@@ -17,6 +17,7 @@ namespace Vuforia
         #region PRIVATE_MEMBER_VARIABLES
  
         private TrackableBehaviour mTrackableBehaviour;
+//		private TargetControl targetControl;
     
         #endregion // PRIVATE_MEMBER_VARIABLES
 
@@ -31,6 +32,7 @@ namespace Vuforia
             {
                 mTrackableBehaviour.RegisterTrackableEventHandler(this);
             }
+//			targetControl = GetComponentInChildren<TargetControl> ();
         }
 
         #endregion // UNTIY_MONOBEHAVIOUR_METHODS
@@ -68,43 +70,17 @@ namespace Vuforia
 
         private void OnTrackingFound()
         {
-            Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
-            Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
-
-            // Enable rendering:
-            foreach (Renderer component in rendererComponents)
-            {
-                component.enabled = true;
-            }
-
-            // Enable colliders:
-            foreach (Collider component in colliderComponents)
-            {
-                component.enabled = true;
-            }
-
-            Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " found");
+//			if(targetControl != null){
+//				targetControl.Init ();
+//			}
         }
 
 
         private void OnTrackingLost()
         {
-            Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
-            Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
-
-            // Disable rendering:
-            foreach (Renderer component in rendererComponents)
-            {
-                component.enabled = false;
-            }
-
-            // Disable colliders:
-            foreach (Collider component in colliderComponents)
-            {
-                component.enabled = false;
-            }
-
-            Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " lost");
+//			if(targetControl != null){
+//				targetControl.Reset ();
+//			}
         }
 
         #endregion // PRIVATE_METHODS
