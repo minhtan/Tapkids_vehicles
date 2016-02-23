@@ -12,19 +12,23 @@ namespace Vuforia
     /// <summary>
     /// A custom handler that implements the ITrackableEventHandler interface.
     /// </summary>
-    public class DefaultTrackableEventHandler : MonoBehaviour,
+    public class DefaultTrackableEventHandlerFSM : MonoBehaviour,
                                                 ITrackableEventHandler
     {
         #region PRIVATE_MEMBER_VARIABLES
  
         private TrackableBehaviour mTrackableBehaviour;
-//		private TargetControl targetControl;
+		private PlayMakerFSM fsm;
     
         #endregion // PRIVATE_MEMBER_VARIABLES
 
 
 
         #region UNTIY_MONOBEHAVIOUR_METHODS
+    	
+		void Awake(){
+			fsm = gameObject.GetComponent<PlayMakerFSM>();
+		}
 
         void Start()
         {
@@ -33,7 +37,6 @@ namespace Vuforia
             {
                 mTrackableBehaviour.RegisterTrackableEventHandler(this);
             }
-//			targetControl = GetComponentInChildren<TargetControl> ();
         }
 
         #endregion // UNTIY_MONOBEHAVIOUR_METHODS
@@ -71,17 +74,13 @@ namespace Vuforia
 
         private void OnTrackingFound()
         {
-//			if(targetControl != null){
-//				targetControl.Init ();
-//			}
+			fsm.Fsm.Event("Found");
         }
 
 
         private void OnTrackingLost()
         {
-//			if(targetControl != null){
-//				targetControl.Reset ();
-//			}
+			fsm.Fsm.Event("Lost");
         }
 
         #endregion // PRIVATE_METHODS
