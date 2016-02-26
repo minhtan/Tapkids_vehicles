@@ -9,11 +9,13 @@ using System.Linq;
 public class WordGameControl : MonoBehaviour {
 
 	private Dictionary<string, DefaultTrackableEventHandlerFSM> dic_targetImages = new Dictionary<string, DefaultTrackableEventHandlerFSM>();
-	private Dictionary<string, Transform> playableTargetTransform = new Dictionary<string, Transform> ();
+	private Dictionary<string, Transform> dic_playableTargets = new Dictionary<string, Transform> ();
+    PlayMakerFSM fsm;
 
 	void Awake(){
-		DefaultTrackableEventHandlerFSM[] imgTargs = FindObjectsOfType<DefaultTrackableEventHandlerFSM> ();
+        fsm = gameObject.GetComponent<PlayMakerFSM>();
 
+        DefaultTrackableEventHandlerFSM[] imgTargs = FindObjectsOfType<DefaultTrackableEventHandlerFSM> ();
 		for(int i = 0; i < imgTargs.Length; i++){
 			dic_targetImages.Add (imgTargs[i].targetName, imgTargs[i]);
 		}
@@ -21,7 +23,9 @@ public class WordGameControl : MonoBehaviour {
 
 	void InitGame(){
 		List<string> playableLetters = GetPlayableLetters ();
-		playableTargetTransform.Clear ();
+        fsm.FsmVariables.GetFsmInt("totalTargetsRequired").Value = GetMinTargetsRequired();
+
+        dic_playableTargets.Clear ();
 
 		foreach(string letter in playableLetters){
 			if(dic_targetImages.ContainsKey(letter)){
@@ -30,11 +34,15 @@ public class WordGameControl : MonoBehaviour {
 					//Set ready state for playable image target
 					imageTarget.Ready ();
 					//Add image target to playable dictionary
-					playableTargetTransform.Add(letter, imageTarget.gameObject.transform);
+					dic_playableTargets.Add(letter, imageTarget.gameObject.transform);
 				}
 			}
 		}
 	}
+
+    int GetMinTargetsRequired() {
+        return 2;
+    }
 
 	List<string> GetPlayableLetters(){
 		List<string> letters = new List<string> ();
@@ -45,10 +53,10 @@ public class WordGameControl : MonoBehaviour {
 	}
 
 	string CheckingWordsOrder(){
-		playableTargetTransform = playableTargetTransform.OrderBy(x=>x.Value.position.x).ToDictionary(x => x.Key, x => x.Value);
+		dic_playableTargets = dic_playableTargets.OrderBy(x=>x.Value.position.x).ToDictionary(x => x.Key, x => x.Value);
 		string word = "";
-		for(int i = 0; i < playableTargetTransform.Count; i++){
-			word = word + playableTargetTransform.Keys.ElementAt (i);
+		for(int i = 0; i < dic_playableTargets.Count; i++){
+			word = word + dic_playableTargets.Keys.ElementAt (i);
 		}
 		Debug.Log (word);
 		return word;
