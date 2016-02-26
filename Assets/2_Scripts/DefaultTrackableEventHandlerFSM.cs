@@ -30,7 +30,8 @@ namespace Vuforia
     	
 		void Awake(){
 			fsm = gameObject.GetComponent<PlayMakerFSM>();
-		}
+            fsm.FsmVariables.GetFsmString("letter").Value = targetName;
+        }
 
         void Start()
         {
@@ -74,20 +75,17 @@ namespace Vuforia
         #region PRIVATE_METHODS
 
 
-        private void OnTrackingFound()
-        {
-			fsm.Fsm.Event("Found");
+        private void OnTrackingFound(){
+			fsm.Fsm.Event("found");
         }
 
 
-        private void OnTrackingLost()
-        {
-			fsm.Fsm.Event("Lost");
+        private void OnTrackingLost(){
+			fsm.Fsm.Event("lost");
         }
 
 		public void Ready(){
-			fsm.Fsm.Event ("Ready");
-            fsm.FsmVariables.GetFsmString("letter").Value = targetName;
+			fsm.Fsm.Event ("ready");
         }
 
         #endregion // PRIVATE_METHODS

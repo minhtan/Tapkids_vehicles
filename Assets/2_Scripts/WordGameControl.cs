@@ -21,11 +21,12 @@ public class WordGameControl : MonoBehaviour {
 		}
 	}
 
-	void _InitGame(){
-		List<string> playableLetters = GetPlayableLetters ();
-        fsm.FsmVariables.GetFsmInt("totalTargetsRequired").Value = GetMinTargetsRequired();
+    void _GameOver() {
+        dic_playableTargets.Clear();
+    }
 
-        dic_playableTargets.Clear ();
+    void _InitGame(){
+		List<string> playableLetters = GetPlayableLetters ();
 
 		foreach(string letter in playableLetters){
 			if(dic_targetImages.ContainsKey(letter)){
@@ -38,8 +39,12 @@ public class WordGameControl : MonoBehaviour {
 		}
 	}
 
-    int GetMinTargetsRequired() {
-        return 2;
+    public void _ResetGame() {
+        fsm.Fsm.BroadcastEvent("ge_reset");
+    }
+
+    public void _ReadyGame() {
+        fsm.Fsm.Event("ready");
     }
 
     void _AddPlayableTarget(string letter) {
