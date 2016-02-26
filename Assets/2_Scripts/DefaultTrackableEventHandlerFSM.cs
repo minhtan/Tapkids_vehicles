@@ -87,7 +87,8 @@ namespace Vuforia
 
 		public void Ready(){
 			fsm.Fsm.Event ("Ready");
-		}
+            fsm.FsmVariables.GetFsmString("letter").Value = targetName;
+        }
 
         #endregion // PRIVATE_METHODS
     }

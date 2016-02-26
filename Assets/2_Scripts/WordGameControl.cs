@@ -10,7 +10,7 @@ public class WordGameControl : MonoBehaviour {
 
 	private Dictionary<string, DefaultTrackableEventHandlerFSM> dic_targetImages = new Dictionary<string, DefaultTrackableEventHandlerFSM>();
 	private Dictionary<string, Transform> dic_playableTargets = new Dictionary<string, Transform> ();
-    PlayMakerFSM fsm;
+    private PlayMakerFSM fsm;
 
 	void Awake(){
         fsm = gameObject.GetComponent<PlayMakerFSM>();
@@ -21,7 +21,7 @@ public class WordGameControl : MonoBehaviour {
 		}
 	}
 
-	void InitGame(){
+	void _InitGame(){
 		List<string> playableLetters = GetPlayableLetters ();
         fsm.FsmVariables.GetFsmInt("totalTargetsRequired").Value = GetMinTargetsRequired();
 
@@ -33,8 +33,6 @@ public class WordGameControl : MonoBehaviour {
 				if ( dic_targetImages.TryGetValue (letter, out imageTarget) ) {
 					//Set ready state for playable image target
 					imageTarget.Ready ();
-					//Add image target to playable dictionary
-					dic_playableTargets.Add(letter, imageTarget.gameObject.transform);
 				}
 			}
 		}
@@ -44,7 +42,22 @@ public class WordGameControl : MonoBehaviour {
         return 2;
     }
 
-	List<string> GetPlayableLetters(){
+    void _AddPlayableTarget(string letter) {
+        DefaultTrackableEventHandlerFSM imageTarget;
+        if (dic_targetImages.TryGetValue(letter, out imageTarget))
+        {
+            dic_playableTargets.Add(letter, imageTarget.gameObject.transform);
+        }
+    }
+
+    void _RemovePlayableTarget(string letter) {
+        if (dic_targetImages.ContainsKey(letter))
+        {
+            dic_playableTargets.Remove(letter);
+        }
+    }
+
+    List<string> GetPlayableLetters(){
 		List<string> letters = new List<string> ();
 		letters.Add ("M");
 		letters.Add ("D");
@@ -52,7 +65,14 @@ public class WordGameControl : MonoBehaviour {
 		return letters;
 	}
 
-	string CheckingWordsOrder(){
+    List<string> GetAnswersList() {
+        List<string> answers = new List<string>();
+        answers.Add("MD");
+        answers.Add("MDN");
+        return answers;
+    }
+
+	string _CheckingWordsOrder(){
 		dic_playableTargets = dic_playableTargets.OrderBy(x=>x.Value.position.x).ToDictionary(x => x.Key, x => x.Value);
 		string word = "";
 		for(int i = 0; i < dic_playableTargets.Count; i++){
