@@ -15,6 +15,8 @@ namespace Vuforia
     public class DefaultTrackableEventHandlerFSM : MonoBehaviour,
                                                 ITrackableEventHandler
     {
+		public string targetName;
+
         #region PRIVATE_MEMBER_VARIABLES
  
         private TrackableBehaviour mTrackableBehaviour;
@@ -82,6 +84,10 @@ namespace Vuforia
         {
 			fsm.Fsm.Event("Lost");
         }
+
+		public void Ready(){
+			fsm.Fsm.Event ("Ready");
+		}
 
         #endregion // PRIVATE_METHODS
     }
