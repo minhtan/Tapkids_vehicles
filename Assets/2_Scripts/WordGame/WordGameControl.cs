@@ -21,8 +21,8 @@ public class WordGameControl : MonoBehaviour {
 	private Dictionary<string, Transform> dic_playableTargets = new Dictionary<string, Transform> ();
     private List<string> lst_answers;
     private PlayMakerFSM fsm;
-    private string wordFound;
-    public int time;
+    public int timeInSeconds;
+    public AudioClip correctSound;
     //********************************************************End game vars******************************************************
 
     //*********************************************************Data vars*********************************************************
@@ -80,7 +80,7 @@ public class WordGameControl : MonoBehaviour {
         List<string> playableLetters = GetPlayableLetters ();
         lst_answers = GetAnswersList();
 
-        fsm.FsmVariables.GetFsmInt("timer").Value = time;
+        fsm.FsmVariables.GetFsmInt("timer").Value = timeInSeconds;
 
         foreach (string letter in playableLetters){
 			if( dic_targetImages.ContainsKey(letter) ){
@@ -106,7 +106,7 @@ public class WordGameControl : MonoBehaviour {
     }
 
 	void _CheckWord(){
-        wordFound = CheckWordOrder();
+        string wordFound = CheckWordOrder();
         HandleWordFound(wordFound);
     }
 
@@ -121,10 +121,10 @@ public class WordGameControl : MonoBehaviour {
 
     void HandleWordFound(string wordFound) {
         if ( CheckAnswer(wordFound) ){
-            Debug.Log("correct word found: " + wordFound);
+            SoundSingleton.Instance.PlaySound(correctSound);
             lst_answers.Remove(wordFound);
         }else{
-            Debug.Log("incorrecrt word: " + wordFound);
+            
         }
     }
 
