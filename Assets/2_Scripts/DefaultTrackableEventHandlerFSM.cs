@@ -15,7 +15,8 @@ namespace Vuforia
     public class DefaultTrackableEventHandlerFSM : MonoBehaviour,
                                                 ITrackableEventHandler
     {
-		public string targetName;
+        [Header("Case sensitive!")]
+        public string targetName;
 
         #region PRIVATE_MEMBER_VARIABLES
  
