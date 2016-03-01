@@ -42,7 +42,7 @@ public class WordListHandler : MonoBehaviour
 	public void CreateWordList ()
 	{
 		JSONObject j = new JSONObject (JSONObject.Type.OBJECT);
-		j.AddField("");
+		j.AddField("letters", _letterGroups [0]);
 		foreach (var key in groupLengthResult.Keys) {
 			JSONObject arr = new JSONObject (JSONObject.Type.ARRAY);
 			j.AddField ("" + key, arr);
@@ -59,10 +59,9 @@ public class WordListHandler : MonoBehaviour
 	public void CreateGroupWordList ()
 	{
 		List<string> result = FindWordWithLetters (_letterGroups [0]);
-		
-		
-		JSONObject j = new JSONObject (JSONObject.Type.OBJECT);
 
+		JSONObject j = new JSONObject (JSONObject.Type.OBJECT);
+		j.AddField("letters", _letterGroups [0]);
 		JSONObject arr = new JSONObject (JSONObject.Type.ARRAY);
 		j.AddField ("wordlist", arr);
 			

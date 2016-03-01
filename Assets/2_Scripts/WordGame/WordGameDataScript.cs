@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 public class WordGameData : ScriptableObject
 {
@@ -14,6 +16,7 @@ public class WordGameDataList : ScriptableObject
     public List<WordGameData> list;
 }
 
+#if UNITY_EDITOR
 public class CreateWordGameDataList
 {
     [MenuItem("Assets/Create/WordGame Data List")]
@@ -44,3 +47,4 @@ public class CreateWordGameDataList
         return asset;
     }
 }
+#endif
