@@ -72,8 +72,13 @@ public class WordListHandler : MonoBehaviour
 			
 		WriteTextFile (encodedJson, _outputFileName, _directoryPath);
 	}
+	
 
     #region PRIVATE METHOD
+	private void FilterRepeate()
+	{
+
+	}
 
 	private void GroupWordByLength (string word)
 	{
