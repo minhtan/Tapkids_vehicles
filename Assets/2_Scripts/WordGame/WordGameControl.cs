@@ -14,6 +14,8 @@ public class WordGameControl : MonoBehaviour {
         {
             dic_targetImages.Add(imgTargs[i].targetName, imgTargs[i]);
         }
+
+		dataList = DataUltility.ReadWordListByLevel (lvl);
     }
 
     //*********************************************************Game vars*********************************************************
@@ -26,7 +28,8 @@ public class WordGameControl : MonoBehaviour {
     //********************************************************End game vars******************************************************
 
     //*********************************************************Data vars*********************************************************
-    public WordGameDataList dataList;
+	public string lvl;
+	private List<WordGameData> dataList;
     private WordGameData data;
     //********************************************************End data vars******************************************************
 
@@ -34,23 +37,23 @@ public class WordGameControl : MonoBehaviour {
     void RandomData()
     {
         UnityEngine.Random.seed = Environment.TickCount;
-        data = dataList.list[Mathf.RoundToInt(UnityEngine.Random.Range(0, dataList.list.Count - 1))];
+        data = dataList[Mathf.RoundToInt(UnityEngine.Random.Range(0, dataList.Count - 1))];
     }
 
     List<string> GetPlayableLetters()
     {
         List<string> letters = new List<string>();
-        foreach (string letter in data.letters)
-        {
-            letters.Add(letter);
-        }
+		char[] c_letters = data.letters.ToCharArray ();
+		for(int i=0; i < c_letters.Length; i++){
+			letters.Add (c_letters [i].ToString ());
+		}
         return letters;
     }
 
     List<string> GetAnswersList()
     {
         List<string> answers = new List<string>();
-        foreach (string answer in data.answers)
+        foreach (string answer in data.wordlist)
         {
             answers.Add(answer);
         }
