@@ -23,14 +23,12 @@ public class Spawner : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		for (int i = 0; i < checkPoints.Length; i++) {
-			TrashMan.spawn (letters[Random.Range (0, letters.Length)], checkPoints[Random.Range(0, checkPoints.Length)].position, Quaternion.identity);
-		}
+		
 	}
 
-//	void SpawnLetter () {
-//		TrashMan.spawn (letters[Random.Range (0, letters.Length)], checkPoints[Random.Range(0, checkPoints.Length)], 0, Random.Range(-spawnArea, spawnArea)), Quaternion.identity);
-//	}
+	void SpawnLetter () {
+		TrashMan.spawn (letters[Random.Range (0, letters.Length)], checkPoints[Random.Range(0, checkPoints.Length)], 0, Random.Range(-spawnArea, spawnArea)), Quaternion.identity);
+	}
 
 
 }
