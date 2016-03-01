@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Vehicle : MonoBehaviour
 {
-	int currentPosition;	// -1, 0, 1
+	int currentPosition;	// -3, 0, 3
 
 
 	// Use this for initialization
@@ -15,34 +15,21 @@ public class Vehicle : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		// get horizontal input
-		int hInput =  (int) Input.GetAxisRaw("Horizontal");
-		switch (hInput) {
-		case 0:
-			break;
-		case 1:
-			TurnRight();
-			break;
-		case -1:
-			TurnLeft();
-			break;
+		if(Input.GetKeyDown(KeyCode.A) && currentPosition != -3)
+		{
+//			LeanTween.moveLocalX(gameObject, transform.localPosition.x - 3f, .1f);
+			transform.position = new Vector3(transform.localPosition.x - 3f, transform.localPosition.y,transform.localPosition.z);
+			currentPosition = (int) transform.localPosition.x;
+		}
+
+		if(Input.GetKeyDown(KeyCode.D) && currentPosition != 3)
+		{
+//			LeanTween.moveLocalX(gameObject, transform.localPosition.x + 3f, .1f);
+			transform.position = new Vector3(transform.localPosition.x + 3f, transform.localPosition.y,transform.localPosition.z);
+			currentPosition = (int) transform.localPosition.x;
 		}
 	}
 
-	void TurnLeft ()
-	{
-		if (currentPosition != -1)
-			currentPosition--;
-		LeanTween.move(gameObject, new Vector3 (transform.position.x - 1f, transform.position.y, transform.position.z), .2f);
-//		Debug.Log(currentPosition);
-	}
 
-	void TurnRight () 
-	{
-		if (currentPosition != 1)
-			currentPosition++;
-		LeanTween.move(gameObject, new Vector3 (transform.position.x + 1f, transform.position.y, transform.position.z), .2f);
-//		Debug.Log(currentPosition);
-	}
 
 }
