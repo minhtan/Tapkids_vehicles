@@ -27,7 +27,7 @@ public class Spawner : MonoBehaviour {
 	}
 
 	void SpawnLetter () {
-		TrashMan.spawn (letters[Random.Range (0, letters.Length)], checkPoints[Random.Range(0, checkPoints.Length)], 0, Random.Range(-spawnArea, spawnArea)), Quaternion.identity);
+//		TrashMan.spawn (letters[Random.Range (0, letters.Length)], checkPoints[Random.Range(0, checkPoints.Length)], Quaternion.identity);
 	}
 
 

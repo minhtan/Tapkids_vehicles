@@ -28,7 +28,7 @@ namespace UnityStandardAssets.Vehicles.Car
 			m_Car.Move(h, 1f, 0f, 0f);
 #else
 //            m_Car.Move(h, v, v, 0f);
-			m_Car.Move(h, .5f, 0f, 0f);
+			m_Car.Move(h, 1f, 0f, 0f);
 #endif
         }
     }
