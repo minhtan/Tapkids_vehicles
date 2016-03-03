@@ -13,7 +13,7 @@ public class DataUltility {
 	public static List<WordGameData> ReadWordListByLevel(string level){
 		List<WordGameData> list = new List<WordGameData> ();
 
-		TextAsset[] textList = Resources.LoadAll<TextAsset> ("WordList/" + level);
+		TextAsset[] textList = Resources.LoadAll<TextAsset> ("WordGame/" + level);
 		for(int i=0; i < textList.Length; i++){
 			list.Add(JsonUtility.FromJson<WordGameData> (textList [0].text));
 		}
@@ -23,5 +23,25 @@ public class DataUltility {
 
 	public static WordGameData ReadDataForCarGame (string letter) {
 		return JsonUtility.FromJson <WordGameData> (Resources.Load <TextAsset> ("CarGame/" + letter).text);
+	}
+
+	public static List<string> GetPlayableLetters(WordGameData data)
+	{
+		List<string> letters = new List<string>();
+		char[] c_letters = data.letters.ToCharArray ();
+		for(int i=0; i < c_letters.Length; i++){
+			letters.Add (c_letters [i].ToString ());
+		}
+		return letters;
+	}
+
+	public static List<string> GetAnswersList(WordGameData data)
+	{
+		List<string> answers = new List<string>();
+		foreach (string answer in data.wordlist)
+		{
+			answers.Add(answer);
+		}
+		return answers;
 	}
 }

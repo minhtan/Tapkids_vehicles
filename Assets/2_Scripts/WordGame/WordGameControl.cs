@@ -50,26 +50,6 @@ public class WordGameControl : MonoBehaviour {
         UnityEngine.Random.seed = Environment.TickCount;
         data = dataList[Mathf.RoundToInt(UnityEngine.Random.Range(0, dataList.Count - 1))];
     }
-
-    List<string> GetPlayableLetters()
-    {
-        List<string> letters = new List<string>();
-		char[] c_letters = data.letters.ToCharArray ();
-		for(int i=0; i < c_letters.Length; i++){
-			letters.Add (c_letters [i].ToString ());
-		}
-        return letters;
-    }
-
-    List<string> GetAnswersList()
-    {
-        List<string> answers = new List<string>();
-        foreach (string answer in data.wordlist)
-        {
-            answers.Add(answer);
-        }
-        return answers;
-    }
 	#endregion
 
 	#region UI funcs
@@ -89,8 +69,8 @@ public class WordGameControl : MonoBehaviour {
 		fsm.FsmVariables.GetFsmInt("timer").Value = gameTimeInSeconds;
 		letterToPosition.Clear();
 		RandomData();
-		List<string> playableLetters = GetPlayableLetters ();
-		lst_answers = GetAnswersList();
+		List<string> playableLetters = DataUltility.GetPlayableLetters (data);
+		lst_answers = DataUltility.GetAnswersList(data);
 
 		foreach (string letter in playableLetters){
 			if( letterToImgTarget.ContainsKey(letter) ){
