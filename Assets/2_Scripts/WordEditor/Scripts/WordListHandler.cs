@@ -25,7 +25,8 @@ public class WordListHandler : MonoBehaviour
 
 	[SerializeField]
 	private FilterMode
-		_filterMode;
+		_filterMode = FilterMode.REPEATED;
+
 	private List<string> _dict;
 	private Dictionary<int, List<string>> groupLengthResult = new Dictionary<int, List<string>> ();
 
@@ -41,8 +42,35 @@ public class WordListHandler : MonoBehaviour
 
 	public void CreateWordList ()
 	{
+		List<string> result = FindWordWithLetters (_letterGroups [0]);
+
+		if(_filterMode == FilterMode.NO_REPEATED)
+			FilterRepeateLetter(result);
+
 		JSONObject j = new JSONObject (JSONObject.Type.OBJECT);
-		j.AddField("letters", _letterGroups [0]);
+		j.AddField ("letters", _letterGroups [0]);
+		JSONObject arr = new JSONObject (JSONObject.Type.ARRAY);
+		j.AddField ("wordlist", arr);
+		
+		foreach (string word in result)
+			arr.Add (word);
+		
+		string encodedJson = j.Print ();
+		WriteTextFile (encodedJson, _outputFileName, _directoryPath);
+	}
+
+	public void CreateGroupWordList ()
+	{
+		List<string> result = FindWordWithLetters (_letterGroups [0]);
+
+		if(_filterMode == FilterMode.NO_REPEATED)
+			FilterRepeateLetter(result);
+
+		foreach (string word in result)
+			GroupWordByLength (word);
+		 
+		JSONObject j = new JSONObject (JSONObject.Type.OBJECT);
+		j.AddField ("letters", _letterGroups [0]);
 		foreach (var key in groupLengthResult.Keys) {
 			JSONObject arr = new JSONObject (JSONObject.Type.ARRAY);
 			j.AddField ("" + key, arr);
@@ -55,29 +83,30 @@ public class WordListHandler : MonoBehaviour
 			WriteTextFile (encodedJson, _outputFileName, _directoryPath);
 		}
 	}
-
-	public void CreateGroupWordList ()
-	{
-		List<string> result = FindWordWithLetters (_letterGroups [0]);
-
-		JSONObject j = new JSONObject (JSONObject.Type.OBJECT);
-		j.AddField("letters", _letterGroups [0]);
-		JSONObject arr = new JSONObject (JSONObject.Type.ARRAY);
-		j.AddField ("wordlist", arr);
-			
-		foreach (string word in result)
-			arr.Add (word);
-			
-		string encodedJson = j.Print ();
-			
-		WriteTextFile (encodedJson, _outputFileName, _directoryPath);
-	}
 	
 
     #region PRIVATE METHOD
-	private void FilterRepeate()
+	private void FilterRepeateLetter (List<string> result)
 	{
+		foreach(string word in result)
+		{
+			if(IsDuplicatedLetter(word))
+				result.Remove(word);
+		}
+	}
 
+	private bool IsDuplicatedLetter(string word)
+	{
+		for(int i = 0; i < word.Length - 1; i++)
+		{
+			for(int k = i + 1; k < word.Length; k++)
+			{
+				if(word[i] == word[k])
+					return true;
+			}
+		}
+
+		return false;
 	}
 
 	private void GroupWordByLength (string word)
@@ -102,7 +131,6 @@ public class WordListHandler : MonoBehaviour
 		foreach (string word in _dict) {
 			if (IsContructedByLetters (word, letters)) {
 				listWithWord.Add (word);
-				GroupWordByLength (word);
 			}
 		}
 
