@@ -19,8 +19,8 @@ namespace WordList
 			_letterGroups;
 
 		[SerializeField]
-		private Object
-			_textAsset = null;
+		private TextAsset
+			_textAsset;
 
 		public enum FilterMode
 		{
@@ -51,10 +51,7 @@ namespace WordList
 		[MenuItem("Window/Wordlist Editor")]
 		public static void ShowWindow ()
 		{
-			//WordListEditorWindow window = (WordListEditorWindow) EditorWindow.GetWindowWithRect(typeof(WordListEditorWindow), new Rect(0, 0, Constant.WINDOW_DEFAULT_WIDTH, Constant.WINDOW_DEFAULT_HEIGHT));
-			//window.Show();
-
-			EditorWindow.GetWindow(typeof(WordListEditorWindow), true, "WordList Editor");
+			EditorWindow.GetWindow(typeof(WordListEditorWindow), true, "WordList Editor", true);
 		}
 
 		void OnEnable ()
@@ -64,13 +61,11 @@ namespace WordList
 
 		void OnGUI ()
 		{
-			
-			EditorGUILayout.BeginVertical();
+
 			GUILayout.Label ("INPUT CONFIGURATIONS", EditorStyles.boldLabel);
 
+			EditorHelper.DrawProperty(_serializedObject, "_textAsset", Constant.GUI_LAYOUT_SPACE);
 
-			_textAsset = EditorGUILayout.ObjectField("Input File", _textAsset, typeof(TextAsset), false);
-		
 			EditorHelper.DrawArrayProperty (_serializedObject, "_letterGroups", Constant.GUI_LAYOUT_SPACE);
 			EditorHelper.DrawProperty (_serializedObject, "_filterMode", Constant.GUI_LAYOUT_SPACE);
 
@@ -87,7 +82,6 @@ namespace WordList
 				GenerateWordList ();
 			}
 
-			EditorGUILayout.EndVertical();
 			
 			EditorHelper.SaveWindowEditor (this, _serializedObject);
 		}
@@ -112,7 +106,7 @@ namespace WordList
 				if (_filterMode == FilterMode.NO_REPEATED)
 					FilterRepeateLetter (result);
 
-				_writer.WriteWordList (result, _letterGroups, _letterGroups [i], _directoryPath);
+				_writer.WriteWordList (result, _letterGroups[i], _letterGroups [i], _directoryPath);
 			}
 		}
 

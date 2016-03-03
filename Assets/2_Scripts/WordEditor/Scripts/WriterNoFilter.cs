@@ -8,10 +8,10 @@ namespace WordList
 
 	#region IWordListWriter implementation
 
-		public override void WriteWordList (List<string> resultList, string[] letterGroups, string fileName, string directoryPath)
+		public override void WriteWordList (List<string> resultList, string letterGroup, string fileName, string directoryPath)
 		{
 			JSONObject j = new JSONObject (JSONObject.Type.OBJECT);
-			j.AddField ("letters", letterGroups [0]);
+			j.AddField ("letters", letterGroup);
 			JSONObject arr = new JSONObject (JSONObject.Type.ARRAY);
 			j.AddField ("wordlist", arr);
 		

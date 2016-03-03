@@ -7,7 +7,7 @@ namespace WordList
 	public abstract class WordListWriter
 	{
 	
-		public abstract void WriteWordList (List<string> resultList, string[] letterGroups, string fileName, string directoryPath);
+		public abstract void WriteWordList (List<string> resultList, string letterGroup, string fileName, string directoryPath);
 
 		protected void WriteTextFile (string data, string fileName, string directoryPath)
 		{

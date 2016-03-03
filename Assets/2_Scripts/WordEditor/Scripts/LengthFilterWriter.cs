@@ -10,13 +10,13 @@ namespace WordList
 
 	#region implemented abstract members of WordListWriter
 
-		public override void WriteWordList (List<string> resultList, string[] letterGroups, string fileName, string directoryPath)
+		public override void WriteWordList (List<string> resultList, string letterGroup, string fileName, string directoryPath)
 		{
 			foreach (string word in resultList)
 				GroupWordByLength (word);
 		
 			JSONObject j = new JSONObject (JSONObject.Type.OBJECT);
-			j.AddField ("letters", letterGroups [0]);
+			j.AddField ("letters", letterGroup);
 			foreach (var key in groupLengthResult.Keys) {
 				JSONObject arr = new JSONObject (JSONObject.Type.ARRAY);
 				j.AddField ("" + key, arr);
