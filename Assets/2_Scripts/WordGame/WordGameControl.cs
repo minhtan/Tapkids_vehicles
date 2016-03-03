@@ -115,7 +115,7 @@ public class WordGameControl : MonoBehaviour {
 
     void HandleWordFound(string wordFound) {
         if ( CheckAnswer(wordFound) ){
-            SoundSingleton.Instance.PlaySound(correctSound);
+            SoundControl.Instance.PlaySound(correctSound);
 			currentScore = currentScore + GetWordScore(wordFound);
 			fsm.FsmVariables.GetFsmInt("currentScore").Value = currentScore;
             lst_answers.Remove(wordFound);
