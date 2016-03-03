@@ -14,6 +14,7 @@ public class WordGameControl : MonoBehaviour {
         {
             letterToImgTarget.Add(imgTargs[i].targetName, imgTargs[i]);
         }
+		GetDataList ();
     }
 
 	#region Vars
@@ -22,13 +23,12 @@ public class WordGameControl : MonoBehaviour {
 	private Dictionary<string, Transform> letterToPosition = new Dictionary<string, Transform> ();
     private List<string> lst_answers;
     private PlayMakerFSM fsm;
-    public int timeInSeconds;
+    public int gameTimeInSeconds;
     public AudioClip correctSound;
 
 	//Data
 	private List<WordGameData> dataList;
 	private WordGameData data;
-	public int levelIndex = 1;
 
 	//Score
 	private int currentScore;
@@ -41,8 +41,8 @@ public class WordGameControl : MonoBehaviour {
 	#endregion
 
 	#region Data funcs
-	void GetDataListByLevel(){
-		dataList = DataUltility.ReadWordListByLevel (levelIndex.ToString());
+	void GetDataList(){
+		dataList = DataUltility.ReadWordListByLevel ("");
 	}
 
     void RandomData()
@@ -85,13 +85,8 @@ public class WordGameControl : MonoBehaviour {
 
 	#region Game funcs
 	void _InitGame(){
-		levelIndex = 1;
 		currentScore = 0;
-		GetDataListByLevel ();
-	}
-
-	void _Start(){
-		fsm.FsmVariables.GetFsmInt("timer").Value = timeInSeconds;
+		fsm.FsmVariables.GetFsmInt("timer").Value = gameTimeInSeconds;
 		letterToPosition.Clear();
 		RandomData();
 		List<string> playableLetters = GetPlayableLetters ();
@@ -108,11 +103,6 @@ public class WordGameControl : MonoBehaviour {
 
 		FindMinWordLength ();
 		GetWinScore ();
-	}
-
-	void _Win(){
-		levelIndex++;
-		GetDataListByLevel ();
 	}
 
     void _AddPlayableTarget(string letter) {
@@ -149,9 +139,10 @@ public class WordGameControl : MonoBehaviour {
 			currentScore = currentScore + GetWordScore(wordFound);
 			fsm.FsmVariables.GetFsmInt("currentScore").Value = currentScore;
             lst_answers.Remove(wordFound);
-        }else{
-            
         }
+		if(lst_answers.Count <= 0){
+			fsm.Fsm.Event ("gameover");
+		}
     }
 
     bool CheckAnswer(string word)
