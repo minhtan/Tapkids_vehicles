@@ -17,14 +17,14 @@ namespace UnityStandardAssets.CrossPlatformInput
         // the Cross Platform Input package.
 
 #if !UNITY_EDITOR
-	void OnEnable()
-	{
-		CheckEnableControlRig();
-	}
+		void OnEnable()
+		{
+			CheckEnableControlRig();
+		}
 	#endif
 
-        private void Start()
-        {
+	    private void Start()
+	    {
 #if UNITY_EDITOR
             if (Application.isPlaying) //if in the editor, need to check if we are playing, as start is also called just after exiting play
 #endif

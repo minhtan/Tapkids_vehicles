@@ -17,12 +17,12 @@ namespace UnityStandardAssets.CrossPlatformInput
 		void Start () {
 			image = GetComponent<Image> ();
 			center = image.transform.position;
-			Debug.Log (center);
+//			Debug.Log (center);
 		}
 
 		void OnEnable()
 		{
-			CreateVirtualAxes();
+			CreateVirtualAxes();	
 		}
 
 		void CreateVirtualAxes()

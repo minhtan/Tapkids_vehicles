@@ -20,4 +20,8 @@ public class DataUltility {
 
 		return list;
 	}
+
+	public static WordGameData ReadDataForCarGame (string letter) {
+		return JsonUtility.FromJson <WordGameData> (Resources.Load <TextAsset> ("CarGame/" + letter).text);
+	}
 }
