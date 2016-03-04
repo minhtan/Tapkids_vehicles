@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+using HutongGames.PlayMaker;
 public class Spawner : MonoBehaviour {
 
 //	// spawn time
@@ -12,11 +12,11 @@ public class Spawner : MonoBehaviour {
 //	float maxSpawnRate = 3f;
 //	float minSpawnRate = 1f;
 
-
+	string letters;
 	float time;
 	// object type
-	public GameObject[] obstacles;
-	public GameObject[] letters;
+//	public GameObject[] obstacles;
+	public GameObject[] letterPrefabs;
 	public Transform[] checkPoints;
 
 	//
@@ -26,9 +26,11 @@ public class Spawner : MonoBehaviour {
 		
 	}
 
+	void Init () {
+		Debug.Log (FsmVariables.GlobalVariables.GetFsmString ("givenWord").Value);
+	}
 	void SpawnLetter () {
 //		TrashMan.spawn (letters[Random.Range (0, letters.Length)], checkPoints[Random.Range(0, checkPoints.Length)], Quaternion.identity);
 	}
-
 
 }

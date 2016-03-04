@@ -15,7 +15,6 @@ namespace Vuforia
     public class DefaultTrackableEventHandlerFSM : MonoBehaviour,
                                                 ITrackableEventHandler
     {
-        [Header("Case sensitive!")]
         public string targetName;
 
         #region PRIVATE_MEMBER_VARIABLES
@@ -31,7 +30,7 @@ namespace Vuforia
     	
 		void Awake(){
 			fsm = gameObject.GetComponent<PlayMakerFSM>();
-            fsm.FsmVariables.GetFsmString("letter").Value = targetName;
+			fsm.FsmVariables.GetFsmString("letter").Value = targetName.ToLower ();
         }
 
         void Start()
