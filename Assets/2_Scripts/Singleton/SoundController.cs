@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SoundControl : UnitySingletonPersistent<SoundControl>
+public class SoundController : UnitySingletonPersistent<SoundController>
 {
 	private AudioSource audioSource;
 

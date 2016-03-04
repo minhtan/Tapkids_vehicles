@@ -15,7 +15,13 @@ MonoBehaviour:
     floatVariables: []
     intVariables: []
     boolVariables: []
-    stringVariables: []
+    stringVariables:
+    - useVariable: 1
+      name: givenWord
+      tooltip: 
+      showInInspector: 0
+      networkSync: 0
+      value: 
     vector2Variables: []
     vector3Variables: []
     colorVariables: []
@@ -35,13 +41,13 @@ MonoBehaviour:
     enumVariables: []
     categories:
     - 
-    variableCategoryIDs: 00000000
+    variableCategoryIDs: 0000000000000000
   events:
   - VUFORIA / TRACKABLE FOUND
   - VUFORIA / TRACKABLE LOST
   - G_reset
   - Word Invalid
   - Word Valid
-  - Gathered
-  - Collected
   - TargetFound
+  - Collected
+  - Collect
