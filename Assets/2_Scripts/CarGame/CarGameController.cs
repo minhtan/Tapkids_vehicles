@@ -11,6 +11,10 @@ public class CarGameController : MonoBehaviour {
 	#region private members
 	private string mLetter;
 	private WordGameData wordData;
+	private List <string> answers;
+	private List <string> letters;
+
+	private List <GameObject> letterPrefabs;
 	#endregion private members
 
 	#region Mono
@@ -31,38 +35,25 @@ public class CarGameController : MonoBehaviour {
 	}
 
 	void GetWordData () {
+		if (mLetter == null)
+			return;
 		wordData = DataUltility.ReadDataForCarGame (mLetter);
+		answers = DataUltility.GetAnswersList (wordData);
+		letters = DataUltility.GetPlayableLetters (wordData);
 	}
 
-	List<string> GetPlayableLetters()
-	{
-		List<string> letters = new List<string>();
-		if (wordData == null)
-			return null;
-		char[] chars = wordData.letters.ToCharArray ();
-		for(int i=0; i < chars.Length; i++){
-			letters.Add (chars [i].ToString ());
-		}
-		return letters;
-	}
-
-	List<string> GetAnswersList()
-	{
-		List<string> answers = new List<string>();
-		if (wordData.wordlist.Length > 0) {
-			foreach (string answer in wordData.wordlist) {
-				answers.Add (answer);
-			}
-		}
-		return answers;
-	}
 
 	void GetCarData () {
 
 	}
 
 	void GenerateLetter () {
-
+		// generate letter object base on letter list
+		if (letters.Count <= 0)
+			return;
+		for (int i = 0; i < letters.Count; i++) {
+			Debug.Log (letters [i]);
+		}
 	}
 
 	void GenerateObstacles () {

@@ -4,13 +4,13 @@ using System.Collections.Generic;
 
 public class Spawner : MonoBehaviour {
 
-	// spawn time
-	float maxSpawnTime = 3f;
-	float minSpawnTime = 1f;
-
-	// spawn rate
-	float maxSpawnRate = 3f;
-	float minSpawnRate = 1f;
+//	// spawn time
+//	float maxSpawnTime = 3f;
+//	float minSpawnTime = 1f;
+//
+//	// spawn rate
+//	float maxSpawnRate = 3f;
+//	float minSpawnRate = 1f;
 
 
 	float time;
