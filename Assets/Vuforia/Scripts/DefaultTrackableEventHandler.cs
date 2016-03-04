@@ -15,6 +15,8 @@ namespace Vuforia
     public class DefaultTrackableEventHandler : MonoBehaviour,
                                                 ITrackableEventHandler
     {
+
+		public GameObject go;
         #region PRIVATE_MEMBER_VARIABLES
  
         private TrackableBehaviour mTrackableBehaviour;
@@ -71,6 +73,7 @@ namespace Vuforia
 
         private void OnTrackingFound()
         {
+			go.SetActive (true);
 //			if(targetControl != null){
 //				targetControl.Init ();
 //			}
@@ -79,6 +82,7 @@ namespace Vuforia
 
         private void OnTrackingLost()
         {
+			go.SetActive (false);
 //			if(targetControl != null){
 //				targetControl.Reset ();
 //			}
