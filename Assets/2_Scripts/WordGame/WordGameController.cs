@@ -4,7 +4,7 @@ using Vuforia;
 using System.Collections.Generic;
 using System.Linq;
 
-public class WordGameControl : MonoBehaviour {
+public class WordGameController : MonoBehaviour {
     void Awake()
     {
         fsm = gameObject.GetComponent<PlayMakerFSM>();
@@ -115,7 +115,7 @@ public class WordGameControl : MonoBehaviour {
 
     void HandleWordFound(string wordFound) {
         if ( CheckAnswer(wordFound) ){
-            SoundControl.Instance.PlaySound(correctSound);
+            SoundController.Instance.PlaySound(correctSound);
 			currentScore = currentScore + GetWordScore(wordFound);
 			fsm.FsmVariables.GetFsmInt("currentScore").Value = currentScore;
             lst_answers.Remove(wordFound);

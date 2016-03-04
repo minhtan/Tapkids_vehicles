@@ -12,7 +12,8 @@ public class CarGameController : MonoBehaviour {
 	private WordGameData wordData;
 //	private List <string> answers;
 	private string letters;
-
+	string assetBundleName = "car_asset";
+	string carName = "Police";
 	private List <GameObject> letterPrefabs;
 	#endregion private members
 
@@ -29,12 +30,20 @@ public class CarGameController : MonoBehaviour {
 
 	void Init () {
 		GetWordData ();
+		StartCoroutine (CreateCar ());
 //		GetCarData ();
 //		GenerateLetter ();
-		GenerateObstacles ();
+//		GenerateObstacles ();
 		FsmVariables.GlobalVariables.GetFsmString ("givenWord").Value = wordData.letters;
 	}
 
+
+	IEnumerator CreateCar () {
+		yield return StartCoroutine (AssetControl.Instance.InstantiateGameObjectAsync (assetBundleName, carName, (bundle) => {
+			GameObject carGO = Instantiate (bundle);
+			carGO.transform.SetParent (transform);
+		}));
+	}
 	void GetWordData () {
 //		if (mLetter == null)
 //			return;

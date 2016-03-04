@@ -179,7 +179,7 @@ MonoBehaviour:
       - fsmEvent:
           name: Ready To Init
           isSystemEvent: 0
-          isGlobal: 1
+          isGlobal: 0
         toState: Init
         linkStyle: 0
         linkConstraint: 0
@@ -560,7 +560,7 @@ MonoBehaviour:
       isGlobal: 0
     - name: Ready To Init
       isSystemEvent: 0
-      isGlobal: 1
+      isGlobal: 0
     globalTransitions: []
     variables:
       floatVariables: []
@@ -635,7 +635,7 @@ Transform:
   m_LocalScale: {x: 50, y: 1, z: 50}
   m_Children: []
   m_Father: {fileID: 1388146864}
-  m_RootOrder: 2
+  m_RootOrder: 1
 --- !u!23 &83500737
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -875,21 +875,29 @@ MonoBehaviour:
     dataVersion: 2
     usedInTemplate: {fileID: 0}
     name: Car Controller
-    startState: State 1
+    startState: Wait To Count Down
     states:
-    - name: State 1
-      description: 
+    - name: Wait To Count Down
+      description: wait for user car data
       colorIndex: 0
       position:
         serializedVersion: 2
-        x: 50
-        y: 100
-        width: 100
-        height: 16
+        x: 120
+        y: 113.94531
+        width: 150.5
+        height: 32
       isBreakpoint: 0
       isSequence: 0
       hideUnused: 0
-      transitions: []
+      transitions:
+      - fsmEvent:
+          name: Ready
+          isSystemEvent: 0
+          isGlobal: 0
+        toState: Running
+        linkStyle: 0
+        linkConstraint: 0
+        colorIndex: 0
       actionData:
         actionNames: []
         customNames: []
@@ -934,14 +942,22 @@ MonoBehaviour:
       colorIndex: 0
       position:
         serializedVersion: 2
-        x: 109
-        y: 214
+        x: 429
+        y: 232
         width: 100
-        height: 16
+        height: 32
       isBreakpoint: 0
       isSequence: 0
       hideUnused: 0
-      transitions: []
+      transitions:
+      - fsmEvent:
+          name: FINISHED
+          isSystemEvent: 1
+          isGlobal: 0
+        toState: Running
+        linkStyle: 0
+        linkConstraint: 0
+        colorIndex: 0
       actionData:
         actionNames: []
         customNames: []
@@ -986,14 +1002,22 @@ MonoBehaviour:
       colorIndex: 0
       position:
         serializedVersion: 2
-        x: 330
-        y: 237
-        width: 137.5
-        height: 16
+        x: 388
+        y: 340
+        width: 145.5
+        height: 32
       isBreakpoint: 0
       isSequence: 0
       hideUnused: 0
-      transitions: []
+      transitions:
+      - fsmEvent:
+          name: FINISHED
+          isSystemEvent: 1
+          isGlobal: 0
+        toState: Running
+        linkStyle: 0
+        linkConstraint: 0
+        colorIndex: 0
       actionData:
         actionNames:
         - HutongGames.PlayMaker.Actions.SendEvent
@@ -1064,7 +1088,7 @@ MonoBehaviour:
         fsmRectParams: []
         fsmQuaternionParams: []
         stringParams:
-        - Gathered
+        - Gather
         byteData: 00
         arrayParamSizes: 
         arrayParamTypes: []
@@ -1078,19 +1102,27 @@ MonoBehaviour:
         - everyFrame
         paramDataPos: 00000000000000000000000000000000
         paramByteDataSize: 00000000000000000000000001000000
-    - name: State 2
-      description: 
+    - name: Car Crash
+      description: "Reset Position \nReset Rotation"
       colorIndex: 0
       position:
         serializedVersion: 2
-        x: 60
-        y: 360
+        x: 65
+        y: 428
         width: 100
-        height: 16
+        height: 32
       isBreakpoint: 0
       isSequence: 0
       hideUnused: 0
-      transitions: []
+      transitions:
+      - fsmEvent:
+          name: FINISHED
+          isSystemEvent: 1
+          isGlobal: 0
+        toState: Running
+        linkStyle: 0
+        linkConstraint: 0
+        colorIndex: 0
       actionData:
         actionNames: []
         customNames: []
@@ -1130,19 +1162,43 @@ MonoBehaviour:
         paramName: []
         paramDataPos: 
         paramByteDataSize: 
-    - name: Car Stuck
-      description: "Reset Position \nReset Rotation"
+    - name: Running
+      description: 
       colorIndex: 0
       position:
         serializedVersion: 2
-        x: 338
-        y: 388
+        x: 84
+        y: 253
         width: 100
-        height: 16
+        height: 64
       isBreakpoint: 0
       isSequence: 0
       hideUnused: 0
-      transitions: []
+      transitions:
+      - fsmEvent:
+          name: Collect
+          isSystemEvent: 0
+          isGlobal: 1
+        toState: Collect
+        linkStyle: 0
+        linkConstraint: 0
+        colorIndex: 0
+      - fsmEvent:
+          name: Gather
+          isSystemEvent: 0
+          isGlobal: 0
+        toState: Gather
+        linkStyle: 0
+        linkConstraint: 0
+        colorIndex: 0
+      - fsmEvent:
+          name: Crash
+          isSystemEvent: 0
+          isGlobal: 0
+        toState: Car Crash
+        linkStyle: 0
+        linkConstraint: 0
+        colorIndex: 0
       actionData:
         actionNames: []
         customNames: []
@@ -1183,12 +1239,24 @@ MonoBehaviour:
         paramDataPos: 
         paramByteDataSize: 
     events:
-    - name: Collected
+    - name: FINISHED
+      isSystemEvent: 1
+      isGlobal: 0
+    - name: Collect
       isSystemEvent: 0
       isGlobal: 1
-    - name: Gathered
+    - name: Crash
       isSystemEvent: 0
-      isGlobal: 1
+      isGlobal: 0
+    - name: Gather
+      isSystemEvent: 0
+      isGlobal: 0
+    - name: Ready
+      isSystemEvent: 0
+      isGlobal: 0
+    - name: Reset
+      isSystemEvent: 0
+      isGlobal: 0
     globalTransitions: []
     variables:
       floatVariables:
@@ -1428,7 +1496,7 @@ Transform:
   - {fileID: 1774266704}
   - {fileID: 2122710172}
   m_Father: {fileID: 1388146864}
-  m_RootOrder: 4
+  m_RootOrder: 3
 --- !u!1 &282810881
 GameObject:
   m_ObjectHideFlags: 0
@@ -1539,7 +1607,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1388146864}
-  m_RootOrder: 3
+  m_RootOrder: 2
 --- !u!23 &317640797
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1903,7 +1971,7 @@ Transform:
   - {fileID: 647057475}
   - {fileID: 1660449346}
   m_Father: {fileID: 1388146864}
-  m_RootOrder: 6
+  m_RootOrder: 5
 --- !u!1 &644861421
 GameObject:
   m_ObjectHideFlags: 0
@@ -2038,7 +2106,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 447576, guid: 61c883dc901e046f1aefab45019b3d55, type: 2}
       propertyPath: m_RootOrder
-      value: 1
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 113028, guid: 61c883dc901e046f1aefab45019b3d55, type: 2}
       propertyPath: m_Name
@@ -2046,11 +2114,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 143374, guid: 61c883dc901e046f1aefab45019b3d55, type: 2}
       propertyPath: m_Name
-      value: MyCar1
+      value: Car1
       objectReference: {fileID: 0}
     - target: {fileID: 143374, guid: 61c883dc901e046f1aefab45019b3d55, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 61c883dc901e046f1aefab45019b3d55, type: 2}
@@ -2705,7 +2773,7 @@ RectTransform:
   m_Children:
   - {fileID: 282810882}
   m_Father: {fileID: 1388146864}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -2793,13 +2861,13 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 75234520}
-  - {fileID: 45310303}
   - {fileID: 83500736}
   - {fileID: 317640796}
   - {fileID: 268545557}
   - {fileID: 1866366919}
   - {fileID: 562124405}
   - {fileID: 1338195957}
+  - {fileID: 45310303}
   m_Father: {fileID: 0}
   m_RootOrder: 4
 --- !u!114 &1388146865
@@ -2823,6 +2891,8 @@ MonoBehaviour:
       description: '- Gen Game Data: letter, car, ...
 
         - Set game time ...
+
+        - setup car
 
         - Start sub components: car physics, input, spawner, score'
       colorIndex: 0
@@ -3574,7 +3644,7 @@ MonoBehaviour:
       - fsmEvent:
           name: Gathered
           isSystemEvent: 0
-          isGlobal: 1
+          isGlobal: 0
         toState: Check Valid Word
         linkStyle: 0
         linkConstraint: 0
@@ -3938,8 +4008,8 @@ MonoBehaviour:
       colorIndex: 0
       position:
         serializedVersion: 2
-        x: 77.734375
-        y: 497.1875
+        x: 111.32031
+        y: 496.39844
         width: 165
         height: 32
       isBreakpoint: 0
@@ -4122,7 +4192,7 @@ MonoBehaviour:
       isGlobal: 0
     - name: Gathered
       isSystemEvent: 0
-      isGlobal: 1
+      isGlobal: 0
     - name: Out Of Word
       isSystemEvent: 0
       isGlobal: 0
@@ -4137,7 +4207,7 @@ MonoBehaviour:
       isGlobal: 0
     - name: Ready To Init
       isSystemEvent: 0
-      isGlobal: 1
+      isGlobal: 0
     - name: TargetFound
       isSystemEvent: 0
       isGlobal: 1
@@ -4193,7 +4263,7 @@ MonoBehaviour:
     ExposedEvents:
     - name: Gathered
       isSystemEvent: 0
-      isGlobal: 1
+      isGlobal: 0
     RestartOnEnable: 1
     EnableDebugFlow: 0
     EnableBreakpoints: 1
@@ -5328,7 +5398,7 @@ Transform:
   - {fileID: 1811153769}
   - {fileID: 1143448513}
   m_Father: {fileID: 1388146864}
-  m_RootOrder: 5
+  m_RootOrder: 4
 --- !u!1 &1868967102
 GameObject:
   m_ObjectHideFlags: 0
@@ -5356,6 +5426,48 @@ Transform:
   m_Children: []
   m_Father: {fileID: 75234520}
   m_RootOrder: 2
+--- !u!1001 &2012250625
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 458436, guid: 48789741c76234fc28038195f078ec53, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 786.3222
+      objectReference: {fileID: 0}
+    - target: {fileID: 458436, guid: 48789741c76234fc28038195f078ec53, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 341.0317
+      objectReference: {fileID: 0}
+    - target: {fileID: 458436, guid: 48789741c76234fc28038195f078ec53, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 458436, guid: 48789741c76234fc28038195f078ec53, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 458436, guid: 48789741c76234fc28038195f078ec53, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 458436, guid: 48789741c76234fc28038195f078ec53, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 458436, guid: 48789741c76234fc28038195f078ec53, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 458436, guid: 48789741c76234fc28038195f078ec53, type: 2}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 48789741c76234fc28038195f078ec53, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &2056312292
 GameObject:
   m_ObjectHideFlags: 0
