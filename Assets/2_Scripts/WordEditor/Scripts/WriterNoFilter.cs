@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-
+#if UNITY_EDITOR
 namespace WordList
 {
 	public class WriterNoFilter : WordListWriter
@@ -27,3 +27,4 @@ namespace WordList
 	}
 
 }
+#endif
