@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+#if UNITY_EDITOR
 using UnityEditor;
 
 namespace WordList
@@ -82,3 +83,4 @@ namespace WordList
 	#endregion
 	}
 }
+#endif

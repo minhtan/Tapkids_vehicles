@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
-using UnityEditor;
 using System;
+#if UNITY_EDITOR
+using UnityEditor;
+
 
 namespace WordList
 {
@@ -28,3 +30,4 @@ namespace WordList
 		}
 	}
 }
+#endif
