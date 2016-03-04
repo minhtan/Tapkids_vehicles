@@ -3,7 +3,7 @@ using System.Collections;
 using AssetBundles;
 using System;
 
-public class AssetControl : UnitySingletonPersistent<AssetControl> {
+public class AssetController : UnitySingletonPersistent<AssetController> {
 
 	#region Vars
 	private string url = "http://103.27.239.161/Upload/";

@@ -39,7 +39,7 @@ public class CarGameController : MonoBehaviour {
 
 
 	IEnumerator CreateCar () {
-		yield return StartCoroutine (AssetControl.Instance.InstantiateGameObjectAsync (assetBundleName, carName, (bundle) => {
+		yield return StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (assetBundleName, carName, (bundle) => {
 			GameObject carGO = Instantiate (bundle);
 			carGO.transform.SetParent (transform);
 		}));
