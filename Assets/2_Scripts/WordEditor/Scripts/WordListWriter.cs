@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
+using UnityEditor;
+using System;
 
 namespace WordList
 {
@@ -11,8 +13,17 @@ namespace WordList
 
 		protected void WriteTextFile (string data, string fileName, string directoryPath)
 		{
-			var sr = File.CreateText (directoryPath + "/" + fileName + ".txt");
+			string assetPath = directoryPath + "/" + fileName + ".txt";
+			var sr = File.CreateText (assetPath);
 			sr.Write (data);
+		
+			AssetDatabase.Refresh();
+
+			int index = assetPath.IndexOf("Assets");
+			string relativePath = assetPath.Substring(index, assetPath.Length - index);
+			TextAsset txtGO = AssetDatabase.LoadAssetAtPath<TextAsset>(relativePath);
+			EditorGUIUtility.PingObject(txtGO);
+
 			sr.Close ();
 		}
 	}
