@@ -16,6 +16,7 @@ GameObject:
   - 114: {fileID: 11498518}
   - 114: {fileID: 11466118}
   - 114: {fileID: 11462130}
+  - 114: {fileID: 11415456}
   m_Layer: 0
   m_Name: ARController
   m_TagString: Untagged
@@ -79,7 +80,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 126766}
   m_LocalRotation: {x: 0.7071069, y: 0, z: 0, w: 0.70710677}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 10, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 447110}
@@ -172,6 +173,17 @@ Behaviour:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 166846}
   m_Enabled: 1
+--- !u!114 &11415456
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 126766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec32315094b16415cb95a380e16d337e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11416152
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -197,8 +209,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mDataSetsToLoad:
   - EnglishTaplifeAnimal
-  mDataSetsToActivate:
-  - EnglishTaplifeAnimal
+  mDataSetsToActivate: []
   mExternalDatasetRoots: []
 --- !u!114 &11454378
 MonoBehaviour:
@@ -220,7 +231,7 @@ MonoBehaviour:
   UseDelayedLoadingObjectTargets: 0
   CameraDirection: 0
   MirrorVideoBackground: 0
-  mWorldCenterMode: 1
+  mWorldCenterMode: 2
   mWorldCenter: {fileID: 0}
   mCentralAnchorPoint: {fileID: 431796}
   mParentAnchorPoint: {fileID: 431796}
@@ -337,7 +348,11 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: mWorldCenterMode
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 126766}

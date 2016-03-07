@@ -3,25 +3,21 @@ using System;
 using Vuforia;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.UI;
 
 public class WordGameController : MonoBehaviour {
     void Awake()
     {
         fsm = gameObject.GetComponent<PlayMakerFSM>();
-
-        DefaultTrackableEventHandlerFSM[] imgTargs = FindObjectsOfType<DefaultTrackableEventHandlerFSM>();
-        for (int i = 0; i < imgTargs.Length; i++)
-        {
-            letterToImgTarget.Add(imgTargs[i].targetName, imgTargs[i]);
-        }
-		GetDataList ();
     }
 
 	#region Vars
 	//Core
 	private Dictionary<string, DefaultTrackableEventHandlerFSM> letterToImgTarget = new Dictionary<string, DefaultTrackableEventHandlerFSM>();
 	private Dictionary<string, Transform> letterToPosition = new Dictionary<string, Transform> ();
-    private List<string> lst_answers;
+	private List<string> playableLetters;
+	private List<string> answers;
+	private List<string> foundAnswers = new List<string>();
     private PlayMakerFSM fsm;
     public int gameTimeInSeconds;
     public AudioClip correctSound;
@@ -38,17 +34,21 @@ public class WordGameController : MonoBehaviour {
 	public float winScorePercentage = 0.5f;
 	public int letterPoint = 5;
 	public int scoreStep = 1;
+
+	//GUI
+	public Text txt_letters;
+	public Text txt_answers;
 	#endregion
 
 	#region Data funcs
 	void GetDataList(){
-		dataList = DataUltility.ReadWordListByLevel ("");
+		dataList = DataUltility.ReadWordListByLevel ();
 	}
 
     void RandomData()
     {
         UnityEngine.Random.seed = Environment.TickCount;
-        data = dataList[Mathf.RoundToInt(UnityEngine.Random.Range(0, dataList.Count - 1))];
+		data = dataList[Mathf.RoundToInt (UnityEngine.Random.Range (0, dataList.Count))];
     }
 	#endregion
 
@@ -61,16 +61,57 @@ public class WordGameController : MonoBehaviour {
 	public void _ResetGame(){
 		fsm.Fsm.Event ("reset");
 	}
+
+	void _UpdateStartUI(){
+		txt_answers.text = "";
+		txt_letters.text = "";
+		for(int i = 0; i < playableLetters.Count; i++){
+			if (i > 0) {
+				txt_letters.text = txt_letters.text + " " + playableLetters [i];
+			} else {
+				txt_letters.text = txt_letters.text + playableLetters [i];
+			}
+		}
+	}
+
+	void _UpdatePlayingUI(){
+		txt_answers.text = "";
+		for(int i=0; i < foundAnswers.Count; i++){
+			if (i > 0) {
+				txt_answers.text = txt_answers.text + "\n" + foundAnswers [i];
+			} else {
+				txt_answers.text = txt_answers.text + foundAnswers [i];
+			}
+		}
+	}
+
+	void _UpdateGameOverUI(){
+		
+	}
 	#endregion
 
 	#region Game funcs
+	void _PreInit(){
+		ArController.Instance.DeactiveAllDataSet ();
+		ArController.Instance.SetActiveDataSet (0, true);
+
+		DefaultTrackableEventHandlerFSM[] imgTargs = FindObjectsOfType<DefaultTrackableEventHandlerFSM>();
+		for (int i = 0; i < imgTargs.Length; i++)
+		{
+			letterToImgTarget.Add(imgTargs[i].targetName, imgTargs[i]);
+		}
+		GetDataList ();
+	}
+
 	void _InitGame(){
 		currentScore = 0;
-		fsm.FsmVariables.GetFsmInt("timer").Value = gameTimeInSeconds;
-		letterToPosition.Clear();
-		RandomData();
-		List<string> playableLetters = DataUltility.GetPlayableLetters (data);
-		lst_answers = DataUltility.GetAnswersList(data);
+		fsm.FsmVariables.GetFsmInt ("timer").Value = gameTimeInSeconds;
+		letterToPosition.Clear ();
+		foundAnswers.Clear ();
+		RandomData ();
+		playableLetters = DataUltility.GetPlayableLetters (data);
+		answers = DataUltility.GetAnswersList (data);
+		ArController.Instance.SetArMaxStimTargets (playableLetters.Count);
 
 		foreach (string letter in playableLetters){
 			if( letterToImgTarget.ContainsKey(letter) ){
@@ -114,20 +155,22 @@ public class WordGameController : MonoBehaviour {
     }
 
     void HandleWordFound(string wordFound) {
-        if ( CheckAnswer(wordFound) ){
+        if ( CheckAnswer (wordFound) ){
             SoundController.Instance.PlaySound(correctSound);
-			currentScore = currentScore + GetWordScore(wordFound);
+			currentScore = currentScore + GetWordScore (wordFound);
 			fsm.FsmVariables.GetFsmInt("currentScore").Value = currentScore;
-            lst_answers.Remove(wordFound);
+            answers.Remove (wordFound);
+			foundAnswers.Add (wordFound);
+			fsm.Fsm.Event ("updateUI");
         }
-		if(lst_answers.Count <= 0){
+		if(answers.Count <= 0){
 			fsm.Fsm.Event ("gameover");
 		}
     }
 
     bool CheckAnswer(string word)
     {
-        if ( word != null && word != "" && lst_answers.Contains(word) ){
+        if ( word != null && word != "" && answers.Contains(word) ){
             return true;
         }else{
             return false;
@@ -137,18 +180,18 @@ public class WordGameController : MonoBehaviour {
 
 	#region Score funcs
 	void FindMinWordLength(){
-		minWordLength = 100;
-		for(int i=0; i<lst_answers.Count; i++){
-			if(lst_answers[i].Length < minWordLength){
-				minWordLength = lst_answers [i].Length;
+		minWordLength = 100;//hehe
+		for(int i=0; i<answers.Count; i++){
+			if(answers[i].Length < minWordLength){
+				minWordLength = answers [i].Length;
 			}
 		}
 	}
 
 	void GetWinScore(){
 		winScore = 0;
-		for(int i = 0; i < lst_answers.Count; i++){
-			winScore = winScore + GetWordScore(lst_answers[i]);
+		for(int i = 0; i < answers.Count; i++){
+			winScore = winScore + GetWordScore(answers[i]);
 		}
 		winScore = (int)(winScore * winScorePercentage);
 		fsm.FsmVariables.GetFsmInt("winScore").Value = winScore;
