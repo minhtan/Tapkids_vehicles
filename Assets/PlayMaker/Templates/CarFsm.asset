@@ -23,22 +23,14 @@ MonoBehaviour:
       colorIndex: 0
       position:
         serializedVersion: 2
-        x: 55
-        y: 105
-        width: 149
-        height: 32
+        x: 54
+        y: 100
+        width: 134
+        height: 16
       isBreakpoint: 0
       isSequence: 0
       hideUnused: 0
-      transitions:
-      - fsmEvent:
-          name: FINISHED
-          isSystemEvent: 1
-          isGlobal: 0
-        toState: Running
-        linkStyle: 0
-        linkConstraint: 0
-        colorIndex: 0
+      transitions: []
       actionData:
         actionNames: []
         customNames: []
@@ -83,8 +75,8 @@ MonoBehaviour:
       colorIndex: 0
       position:
         serializedVersion: 2
-        x: 378
-        y: 214
+        x: 382
+        y: 194
         width: 100
         height: 32
       isBreakpoint: 0
@@ -143,8 +135,8 @@ MonoBehaviour:
       colorIndex: 0
       position:
         serializedVersion: 2
-        x: 381
-        y: 326
+        x: 382
+        y: 328
         width: 100
         height: 32
       isBreakpoint: 0
@@ -203,8 +195,8 @@ MonoBehaviour:
       colorIndex: 0
       position:
         serializedVersion: 2
-        x: 63
-        y: 237
+        x: 64
+        y: 238
         width: 101
         height: 80
       isBreakpoint: 0
@@ -287,8 +279,8 @@ MonoBehaviour:
       colorIndex: 0
       position:
         serializedVersion: 2
-        x: 51
-        y: 414
+        x: 63
+        y: 455
         width: 100
         height: 32
       isBreakpoint: 0
@@ -415,6 +407,9 @@ MonoBehaviour:
     - name: G Game Over
       isSystemEvent: 0
       isGlobal: 1
+    - name: G Game Start
+      isSystemEvent: 0
+      isGlobal: 1
     - name: Gather
       isSystemEvent: 0
       isGlobal: 0
@@ -427,6 +422,14 @@ MonoBehaviour:
         isSystemEvent: 0
         isGlobal: 1
       toState: Stop
+      linkStyle: 0
+      linkConstraint: 0
+      colorIndex: 0
+    - fsmEvent:
+        name: G Game Start
+        isSystemEvent: 0
+        isGlobal: 1
+      toState: Running
       linkStyle: 0
       linkConstraint: 0
       colorIndex: 0

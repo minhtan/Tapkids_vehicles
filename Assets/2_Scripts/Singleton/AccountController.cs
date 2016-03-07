@@ -5,15 +5,17 @@ public class AccountController : UnitySingletonPersistent<AccountController> {
 
 	// account data stored
 	// name
-	// score
-	// strong word list (optional)
-	// car unlocked
-	// current selected car 
+	// current score
+	// total score
+	// list cars has been unlocked
+	// current select car 
+
+	// strong word list 
+	// weak word list
 
 	public class AccountData {
 		public string username;
 		public int score;
-		public List<string> stringWords;
 	}
 
 	#region public members
