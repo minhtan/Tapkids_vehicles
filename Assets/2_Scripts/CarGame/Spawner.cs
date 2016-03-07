@@ -12,23 +12,45 @@ public class Spawner : MonoBehaviour {
 //	float maxSpawnRate = 3f;
 //	float minSpawnRate = 1f;
 
-	string letters;
+//	string letters;
 	float time;
 	// object type
 //	public GameObject[] obstacles;
 	public GameObject[] letterPrefabs;
 	public Transform[] checkPoints;
-
 	//
 
-	// Use this for initialization
+	void OnEnable () {
+		CarGameEventController.InitGame += OnInitGame;
+		CarGameEventController.GameOver += OnGameOver;
+	}
+	void OnDisable () {
+		CarGameEventController.InitGame -= OnInitGame;
+		CarGameEventController.GameOver -= OnGameOver;
+	}
+
 	void Start () {
 		
 	}
 
-	void Init () {
-		Debug.Log (FsmVariables.GlobalVariables.GetFsmString ("givenWord").Value);
+	void OnInitGame (string letter) {
+		for (int i = 0; i < letter.Length; i++) {
+			for (int j = 0; j < letterPrefabs.Length; j++) {
+				if (letter[i].ToString ().Equals (letterPrefabs[j].name)) {
+					Debug.Log (letter [i].ToString ());
+					TrashMan.spawn (letterPrefabs[j], checkPoints [Random.Range (0, checkPoints.Length)].position, Quaternion.identity);
+				}
+			}
+		}
 	}
+
+	void OnGameOver () {
+
+	}
+//	void Init () {
+//		Debug.Log (FsmVariables.GlobalVariables.GetFsmString ("givenWord").Value);
+//	}
+
 	void SpawnLetter () {
 //		TrashMan.spawn (letters[Random.Range (0, letters.Length)], checkPoints[Random.Range(0, checkPoints.Length)], Quaternion.identity);
 	}
