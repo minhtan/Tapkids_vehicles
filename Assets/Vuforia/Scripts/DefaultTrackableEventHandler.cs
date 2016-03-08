@@ -74,6 +74,7 @@ namespace Vuforia
 //			if(targetControl != null){
 //				targetControl.Init ();
 //			}
+			Debug.Log("Found");
         }
 
 
@@ -82,6 +83,7 @@ namespace Vuforia
 //			if(targetControl != null){
 //				targetControl.Reset ();
 //			}
+			Debug.Log("Lost");
         }
 
         #endregion // PRIVATE_METHODS
