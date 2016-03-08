@@ -14,7 +14,9 @@ public class CarGameController : MonoBehaviour {
 	#region public members
 	public float gameTime = 10f;
 	public List<string> collectedLetters;
-	public Text gatherLetter;
+	public Text gatherLetterText;
+	public Text scoreText;
+	public GameObject car;
 	#endregion public members
 
 	#region private members
@@ -24,9 +26,14 @@ public class CarGameController : MonoBehaviour {
 
 
 	// word game data member
-	private WordGameData wordGameData;		// contains given letters and, answers
+	[HideInInspector]
+	public WordGameData wordGameData;		// contains given letters and, answers
 	[HideInInspector]
 	public string letter;					// founded image target
+	[HideInInspector]
+	public List<string> answers;
+	// score members
+	private int score = 0;
 
 	// car game data member
 //	string assetBundleName = "car_asset";
@@ -43,6 +50,7 @@ public class CarGameController : MonoBehaviour {
 	void GetData () {
 //		wordGameData = DataUltility.ReadDataForCarGame (letter);
 	}
+
 	#endregion GET DATA
 
 	#region public functions
@@ -56,10 +64,11 @@ public class CarGameController : MonoBehaviour {
 				// reset create other game base on new letter
 			}
 			letter = _letter;
-			mTransform.SetParent(_parent);
+
+			mTransform.SetParent(_parent, true);
 
 			_machine.changeState <CGInitState> ();
-		} 
+		}
 //		else {
 //			// if lost target 
 //			// we pause game for sure
@@ -71,18 +80,28 @@ public class CarGameController : MonoBehaviour {
 
 	void OnCollectLetter (string letter) {
 		collectedLetters.Add (letter);
+		gatherLetterText.text =  string.Join ("", collectedLetters.ToArray ());
 	}
 
 	void OnGatherLetter () {
 		if (collectedLetters.Count > 0) {
-			gatherLetter.text = string.Join ("", collectedLetters.ToArray ());
+			string gather = string.Join ("", collectedLetters.ToArray ());
+			if(collectedLetters.ToArray ().Length > 0 && answers.Contains (gather)) {
+				score++;
+				scoreText.text = score.ToString ();
+			}
 		}
 			
 	}
 
+	void OnResetGame () {
+		car.transform.position = Vector3.zero;
 
-	void GetWordData () {
-//		wordGameData = DataUltility.ReadDataForCarGame (letter);
+		score = 0;
+		scoreText.text = "0";
+
+		collectedLetters.Clear ();
+		gatherLetterText.text = "Result";
 	}
 
 	void Init () {
@@ -92,26 +111,25 @@ public class CarGameController : MonoBehaviour {
 	}
 
 
-
+	// create car from asset bundle
 //	IEnumerator CreateCar () {
 //		yield return StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (assetBundleName, carName, (bundle) => {
 //			GameObject carGO = Instantiate (bundle);
 //			carGO.transform.SetParent (transform);
 //		}));
 //	}
-
-
-
 	#endregion private functions
 
 	#region Mono
 	void OnEnable () {
 		CarGameEventController.TargetTracking += OnTargetTracking;
+		CarGameEventController.ResetGame += OnResetGame;
 		CarGameEventController.CollectLetter += OnCollectLetter;
 		CarGameEventController.GatherLetter += OnGatherLetter;
 	}
 	void OnDisable () {
 		CarGameEventController.TargetTracking -= OnTargetTracking;
+		CarGameEventController.ResetGame += OnResetGame;
 		CarGameEventController.CollectLetter -= OnCollectLetter;
 		CarGameEventController.GatherLetter -= OnGatherLetter;
 	}

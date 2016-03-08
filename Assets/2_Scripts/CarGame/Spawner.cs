@@ -37,8 +37,7 @@ public class Spawner : MonoBehaviour {
 		for (int i = 0; i < letter.Length; i++) {
 			for (int j = 0; j < letterPrefabs.Length; j++) {
 				if (letter[i].ToString ().Equals (letterPrefabs[j].name)) {
-					Debug.Log (letter [i].ToString ());
-					TrashMan.spawn (letterPrefabs[j], checkPoints [Random.Range (0, checkPoints.Length)].position, Quaternion.identity);
+					TrashMan.spawn (letterPrefabs[j], checkPoints [i].position, Quaternion.identity);
 				}
 			}
 		}

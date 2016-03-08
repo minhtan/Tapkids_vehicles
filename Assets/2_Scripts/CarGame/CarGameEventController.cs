@@ -12,6 +12,8 @@ public static class CarGameEventController {
 
 	public delegate void PauseGameEventHandler ();
 
+	public delegate void ResetGameEventHandler ();
+
 	public delegate void GameOverEventHandler ();
 
 	// Car 
@@ -32,7 +34,9 @@ public static class CarGameEventController {
 
 	public static event PauseGameEventHandler PauseGame;
 
-	public static event PauseGameEventHandler GameOver;
+	public static event ResetGameEventHandler ResetGame;
+
+	public static event GameOverEventHandler GameOver;
 
 	// Car
 	public static event CollectLetterEventHandler CollectLetter;
@@ -67,6 +71,13 @@ public static class CarGameEventController {
 
 	public static void OnPauseGame () {
 		var handler = PauseGame;
+		if (handler != null) {
+			handler ();
+		}
+	}
+
+	public static void OnResetGame () {
+		var handler = ResetGame;
 		if (handler != null) {
 			handler ();
 		}

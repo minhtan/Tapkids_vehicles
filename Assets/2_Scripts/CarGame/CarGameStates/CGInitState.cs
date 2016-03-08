@@ -5,7 +5,6 @@ using Prime31.StateKit;
 public class CGInitState : SKState<CarGameController> {
 
 	private	float countDownTimer = 3f;
-	private WordGameData wordData;
 
 	public override void begin ()
 	{
@@ -14,9 +13,10 @@ public class CGInitState : SKState<CarGameController> {
 		// reset game time
 		_context.gameTime = 10f;
 		// get word data]
-		wordData = DataUltility.ReadDataForCarGame (_context.letter);
+		_context.wordGameData = DataUltility.ReadDataForCarGame (_context.letter);
 		// send event init game environment
-		CarGameEventController.OnInitGame (wordData.letters);
+		_context.answers = DataUltility.GetAnswersList (_context.wordGameData);
+		CarGameEventController.OnInitGame (_context.wordGameData.letters);
 
 	}
 

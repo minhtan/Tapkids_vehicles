@@ -6,11 +6,12 @@ public class Letter : MonoBehaviour {
 	public string name;
 
 	void OnTriggerEnter (Collider other) {
-		// collect letter
-		CarGameEventController.OnCollectLetter (name);
+
+		Debug.Log ("_________");
 		// disable letter
 		TrashMan.despawn(gameObject);
-
+		// collect letter
+		CarGameEventController.OnCollectLetter (name);
 
 	}
 
