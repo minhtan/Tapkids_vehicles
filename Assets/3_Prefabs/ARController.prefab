@@ -16,7 +16,7 @@ GameObject:
   - 114: {fileID: 11498518}
   - 114: {fileID: 11466118}
   - 114: {fileID: 11462130}
-  - 114: {fileID: 11415456}
+  - 114: {fileID: 11454306}
   m_Layer: 0
   m_Name: ARController
   m_TagString: Untagged
@@ -115,7 +115,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 2
+  near clip plane: 0.01
   far clip plane: 5000
   field of view: 51
   orthographic: 0
@@ -173,17 +173,6 @@ Behaviour:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 166846}
   m_Enabled: 1
---- !u!114 &11415456
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 126766}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec32315094b16415cb95a380e16d337e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &11416152
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -207,10 +196,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67cbfb9153674e84d894cc7d53ffe720, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mDataSetsToLoad:
-  - EnglishTaplifeAnimal
+  mDataSetsToLoad: []
   mDataSetsToActivate: []
   mExternalDatasetRoots: []
+--- !u!114 &11454306
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 126766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec32315094b16415cb95a380e16d337e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isVuforiaReady: 0
 --- !u!114 &11454378
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -226,7 +226,7 @@ MonoBehaviour:
   mCameraOffset: 0
   mSkewFrustum: 1
   CameraDeviceModeSetting: -1
-  MaxSimultaneousImageTargets: 1
+  MaxSimultaneousImageTargets: 5
   MaxSimultaneousObjectTargets: 1
   UseDelayedLoadingObjectTargets: 0
   CameraDirection: 0

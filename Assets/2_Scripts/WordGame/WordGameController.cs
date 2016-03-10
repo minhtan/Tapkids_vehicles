@@ -4,12 +4,29 @@ using Vuforia;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.UI;
+using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class WordGameController : MonoBehaviour {
     void Awake()
     {
         fsm = gameObject.GetComponent<PlayMakerFSM>();
     }
+
+	void Start(){
+		StartCoroutine (WaitForVuforia ());
+	}
+
+	void OnDestroy(){
+//		ArController.Instance.UnloadAllDataSet ();
+	}
+
+	IEnumerator WaitForVuforia(){
+//		while(!ArController.Instance.isVuforiaReady){
+			yield return null;
+//		}
+		fsm.Fsm.Event ("vuforiaFinished");
+	}
 
 	#region Vars
 	//Core
@@ -92,8 +109,7 @@ public class WordGameController : MonoBehaviour {
 
 	#region Game funcs
 	void _PreInit(){
-		ArController.Instance.DeactiveAllDataSet ();
-		ArController.Instance.SetActiveDataSet (0, true);
+//		ArController.Instance.LoadAndActiveDataSet ("EnglishTaplifeAnimal");
 
 		DefaultTrackableEventHandlerFSM[] imgTargs = FindObjectsOfType<DefaultTrackableEventHandlerFSM>();
 		for (int i = 0; i < imgTargs.Length; i++)

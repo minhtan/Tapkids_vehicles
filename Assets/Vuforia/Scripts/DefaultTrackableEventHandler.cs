@@ -18,11 +18,8 @@ namespace Vuforia
         #region PRIVATE_MEMBER_VARIABLES
  
         private TrackableBehaviour mTrackableBehaviour;
-//		private TargetControl targetControl;
     
         #endregion // PRIVATE_MEMBER_VARIABLES
-
-
 
         #region UNTIY_MONOBEHAVIOUR_METHODS
 
@@ -33,12 +30,9 @@ namespace Vuforia
             {
                 mTrackableBehaviour.RegisterTrackableEventHandler(this);
             }
-//			targetControl = GetComponentInChildren<TargetControl> ();
         }
 
         #endregion // UNTIY_MONOBEHAVIOUR_METHODS
-
-
 
         #region PUBLIC_METHODS
 
@@ -64,26 +58,24 @@ namespace Vuforia
 
         #endregion // PUBLIC_METHODS
 
-
-
         #region PRIVATE_METHODS
 
 
         private void OnTrackingFound()
         {
-//			if(targetControl != null){
-//				targetControl.Init ();
-//			}
 			Debug.Log("Found");
+			foreach(Transform t in transform){
+				t.gameObject.SetActive (true);
+			}
         }
 
 
         private void OnTrackingLost()
         {
-//			if(targetControl != null){
-//				targetControl.Reset ();
-//			}
 			Debug.Log("Lost");
+			foreach(Transform t in transform){
+				t.gameObject.SetActive (false);
+			}
         }
 
         #endregion // PRIVATE_METHODS
