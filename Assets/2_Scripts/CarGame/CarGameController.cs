@@ -15,7 +15,7 @@ public class CarGameController : MonoBehaviour {
 	public float gameTime = 10f;
 	public List<string> collectedLetters;
 	public Text gatherLetterText;
-	public Text scoreText;
+	public Text successText;
 	public GameObject car;
 	#endregion public members
 
@@ -32,26 +32,12 @@ public class CarGameController : MonoBehaviour {
 	public string letter;					// founded image target
 	[HideInInspector]
 	public List<string> answers;
-	// score members
-	private int score = 0;
 
 	// car game data member
 //	string assetBundleName = "car_asset";
 //	string carName = "Police";
 
 	#endregion private members
-
-	#region GET DATA
-	// get letter from image target
-	// get word data by given letter
-
-	// get current select car
-	// 
-	void GetData () {
-//		wordGameData = DataUltility.ReadDataForCarGame (letter);
-	}
-
-	#endregion GET DATA
 
 	#region public functions
 
@@ -69,13 +55,9 @@ public class CarGameController : MonoBehaviour {
 
 			_machine.changeState <CGInitState> ();
 		}
-//		else {
-//			// if lost target 
-//			// we pause game for sure
-//			if (_machine.currentState == ) {
-//				_machine.changeState <CGPauseState> ();
-//			}
-//		}
+		else {
+			// TODO: WHAT IF TARGETLOST
+		}
 	}
 
 	void OnCollectLetter (string letter) {
@@ -86,9 +68,19 @@ public class CarGameController : MonoBehaviour {
 	void OnGatherLetter () {
 		if (collectedLetters.Count > 0) {
 			string gather = string.Join ("", collectedLetters.ToArray ());
-			if(collectedLetters.ToArray ().Length > 0 && answers.Contains (gather)) {
-				score++;
-				scoreText.text = score.ToString ();
+			if(collectedLetters.ToArray ().Length > 0) {
+				if (answers.Contains (gather)) {
+					successText.text = "Correct";
+					_machine.changeState <CGPauseState> ();
+				} else {
+					successText.text = "Wrong";
+					collectedLetters.Clear ();
+					gatherLetterText.text = "Result";
+					// respawn letter
+
+					CarGameEventController.OnValidateWord();
+
+				}
 			}
 		}
 			
@@ -96,12 +88,11 @@ public class CarGameController : MonoBehaviour {
 
 	void OnResetGame () {
 		car.transform.position = Vector3.zero;
-
-		score = 0;
-		scoreText.text = "0";
+		successText.text = "";
 
 		collectedLetters.Clear ();
 		gatherLetterText.text = "Result";
+
 	}
 
 	void Init () {
@@ -144,6 +135,7 @@ public class CarGameController : MonoBehaviour {
 		_machine.addState (new CGPlayState ());
 		_machine.addState (new CGPauseState ());
 		_machine.addState (new CGGameOverState ());
+		_machine.addState (new CGResetGameState ());
 
 		collectedLetters = new List <string> ();
 	}

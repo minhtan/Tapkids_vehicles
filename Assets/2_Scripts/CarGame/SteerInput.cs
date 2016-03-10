@@ -8,11 +8,15 @@ namespace UnityStandardAssets.CrossPlatformInput
 	[RequireComponent(typeof(Image))]
 	public class SteerInput : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	{
-		public string horizontalAxisName = "Horizontal"; // The name given to the horizontal axis for the cross platform input
-		public string verticalAxisName = "Vertical";
+		public string steerInputName = "Steer"; // The name given to the horizontal axis for the cross platform input
+		public string accelerateInputName = "Accelerate";
+		public string brakeInputName = "Brake";
 
-		CrossPlatformInputManager.VirtualAxis m_HorizontalVirtualAxis; // Reference to the joystick in the cross platform input
-		CrossPlatformInputManager.VirtualAxis m_VerticalVirtualAxis; // Reference to the joystick in the cross platform input
+		private bool isActiveInput;
+
+		CrossPlatformInputManager.VirtualAxis m_Steer; // Reference to the joystick in the cross platform input
+		CrossPlatformInputManager.VirtualAxis m_Accelerate; // Reference to the joystick in the cross platform input
+		CrossPlatformInputManager.VirtualAxis m_Brake; // Reference to the joystick in the cross platform input
 
 		Image image;
 		Vector3 center;
@@ -24,29 +28,50 @@ namespace UnityStandardAssets.CrossPlatformInput
 
 		void OnEnable()
 		{
+			CarGameEventController.StartGame += OnStartGame;
+			CarGameEventController.PauseGame += OnPauseGame;
+			CarGameEventController.PauseGame += OnResetGame;
+
 			CreateVirtualAxes();	
 		}
 
+		void OnStartGame () {
+			isActiveInput = true;
+			m_Accelerate.Update (1f);
+		}
+		void OnPauseGame () {
+			isActiveInput = false;
+			m_Accelerate.Update (0f);
+		}
+		void OnResetGame () {
+			isActiveInput = true;
+			m_Accelerate.Update (1f);
+
+		}
 		void CreateVirtualAxes()
 		{
 			// create new axes based on axes to use
-			m_HorizontalVirtualAxis = new CrossPlatformInputManager.VirtualAxis(horizontalAxisName);
-			CrossPlatformInputManager.RegisterVirtualAxis(m_HorizontalVirtualAxis);
+			m_Steer = new CrossPlatformInputManager.VirtualAxis (steerInputName);
+			CrossPlatformInputManager.RegisterVirtualAxis (m_Steer);
 
-			m_VerticalVirtualAxis = new CrossPlatformInputManager.VirtualAxis(verticalAxisName);
-			CrossPlatformInputManager.RegisterVirtualAxis(m_VerticalVirtualAxis);
+			m_Accelerate = new CrossPlatformInputManager.VirtualAxis(accelerateInputName);
+			CrossPlatformInputManager.RegisterVirtualAxis (m_Accelerate);
+
+			m_Brake = new CrossPlatformInputManager.VirtualAxis (brakeInputName);
+			CrossPlatformInputManager.RegisterVirtualAxis (m_Brake);
 		}
 
 		void UpdateVirtualAxes(Vector3 value)
 		{
 			value = value.normalized;
-			m_HorizontalVirtualAxis.Update (value.x);
-			m_VerticalVirtualAxis.Update (1f);
+			m_Steer.Update (value.x);
 		}
 
 
 		public void OnPointerDown(PointerEventData data)
 		{
+			if (!isActiveInput) return;
+
 			if(data.position.x > center.x)
 				UpdateVirtualAxes (Vector3.right);
 			else
@@ -55,13 +80,25 @@ namespace UnityStandardAssets.CrossPlatformInput
 
 		public void OnPointerUp(PointerEventData data)
 		{
+			if (!isActiveInput) return;
+
 			UpdateVirtualAxes (Vector3.zero);
 		}
 
 		void OnDisable()
 		{
-			if (CrossPlatformInputManager.AxisExists(horizontalAxisName))
-				CrossPlatformInputManager.UnRegisterVirtualAxis(horizontalAxisName);
+			CarGameEventController.StartGame -= OnStartGame;
+			CarGameEventController.PauseGame -= OnPauseGame;
+			CarGameEventController.PauseGame -= OnResetGame;
+
+			if (CrossPlatformInputManager.AxisExists (steerInputName))
+				CrossPlatformInputManager.UnRegisterVirtualAxis (steerInputName);
+
+			if (CrossPlatformInputManager.AxisExists (accelerateInputName))
+				CrossPlatformInputManager.UnRegisterVirtualAxis (accelerateInputName);
+
+			if (CrossPlatformInputManager.AxisExists (brakeInputName))
+				CrossPlatformInputManager.UnRegisterVirtualAxis (brakeInputName);
 		}
 	}
 }

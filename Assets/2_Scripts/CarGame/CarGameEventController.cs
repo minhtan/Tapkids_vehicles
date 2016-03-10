@@ -21,6 +21,8 @@ public static class CarGameEventController {
 
 	public delegate void GatherLetterEventHandler ();
 
+	// Word
+	public delegate void ValidateWordEventHandler ();
 
 	#endregion public delegates
 
@@ -42,6 +44,9 @@ public static class CarGameEventController {
 	public static event CollectLetterEventHandler CollectLetter;
 
 	public static event GatherLetterEventHandler GatherLetter;
+
+	// Word
+	public static event ValidateWordEventHandler ValidateWord;
 
 	#endregion Events
 
@@ -100,6 +105,14 @@ public static class CarGameEventController {
 
 	public static void OnGatherLetter () {
 		var handler = GatherLetter;
+		if (handler != null) {
+			handler ();
+		}
+	}
+
+	// Word
+	public static void OnValidateWord () {
+		var handler = ValidateWord;
 		if (handler != null) {
 			handler ();
 		}

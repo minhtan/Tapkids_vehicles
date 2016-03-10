@@ -14,30 +14,40 @@ public class Spawner : MonoBehaviour {
 
 //	string letters;
 	float time;
+	string letter;
 	// object type
 //	public GameObject[] obstacles;
 	public GameObject[] letterPrefabs;
 	public Transform[] checkPoints;
 	//
 
+	List<GameObject> letterGos;
+
 	void OnEnable () {
 		CarGameEventController.InitGame += OnInitGame;
 		CarGameEventController.GameOver += OnGameOver;
+		CarGameEventController.ResetGame += OnValidateWord;
+		CarGameEventController.ValidateWord += OnValidateWord;
 	}
 	void OnDisable () {
 		CarGameEventController.InitGame -= OnInitGame;
 		CarGameEventController.GameOver -= OnGameOver;
+		CarGameEventController.ResetGame -= OnValidateWord;
+		CarGameEventController.ValidateWord -= OnValidateWord;
 	}
 
 	void Start () {
-		
+		letterGos = new List<GameObject> ();
 	}
 
-	void OnInitGame (string letter) {
+	void OnInitGame (string _letter) {
+		letter = _letter;
 		for (int i = 0; i < letter.Length; i++) {
 			for (int j = 0; j < letterPrefabs.Length; j++) {
 				if (letter[i].ToString ().Equals (letterPrefabs[j].name)) {
-					TrashMan.spawn (letterPrefabs[j], checkPoints [i].position, Quaternion.identity);
+//					TrashMan.spawn (letterPrefabs[j], checkPoints [i].position, Quaternion.identity);
+					GameObject go = (GameObject) Instantiate (letterPrefabs [j], checkPoints [i].position, Quaternion.identity);
+					letterGos.Add (go);
 				}
 			}
 		}
@@ -46,12 +56,30 @@ public class Spawner : MonoBehaviour {
 	void OnGameOver () {
 
 	}
-//	void Init () {
-//		Debug.Log (FsmVariables.GlobalVariables.GetFsmString ("givenWord").Value);
-//	}
 
-	void SpawnLetter () {
-//		TrashMan.spawn (letters[Random.Range (0, letters.Length)], checkPoints[Random.Range(0, checkPoints.Length)], Quaternion.identity);
+	void OnValidateWord () {
+
+//		if(_isCorrect) return;
+
+		// clear current letter
+		if(letterGos.Count > 0) {
+			for (int i = 0; i < letterGos.Count; i++) {
+				if(letterGos[i] != null) {
+					Destroy (letterGos[i]);
+				}
+			}
+		}
+		letterGos.Clear ();
+		// re spawn
+
+		for (int i = 0; i < letter.Length; i++) {
+			for (int j = 0; j < letterPrefabs.Length; j++) {
+				if (letter[i].ToString ().Equals (letterPrefabs[j].name)) {
+//					TrashMan.spawn (letterPrefabs[j], checkPoints [i].position, Quaternion.identity);
+					GameObject go = (GameObject) Instantiate (letterPrefabs [j], checkPoints [i].position, Quaternion.identity);
+					letterGos.Add (go);
+				}
+			}
+		}
 	}
-
 }

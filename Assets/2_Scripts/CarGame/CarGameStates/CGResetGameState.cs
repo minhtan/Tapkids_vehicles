@@ -1,16 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Prime31.StateKit;
+public class CGResetGameState : SKState<CarGameController> {
 
-public class CGPauseState : SKState<CarGameController> {
 
 	public override void begin ()
 	{
-		Debug.Log("Pause State >>>");
-		// send message pause game: to disable mobile input, enable pause gui, 
-
-		CarGameEventController.OnPauseGame ();
-
+		Debug.Log("Reset State >>>");
+		
 	}
 
 	public override void reason ()
@@ -22,8 +19,9 @@ public class CGPauseState : SKState<CarGameController> {
 
 	public override void end ()
 	{
-		Debug.Log("Pause State <<<");
+		Debug.Log("Reset State <<<");
 	}
+
 	#region public members
 	#endregion public members
 
