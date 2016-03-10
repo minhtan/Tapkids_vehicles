@@ -10,12 +10,12 @@ public class DataUltility {
 		return Resources.Load<TextAsset>(fileName).text;
 	}
 
-	public static List<WordGameData> ReadWordListByLevel(string level){
+	public static List<WordGameData> ReadWordListByLevel(){
 		List<WordGameData> list = new List<WordGameData> ();
 
-		TextAsset[] textList = Resources.LoadAll<TextAsset> ("WordGame/" + level);
+		TextAsset[] textList = Resources.LoadAll<TextAsset> ("WordGame/");
 		for(int i=0; i < textList.Length; i++){
-			list.Add(JsonUtility.FromJson<WordGameData> (textList [0].text));
+			list.Add(JsonUtility.FromJson<WordGameData> (textList [i].text));
 		}
 
 		return list;

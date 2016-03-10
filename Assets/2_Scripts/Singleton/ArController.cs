@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Vuforia;
+using System.Collections.Generic;
+using System.Linq;
 
 public class ArController : UnitySingletonPersistent<ArController> {
 
 	#region Vars
-
 	#endregion
 
 	#region Mono
@@ -14,12 +15,7 @@ public class ArController : UnitySingletonPersistent<ArController> {
 		base.Awake ();
 	}
 
-	void Start () {
-	
-	}
-
 	void Update () {
-	
 	}
 	#endregion
 
@@ -27,7 +23,7 @@ public class ArController : UnitySingletonPersistent<ArController> {
 		VuforiaUnity.SetHint ( Vuforia.VuforiaUnity.VuforiaHint.HINT_MAX_SIMULTANEOUS_IMAGE_TARGETS,  targetNums );
 	}
 
-	public void ToggleAr(bool state){
+	public void ToggleAR(bool state){
 		VuforiaBehaviour.Instance.enabled = state;
 	}
 }

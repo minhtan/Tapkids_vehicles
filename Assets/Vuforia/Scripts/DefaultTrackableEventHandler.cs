@@ -1,11 +1,10 @@
 /*==============================================================================
 Copyright (c) 2010-2014 Qualcomm Connected Experiences, Inc.
 All Rights Reserved.
-Confidential and Proprietary - Qualcomm Connected Experiences, Inc.
+Confidential and Proprietary - Protected under copyright and other laws.
 ==============================================================================*/
 
 using UnityEngine;
-using PlayMaker;
 
 namespace Vuforia
 {
@@ -15,19 +14,16 @@ namespace Vuforia
     public class DefaultTrackableEventHandler : MonoBehaviour,
                                                 ITrackableEventHandler
     {
-
-		public GameObject go;
         #region PRIVATE_MEMBER_VARIABLES
  
         private TrackableBehaviour mTrackableBehaviour;
-//		private TargetControl targetControl;
     
         #endregion // PRIVATE_MEMBER_VARIABLES
 
 
 
         #region UNTIY_MONOBEHAVIOUR_METHODS
-
+    
         void Start()
         {
             mTrackableBehaviour = GetComponent<TrackableBehaviour>();
@@ -35,7 +31,6 @@ namespace Vuforia
             {
                 mTrackableBehaviour.RegisterTrackableEventHandler(this);
             }
-//			targetControl = GetComponentInChildren<TargetControl> ();
         }
 
         #endregion // UNTIY_MONOBEHAVIOUR_METHODS
@@ -73,19 +68,43 @@ namespace Vuforia
 
         private void OnTrackingFound()
         {
-			go.SetActive (true);
-//			if(targetControl != null){
-//				targetControl.Init ();
-//			}
+            Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
+            Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
+
+            // Enable rendering:
+            foreach (Renderer component in rendererComponents)
+            {
+                component.enabled = true;
+            }
+
+            // Enable colliders:
+            foreach (Collider component in colliderComponents)
+            {
+                component.enabled = true;
+            }
+
+            Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " found");
         }
 
 
         private void OnTrackingLost()
         {
-			go.SetActive (false);
-//			if(targetControl != null){
-//				targetControl.Reset ();
-//			}
+            Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
+            Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
+
+            // Disable rendering:
+            foreach (Renderer component in rendererComponents)
+            {
+                component.enabled = false;
+            }
+
+            // Disable colliders:
+            foreach (Collider component in colliderComponents)
+            {
+                component.enabled = false;
+            }
+
+            Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " lost");
         }
 
         #endregion // PRIVATE_METHODS
