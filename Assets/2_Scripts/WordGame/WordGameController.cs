@@ -12,25 +12,9 @@ public class WordGameController : MonoBehaviour {
     {
         fsm = gameObject.GetComponent<PlayMakerFSM>();
     }
-
-	void Start(){
-		StartCoroutine (WaitForVuforia ());
-	}
-
-	void OnDestroy(){
-//		ArController.Instance.UnloadAllDataSet ();
-	}
-
-	IEnumerator WaitForVuforia(){
-//		while(!ArController.Instance.isVuforiaReady){
-			yield return null;
-//		}
-		fsm.Fsm.Event ("vuforiaFinished");
-	}
-
 	#region Vars
 	//Core
-	private Dictionary<string, DefaultTrackableEventHandlerFSM> letterToImgTarget = new Dictionary<string, DefaultTrackableEventHandlerFSM>();
+	private Dictionary<string, FSMTrackable> letterToImgTarget = new Dictionary<string, FSMTrackable>();
 	private Dictionary<string, Transform> letterToPosition = new Dictionary<string, Transform> ();
 	private List<string> playableLetters;
 	private List<string> answers;
@@ -109,9 +93,7 @@ public class WordGameController : MonoBehaviour {
 
 	#region Game funcs
 	void _PreInit(){
-//		ArController.Instance.LoadAndActiveDataSet ("EnglishTaplifeAnimal");
-
-		DefaultTrackableEventHandlerFSM[] imgTargs = FindObjectsOfType<DefaultTrackableEventHandlerFSM>();
+		FSMTrackable[] imgTargs = FindObjectsOfType<FSMTrackable>();
 		for (int i = 0; i < imgTargs.Length; i++)
 		{
 			letterToImgTarget.Add(imgTargs[i].targetName, imgTargs[i]);
@@ -131,7 +113,7 @@ public class WordGameController : MonoBehaviour {
 
 		foreach (string letter in playableLetters){
 			if( letterToImgTarget.ContainsKey(letter) ){
-				DefaultTrackableEventHandlerFSM imageTarget;
+				FSMTrackable imageTarget;
 				if ( letterToImgTarget.TryGetValue (letter, out imageTarget) ) {
 					imageTarget.Ready ();
 				}
@@ -143,7 +125,7 @@ public class WordGameController : MonoBehaviour {
 	}
 
     void _AddPlayableTarget(string letter) {
-        DefaultTrackableEventHandlerFSM imageTarget;
+        FSMTrackable imageTarget;
         if ( letterToImgTarget.TryGetValue(letter, out imageTarget) ){
             letterToPosition.Add(letter, imageTarget.gameObject.transform);
         }

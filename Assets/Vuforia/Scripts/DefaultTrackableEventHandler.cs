@@ -1,11 +1,10 @@
 /*==============================================================================
 Copyright (c) 2010-2014 Qualcomm Connected Experiences, Inc.
 All Rights Reserved.
-Confidential and Proprietary - Qualcomm Connected Experiences, Inc.
+Confidential and Proprietary - Protected under copyright and other laws.
 ==============================================================================*/
 
 using UnityEngine;
-using PlayMaker;
 
 namespace Vuforia
 {
@@ -21,8 +20,10 @@ namespace Vuforia
     
         #endregion // PRIVATE_MEMBER_VARIABLES
 
-        #region UNTIY_MONOBEHAVIOUR_METHODS
 
+
+        #region UNTIY_MONOBEHAVIOUR_METHODS
+    
         void Start()
         {
             mTrackableBehaviour = GetComponent<TrackableBehaviour>();
@@ -33,6 +34,8 @@ namespace Vuforia
         }
 
         #endregion // UNTIY_MONOBEHAVIOUR_METHODS
+
+
 
         #region PUBLIC_METHODS
 
@@ -58,24 +61,50 @@ namespace Vuforia
 
         #endregion // PUBLIC_METHODS
 
+
+
         #region PRIVATE_METHODS
 
 
         private void OnTrackingFound()
         {
-			Debug.Log("Found");
-			foreach(Transform t in transform){
-				t.gameObject.SetActive (true);
-			}
+            Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
+            Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
+
+            // Enable rendering:
+            foreach (Renderer component in rendererComponents)
+            {
+                component.enabled = true;
+            }
+
+            // Enable colliders:
+            foreach (Collider component in colliderComponents)
+            {
+                component.enabled = true;
+            }
+
+            Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " found");
         }
 
 
         private void OnTrackingLost()
         {
-			Debug.Log("Lost");
-			foreach(Transform t in transform){
-				t.gameObject.SetActive (false);
-			}
+            Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
+            Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
+
+            // Disable rendering:
+            foreach (Renderer component in rendererComponents)
+            {
+                component.enabled = false;
+            }
+
+            // Disable colliders:
+            foreach (Collider component in colliderComponents)
+            {
+                component.enabled = false;
+            }
+
+            Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " lost");
         }
 
         #endregion // PRIVATE_METHODS
