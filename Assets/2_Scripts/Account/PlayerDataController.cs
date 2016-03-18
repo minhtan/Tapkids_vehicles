@@ -47,10 +47,13 @@ public class PlayerDataController : MonoBehaviour {
 		
 	}
 
+<<<<<<< HEAD
 
 	void GetPlayerData () {
 
 	}
+=======
+>>>>>>> 305f485ebd19243def2a4d97d842b294e2abd249
 	// get and set data for player: name, score, car
 	// 
 		
