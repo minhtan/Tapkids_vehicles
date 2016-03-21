@@ -70,7 +70,7 @@ public class GestureLineDrawing : GestureDrawing
 
 			currentLine.Draw ();
 		}
-	}
+	}	
 
 	protected override void StrokeEnd (Lean.LeanFinger finger)
 	{
