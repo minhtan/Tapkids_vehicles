@@ -88,6 +88,7 @@ namespace PDollarGestureRecognizer
 		private static Gesture ReadGesture (XmlTextReader xmlReader)
 		{
 			List<Point> points = new List<Point> ();
+
 			int currentStrokeIndex = -1;
 			string gestureName = "";
 
@@ -119,6 +120,7 @@ namespace PDollarGestureRecognizer
 				if (xmlReader != null)
 					xmlReader.Close ();
 			}
+				
 			return new Gesture (points.ToArray (), gestureName, currentStrokeIndex + 1);
 		}
 

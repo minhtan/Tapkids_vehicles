@@ -58,6 +58,7 @@
  * SUCH DAMAGE.
 **/
 using System;
+using System.Collections.Generic;
 
 namespace PDollarGestureRecognizer
 {

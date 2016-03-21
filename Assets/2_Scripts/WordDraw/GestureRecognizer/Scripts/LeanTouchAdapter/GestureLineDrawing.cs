@@ -17,6 +17,8 @@ public class GestureLineDrawing : GestureDrawing
 	private int sqrMinPixelMove;
 	private bool canDraw = false;
 
+	
+
 	void Awake ()
 	{
 		if (useEndCap) {
@@ -85,9 +87,14 @@ public class GestureLineDrawing : GestureDrawing
 		canDraw = false;
 	}
 
+	/// <summary>
+	/// Changes to next stroke. use to split losing focus stroke
+	/// </summary>
 	public void ChangeToNextStroke ()
 	{
-		currentLine = lineList [recognizer.CurrentStrokeID];
+		recognizer.ChangeToNextStroke ();
+
+		currentLine = lineList [recognizer.CurrentStrokeID + 1];
 
 		previousPosition = Input.mousePosition;
 		currentLine.points2.Add (Input.mousePosition);
