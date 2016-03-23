@@ -73,7 +73,7 @@ namespace TouchScript.Editor.Gestures
                     EditorGUI.LabelField(rect, GUIContent.none);
                     return;
                 }
-                EditorGUI.LabelField(rect, string.Format("{0} @ {1}", gesture.GetType().Name, gesture.name), GUIElements.BoxLabelStyle);
+				EditorGUI.LabelField(rect, string.Format("{0} @ {1}", gesture.GetType().Name, gesture.name), GUIElements.BoxLabelStyle);
             };
             friendlyGesturesList.onRemoveCallback += list => { indexToRemove = list.index; };
         }

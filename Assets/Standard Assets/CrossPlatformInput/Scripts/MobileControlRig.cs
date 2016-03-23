@@ -17,14 +17,14 @@ namespace UnityStandardAssets.CrossPlatformInput
         // the Cross Platform Input package.
 
 #if !UNITY_EDITOR
-		void OnEnable()
-		{
-			CheckEnableControlRig();
-		}
+	void OnEnable()
+	{
+		CheckEnableControlRig();
+	}
 	#endif
 
-	    private void Start()
-	    {
+        private void Start()
+        {
 #if UNITY_EDITOR
             if (Application.isPlaying) //if in the editor, need to check if we are playing, as start is also called just after exiting play
 #endif
@@ -37,7 +37,6 @@ namespace UnityStandardAssets.CrossPlatformInput
 
                     o.AddComponent<UnityEngine.EventSystems.EventSystem>();
                     o.AddComponent<UnityEngine.EventSystems.StandaloneInputModule>();
-                    o.AddComponent<UnityEngine.EventSystems.TouchInputModule>();
                 }
             }
         }
@@ -46,19 +45,19 @@ namespace UnityStandardAssets.CrossPlatformInput
 
         private void OnEnable()
         {
-            EditorUserBuildSettings.activeBuildTargetChanged += UpdatePlatform;
-            EditorApplication.update += UpdatePlatform;
+            EditorUserBuildSettings.activeBuildTargetChanged += Update;
+            EditorApplication.update += Update;
         }
 
 
         private void OnDisable()
         {
-            EditorUserBuildSettings.activeBuildTargetChanged -= UpdatePlatform;
-            EditorApplication.update -= UpdatePlatform;
+            EditorUserBuildSettings.activeBuildTargetChanged -= Update;
+            EditorApplication.update -= Update;
         }
 
 
-        private void UpdatePlatform()
+        private void Update()
         {
             CheckEnableControlRig();
         }
@@ -70,7 +69,7 @@ namespace UnityStandardAssets.CrossPlatformInput
 #if MOBILE_INPUT
 		EnableControlRig(true);
 		#else
-        EnableControlRig(false);
+            EnableControlRig(false);
 #endif
         }
 

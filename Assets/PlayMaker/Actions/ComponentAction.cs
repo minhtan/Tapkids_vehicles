@@ -71,7 +71,7 @@ namespace HutongGames.PlayMaker.Actions
 
                 if (component == null)
                 {
-                    LogWarning("Missing component: " + typeof(T).FullName + " on: " + go.name);
+					LogWarning("Missing component: " + typeof(T).FullName + " on: " + go.name);
                 }
             }
 

@@ -12,7 +12,7 @@ public class CameraSwitch : MonoBehaviour
 
     private void OnEnable()
     {
-        text.text = objects[m_CurrentActiveObject].name;
+		text.text = objects[m_CurrentActiveObject].name;
     }
 
 
@@ -26,6 +26,6 @@ public class CameraSwitch : MonoBehaviour
         }
 
         m_CurrentActiveObject = nextactiveobject;
-        text.text = objects[m_CurrentActiveObject].name;
+		text.text = objects[m_CurrentActiveObject].name;
     }
 }

@@ -149,7 +149,7 @@ namespace TouchScript.Layers
         protected override void setName()
         {
             if (_camera == null) Name = "Global Fullscreen";
-            else Name = "Fullscreen @ " + _camera.name;
+			else Name = "Fullscreen @ " + _camera.name;
         }
 
         /// <inheritdoc />

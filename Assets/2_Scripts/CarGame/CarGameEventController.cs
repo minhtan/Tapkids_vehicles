@@ -24,6 +24,12 @@ public static class CarGameEventController {
 	// Word
 	public delegate void ValidateWordEventHandler ();
 
+	// GUI 
+	public delegate void UpdateCollectedTextEventHandler (string letter);
+
+	// Others
+	public delegate void CreateCarEventHandler () ;
+
 	#endregion public delegates
 
 	#region Events
@@ -48,6 +54,12 @@ public static class CarGameEventController {
 	// Word
 	public static event ValidateWordEventHandler ValidateWord;
 
+	// GUI
+	public static event UpdateCollectedTextEventHandler UpdateCollectedText;
+
+
+	// Others
+	public static event CreateCarEventHandler CreateCar;
 	#endregion Events
 
 	#region Event Invoker Methods
@@ -117,6 +129,22 @@ public static class CarGameEventController {
 			handler ();
 		}
 	}
+
+	// GUI
+	public static void OnUpdateCollectedText (string letter) {
+		var handler = UpdateCollectedText;
+		if (handler != null) {
+			handler (letter);
+		}
+	}
+	// Others
+	public static void OnCreateCar () {
+		var handler = CreateCar;
+		if (handler != null) {
+			handler ();
+		}
+	}
+
 
 	#endregion  Event Invoker Methods
 }
