@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEngine.SceneManagement;
 
-public class Test : MonoBehaviour {
+public class MenuScript : MonoBehaviour {
 
 	#region Vars
 
@@ -22,7 +21,7 @@ public class Test : MonoBehaviour {
 	}
 	#endregion
 
-	public void Loadscene(string name){
-		SceneManager.LoadScene (name);
+	public void _LoadScene(int sceneID){
+		SceneController.Instance.LoadingSceneAsync ((SceneController.SceneID)sceneID);
 	}
 }

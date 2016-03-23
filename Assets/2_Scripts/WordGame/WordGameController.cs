@@ -12,6 +12,10 @@ public class WordGameController : MonoBehaviour {
     {
         fsm = gameObject.GetComponent<PlayMakerFSM>();
     }
+
+	void OnDestroy(){
+		ArController.Instance.ToggleAR (false);
+	}
 	#region Vars
 	//Core
 	private Dictionary<string, FSMTrackable> letterToImgTarget = new Dictionary<string, FSMTrackable>();
@@ -99,6 +103,9 @@ public class WordGameController : MonoBehaviour {
 			letterToImgTarget.Add(imgTargs[i].targetName, imgTargs[i]);
 		}
 		GetDataList ();
+		ArController.Instance.ToggleAR (true);
+		ArController.Instance.SetCenterMode (true);
+		ArController.Instance.SetArMaxStimTargets (5);
 	}
 
 	void _InitGame(){
