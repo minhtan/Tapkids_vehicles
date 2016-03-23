@@ -11,7 +11,11 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 	private SceneContainer[] _sceneGroup;
 
 	public enum SceneID{
-		MENU, LOADING
+		INTRO = 0, 
+		AR = 1,
+		MENU = 2, 
+		WORDGAME = 3,
+		CARGAME = 4
 	}
 	#endregion
 
@@ -22,7 +26,7 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 	public override void Awake ()
 	{
 		base.Awake ();
-		//InitSceneGroup ();
+		InitSceneGroup ();
 	}
 
 	public void LoadingSceneAsync (SceneID id)

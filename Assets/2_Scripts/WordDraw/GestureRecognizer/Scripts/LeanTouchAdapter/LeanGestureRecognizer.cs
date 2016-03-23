@@ -191,6 +191,7 @@ public class LeanGestureRecognizer : MonoBehaviour
 		string fileName = String.Format("{0}/{1}-{2}.xml", Application.persistentDataPath, newGestureName, DateTime.Now.ToFileTime());
 
 		#if !UNITY_WEBPLAYER
+		_currentGesture.SetGesture (_pointList.ToArray ());
 		GestureIO.WriteGesture(_currentGesture.Points, newGestureName, fileName);
 		#endif
 	}
