@@ -18,7 +18,7 @@ namespace TouchScript.Devices.Display
             set
             {
                 name = value;
-                base.name = value;
+				base.name = value;
             }
         }
 
@@ -46,7 +46,7 @@ namespace TouchScript.Devices.Display
         /// </summary>
         protected virtual void OnEnable()
         {
-            base.name = name;
+			base.name = name;
         }
     }
 }

@@ -91,7 +91,7 @@ class PlayMakerGUIInspector : Editor
 
 						if (behavior.gameObject.GetComponents(typeof(Component)).Length == 2) // every game object has a transform component
 						{
-                            if (EditorUtility.DisplayDialog(Strings.ProductName, string.Format(Strings.Dialog_Delete_Extra_PlayMakerGUI_GameObject, behavior.gameObject.name), Strings.Yes, Strings.No))
+							if (EditorUtility.DisplayDialog(Strings.ProductName, string.Format(Strings.Dialog_Delete_Extra_PlayMakerGUI_GameObject, behavior.gameObject.name), Strings.Yes, Strings.No))
 							{
 								DestroyImmediate(behavior.gameObject);
 							}

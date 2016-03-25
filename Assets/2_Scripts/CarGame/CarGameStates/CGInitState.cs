@@ -4,8 +4,12 @@ using Prime31.StateKit;
 
 public class CGInitState : SKState<CarGameController> {
 
+	#region private members
 	private	float countDownTimer = 3f;
 
+	#endregion private members
+
+	#region SKState
 	public override void begin ()
 	{
 		Debug.Log("Init State >>>");
@@ -18,6 +22,8 @@ public class CGInitState : SKState<CarGameController> {
 		_context.answers = DataUltility.GetAnswersList (_context.wordGameData);
 		CarGameEventController.OnInitGame (_context.wordGameData.letters);
 
+		// SKState does not have corountine so we send event back to CarGameController
+		CarGameEventController.OnCreateCar();
 	}
 
 	public override void reason ()
@@ -35,17 +41,7 @@ public class CGInitState : SKState<CarGameController> {
 	{
 		Debug.Log("Init State <<<");
 	}
-	#region public members
-	#endregion public members
-
-	#region private members
-	#endregion private members
-
-	#region Mono
-	#endregion Mono
-
-	#region public functions
-	#endregion public functions
+	#endregion SKState
 
 	#region private functions
 	#endregion private functions

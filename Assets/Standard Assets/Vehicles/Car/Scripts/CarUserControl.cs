@@ -8,7 +8,7 @@ namespace UnityStandardAssets.Vehicles.Car
     public class CarUserControl : MonoBehaviour
     {
         private CarController m_Car; // the car controller we want to use
-
+		float handbrake;
 
         private void Awake()
         {
@@ -20,15 +20,16 @@ namespace UnityStandardAssets.Vehicles.Car
         private void FixedUpdate()
         {
             // pass the input to the car!
-			float h = CrossPlatformInputManager.GetAxis ("Steer");
-			float v = CrossPlatformInputManager.GetAxis ("Accelerate");
-
+			float h = CrossPlatformInputManager.GetAxis("Horizontal");
+			float v = CrossPlatformInputManager.GetAxis("Vertical");
 #if !MOBILE_INPUT
-            float handbrake = CrossPlatformInputManager.GetAxis("Jump");
-            m_Car.Move(h, v, v, handbrake);
+            handbrake = CrossPlatformInputManager.GetAxis("Jump");
+			Debug.Log (h + " - " + v + " - " + handbrake);
+			m_Car.Move(h, v, v, handbrake);
 #else
-			float b = CrossPlatformInputManager.GetAxis ("Brake");
-            m_Car.Move(h, v, v, b);
+			float b = CrossPlatformInputManager.GetAxis ("Jump");
+//          m_Car.Move(h, v, v, 0f);
+			m_Car.Move(h, v, b, 0f);
 #endif
         }
     }

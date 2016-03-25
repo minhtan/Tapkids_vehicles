@@ -105,7 +105,7 @@ public class PlayMakerEditorUtils : Editor {
 						{
 							if (_asset!=null)
 							{
-								_name = _asset.name;
+							_name = _asset.name;
 							}else
 							{
 								_name = FsmEditorUtility.GetActionLabel(action) + "[WARNING: FILE NOT FOUND]";

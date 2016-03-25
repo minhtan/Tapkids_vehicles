@@ -82,7 +82,7 @@ namespace TouchScript.Layers
         /// <inheritdoc />
         protected override void setName()
         {
-            if (String.IsNullOrEmpty(Name) && _camera != null) Name = _camera.name;
+			if (String.IsNullOrEmpty(Name) && _camera != null) Name = _camera.name;
         }
 
         /// <inheritdoc />
@@ -99,7 +99,7 @@ namespace TouchScript.Layers
             _camera = GetComponent<Camera>();
             if (_camera == null) _camera = Camera.main;
             if (_camera != null) return;
-            Debug.LogError("No Camera found for CameraLayer '" + name + "'.");
+			Debug.LogError("No Camera found for CameraLayer '" + name + "'.");
             enabled = false;
         }
 

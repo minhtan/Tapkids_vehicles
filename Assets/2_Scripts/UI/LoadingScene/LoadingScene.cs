@@ -5,7 +5,7 @@ public class LoadingScene : MonoBehaviour {
 
 	// Use this for initialization
 	public void StartLoading () {
-		SceneController.Instance.LoadingSceneAsync (SceneController.SceneID.MENU);
+		SceneController.Instance.LoadingSceneAsync (SceneController.SceneID.AR);
 	}
 
 	void OnEnable()

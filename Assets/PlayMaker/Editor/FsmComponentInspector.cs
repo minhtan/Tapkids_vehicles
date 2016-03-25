@@ -426,7 +426,7 @@ public class FsmComponentInspector : Editor
         foreach (var template in templates)
         {
             const string submenu = "/";
-            menu.AddItem(new GUIContent(template.Category + submenu + template.name), fsmComponent.FsmTemplate == template, SelectTemplate, template);
+			menu.AddItem(new GUIContent(template.Category + submenu + template.name), fsmComponent.FsmTemplate == template, SelectTemplate, template);
         }
 
         menu.ShowAsContext();

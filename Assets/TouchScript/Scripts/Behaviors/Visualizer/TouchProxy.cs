@@ -31,7 +31,7 @@ namespace TouchScript.Behaviors.Visualizer
             stringBuilder.Length = 0;
             stringBuilder.Append("Touch id: ");
             stringBuilder.Append(touch.Id);
-            gameObject.name = stringBuilder.ToString();
+			gameObject.name = stringBuilder.ToString();
 
             if (Text == null) return;
             if (!ShowTouchId && !ShowTags) return;
@@ -162,7 +162,7 @@ namespace TouchScript.Behaviors.Visualizer
         protected virtual void hide()
         {
             gameObject.SetActive(false);
-            gameObject.name = "inactive touch";
+			gameObject.name = "inactive touch";
         }
 
         /// <summary>
