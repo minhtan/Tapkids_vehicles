@@ -25,6 +25,11 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 		//InitSceneGroup ();
 	}
 
+	public void ReloadCurrentScene()
+	{
+		SceneManager.LoadScene (SceneManager.GetActiveScene().buildIndex);
+	}
+
 	public void LoadingSceneAsync (SceneID id)
 	{
 		StartCoroutine (LoadingOperation(id, 0f));
