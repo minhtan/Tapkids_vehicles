@@ -65,6 +65,10 @@ public class LeanGestureRecognizer : MonoBehaviour
 
 	public static event OnGestureResetEvent OnGestureReset;
 
+	public delegate void OnGestureLoadedEvent (List<Gesture> gestures);
+
+	public static event OnGestureLoadedEvent OnGestureLoaded;
+
 	void OnEnable ()
 	{
 		GestureLineDrawing.OnStrokeStart += OnStrokeStart;
@@ -93,7 +97,10 @@ public class LeanGestureRecognizer : MonoBehaviour
 	{
 		_gestureList.Clear ();
 		GestureIO.LoadPremadeGestureTemplates ("GestureTemplates", _gestureList);
-		GestureIO.LoadCustomGestureTemplates (_gestureList);
+		//GestureIO.LoadCustomGestureTemplates (_gestureList);
+
+		if (OnGestureLoaded != null)
+			OnGestureLoaded (_gestureList);
 	}
 
 	private void OnStrokeStart (Lean.LeanFinger finger)
@@ -128,6 +135,10 @@ public class LeanGestureRecognizer : MonoBehaviour
 	private void DelayRecognizing ()
 	{
 		_isInProgress = false;
+
+		if (_delayCor != null)
+			StopCoroutine (_delayCor);
+		
 		_delayCor = StartCoroutine (DelayRecognizingCorroutine ());
 	}
 
@@ -143,6 +154,7 @@ public class LeanGestureRecognizer : MonoBehaviour
 
 			if (timer >= _delayThreshold) {
 				Recognizing ();
+				_delayCor = null;
 				yield break;
 			}
 
@@ -159,11 +171,11 @@ public class LeanGestureRecognizer : MonoBehaviour
 	{
 		if (_pointList == null || _pointList.Count == 0)
 			return;
-		
-		if (OnGestureDetected != null) {
-			_currentGesture.SetGesture (_pointList.ToArray ());
-			Result r = PointCloudRecognizer.Classify (_currentGesture, _gestureList.ToArray ());
 
+		_currentGesture.SetGesture (_pointList.ToArray ());
+		Result r = PointCloudRecognizer.Classify (_currentGesture, _gestureList.ToArray ());
+
+		if (OnGestureDetected != null) {
 			OnGestureDetected (r);
 		}
 

@@ -19,6 +19,7 @@ namespace PDollarGestureRecognizer
 
 		public static void LoadCustomGestureTemplates (List<Gesture> gestureList)
 		{
+			
 			string[] filePaths = Directory.GetFiles (Application.persistentDataPath, "*.xml");
 
 			foreach (string filePath in filePaths)

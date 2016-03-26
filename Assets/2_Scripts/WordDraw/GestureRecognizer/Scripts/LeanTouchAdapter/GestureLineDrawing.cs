@@ -17,7 +17,6 @@ public class GestureLineDrawing : GestureDrawing
 	private int sqrMinPixelMove;
 	private bool canDraw = false;
 
-	
 
 	void Awake ()
 	{
@@ -34,6 +33,9 @@ public class GestureLineDrawing : GestureDrawing
 
 		// Used for .sqrMagnitude, which is faster than .magnitude
 		sqrMinPixelMove = minPixelMove * minPixelMove;
+
+		GameObject vestrosityGO = GameObject.Find ("VectorCanvas");
+		vestrosityGO.AddComponent<DestroyOnLoad> ();
 	}
 
 	private void AddStroke (int index)
@@ -92,6 +94,9 @@ public class GestureLineDrawing : GestureDrawing
 	/// </summary>
 	public void ChangeToNextStroke ()
 	{
+		if (recognizer.IsReachMaxStroke)
+			return;
+		
 		recognizer.ChangeToNextStroke ();
 
 		currentLine = lineList [recognizer.CurrentStrokeID + 1];
@@ -99,5 +104,10 @@ public class GestureLineDrawing : GestureDrawing
 		previousPosition = Input.mousePosition;
 		currentLine.points2.Add (Input.mousePosition);
 		canDraw = true;
+	}
+
+	public void DisableDrawing()
+	{
+		canDraw = false;
 	}
 }

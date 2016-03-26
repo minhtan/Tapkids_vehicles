@@ -162,7 +162,7 @@ public class WordListHandler : MonoBehaviour
 		switch (obj.type) {
 		case JSONObject.Type.OBJECT:
 			for (int i = 0; i < obj.list.Count; i++) {
-				string key = (string)obj.keys [i];
+				//string key = (string)obj.keys [i];
 				JSONObject j = (JSONObject)obj.list [i];
 				AccessData (j);
 			}

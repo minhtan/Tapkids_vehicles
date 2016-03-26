@@ -20,7 +20,6 @@ public class GestureAutoDrawer : MonoBehaviour {
 	private VectorLine currentLine;
 	private Vector2 previousPosition;
 	private int sqrMinPixelMove;
-	private bool canDraw = false;
 
 	private Gesture _currentGesture;
 
