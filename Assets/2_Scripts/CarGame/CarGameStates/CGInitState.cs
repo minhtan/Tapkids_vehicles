@@ -16,14 +16,11 @@ public class CGInitState : SKState<CarGameController> {
 
 		// reset game time
 		_context.gameTime = 10f;
-		// get word data]
+		// get word data
 		_context.wordGameData = DataUltility.ReadDataForCarGame (_context.letter);
 		// send event init game environment
 		_context.answers = DataUltility.GetAnswersList (_context.wordGameData);
 		CarGameEventController.OnInitGame (_context.wordGameData.letters);
-
-		// SKState does not have corountine so we send event back to CarGameController
-		CarGameEventController.OnCreateCar();
 	}
 
 	public override void reason ()

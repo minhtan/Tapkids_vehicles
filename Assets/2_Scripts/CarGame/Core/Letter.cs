@@ -3,28 +3,29 @@ using System.Collections;
 
 public class Letter : MonoBehaviour {
 
-	public string name;
+	public string letterName;
 
-	void OnEnable () {
-//		CarGameEventController.ResetGame += OnResetGame;
+	private Camera mainCamera;
+	private Transform mTransform;
+
+	#region MONO
+	void Start () {
+		mainCamera = Camera.main;
+		mTransform = GetComponent <Transform> ();
 	}
 
-	void Disable () {
-//		CarGameEventController.ResetGame -= OnResetGame;
+	void Update () {
+		// camera facing billboard effect
+		mTransform.LookAt (mTransform.position + mainCamera.transform.rotation * Vector3.forward, mainCamera.transform.rotation * Vector3.up);
 	}
-
-//	void OnResetGame () {
-//		if(gameObject.activeInHierarchy) 
-//			TrashMan.despawn(gameObject);	
-//	}
 
 	void OnTriggerEnter (Collider other) {
+		// collect letter
+		CarGameEventController.OnCollectLetter (letterName);
 
 		// disable letter
-		TrashMan.despawn(gameObject);
-		// collect letter
-		CarGameEventController.OnCollectLetter (name);
-
+		gameObject.SetActive (false);
 	}
 
+	#endregion MONO
 }

@@ -6,18 +6,18 @@ public static class CarGameEventController {
 	public delegate void TargetTrackingEventHandler (bool isFound, Transform parent, string letter);
 
 	// Game State 
-	public delegate void InitGameEventHandler (string letter);
+	public delegate void InitGameEventHandler (string _letter);
 
 	public delegate void StartGameEventHandler ();
 
-	public delegate void PauseGameEventHandler ();
+	public delegate void PauseGameEventHandler (bool _isPaused);
 
 	public delegate void ResetGameEventHandler ();
 
 	public delegate void GameOverEventHandler ();
 
 	// Car 
-	public delegate void CollectLetterEventHandler (string letter);
+	public delegate void CollectLetterEventHandler (string _letter);
 
 	public delegate void GatherLetterEventHandler ();
 
@@ -25,14 +25,18 @@ public static class CarGameEventController {
 	public delegate void ValidateWordEventHandler ();
 
 	// GUI 
-	public delegate void UpdateCollectedTextEventHandler (string letter);
+	public delegate void UpdateCollectedTextEventHandler (string _letter);
 
+	public delegate void ToggleTutorialPanelEventHandler (bool _isToggled);
+
+	public delegate void ToggleInGamePanelEventHandler (bool _isToggled);
+
+	public delegate void ToggleGameOverPanelEventHandler (bool _isToggled);
 	// Others
-	public delegate void CreateCarEventHandler () ;
 
 	#endregion public delegates
 
-	#region Events
+	#region EventsisPaused
 	public static event TargetTrackingEventHandler TargetTracking;
 
 	// Game State
@@ -57,25 +61,29 @@ public static class CarGameEventController {
 	// GUI
 	public static event UpdateCollectedTextEventHandler UpdateCollectedText;
 
+	public static event ToggleTutorialPanelEventHandler ToggleTutorialPanel;
+
+	public static event ToggleInGamePanelEventHandler ToggleInGamePanel;
+
+	public static event ToggleGameOverPanelEventHandler ToggleGameOverPanel;
 
 	// Others
-	public static event CreateCarEventHandler CreateCar;
 	#endregion Events
 
 	#region Event Invoker Methods
 
-	public static void OnTargetTracking (bool isFound, Transform parent, string letter) {
+	public static void OnTargetTracking (bool _isFound, Transform _parent, string _letter) {
 		var handler = TargetTracking;
 		if (handler != null) {
-			handler (isFound, parent, letter);
+			handler (_isFound, _parent, _letter);
 		}
 	}
 
 	// Game State
-	public static void OnInitGame (string letter) {
+	public static void OnInitGame (string _letter) {
 		var handler = InitGame;
 		if (handler != null) {
-			handler (letter);
+			handler (_letter);
 		}
 	}
 
@@ -86,10 +94,10 @@ public static class CarGameEventController {
 		}
 	}
 
-	public static void OnPauseGame () {
+	public static void OnPauseGame (bool _isPaused) {
 		var handler = PauseGame;
 		if (handler != null) {
-			handler ();
+			handler (_isPaused);
 		}
 	}
 
@@ -108,10 +116,10 @@ public static class CarGameEventController {
 	}
 
 	// Car
-	public static void OnCollectLetter (string letter) {
+	public static void OnCollectLetter (string _letter) {
 		var handler = CollectLetter;
 		if (handler != null) {
-			handler (letter);
+			handler (_letter);
 		}
 	}
 
@@ -131,20 +139,32 @@ public static class CarGameEventController {
 	}
 
 	// GUI
-	public static void OnUpdateCollectedText (string letter) {
+	public static void OnUpdateCollectedText (string _letter) {
 		var handler = UpdateCollectedText;
 		if (handler != null) {
-			handler (letter);
+			handler (_letter);
 		}
 	}
-	// Others
-	public static void OnCreateCar () {
-		var handler = CreateCar;
+
+	public static void OnToggleTutorialPanel (bool _isToggled) {
+		var handler = ToggleTutorialPanel;
 		if (handler != null) {
-			handler ();
+			handler (_isToggled);
 		}
 	}
 
+	public static void OnToggleInGamePanel (bool _isToggled) {
+		var handler = ToggleInGamePanel;
+		if (handler != null) {
+			handler (_isToggled);
+		}
+	}
 
-	#endregion  Event Invoker Methods
+	public static void OnToggleGameOverPanel (bool _isToggled) {
+		var handler = ToggleGameOverPanel;
+		if (handler != null) {
+			handler (_isToggled);
+		}
+	}
+	#endregion Event Invoker Methods
 }

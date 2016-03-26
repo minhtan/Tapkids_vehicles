@@ -17,13 +17,9 @@ public class CarGameController : MonoBehaviour {
 
 	public Text gatherLetterText;
 	public Text successText;
-	public GameObject carPrefab;
 	#endregion public members
 
 	#region private members
-	private string assetBundleName = "car_asset";
-	private Vehicle currentVehicle;
-
 	private List<string> collectedLetters;
 
 	// mono
@@ -52,16 +48,24 @@ public class CarGameController : MonoBehaviour {
 			}
 			letter = _letter;
 			mTransform.SetParent(_parent, true);
+
+			for (int i = 0; i < mTransform.childCount; i++) {
+				mTransform.GetChild (i).gameObject.SetActive (true);
+			}
+
 			_machine.changeState <CGInitState> ();
 		}
 		else {
 			// TODO: WHAT IF TARGETLOST
+			for (int i = 0; i < mTransform.childCount; i++) {
+				mTransform.GetChild (i).gameObject.SetActive (false);
+			}
 		}
 	}
 
 	void OnCollectLetter (string letter) {
-		collectedLetters.Add (letter);
-		gatherLetterText.text =  string.Join ("", collectedLetters.ToArray ());
+//		collectedLetters.Add (letter);
+//		gatherLetterText.text =  string.Join ("", collectedLetters.ToArray ());
 	}
 
 	void OnGatherLetter () {
@@ -90,21 +94,6 @@ public class CarGameController : MonoBehaviour {
 
 	}
 
-	// create car from asset bundle
-	void OnCreatCar () {
-		GameObject carGO = Instantiate (carPrefab) as GameObject;
-		carGO.transform.SetParent (transform);
-
-		//TODO: pending for real asset bundle server
-		// StartCoroutine (CreateCarCo ());
-	}
-	
-	IEnumerator CreateCarCo () {
-		yield return StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (assetBundleName, currentVehicle.name, (bundle) => {
-			GameObject carGO = Instantiate (bundle) as GameObject;
-			carGO.transform.SetParent (transform);
-		}));
-	}
 	#endregion private functions
 
 	#region Mono
@@ -113,14 +102,12 @@ public class CarGameController : MonoBehaviour {
 		CarGameEventController.ResetGame += OnResetGame;
 		CarGameEventController.CollectLetter += OnCollectLetter;
 		CarGameEventController.GatherLetter += OnGatherLetter;
-
-		CarGameEventController.CreateCar += OnCreatCar;
 	}
 	void OnDisable () {
 		CarGameEventController.TargetTracking -= OnTargetTracking;
 		CarGameEventController.ResetGame += OnResetGame;
 		CarGameEventController.CollectLetter -= OnCollectLetter;
-		CarGameEventController.GatherLetter -= OnGatherLetter;CarGameEventController.CreateCar -= OnCreatCar;
+		CarGameEventController.GatherLetter -= OnGatherLetter;
 	}
 
 	void Awake () {
@@ -138,7 +125,6 @@ public class CarGameController : MonoBehaviour {
 
 	void Start () {
 		collectedLetters = new List <string> ();
-		PlayerDataController.Instance.myPlayer2.unlockedVehicles.TryGetValue (PlayerDataController.Instance.myPlayer2.currentVehicleIndex, out currentVehicle);
 	}
 
 	void Update () {
