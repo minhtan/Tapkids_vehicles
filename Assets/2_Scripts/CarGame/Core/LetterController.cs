@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Letter : MonoBehaviour {
+public class LetterController : MonoBehaviour {
 
 	public string letterName;
 

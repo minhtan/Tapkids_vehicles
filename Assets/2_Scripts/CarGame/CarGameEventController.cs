@@ -32,6 +32,8 @@ public static class CarGameEventController {
 	public delegate void ToggleInGamePanelEventHandler (bool _isToggled);
 
 	public delegate void ToggleGameOverPanelEventHandler (bool _isToggled);
+
+	public delegate void SelectCarEventHandler (int index);
 	// Others
 
 	#endregion public delegates
@@ -66,6 +68,8 @@ public static class CarGameEventController {
 	public static event ToggleInGamePanelEventHandler ToggleInGamePanel;
 
 	public static event ToggleGameOverPanelEventHandler ToggleGameOverPanel;
+
+	public static event SelectCarEventHandler SelectCar;
 
 	// Others
 	#endregion Events
@@ -164,6 +168,13 @@ public static class CarGameEventController {
 		var handler = ToggleGameOverPanel;
 		if (handler != null) {
 			handler (_isToggled);
+		}
+	}
+
+	public static void OnSelectCar (int _index) {
+		var handler = SelectCar;
+		if (handler != null) {
+			handler (_index);
 		}
 	}
 	#endregion Event Invoker Methods

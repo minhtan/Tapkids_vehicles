@@ -5,6 +5,10 @@ using System.Collections.Generic;
 
 public class ArcadeCarController : MonoBehaviour {
 
+	#region public members
+	public string vehicleName;
+	#endregion
+
 	#region private members
 	[SerializeField] private WheelCollider[] wheelColliders = new WheelCollider[4];
 	[SerializeField] private GameObject[] wheelMeshes = new GameObject [4];
@@ -38,15 +42,10 @@ public class ArcadeCarController : MonoBehaviour {
 
 		mTransform = this.transform;
 	}
-
-	public void FixedUpdate()
-	{
-		
-	}
 	#endregion MONO
 
 	#region public functions
-	// handle car movement 
+	// handle car movement
 	public void Move (float steer, float accel) {
 		
 		for (int i = 0; i < 4; i++) {
@@ -105,6 +104,10 @@ public class ArcadeCarController : MonoBehaviour {
 		oldRotation = mTransform.eulerAngles.y;
 	}
 
+
+	#endregion private functions
+
+	#region event subscribers
 	private void OnGameOver () {
 		for (int i = 0; i < 4; i++) 
 			wheelColliders[i].brakeTorque = brakeTorque;
@@ -114,5 +117,6 @@ public class ArcadeCarController : MonoBehaviour {
 		for (int i = 0; i < 4; i++) 
 			wheelColliders[i].brakeTorque = brakeTorque;
 	}
-	#endregion public functions
+	#endregion event subscribers
+
 }

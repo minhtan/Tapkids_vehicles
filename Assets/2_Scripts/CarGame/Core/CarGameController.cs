@@ -103,6 +103,7 @@ public class CarGameController : MonoBehaviour {
 		CarGameEventController.CollectLetter += OnCollectLetter;
 		CarGameEventController.GatherLetter += OnGatherLetter;
 	}
+
 	void OnDisable () {
 		CarGameEventController.TargetTracking -= OnTargetTracking;
 		CarGameEventController.ResetGame += OnResetGame;

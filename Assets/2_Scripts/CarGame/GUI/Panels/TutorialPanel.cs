@@ -42,6 +42,7 @@ public class TutorialPanel : MonoBehaviour, IPointerClickHandler {
 			if (localCursor.x > 0) { // NEXT
 				if (currentStep >= 0)
 					transform.GetChild (currentStep).gameObject.SetActive (false);
+
 				if ( currentStep < transform.childCount)
 					transform.GetChild (++currentStep).gameObject.SetActive (true);
 				if (currentStep > 3) {
