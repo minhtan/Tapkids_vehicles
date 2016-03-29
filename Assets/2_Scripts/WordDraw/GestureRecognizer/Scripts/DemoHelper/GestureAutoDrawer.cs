@@ -21,6 +21,7 @@ public class GestureAutoDrawer : MonoBehaviour {
 	private Vector2 previousPosition;
 	private int sqrMinPixelMove;
 
+	private List<Gesture> _gestureList;
 	private Gesture _currentGesture;
 
 
@@ -35,7 +36,9 @@ public class GestureAutoDrawer : MonoBehaviour {
 
 		lineList = new List<VectorLine> ();
 
-		_currentGesture = recognizer.GetGestureByName (_gestureName);
+		_gestureList = new List<Gesture> ();
+		GestureIO.LoadPremadeGestureTemplates ("GestureTraining", _gestureList);
+		_currentGesture = GestureUtils.GetGestureByName (_gestureList, _gestureName);
 
 		for(int i = 0; i < _currentGesture.StrokeCount; i++)
 		{
@@ -55,7 +58,6 @@ public class GestureAutoDrawer : MonoBehaviour {
 		if (useEndCap) {
 			line.endCap = "cap";
 		}
-		//line.rectTransform.anchoredPosition 
 
 		RectTransform rectTrans = line.rectTransform;
 		rectTrans.anchorMin = Vector2.right;
@@ -63,6 +65,9 @@ public class GestureAutoDrawer : MonoBehaviour {
 		rectTrans.pivot = Vector2.one / 2;
 
 		rectTrans.localScale = Vector2.one * _scaleFactor;
+		Quaternion localRot = rectTrans.localRotation;
+		localRot.x = 180f;
+		rectTrans.localRotation = localRot;
 
 		lineList.Add (line);
 	}
@@ -71,8 +76,8 @@ public class GestureAutoDrawer : MonoBehaviour {
 	private void AutoDrawGesture(Gesture gesture)
 	{
 		List<List<Point>> strokeList = GestureUtils.GetStrokeListFromGesture (gesture);
-		StartCoroutine (DrawPointShuffleCor (strokeList, _duration));
-		//StartCoroutine (DrawPointCor(strokeList, _duration));
+		//StartCoroutine (DrawPointShuffleCor (strokeList, _duration));
+		StartCoroutine (DrawPointCor(strokeList, _duration));
 	}
 
 	private IEnumerator DrawPointCor(List<List<Point>> points, float duration)

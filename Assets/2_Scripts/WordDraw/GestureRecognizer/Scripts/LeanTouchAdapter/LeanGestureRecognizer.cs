@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using PDollarGestureRecognizer;
 using UnityEngine.Events;
 using System;
+using UnityEngine.UI;
 
 
 public class LeanGestureRecognizer : MonoBehaviour
@@ -71,16 +72,16 @@ public class LeanGestureRecognizer : MonoBehaviour
 
 	void OnEnable ()
 	{
-		GestureLineDrawing.OnStrokeStart += OnStrokeStart;
-		GestureLineDrawing.OnStrokeDrag += OnStrokeDrag;
-		GestureLineDrawing.OnStrokeEnd += OnStrokeEnd;
+		GestureDrawing.OnStrokeStart += OnStrokeStart;
+		GestureDrawing.OnStrokeDrag += OnStrokeDrag;
+		GestureDrawing.OnStrokeEnd += OnStrokeEnd;
 	}
 
 	void OnDisable ()
 	{
-		GestureLineDrawing.OnStrokeStart -= OnStrokeStart;
-		GestureLineDrawing.OnStrokeDrag -= OnStrokeDrag;
-		GestureLineDrawing.OnStrokeEnd -= OnStrokeEnd;
+		GestureDrawing.OnStrokeStart -= OnStrokeStart;
+		GestureDrawing.OnStrokeDrag -= OnStrokeDrag;
+		GestureDrawing.OnStrokeEnd -= OnStrokeEnd;
 	}
 
 	void Awake ()
@@ -97,7 +98,7 @@ public class LeanGestureRecognizer : MonoBehaviour
 	{
 		_gestureList.Clear ();
 		GestureIO.LoadPremadeGestureTemplates ("GestureTemplates", _gestureList);
-		//GestureIO.LoadCustomGestureTemplates (_gestureList);
+		GestureIO.LoadCustomGestureTemplates (_gestureList);
 
 		if (OnGestureLoaded != null)
 			OnGestureLoaded (_gestureList);
@@ -135,11 +136,11 @@ public class LeanGestureRecognizer : MonoBehaviour
 	private void DelayRecognizing ()
 	{
 		_isInProgress = false;
-
+	
 		if (_delayCor != null)
 			StopCoroutine (_delayCor);
 		
-		_delayCor = StartCoroutine (DelayRecognizingCorroutine ());
+		_delayCor = StartCoroutine (DelayRecognizingCorroutine());
 	}
 
 	IEnumerator DelayRecognizingCorroutine ()
@@ -206,16 +207,5 @@ public class LeanGestureRecognizer : MonoBehaviour
 		_currentGesture.SetGesture (_pointList.ToArray ());
 		GestureIO.WriteGesture(_currentGesture.Points, newGestureName, fileName);
 		#endif
-	}
-
-	public Gesture GetGestureByName(string name)
-	{
-		for(int i = 0; i < _gestureList.Count; i++)
-		{
-			if (_gestureList [i].Name == name)
-				return _gestureList [i];
-		}
-
-		return null;
 	}
 }
