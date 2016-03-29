@@ -16,6 +16,10 @@ public class WordGameController : MonoBehaviour {
 	void OnDestroy(){
 		ArController.Instance.ToggleAR (false);
 	}
+
+	void Update(){
+		UpdateScoreSliderValue ();
+	}
 	#region Vars
 	//Core
 	private Dictionary<string, FSMTrackable> letterToImgTarget = new Dictionary<string, FSMTrackable>();
@@ -31,11 +35,12 @@ public class WordGameController : MonoBehaviour {
 	private WordGameData data;
 
 	//Score
-	private int currentScore;
 	private int minWordLength;
+	private int totalScore;
 	private int winScore;
+	private int currentScore;
 	[Range(0.0f, 1.0f)]
-	public float winScorePercentage = 0.5f;
+	public float winScorePercentage = 0.7f;
 	public int letterPoint = 5;
 	public int scoreStep = 1;
 
@@ -45,6 +50,7 @@ public class WordGameController : MonoBehaviour {
 	//GUI
 	public Text txt_letters;
 	public Text txt_answers;
+	public Slider sld_score;
 	#endregion
 
 	#region Data funcs
@@ -81,7 +87,9 @@ public class WordGameController : MonoBehaviour {
 		}
 	}
 
-	void _UpdatePlayingUI(){
+	void _UpdateWordFoundUI(){
+		SoundController.Instance.PlaySound(correctSound);
+
 		txt_answers.text = "";
 		for(int i=0; i < foundAnswers.Count; i++){
 			if (i > 0) {
@@ -92,8 +100,8 @@ public class WordGameController : MonoBehaviour {
 		}
 	}
 
-	void _UpdateGameOverUI(){
-		
+	void UpdateScoreSliderValue(){
+		sld_score.value = GetCurrentScorePercentage ();
 	}
 	#endregion
 
@@ -133,6 +141,18 @@ public class WordGameController : MonoBehaviour {
 		GetWinScore ();
 	}
 
+	void _GameOver(){
+		if (currentScore >= winScore) {
+			fsm.Fsm.Event ("win");
+		} else {
+			fsm.Fsm.Event ("lose");
+		}
+	}
+
+	void _Win(){
+		//add score
+	}
+
     void _AddPlayableTarget(string letter) {
         FSMTrackable imageTarget;
         if ( letterToImgTarget.TryGetValue(letter, out imageTarget) ){
@@ -163,9 +183,7 @@ public class WordGameController : MonoBehaviour {
 
     void HandleWordFound(string wordFound) {
         if ( CheckAnswer (wordFound) ){
-            SoundController.Instance.PlaySound(correctSound);
-			currentScore = currentScore + GetWordScore (wordFound);
-			fsm.FsmVariables.GetFsmInt("currentScore").Value = currentScore;
+			currentScore += GetWordScore (wordFound);
             answers.Remove (wordFound);
 			foundAnswers.Add (wordFound);
 			fsm.Fsm.Event ("wordFound");
@@ -196,16 +214,19 @@ public class WordGameController : MonoBehaviour {
 	}
 
 	void GetWinScore(){
-		winScore = 0;
+		totalScore = 0;
 		for(int i = 0; i < answers.Count; i++){
-			winScore = winScore + GetWordScore(answers[i]);
+			totalScore = totalScore + GetWordScore(answers[i]);
 		}
-		winScore = (int)(winScore * winScorePercentage);
-		fsm.FsmVariables.GetFsmInt("winScore").Value = winScore;
+		winScore = (int)(totalScore * winScorePercentage);
 	}
 
 	int GetWordScore(string word){
 		return letterPoint * word.Length * ((word.Length - minWordLength) * scoreStep + 1);
+	}
+
+	float GetCurrentScorePercentage(){
+		return (float)currentScore / totalScore;
 	}
 	#endregion
 }
