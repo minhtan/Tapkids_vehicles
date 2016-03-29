@@ -57,7 +57,6 @@ public class AssetController : UnitySingletonPersistent<AssetController> {
 		GameObject prefab = request.GetAsset<GameObject> ();
 
 		if (prefab != null) {
-			//GameObject.Instantiate(prefab);
 			callback (prefab);
 		}
 

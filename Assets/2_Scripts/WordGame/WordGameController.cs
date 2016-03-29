@@ -25,7 +25,6 @@ public class WordGameController : MonoBehaviour {
 	private List<string> foundAnswers = new List<string>();
     private PlayMakerFSM fsm;
     public int gameTimeInSeconds;
-    public AudioClip correctSound;
 
 	//Data
 	private List<WordGameData> dataList;
@@ -39,6 +38,9 @@ public class WordGameController : MonoBehaviour {
 	public float winScorePercentage = 0.5f;
 	public int letterPoint = 5;
 	public int scoreStep = 1;
+
+	//Sound
+	public AudioClip correctSound;
 
 	//GUI
 	public Text txt_letters;
@@ -166,7 +168,7 @@ public class WordGameController : MonoBehaviour {
 			fsm.FsmVariables.GetFsmInt("currentScore").Value = currentScore;
             answers.Remove (wordFound);
 			foundAnswers.Add (wordFound);
-			fsm.Fsm.Event ("updateUI");
+			fsm.Fsm.Event ("wordFound");
         }
 		if(answers.Count <= 0){
 			fsm.Fsm.Event ("gameover");
@@ -205,7 +207,5 @@ public class WordGameController : MonoBehaviour {
 	int GetWordScore(string word){
 		return letterPoint * word.Length * ((word.Length - minWordLength) * scoreStep + 1);
 	}
-
-
 	#endregion
 }
