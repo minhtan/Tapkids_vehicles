@@ -21,7 +21,7 @@ public class MenuScript : MonoBehaviour {
 	}
 	#endregion
 
-	public void _LoadScene(int sceneID){
-		SceneController.Instance.LoadingSceneAsync ((SceneController.SceneID)sceneID);
+	public void _LoadScene (int sceneID){
+		SceneController.Instance.LoadingSceneAsync ((SceneController.SceneID) sceneID);
 	}
 }

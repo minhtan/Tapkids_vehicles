@@ -9,7 +9,7 @@ public class CGPauseState : SKState<CarGameController> {
 		Debug.Log("Pause State >>>");
 		// send message pause game: to disable mobile input, enable pause gui, 
 
-		CarGameEventController.OnPauseGame ();
+//		CarGameEventController.OnPauseGame ();
 
 	}
 

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using PDollarGestureRecognizer;
-
+using UnityEngine.UI;
 public abstract class GestureDrawing : MonoBehaviour
 {
 	public LeanGestureRecognizer recognizer;
@@ -21,14 +21,22 @@ public abstract class GestureDrawing : MonoBehaviour
 
 	public static event OnStrokeEndEvent OnStrokeEnd;
 
-	void OnEnable ()
+
+	protected virtual void OnEnable ()
 	{
 		Lean.LeanTouch.OnFingerDown += OnFingerDown;
 		Lean.LeanTouch.OnFingerUp += OnFingerUp;
 		Lean.LeanTouch.OnFingerDrag += OnFingerDrag;
 	}
 
-	void OnDisable ()
+	protected virtual void OnDisable ()
+	{
+		/*Lean.LeanTouch.OnFingerDown -= OnFingerDown;
+		Lean.LeanTouch.OnFingerUp -= OnFingerUp;
+		Lean.LeanTouch.OnFingerDrag -= OnFingerDrag;*/
+	}
+
+	void OnDestroy()
 	{
 		Lean.LeanTouch.OnFingerDown -= OnFingerDown;
 		Lean.LeanTouch.OnFingerUp -= OnFingerUp;
@@ -37,6 +45,7 @@ public abstract class GestureDrawing : MonoBehaviour
 
 	private void OnFingerDown (Lean.LeanFinger finger)
 	{
+
 		if (recognizer.IsReachMaxStroke)
 			return;
 

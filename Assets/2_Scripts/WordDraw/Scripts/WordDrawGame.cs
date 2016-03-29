@@ -43,6 +43,7 @@ namespace WordDraw
 
 		public void Restart ()
 		{
+			_drawer.ResetStroke ();
 			SceneController.Instance.ReloadCurrentScene ();
 		}
 	}

@@ -5,13 +5,17 @@ using System.Collections.Generic;
 
 public class ArcadeCarController : MonoBehaviour {
 
+	#region public members
+	public string vehicleName;
+	#endregion
+
 	#region private members
 	[SerializeField] private WheelCollider[] wheelColliders = new WheelCollider[4];
 	[SerializeField] private GameObject[] wheelMeshes = new GameObject [4];
 	[SerializeField] private Vector3 centerOfMass;
 	[Range(0, 1)] [SerializeField] private float steerHelper;
 	[SerializeField] private float maximumSteerAngle = 25f;
-	[SerializeField] private float maxMotorTorque = 500f;
+	[SerializeField] private float maxMotorTorque = 300f;
 	[SerializeField] private float brakeTorque = 20000f;
 
 	private float oldRotation;
@@ -19,7 +23,6 @@ public class ArcadeCarController : MonoBehaviour {
 
 	private Rigidbody mRigidbody;
 	private Transform mTransform;
-	private Vector3 startPoint;
 	#endregion private members
 
 	#region MONO
@@ -38,18 +41,11 @@ public class ArcadeCarController : MonoBehaviour {
 		mRigidbody.centerOfMass = centerOfMass;
 
 		mTransform = this.transform;
-
-		startPoint = GameObject.FindGameObjectWithTag ("StartPoint").transform.position;
-	}
-
-	public void FixedUpdate()
-	{
-		
 	}
 	#endregion MONO
 
 	#region public functions
-	// handle car movement 
+	// handle car movement
 	public void Move (float steer, float accel) {
 		
 		for (int i = 0; i < 4; i++) {
@@ -108,6 +104,10 @@ public class ArcadeCarController : MonoBehaviour {
 		oldRotation = mTransform.eulerAngles.y;
 	}
 
+
+	#endregion private functions
+
+	#region event subscribers
 	private void OnGameOver () {
 		for (int i = 0; i < 4; i++) 
 			wheelColliders[i].brakeTorque = brakeTorque;
@@ -116,8 +116,7 @@ public class ArcadeCarController : MonoBehaviour {
 	private void OnResetGame () {
 		for (int i = 0; i < 4; i++) 
 			wheelColliders[i].brakeTorque = brakeTorque;
-
-		mTransform.position = startPoint;
 	}
-	#endregion public functions
+	#endregion event subscribers
+
 }

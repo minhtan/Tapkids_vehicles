@@ -54,6 +54,9 @@ public class GestureLineDrawing : GestureDrawing
 
 	protected override void StrokeStart (Lean.LeanFinger finger)
 	{
+		if (!canDraw)
+			return;
+		
 		ChangeToNextStroke ();
 	}
 
@@ -106,8 +109,8 @@ public class GestureLineDrawing : GestureDrawing
 		canDraw = true;
 	}
 
-	public void DisableDrawing()
+	public void SetDrawing(bool isActive)
 	{
-		canDraw = false;
+		canDraw = isActive;
 	}
 }

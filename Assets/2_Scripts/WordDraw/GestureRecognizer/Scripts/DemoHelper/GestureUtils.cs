@@ -63,4 +63,15 @@ public class GestureUtils {
 
 		return strokeList;
 	}
+
+	public static Gesture GetGestureByName(List<Gesture> gestures, string name)
+	{
+		for(int i = 0; i < gestures.Count; i++)
+		{
+			if (gestures [i].Name == name)
+				return gestures [i];
+		}
+
+		return null;
+	}
 }
