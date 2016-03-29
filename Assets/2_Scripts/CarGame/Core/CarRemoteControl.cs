@@ -21,7 +21,7 @@ namespace UnityStandardAssets.CrossPlatformInput
 		{
 			CarGameEventController.StartGame += OnStartGame;
 			CarGameEventController.PauseGame += OnPauseGame;
-			CarGameEventController.PauseGame += OnResetGame;
+			CarGameEventController.ResetGame += OnResetGame;
 
 			CreateVirtualAxes();	
 		}
@@ -91,8 +91,9 @@ namespace UnityStandardAssets.CrossPlatformInput
 		private void OnStartGame () {
 			mAccelerate.Update (1f);
 		}
-		private void OnPauseGame () {
-			mAccelerate.Update (0f);
+		private void OnPauseGame (bool _isPaused) {
+			if (_isPaused)
+				mAccelerate.Update (0f);
 		}
 		private void OnResetGame () {
 			mAccelerate.Update (0f);

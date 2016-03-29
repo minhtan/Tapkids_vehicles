@@ -19,6 +19,7 @@ public class ArcadeCarUserController : MonoBehaviour {
 	}
 
 	void FixedUpdate () {
+		return;
 		// pass the input to the car!
 		float h = CrossPlatformInputManager.GetAxis("Steer");
 		float v = CrossPlatformInputManager.GetAxis("Accelerate");
