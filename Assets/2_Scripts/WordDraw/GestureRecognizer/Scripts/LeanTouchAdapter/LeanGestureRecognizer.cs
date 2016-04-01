@@ -5,6 +5,7 @@ using PDollarGestureRecognizer;
 using UnityEngine.Events;
 using System;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 
 public class LeanGestureRecognizer : MonoBehaviour
@@ -58,17 +59,9 @@ public class LeanGestureRecognizer : MonoBehaviour
 		}
 	}
 
-	public delegate void OnGestureDetectedEvent (Result result);
-
-	public static event OnGestureDetectedEvent OnGestureDetected;
-
-	public delegate void OnGestureResetEvent ();
-
-	public static event OnGestureResetEvent OnGestureReset;
-
-	public delegate void OnGestureLoadedEvent (List<Gesture> gestures);
-
-	public static event OnGestureLoadedEvent OnGestureLoaded;
+	public static UnityAction<Result> OnGestureDetected;
+	public static UnityAction OnGestureReset;
+	public static UnityAction<List<Gesture>> OnGestureLoaded;
 
 	void OnEnable ()
 	{
@@ -172,7 +165,7 @@ public class LeanGestureRecognizer : MonoBehaviour
 	{
 		if (_pointList == null || _pointList.Count == 0)
 			return;
-
+		
 		_currentGesture.SetGesture (_pointList.ToArray ());
 		Result r = PointCloudRecognizer.Classify (_currentGesture, _gestureList.ToArray ());
 

@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Collections;
 using PDollarGestureRecognizer;
 using Vectrosity;
+using System;
+using UnityEngine.Events;
 
-public class GestureAutoDrawer : MonoBehaviour {
+public class GestureAutoDrawer : MonoBehaviour
+{
 	public LeanGestureRecognizer recognizer;
-	public string _gestureName;
 	public float _duration;
 	public float _scaleFactor = 300f;
 
@@ -24,8 +26,9 @@ public class GestureAutoDrawer : MonoBehaviour {
 	private List<Gesture> _gestureList;
 	private Gesture _currentGesture;
 
+	public static UnityAction<Gesture> OnDrawGestureDone;
 
-	void Start()
+	void Awake ()
 	{
 		lineList = new List<VectorLine> ();
 
@@ -38,19 +41,11 @@ public class GestureAutoDrawer : MonoBehaviour {
 
 		_gestureList = new List<Gesture> ();
 		GestureIO.LoadPremadeGestureTemplates ("GestureTraining", _gestureList);
-		_currentGesture = GestureUtils.GetGestureByName (_gestureList, _gestureName);
-
-		for(int i = 0; i < _currentGesture.StrokeCount; i++)
-		{
-			AddStroke (i);
-		}
-
-		AutoDrawGesture (_currentGesture);
 	}
 
 	private void AddStroke (int index)
 	{
-		VectorLine line = new VectorLine ("GestureStroke" + index, new List<Vector2> (), lineMaterial, lineWidth, LineType.Continuous, Joins.Weld);
+		VectorLine line = new VectorLine ("GestureAutoStroke" + index, new List<Vector2> (), lineMaterial, lineWidth, LineType.Continuous, Joins.Weld);
 
 		// Optimization for updating only the last point of the currentLine, and the rest is not re-computed
 		line.endPointsUpdate = 1;
@@ -71,16 +66,33 @@ public class GestureAutoDrawer : MonoBehaviour {
 
 		lineList.Add (line);
 	}
-		
 
-	private void AutoDrawGesture(Gesture gesture)
+	public void AutoDrawGesture (string gestureName)
 	{
-		List<List<Point>> strokeList = GestureUtils.GetStrokeListFromGesture (gesture);
-		//StartCoroutine (DrawPointShuffleCor (strokeList, _duration));
-		StartCoroutine (DrawPointCor(strokeList, _duration));
+		try {
+			_currentGesture = GestureUtils.GetGestureByName (_gestureList, gestureName);
+
+			for (int i = 0; i < _currentGesture.StrokeCount; i++) {
+				AddStroke (i);
+			}
+
+			List<List<Point>> strokeList = GestureUtils.GetStrokeListFromGesture (_currentGesture);
+			//StartCoroutine (DrawPointShuffleCor (strokeList, _duration));
+			StartCoroutine (DrawPointCor (strokeList, _duration));
+		} catch (ArgumentNullException e) {
+			Debug.Log (e.StackTrace);
+		}
 	}
 
-	private IEnumerator DrawPointCor(List<List<Point>> points, float duration)
+	public void ResetStroke ()
+	{
+		for (int i = 0; i < lineList.Count; i++) {
+			lineList [i].points2.Clear ();
+			lineList [i].Draw ();
+		}
+	}
+
+	private IEnumerator DrawPointCor (List<List<Point>> points, float duration)
 	{
 		
 		WaitForSeconds wait = new WaitForSeconds (duration);
@@ -89,23 +101,27 @@ public class GestureAutoDrawer : MonoBehaviour {
 		currentLine = lineList [curStroke];
 		List<Point> stroke = points [curStroke];
 
-		while(true)
-		{
+		while (true) {
 			curIndex++;
 
 			if (curIndex == stroke.Count) {
 				curStroke++;
 
 
-				if (curStroke == points.Count)
+				if (curStroke == points.Count) {
+
+					if (OnDrawGestureDone != null)
+						OnDrawGestureDone (_currentGesture);
+					
 					yield break;
+				}
 				
 				curIndex = 0;
 				currentLine = lineList [curStroke];
 				stroke = points [curStroke];
 			}
 
-			currentLine.points2.Add (new Vector2(stroke[curIndex].X, stroke[curIndex].Y));
+			currentLine.points2.Add (new Vector2 (stroke [curIndex].X, stroke [curIndex].Y));
 
 			currentLine.Draw ();
 
@@ -113,7 +129,7 @@ public class GestureAutoDrawer : MonoBehaviour {
 		}
 	}
 
-	private IEnumerator DrawPointShuffleCor(List<List<Point>> points, float duration)
+	private IEnumerator DrawPointShuffleCor (List<List<Point>> points, float duration)
 	{
 
 		WaitForSeconds wait = new WaitForSeconds (duration);
@@ -121,13 +137,12 @@ public class GestureAutoDrawer : MonoBehaviour {
 		int strokeCounter = 0;
 
 		int[] strokeShuffle = GestureUtils.GetShuffleStrokeOrder (_currentGesture);
-		int curStroke = strokeShuffle[strokeCounter];
+		int curStroke = strokeShuffle [strokeCounter];
 
 		currentLine = lineList [curStroke];
 		List<Point> stroke = points [curStroke];
 
-		while(true)
-		{
+		while (true) {
 			curIndex++;
 
 			if (curIndex == stroke.Count) {
@@ -143,7 +158,7 @@ public class GestureAutoDrawer : MonoBehaviour {
 				stroke = points [curStroke];
 			}
 
-			currentLine.points2.Add (new Vector2(stroke[curIndex].X, stroke[curIndex].Y));
+			currentLine.points2.Add (new Vector2 (stroke [curIndex].X, stroke [curIndex].Y));
 
 			currentLine.Draw ();
 

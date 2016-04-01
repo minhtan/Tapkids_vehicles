@@ -31,9 +31,9 @@ public abstract class GestureDrawing : MonoBehaviour
 
 	protected virtual void OnDisable ()
 	{
-		/*Lean.LeanTouch.OnFingerDown -= OnFingerDown;
+		Lean.LeanTouch.OnFingerDown -= OnFingerDown;
 		Lean.LeanTouch.OnFingerUp -= OnFingerUp;
-		Lean.LeanTouch.OnFingerDrag -= OnFingerDrag;*/
+		Lean.LeanTouch.OnFingerDrag -= OnFingerDrag;
 	}
 
 	void OnDestroy()
