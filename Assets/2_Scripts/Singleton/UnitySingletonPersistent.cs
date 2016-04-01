@@ -13,9 +13,10 @@ public class UnitySingletonPersistent<T> : MonoBehaviour
                 instance = FindObjectOfType<T>();
                 if (instance == null)
                 {
-                    GameObject obj = new GameObject();
-                    obj.hideFlags = HideFlags.HideAndDontSave;
-                    instance = obj.AddComponent<T>();
+//                    GameObject obj = new GameObject();
+//                    obj.hideFlags = HideFlags.HideAndDontSave;
+//                    instance = obj.AddComponent<T>();
+					return null;
                 }
             }
             return instance;
