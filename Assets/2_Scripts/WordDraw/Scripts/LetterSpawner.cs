@@ -8,15 +8,19 @@ namespace WordDraw
 	public class LetterSpawner : MonoBehaviour
 	{
 		[SerializeField]
+		private WordDrawDifficulty[] _difficulties; 
+
+		[SerializeField]
 		private RectTransform _spawnPoint;
-		[SerializeField]
-		private GameObject _letterPrefab;
-		[SerializeField]
-		private float _spawnPeriod = 3f;
+	
 		[SerializeField]
 		private int _maxStackCap = 9;
 
 		private List<UILetter> _letterList;
+		private GameObject[] _letterPrefabs;
+		private int _curDifficulty = 0;
+
+		public WordDrawDifficulty CurrentDifficulty { get { return _difficulties [_curDifficulty]; } }
 
 		void OnEnable ()
 		{
@@ -36,6 +40,7 @@ namespace WordDraw
 		void Awake ()
 		{
 			_letterList = new List<UILetter> ();
+			_letterPrefabs = Resources.LoadAll <GameObject> ("Letters");
 			SpawnLetters ();
 		}
 
@@ -43,7 +48,6 @@ namespace WordDraw
 		{
 			Letters letter = WordDrawConfig.GetGestureResult (result);
 			DestroyResultGesture (letter);
-			Debug.Log (letter);
 		}
 
 		private void DestroyResultGesture (Letters target)
@@ -58,13 +62,23 @@ namespace WordDraw
 
 		private void SpawnLetters ()
 		{
-			StartCoroutine (SpawnCor (_spawnPeriod));
+			StartCoroutine (SpawnCor (CurrentDifficulty.SpawnPeriod));
+		}
+
+		private void ChangeToMextDifficulty ()
+		{
+			_curDifficulty++;
+		}
+
+		private GameObject GetRandomLetterPrefab ()
+		{
+			return _letterPrefabs [Random.Range (0, _letterPrefabs.Length)];
 		}
 
 		IEnumerator SpawnCor (float period)
 		{
 			while (true) {
-				GameObject letter = Instantiate (_letterPrefab);
+				GameObject letter = Instantiate (GetRandomLetterPrefab ());
 				letter.transform.SetParent (_spawnPoint, false);
 
 				_letterList.Add (letter.GetComponent<UILetter> ());
@@ -78,5 +92,14 @@ namespace WordDraw
 				yield return new WaitForSeconds (period);
 			}
 		}
+	}
+
+	[System.Serializable]
+	public class WordDrawDifficulty : System.Object
+	{
+		[SerializeField]
+		private float _spawnPeriod;
+
+		public float SpawnPeriod { get { return _spawnPeriod; } }
 	}
 }
