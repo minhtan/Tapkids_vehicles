@@ -21,7 +21,7 @@ public class GestureLineDrawing : GestureDrawing
 	void Awake ()
 	{
 		if (useEndCap) {
-			VectorLine.SetEndCap ("cap", EndCap.Mirror, capMaterial, capTex);
+			//VectorLine.SetEndCap ("cap", EndCap.Mirror, capMaterial, capTex);
 			lineMaterial = capMaterial;
 		}
 

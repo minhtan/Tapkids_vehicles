@@ -72,5 +72,15 @@ namespace WordDraw
 			return (index >= 0 && index <= 26) ? LetterEnum [index] : LetterEnum[LetterNumber - 1];
 		}
 
+		public static bool CompareLetterWithResult(UILetterButton letterBut, Result detectedResult)
+		{
+			Letters resultLetter = GetGestureResult (detectedResult);
+
+			if (letterBut.Letter == resultLetter)
+				return true;
+
+			return false;
+		}
+
 	}
 }
