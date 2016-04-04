@@ -21,7 +21,7 @@ namespace Vuforia
 
 		private TrackableBehaviour mTrackableBehaviour;
 		private PlayMakerFSM fsm;
-
+		private GameObject go;
 		#endregion // PRIVATE_MEMBER_VARIABLES
 
 
@@ -88,6 +88,21 @@ namespace Vuforia
 			fsm.Fsm.Event ("ready");
 		}
 
+		void _ShowModel(){
+			StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (AssetController.bundleName, targetName, (bundle) => {
+				go = GameObject.Instantiate(bundle);
+				go.transform.localScale += new Vector3(50f, 50f, 50f);
+				go.transform.SetParent (transform, false);
+			}));
+		}
+
+		void _HideModel(){
+			if(go != null){
+				GameObject.Destroy(go);
+				Resources.UnloadUnusedAssets();
+				go = null;
+			}
+		}
 		#endregion // PRIVATE_METHODS
 	}
 }

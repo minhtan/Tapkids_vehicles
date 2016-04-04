@@ -3,14 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class DataUltility {	
-
-
-	public static string ReadWordList(string fileName)
-	{
-		return Resources.Load<TextAsset>(fileName).text;
-	}
-
-	public static List<WordGameData> ReadWordListByLevel(){
+	
+	public static List<WordGameData> ReadDataForWordGame(){
 		List<WordGameData> list = new List<WordGameData> ();
 
 		TextAsset[] textList = Resources.LoadAll<TextAsset> ("WordGame/");
@@ -44,4 +38,5 @@ public class DataUltility {
 		}
 		return answers;
 	}
+
 }

@@ -55,7 +55,7 @@ public class WordGameController : MonoBehaviour {
 
 	#region Data funcs
 	void GetDataList(){
-		dataList = DataUltility.ReadWordListByLevel ();
+		dataList = DataUltility.ReadDataForWordGame ();
 	}
 
     void RandomData()
@@ -128,6 +128,11 @@ public class WordGameController : MonoBehaviour {
 		answers = DataUltility.GetAnswersList (data);
 		ArController.Instance.SetArMaxStimTargets (playableLetters.Count);
 
+		FindMinWordLength ();
+		GetWinScore ();
+	}
+
+	void _ReadyAllTargets(){
 		foreach (string letter in playableLetters){
 			if( letterToImgTarget.ContainsKey(letter) ){
 				FSMTrackable imageTarget;
@@ -136,9 +141,6 @@ public class WordGameController : MonoBehaviour {
 				}
 			}
 		}
-
-		FindMinWordLength ();
-		GetWinScore ();
 	}
 
 	void _GameOver(){

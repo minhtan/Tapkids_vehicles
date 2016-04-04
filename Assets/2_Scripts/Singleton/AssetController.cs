@@ -8,6 +8,7 @@ public class AssetController : UnitySingletonPersistent<AssetController> {
 	#region Vars
 	private string url = "http://103.27.239.161/Upload/";
 	public const string AssetBundlesOutputPath = "/AssetBundles/";
+	public static string bundleName = "car_asset";
 	#endregion
 
 	#region Mono
