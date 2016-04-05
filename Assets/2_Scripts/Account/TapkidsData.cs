@@ -9,25 +9,26 @@ using System;
 public class Player {
 	public int id;
 	public string name;
-	public int currentPoint;
-	public int currentVehicleIndex;
-	public Vehicle[] unlockedVehicles;
-
+	public int currentCredit;
+	public Vehicle currentVehicle;
+//	public Vehicle[] unlockedVehicles;
+	public List <Vehicle> unlockedVehicles;
 
 	public Player () {
 	}
 
-	public Player (int _id, string _name, int _currentPoint, int _currentVehicleIndex, Vehicle[] _unlockedVehicles) {
+	public Player (int _id, string _name, int _currentCredit, Vehicle _currentVehicle, List <Vehicle> _unlockedVehicles) {
 		this.id = _id;
 		this.name = _name;
-		this.currentPoint = _currentPoint;
-		this.currentVehicleIndex = _currentVehicleIndex;
+		this.currentCredit = _currentCredit;
+		this.currentVehicle = _currentVehicle;
 		this.unlockedVehicles = _unlockedVehicles;
 	}
 }
 
 [System.Serializable]
 public class Vehicle {
+	public int id;
 	public string name;
 	public int maxSpeed;
 	public int costPoint;
@@ -36,8 +37,10 @@ public class Vehicle {
 	public Vehicle () {
 	}
 
-	public Vehicle (string _name, int _speed, int _costPoint) {
+	public Vehicle (int _id, string _name, int _speed, int _costPoint) {
+		this.id = _id;
 		this.name = _name;
+		this.maxSpeed = _speed;
 		this.costPoint = _costPoint;
 	}
 }
@@ -59,21 +62,13 @@ public static class TapkidsData {
 		return null;
 	}
 
-	public static Vehicle GetVehicleById (int _id) {
+	// update score, current car, unlocked car ....
+	public static void UpdatePlayerById (int _id, Player _newPlayer) {
 		for (int i = 0; i < players.Count; i++) {
 			if (players[i].id == _id) {
-				return players[i].unlockedVehicles[players[i].currentVehicleIndex];
+				players[i] = _newPlayer;
 			}
 		}
-		return null;
-	}
-
-	public static List<Vehicle> GetUnlockedVehicles () {
-		List<Vehicle> vehicles = new List<Vehicle> ();
-
-
-
-		return vehicles;
 	}
 
 	public static bool RemovePlayerById (int _id) {
@@ -86,13 +81,7 @@ public static class TapkidsData {
 		return false;
 	}
 
-	public static void UpdatePlayerById (int _id, Player _newPlayer) {
-		for (int i = 0; i < players.Count; i++) {
-			if (players[i].id == _id) {
-				players[i] = _newPlayer;
-			}
-		}
-	}
+
 
 	public static bool RemoveAllPlayer () {
 		players.Clear ();
