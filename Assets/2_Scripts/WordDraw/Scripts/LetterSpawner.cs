@@ -2,13 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using PDollarGestureRecognizer;
+using UnityEngine.Events;
 
 namespace WordDraw
 {
 	public class LetterSpawner : MonoBehaviour
 	{
 		[SerializeField]
-		private WordDrawDifficulty[] _difficulties; 
+		private WordDrawDifficulty[] _difficulties;
 
 		[SerializeField]
 		private RectTransform _spawnPoint;
@@ -21,6 +22,8 @@ namespace WordDraw
 		private int _curDifficulty = 0;
 
 		public WordDrawDifficulty CurrentDifficulty { get { return _difficulties [_curDifficulty]; } }
+
+		public static UnityAction<bool, Letters, Letters> OnReturnRecognizedResult;  //Return result compared gesture, correct letter, user input letter
 
 		void OnEnable ()
 		{
@@ -53,9 +56,15 @@ namespace WordDraw
 		private void DestroyResultGesture (Letters target)
 		{
 			for (int i = _letterList.Count - 1; i >= 0; i--) {
-				if (target == _letterList [i].Letter) {
-					Destroy (_letterList [i].gameObject);
+				UILetter letter = _letterList [i];
+				if (target == letter.Letter) {
+					Destroy (letter.gameObject);
 					_letterList.RemoveAt (i);
+
+					if(OnReturnRecognizedResult != null)
+					{
+						OnReturnRecognizedResult (true, letter.Letter, target);
+					}
 				}
 			}
 		}
@@ -101,5 +110,12 @@ namespace WordDraw
 		private float _spawnPeriod;
 
 		public float SpawnPeriod { get { return _spawnPeriod; } }
+
+		[SerializeField]
+		private int _requiredScore;
+
+		public int RequiredScore {
+			get { return _requiredScore; }
+		}
 	}
 }
