@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
+using System.IO;
 
 public class DataUltility {	
 	
@@ -39,4 +41,19 @@ public class DataUltility {
 		return answers;
 	}
 
+	public static void WriteTextFile (string data, string fileName, string directoryPath)
+	{
+		string assetPath = directoryPath + "/" + fileName + ".txt";
+		var sr = File.CreateText (assetPath);
+		sr.Write (data);
+
+		AssetDatabase.Refresh();
+
+		int index = assetPath.IndexOf("Assets");
+		string relativePath = assetPath.Substring(index, assetPath.Length - index);
+		TextAsset txtGO = AssetDatabase.LoadAssetAtPath<TextAsset>(relativePath);
+		EditorGUIUtility.PingObject(txtGO);
+
+		sr.Close ();
+	}
 }

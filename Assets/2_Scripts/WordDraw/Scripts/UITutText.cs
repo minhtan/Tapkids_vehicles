@@ -13,7 +13,7 @@ public class UITutText : MonoBehaviour {
 	private Tutorial _curTutText;
 	private int _curIndex = -1;
 
-	public enum TutText {WELCOME, DRAW_TEMPLATE, LET_DRAW, CORRECT, TRY_AGAIN};
+	public enum TutText {WELCOME, DRAW_TEMPLATE, LET_WRITE, CORRECT, TRY_AGAIN, GOOD_JOB, OPPS_LET_SEE_AGAIN};
 
 	private Dictionary<TutText, Tutorial> _tutDict;
 		
