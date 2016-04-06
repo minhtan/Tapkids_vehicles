@@ -68,7 +68,7 @@ public class CarGameGenerator : MonoBehaviour {
 
 	#region private functions
 	private IEnumerator GetCarAssetBundle () {
-		currentVehicle = PlayerDataController.Instance.mPlayer.unlockedVehicles[PlayerDataController.Instance.mPlayer.currentVehicleIndex];
+		currentVehicle = PlayerDataController.Instance.mPlayer.currentVehicle;
 
 		yield return StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (assetBundleName, currentVehicle.name, (bundle) => {
 			GameObject carGO = Instantiate (bundle) as GameObject;

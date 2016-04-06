@@ -43,7 +43,7 @@ public class GaragaController : MonoBehaviour {
 		vehicleDemos = new GameObject[transform.childCount];
 		for (int i = 0; i < vehicleDemos.Length; i++) {
 			vehicleDemos[i] = transform.GetChild (i).gameObject;
-			if (PlayerDataController.Instance.mPlayer.currentVehicleIndex == i) 
+			if (PlayerDataController.Instance.mPlayer.currentVehicle.id == i) 
 				vehicleDemos[i].SetActive (true);
 			else
 				vehicleDemos[i].SetActive (false);
