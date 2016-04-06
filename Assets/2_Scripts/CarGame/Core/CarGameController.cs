@@ -92,7 +92,6 @@ public class CarGameController : MonoBehaviour {
 		successText.text = "";
 		collectedLetters.Clear ();
 		gatherLetterText.text = "Result";
-
 	}
 
 	#endregion private functions

@@ -21,7 +21,7 @@ ModelImporter:
     400012: Shoulder_RGT_joint
     400014: Thigh_LFT_joint1
     400016: Thigh_RGT_joint1
-    7400000: Take 001
+    7400000: idle
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -38,7 +38,51 @@ ModelImporter:
     animationScaleError: .5
     animationWrapMode: 0
     extraExposedTransformPaths: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: idle
+      takeName: Take 001
+      firstFrame: 1
+      lastFrame: 24
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Bones_grp
+        weight: 1
+      - path: Bones_grp/Root_joint
+        weight: 1
+      - path: Bones_grp/Root_joint/Hip_joint
+        weight: 1
+      - path: Bones_grp/Root_joint/Hip_joint/Chest_joint
+        weight: 1
+      - path: Bones_grp/Root_joint/Hip_joint/Chest_joint/Shoulder_LFT_joint
+        weight: 1
+      - path: Bones_grp/Root_joint/Hip_joint/Chest_joint/Shoulder_RGT_joint
+        weight: 1
+      - path: Bones_grp/Root_joint/Hip_joint/Thigh_LFT_joint1
+        weight: 1
+      - path: Bones_grp/Root_joint/Hip_joint/Thigh_RGT_joint1
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
     isReadable: 1
   meshes:
     lODScreenPercentages: []
@@ -56,7 +100,7 @@ ModelImporter:
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
   tangentSpace:
-    normalSmoothAngle: 60
+    normalSmoothAngle: 180
     splitTangentsAcrossUV: 1
     normalImportMode: 0
     tangentImportMode: 1

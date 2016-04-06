@@ -22,6 +22,7 @@ namespace Vuforia
 		private TrackableBehaviour mTrackableBehaviour;
 		private PlayMakerFSM fsm;
 		private GameObject go;
+		private Animator go_anim;
 		#endregion // PRIVATE_MEMBER_VARIABLES
 
 
@@ -91,8 +92,9 @@ namespace Vuforia
 		void _ShowModel(){
 			StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (AssetController.bundleName, targetName, (bundle) => {
 				go = GameObject.Instantiate(bundle);
-				go.transform.localScale += new Vector3(50f, 50f, 50f);
+				go.transform.localScale += new Vector3(49f, 49f, 49f);
 				go.transform.SetParent (transform, false);
+				go_anim = go.GetComponentInChildren<Animator>();
 			}));
 		}
 
@@ -101,6 +103,7 @@ namespace Vuforia
 				GameObject.Destroy(go);
 				Resources.UnloadUnusedAssets();
 				go = null;
+				go_anim = null;
 			}
 		}
 		#endregion // PRIVATE_METHODS

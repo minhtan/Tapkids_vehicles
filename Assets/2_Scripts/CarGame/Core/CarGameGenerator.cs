@@ -14,7 +14,10 @@ public class CarGameGenerator : MonoBehaviour {
 	#region public members
 	public GameObject[] letterPrefabs; 	// Todo: should replace this prefab hard references with loading assetbundle method
 
+	public GameObject[] obstaclePrefabs;
+
 	public GameObject carPrefab;
+
 	#endregion public members
 
 	#region private members
@@ -23,10 +26,12 @@ public class CarGameGenerator : MonoBehaviour {
 
 	private Transform cartPoint;
 	private GameObject[] letterPoints;	// stores letter's positions in environment
+	private GameObject[] obstaclePoints;
 
 	private List<GameObject> letterGameObjects;		// stores game object letter
 //	private Dictionary <int, GameObject> IndexToLetterDictionary = new Dictionary<int, GameObject> ();
 
+	private List<GameObject> obstacleGameObjects;
 	private Vehicle currentVehicle;
 	private GameObject car;
 
@@ -42,12 +47,12 @@ public class CarGameGenerator : MonoBehaviour {
 	void OnEnable () {
 
 		CarGameEventController.InitGame += OnInitGame;
-		CarGameEventController.ValidateWord += OnValidateWord;
+//		CarGameEventController.ValidateWord += OnValidateWord;
 	}
 	void OnDisable () {
 
 		CarGameEventController.InitGame -= OnInitGame;
-		CarGameEventController.ValidateWord -= OnValidateWord;
+//		CarGameEventController.ValidateWord -= OnValidateWord;
 	}
 
 	void Start () {
@@ -58,7 +63,11 @@ public class CarGameGenerator : MonoBehaviour {
 		if (letterPoints.Length <= 0) 
 			Debug.Log ("Setup Error, There is no Letter Point in the environment");
 
-
+		obstacleGameObjects = new List<GameObject> ();
+		obstaclePoints= GameObject.FindGameObjectsWithTag ("ObstaclePoint");
+		if (obstaclePoints.Length <= 0) 
+			Debug.Log ("Setup Error, There is no Obstacle Point in the environment");
+		
 		cartPoint = GameObject.FindWithTag ("CarPoint").transform;
 		if (cartPoint == null) 
 			Debug.Log ("Setup Error, There is no Car Point in the environment");
@@ -86,7 +95,7 @@ public class CarGameGenerator : MonoBehaviour {
 	}
 
 	private void OnInitGame (string _letter) {
-		// demo
+		#region demo
 		if (car == null)
 		{
 			car = Instantiate (carPrefab, cartPoint.position + pointOffset, Quaternion.identity) as GameObject;
@@ -95,8 +104,21 @@ public class CarGameGenerator : MonoBehaviour {
 			car.transform.position = cartPoint.position + pointOffset;
 			car.transform.rotation = Quaternion.identity;
 		}
+
+		for (int i = 0; i < obstacleGameObjects.Count; i++) {
+			GameObject.Destroy (obstacleGameObjects[i]);
+		}
+
+		obstacleGameObjects.Clear ();
+
+		for (int i = 0; i < obstaclePoints.Length; i++) {
+			GameObject obstacleGameObject = (GameObject) Instantiate (obstaclePrefabs[Random.Range (0, obstaclePrefabs.Length)], obstaclePoints [i].transform.position, Quaternion.identity);
+			obstacleGameObject.transform.SetParent (mTransform);
+			obstacleGameObjects.Add (obstacleGameObject);
+		}
+
 		return;
-		// demo
+
 		for (int i = 0; i < letterGameObjects.Count; i++) {
 			GameObject.Destroy (letterGameObjects[i]);
 		}
@@ -112,6 +134,8 @@ public class CarGameGenerator : MonoBehaviour {
 				}
 			}
 		}
+
+		#endregion demo
 
 		//TODO: pending for real asset bundle server
 		// StartCoroutine (GetAssetBundle ());
