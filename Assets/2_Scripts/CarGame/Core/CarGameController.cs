@@ -60,6 +60,7 @@ public class CarGameController : MonoBehaviour {
 			for (int i = 0; i < mTransform.childCount; i++) {
 				mTransform.GetChild (i).gameObject.SetActive (false);
 			}
+			_machine.changeState <CGWaitForTargetState> ();
 		}
 	}
 

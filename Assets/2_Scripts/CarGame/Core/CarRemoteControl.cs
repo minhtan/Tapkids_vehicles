@@ -91,14 +91,16 @@ namespace UnityStandardAssets.CrossPlatformInput
 		private void OnStartGame () {
 			mAccelerate.Update (1f);
 		}
+
 		private void OnPauseGame (bool _isPaused) {
 			if (_isPaused)
 				mAccelerate.Update (0f);
 		}
+
 		private void OnResetGame () {
 			mAccelerate.Update (0f);
-
 		}
+
 		private void CreateVirtualAxes()
 		{
 			// create new axes based on axes to use

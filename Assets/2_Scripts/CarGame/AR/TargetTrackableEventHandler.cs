@@ -29,8 +29,6 @@ public class TargetTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 	{
 		// send letter to game controller
 		CarGameEventController.OnTargetTracking(true, mTransform, letter);
-
-
 	}
 
 	void OnTrackingLost () 

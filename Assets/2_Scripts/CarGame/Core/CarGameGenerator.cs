@@ -95,12 +95,14 @@ public class CarGameGenerator : MonoBehaviour {
 			car.transform.position = cartPoint.position + pointOffset;
 			car.transform.rotation = Quaternion.identity;
 		}
-
+		return;
 		// demo
 		for (int i = 0; i < letterGameObjects.Count; i++) {
 			GameObject.Destroy (letterGameObjects[i]);
 		}
+
 		letterGameObjects.Clear ();
+
 		for (int i = 0; i < _letter.Length; i++) {
 			for (int j = 0; j < letterPrefabs.Length; j++) {
 				if (_letter[i].ToString ().Equals (letterPrefabs[j].name)) {

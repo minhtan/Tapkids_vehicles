@@ -22,7 +22,7 @@ public class CGStartState : SKState<CarGameController> {
 
 	public override void end ()
 	{
-		Debug.Log("End State <<<");
+		Debug.Log("Start State <<<");
 	}
 	#region public members
 	#endregion public members

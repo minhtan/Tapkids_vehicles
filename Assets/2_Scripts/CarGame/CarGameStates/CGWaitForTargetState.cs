@@ -6,9 +6,9 @@ public class CGWaitForTargetState : SKState<CarGameController> {
 
 	public override void begin ()
 	{
-		Debug.Log("Wait For Target State >>>");
+		Debug.Log("Wait State >>>");
 
-		// setting ar camera
+		// TODO: setting ar camera
 //		ArController.Instance.ToggleAR (true);
 //		ArController.Instance.SetCenterMode (false);
 //		ArController.Instance.SetArMaxStimTargets (1);
@@ -23,7 +23,7 @@ public class CGWaitForTargetState : SKState<CarGameController> {
 
 	public override void end ()
 	{
-		Debug.Log("Wait For Target State <<<");
+		Debug.Log("Wait State <<<");
 	}
 
 	#region public members
