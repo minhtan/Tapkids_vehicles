@@ -115,7 +115,6 @@ public class WordGameController : MonoBehaviour {
 		GetDataList ();
 		ArController.Instance.ToggleAR (true);
 		ArController.Instance.SetCenterMode (true);
-		ArController.Instance.SetArMaxStimTargets (5);
 	}
 
 	void _InitGame(){
