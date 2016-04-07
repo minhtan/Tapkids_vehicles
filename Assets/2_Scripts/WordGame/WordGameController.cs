@@ -13,8 +13,18 @@ public class WordGameController : MonoBehaviour {
         fsm = gameObject.GetComponent<PlayMakerFSM>();
     }
 
+	void OnEnable(){
+		Messenger.AddListener<bool>( EventManager.MenuEvent.ISPAUSE.ToString(), ToggleGamePause );
+		Messenger.AddListener( EventManager.MenuEvent.RESTART.ToString(), _ResetGame );
+	}
+
+	void OnDisable(){
+		Messenger.Cleanup ();
+	}
+
 	void OnDestroy(){
 		ArController.Instance.ToggleAR (false);
+		GUIController.Instance.ToggleGUI (false);
 	}
 
 	void Update(){
@@ -66,6 +76,10 @@ public class WordGameController : MonoBehaviour {
 	#endregion
 
 	#region UI funcs
+	void ToggleGamePause(bool state){
+		fsm.Fsm.GetFsmBool ("isPause").Value = state;
+	}
+
     public void _ReadyGame()
     {
         fsm.Fsm.Event("ready");
@@ -103,6 +117,10 @@ public class WordGameController : MonoBehaviour {
 	void UpdateScoreSliderValue(){
 		sld_score.value = GetCurrentScorePercentage ();
 	}
+
+	void _ToggleMenuUI(bool state){
+		
+	}
 	#endregion
 
 	#region Game funcs
@@ -115,6 +133,7 @@ public class WordGameController : MonoBehaviour {
 		GetDataList ();
 		ArController.Instance.ToggleAR (true);
 		ArController.Instance.SetCenterMode (true);
+		GUIController.Instance.ToggleGUI (true);
 	}
 
 	void _InitGame(){
@@ -143,6 +162,7 @@ public class WordGameController : MonoBehaviour {
 	}
 
 	void _GameOver(){
+		_ToggleMenuUI (false);
 		if (currentScore >= winScore) {
 			fsm.Fsm.Event ("win");
 		} else {
