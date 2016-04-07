@@ -16,7 +16,8 @@ public class NextButton : MonoBehaviour {
 		mButton = GetComponent <Button> ();
 		if (mButton != null) {
 			mButton.onClick.AddListener (delegate {
-				CarGameEventController.OnSelectCar (1);
+//				CarGameEventController.OnSelectCar (1);
+				Messenger.Broadcast <int> (EventManager.GUI.SELECTCAR.ToString (), 1);
 			});
 		}
 	}

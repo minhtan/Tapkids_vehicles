@@ -7,11 +7,13 @@ public class NotifyText : MonoBehaviour {
 	private Text mText;
 
 	void OnEnable () {
-		CarGameEventController.NotifyText += OnNotifyText;
+//		CarGameEventController.NotifyText += OnNotifyText;
+		Messenger.AddListener <string> (EventManager.GUI.NOTIFY.ToString (), OnNotifyText);
 	}
 
 	void OnDisable () {
-		CarGameEventController.NotifyText -= OnNotifyText;
+		Messenger.RemoveListener <string> (EventManager.GUI.NOTIFY.ToString (), OnNotifyText);
+//		CarGameEventController.NotifyText -= OnNotifyText;
 	}
 	// Use this for initialization
 	void Start () {

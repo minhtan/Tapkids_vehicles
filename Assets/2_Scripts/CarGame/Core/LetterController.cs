@@ -21,7 +21,8 @@ public class LetterController : MonoBehaviour {
 
 	void OnTriggerEnter (Collider other) {
 		// collect letter
-		CarGameEventController.OnCollectLetter (letterName);
+//		CarGameEventController.OnCollectLetter (letterName);
+		Messenger.Broadcast <string> (EventManager.Vehicle.COLLECT.ToString (), letterName);
 
 		// disable letter
 		gameObject.SetActive (false);

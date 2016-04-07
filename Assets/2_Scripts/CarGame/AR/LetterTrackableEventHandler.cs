@@ -28,13 +28,15 @@ public class LetterTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 	void OnTrackingFound () 
 	{
 		// send letter to game controller
-		CarGameEventController.OnLetterTracking(true, letter);
+//		CarGameEventController.OnLetterTracking(true, letter);
+		Messenger.Broadcast <bool, string> (EventManager.AR.LETTERTRACKING.ToString(), true, letter);
 	}
 
 	void OnTrackingLost () 
 	{
 		// send lost event to game controller
-		CarGameEventController.OnLetterTracking(false, letter);
+//		CarGameEventController.OnLetterTracking(false, letter);
+		Messenger.Broadcast <bool, string> (EventManager.AR.LETTERTRACKING.ToString(), false, letter);
 	}
 	#endregion
 

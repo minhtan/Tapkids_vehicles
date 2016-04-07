@@ -15,11 +15,13 @@ public class PausePanel : MonoBehaviour {
 	#region Mono
 	void OnEnable () {
 //		CarGameEventController.TogglePanel += OnTogglePanel;
-		CarGameEventController.PauseGame += OnPauseGame;
+//		CarGameEventController.PauseGame += OnPauseGame;
+		Messenger.AddListener <bool> (EventManager.GameState.PAUSEGAME.ToString (), OnPauseGame);
 	}
 	void Disable () {
 //		CarGameEventController.TogglePanel -= OnTogglePanel;
-		CarGameEventController.PauseGame -= OnPauseGame;
+//		CarGameEventController.PauseGame -= OnPauseGame;
+		Messenger.RemoveListener <bool> (EventManager.GameState.PAUSEGAME.ToString (), OnPauseGame);
 	}
 
 	void Start () {

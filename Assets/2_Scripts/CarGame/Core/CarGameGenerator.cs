@@ -46,14 +46,16 @@ public class CarGameGenerator : MonoBehaviour {
 
 	void OnEnable () {
 
-		CarGameEventController.InitGame += OnInitGame;
+//		CarGameEventController.InitGame += OnInitGame;
+		Messenger.AddListener <string> (EventManager.GameState.INITGAME.ToString(), OnInitGame);
 
 		//TODO: handle player gathers word, respawn letter at new point
 //		CarGameEventController.ValidateWord += OnValidateWord;
 	}
 	void OnDisable () {
 
-		CarGameEventController.InitGame -= OnInitGame;
+//		CarGameEventController.InitGame -= OnInitGame;
+		Messenger.RemoveListener <string> (EventManager.GameState.INITGAME.ToString(), OnInitGame);
 //		CarGameEventController.ValidateWord -= OnValidateWord;
 	}
 

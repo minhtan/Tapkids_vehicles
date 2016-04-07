@@ -16,7 +16,8 @@ public class TutorialButton : MonoBehaviour {
 		pauseButton = GetComponent <Button> ();
 		if(pauseButton != null) {
 			pauseButton.onClick.AddListener (delegate {
-				CarGameEventController.OnToggleTutorialPanel (true);
+//				CarGameEventController.OnToggleTutorialPanel (true);
+				Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_TUTORIAL.ToString (), true);
 			});
 		}
 	}

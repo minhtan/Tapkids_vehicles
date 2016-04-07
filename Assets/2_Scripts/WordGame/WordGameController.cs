@@ -14,8 +14,8 @@ public class WordGameController : MonoBehaviour {
     }
 
 	void OnEnable(){
-		Messenger.AddListener<bool>( EventManager.MenuEvent.ISPAUSE.ToString(), ToggleGamePause );
-		Messenger.AddListener( EventManager.MenuEvent.RESTART.ToString(), _ResetGame );
+		Messenger.AddListener<bool>( EventManager.GUI.ISPAUSE.ToString(), ToggleGamePause );
+		Messenger.AddListener( EventManager.GUI.RESTART.ToString(), _ResetGame );
 	}
 
 	void OnDisable(){

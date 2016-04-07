@@ -9,7 +9,8 @@ public class CGStartState : SKState<CarGameController> {
 		Debug.Log("Start State >>>");
 		// send event start game: enable mobile input, 
 
-		CarGameEventController.OnStartGame ();
+//		CarGameEventController.OnStartGame ();
+		Messenger.Broadcast (EventManager.GameState.STARTGAME.ToString());
 
 	}
 

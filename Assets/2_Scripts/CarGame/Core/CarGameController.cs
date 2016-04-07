@@ -75,7 +75,8 @@ public class CarGameController : MonoBehaviour {
 					mTransform.GetChild (i).gameObject.SetActive (true);
 				
 			} else {
-				CarGameEventController.OnNotifyText ("Scanned letter first");
+//				CarGameEventController.OnNotifyText ("Scanned letter first");
+				Messenger.Broadcast <string> (EventManager.GUI.NOTIFY.ToString(), "Scanned letter first");
 //				Debug.Log ("Player has not scanned letter");
 			}
 		} else {		// LOST MAP
@@ -103,7 +104,7 @@ public class CarGameController : MonoBehaviour {
 					gatherLetterText.text = "Result";
 					// respawn letter
 
-					CarGameEventController.OnValidateWord();
+//					CarGameEventController.OnValidateWord();
 				}
 			}
 		}
@@ -119,19 +120,18 @@ public class CarGameController : MonoBehaviour {
 
 	#region Mono
 	void OnEnable () {
-		CarGameEventController.LetterTracking += OnLetterTracking;
-		CarGameEventController.MapTracking += OnMapTracking;
-		CarGameEventController.ResetGame += OnResetGame;
-		CarGameEventController.CollectLetter += OnCollectLetter;
-		CarGameEventController.GatherLetter += OnGatherLetter;
+//		CarGameEventController.LetterTracking += OnLetterTracking;
+		Messenger.AddListener <bool, string> (EventManager.AR.LETTERTRACKING.ToString(), OnLetterTracking);
+//		CarGameEventController.MapTracking += OnMapTracking;
+		Messenger.AddListener <bool, Transform> (EventManager.AR.MAPTRACKING.ToString(), OnMapTracking);
+
+//		CarGameEventController.ResetGame += OnResetGame;
+//		CarGameEventController.CollectLetter += OnCollectLetter;
+//		CarGameEventController.GatherLetter += OnGatherLetter;
 	}
 
 	void OnDisable () {
-		CarGameEventController.LetterTracking -= OnLetterTracking;
-		CarGameEventController.MapTracking -= OnMapTracking;
-		CarGameEventController.ResetGame -= OnResetGame;
-		CarGameEventController.CollectLetter -= OnCollectLetter;
-		CarGameEventController.GatherLetter -= OnGatherLetter;
+		Messenger.Cleanup ();
 	}
 
 	void Awake () {

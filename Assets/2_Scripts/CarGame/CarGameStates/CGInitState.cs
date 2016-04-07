@@ -21,7 +21,8 @@ public class CGInitState : SKState<CarGameController> {
 		_context.wordGameData = DataUltility.ReadDataForCarGame (_context.letter);
 		// send event init game environment
 		_context.answers = DataUltility.GetAnswersList (_context.wordGameData);
-		CarGameEventController.OnInitGame (_context.wordGameData.letters);
+//		CarGameEventController.OnInitGame (_context.wordGameData.letters);
+		Messenger.Broadcast <string> (EventManager.GameState.INITGAME.ToString (), _context.wordGameData.letters);
 	}
 
 	public override void reason ()

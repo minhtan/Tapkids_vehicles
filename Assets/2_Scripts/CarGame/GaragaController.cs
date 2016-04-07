@@ -25,11 +25,13 @@ public class GaragaController : MonoBehaviour {
 
 	#region Mono
 	void OnEnable () {
-		CarGameEventController.SelectCar += OnSelectCar;
+//		CarGameEventController.SelectCar += OnSelectCar;
+		Messenger.AddListener <int> (EventManager.GUI.SELECTCAR.ToString (), OnSelectCar);
 	}
 
 	void OnDisable () {
-		CarGameEventController.SelectCar -= OnSelectCar;
+//		CarGameEventController.SelectCar -= OnSelectCar;
+		Messenger.RemoveListener <int> (EventManager.GUI.SELECTCAR.ToString (), OnSelectCar);
 	}
 
 	void Start () {

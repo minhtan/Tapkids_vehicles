@@ -34,11 +34,13 @@ public class OffScreenIndicator : MonoBehaviour {
 
 	#region MONO
 	void OnEnable () {
-		CarGameEventController.InitGame += OnInitGame;
+//		CarGameEventController.InitGame += OnInitGame;
+		Messenger.AddListener <string> (EventManager.GameState.INITGAME.ToString (), OnInitGame);
 	}
 
 	void OnDisable () {
-		CarGameEventController.InitGame -= OnInitGame;
+//		CarGameEventController.InitGame -= OnInitGame;
+		Messenger.RemoveListener <string> (EventManager.GameState.INITGAME.ToString (), OnInitGame);
 	}
 
 	void Start () {
