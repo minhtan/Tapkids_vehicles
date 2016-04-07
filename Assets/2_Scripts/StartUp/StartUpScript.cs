@@ -4,10 +4,14 @@ using System.Collections;
 public class StartUpScript : MonoBehaviour {
 
 	#region Vars
-
+	CaptureAndSave snapShot;
 	#endregion
 
 	#region Mono
+	void Awake(){
+		snapShot = GameObject.FindObjectOfType<CaptureAndSave>();
+	}
+
 	void Start () {
 		ArController.Instance.ToggleAR (true);
 		ArController.Instance.SetCenterMode (true);
@@ -15,5 +19,7 @@ public class StartUpScript : MonoBehaviour {
 	}
 	#endregion
 
-
+	public void _CaptureAndSave(){
+		snapShot.CaptureAndSaveToAlbum();
+	}
 }

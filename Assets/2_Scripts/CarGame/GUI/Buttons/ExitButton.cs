@@ -9,7 +9,6 @@ public class ExitButton : MonoBehaviour {
 
 	#region private members
 	private Button mButton;
-	private int menuSceneId = 2;
 
 	#endregion private members
 
@@ -19,7 +18,7 @@ public class ExitButton : MonoBehaviour {
 		if(mButton != null) {
 			mButton.onClick.AddListener ( delegate {
 				// back to menu
-				SceneController.Instance.LoadingSceneAsync ((SceneController.SceneID) menuSceneId);
+				SceneController.Instance.LoadingSceneAsync (SceneController.SceneID.MENU);
 			});
 		}
 	}

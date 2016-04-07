@@ -16,8 +16,8 @@ public class ResetButton : MonoBehaviour {
 		resetButton = GetComponent <Button> ();
 		if(resetButton != null) {
 			resetButton.onClick.AddListener ( delegate {
-				CarGameEventController.OnResetGame ();
-
+//				CarGameEventController.OnResetGame ();
+				Messenger.Broadcast ( EventManager.MenuEvent.RESTART.ToString() );
 				// car reset position
 				// score reset 0
 				// re init game
