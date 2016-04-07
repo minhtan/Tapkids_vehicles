@@ -73,6 +73,8 @@ public class CarGameController : MonoBehaviour {
 				mTransform.SetParent (_parent, true);
 				for (int i = 0; i < mTransform.childCount; i++) 
 					mTransform.GetChild (i).gameObject.SetActive (true);
+
+				_machine.changeState <CGStartState> ();
 				
 			} else {
 //				CarGameEventController.OnNotifyText ("Scanned letter first");
@@ -120,9 +122,8 @@ public class CarGameController : MonoBehaviour {
 
 	#region Mono
 	void OnEnable () {
-//		CarGameEventController.LetterTracking += OnLetterTracking;
 		Messenger.AddListener <bool, string> (EventManager.AR.LETTERTRACKING.ToString(), OnLetterTracking);
-//		CarGameEventController.MapTracking += OnMapTracking;
+
 		Messenger.AddListener <bool, Transform> (EventManager.AR.MAPTRACKING.ToString(), OnMapTracking);
 
 //		CarGameEventController.ResetGame += OnResetGame;
@@ -131,7 +132,7 @@ public class CarGameController : MonoBehaviour {
 	}
 
 	void OnDisable () {
-		Messenger.Cleanup ();
+//		Messenger.Cleanup ();
 	}
 
 	void Awake () {
