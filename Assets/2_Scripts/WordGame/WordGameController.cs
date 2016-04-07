@@ -18,11 +18,8 @@ public class WordGameController : MonoBehaviour {
 		Messenger.AddListener( EventManager.GUI.RESTART.ToString(), _ResetGame );
 	}
 
-	void OnDisable(){
-		Messenger.Cleanup ();
-	}
-
 	void OnDestroy(){
+		Messenger.Cleanup ();
 		ArController.Instance.ToggleAR (false);
 		GUIController.Instance.ToggleGUI (false);
 	}
@@ -119,7 +116,7 @@ public class WordGameController : MonoBehaviour {
 	}
 
 	void _ToggleMenuUI(bool state){
-		
+		GUIController.Instance.ToggleGUI (state);
 	}
 	#endregion
 
@@ -172,6 +169,7 @@ public class WordGameController : MonoBehaviour {
 
 	void _Win(){
 		//add score
+		PlayerDataController.Instance.UpdatePlayerCredit(currentScore);
 	}
 
     void _AddPlayableTarget(string letter) {
