@@ -2,16 +2,11 @@
 using System.Collections;
 using Prime31.StateKit;
 
-public class CGWaitForLetterState : SKState<CarGameController> {
+public class CGWaitForMapState : SKState<CarGameController> {
 
 	public override void begin ()
 	{
-		Debug.Log("Wait Letter State >>>");
-
-		// TODO: setting ar camera
-//		ArController.Instance.ToggleAR (true);
-//		ArController.Instance.SetCenterMode (false);
-//		ArController.Instance.SetArMaxStimTargets (1);
+		Debug.Log("Wait Map State >>>");
 	}
 
 	public override void reason ()
@@ -23,7 +18,7 @@ public class CGWaitForLetterState : SKState<CarGameController> {
 
 	public override void end ()
 	{
-		Debug.Log("Wait Letter State <<<");
+		Debug.Log("Wait Map State <<<");
 	}
 
 	#region public members

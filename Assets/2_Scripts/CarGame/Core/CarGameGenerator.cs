@@ -35,7 +35,7 @@ public class CarGameGenerator : MonoBehaviour {
 	private Vehicle currentVehicle;
 	private GameObject car;
 
-	private Vector3 pointOffset = new Vector3 (0f, 2f, 0f);
+	private Vector3 pointOffset = new Vector3 (0f, .5f, 0f);
 
 
 	private Transform mTransform;
@@ -47,6 +47,8 @@ public class CarGameGenerator : MonoBehaviour {
 	void OnEnable () {
 
 		CarGameEventController.InitGame += OnInitGame;
+
+		//TODO: handle player gathers word, respawn letter at new point
 //		CarGameEventController.ValidateWord += OnValidateWord;
 	}
 	void OnDisable () {
@@ -81,7 +83,7 @@ public class CarGameGenerator : MonoBehaviour {
 
 		yield return StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (assetBundleName, currentVehicle.name, (bundle) => {
 			GameObject carGO = Instantiate (bundle) as GameObject;
-			carGO.transform.SetParent (mTransform);
+			carGO.transform.SetParent (mTransform, false);
 		}));
 	}
 
@@ -89,7 +91,9 @@ public class CarGameGenerator : MonoBehaviour {
 	private IEnumerator GetLetterAssetBundle (string _letter) {
 		yield return StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (assetBundleName, _letter, (bundle) => {
 			for (int i = 0; i < _letter.Length; i++) {
-				letterGameObjects.Add (Instantiate (bundle) as GameObject);
+				GameObject letterGameObject = Instantiate (bundle) as GameObject;
+				letterGameObject.transform.SetParent (mTransform, false);
+				letterGameObjects.Add (letterGameObject);
 			}
 		}));
 	}
@@ -99,7 +103,7 @@ public class CarGameGenerator : MonoBehaviour {
 		if (car == null)
 		{
 			car = Instantiate (carPrefab, cartPoint.position + pointOffset, Quaternion.identity) as GameObject;
-			car.transform.SetParent (mTransform);
+			car.transform.SetParent (mTransform, false);
 		} else {
 			car.transform.position = cartPoint.position + pointOffset;
 			car.transform.rotation = Quaternion.identity;
@@ -113,11 +117,9 @@ public class CarGameGenerator : MonoBehaviour {
 
 		for (int i = 0; i < obstaclePoints.Length; i++) {
 			GameObject obstacleGameObject = (GameObject) Instantiate (obstaclePrefabs[Random.Range (0, obstaclePrefabs.Length)], obstaclePoints [i].transform.position, Quaternion.identity);
-			obstacleGameObject.transform.SetParent (mTransform);
+			obstacleGameObject.transform.SetParent (mTransform, false);
 			obstacleGameObjects.Add (obstacleGameObject);
 		}
-
-		return;
 
 		for (int i = 0; i < letterGameObjects.Count; i++) {
 			GameObject.Destroy (letterGameObjects[i]);
@@ -129,7 +131,9 @@ public class CarGameGenerator : MonoBehaviour {
 			for (int j = 0; j < letterPrefabs.Length; j++) {
 				if (_letter[i].ToString ().Equals (letterPrefabs[j].name)) {
 					GameObject letterGameObject = (GameObject) Instantiate (letterPrefabs [j], letterPoints [i].transform.position + pointOffset, Quaternion.identity);
-					letterGameObject.transform.SetParent (mTransform);
+					letterGameObject.AddComponent <LetterController> ();
+					letterGameObject.GetComponent <LetterController> ().letterName = letterPrefabs[j].name;
+					letterGameObject.transform.SetParent (mTransform, false);
 					letterGameObjects.Add (letterGameObject);
 				}
 			}

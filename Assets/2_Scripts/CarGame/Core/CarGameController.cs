@@ -13,7 +13,7 @@ public class CarGameController : MonoBehaviour {
 
 	#region public members
 	[HideInInspector]
-	public float gameTime = 10f;
+//	public float gameTime = 10f;	// there is no more game time
 
 	public Text gatherLetterText;
 	public Text successText;
@@ -23,7 +23,9 @@ public class CarGameController : MonoBehaviour {
 	private List<string> collectedLetters;
 
 	// mono
-	Transform mTransform;
+	private Transform mTransform;
+
+	// SK STATE
 	private SKStateMachine <CarGameController> _machine;
 
 	// word game data member
@@ -41,26 +43,45 @@ public class CarGameController : MonoBehaviour {
 	#endregion public functions
 
 	#region private functions
-	void OnTargetTracking (bool _isFound, Transform _parent, string _letter) {
-		if (_isFound) {
-			if(letter != _letter){
-				// reset create other game base on new letter
-			}
-			letter = _letter;
-			mTransform.SetParent(_parent, true);
 
-			for (int i = 0; i < mTransform.childCount; i++) {
-				mTransform.GetChild (i).gameObject.SetActive (true);
-			}
+	// NOTE: Car Game 1 flow 
+	// scan letter and then scan a big map for better ar experience
+	// 1. what if they scan map before scan letter ? warning player that they have not scanned letter
+	// 2. notify player what letter they scanned 
+	// 3. what if player scan new letter? 
 
-			_machine.changeState <CGInitState> ();
+	void OnLetterTracking (bool _isFound, string _letter) {
+		if (_isFound) {	// FOUND LETTER
+			if(letter.Length <= 0)
+				letter = _letter;
+			
+			if (letter.Equals (_letter)) {	// deja vu
+				_machine.changeState <CGInitState> ();
+				Debug.Log (letter);
+			} else {
+				// DO NOTHING
+			}
+		} else {		// LOST LETTER
+			// DO NOTHING
 		}
-		else {
-			// TODO: WHAT IF TARGETLOST
-			for (int i = 0; i < mTransform.childCount; i++) {
-				mTransform.GetChild (i).gameObject.SetActive (false);
+	}
+
+	void OnMapTracking (bool _isFound, Transform _parent) {
+		if (_isFound) {	// FOUND MAP
+			// check letter if null show warning
+			if (letter.Length > 0) {
+				mTransform.SetParent (_parent, true);
+				for (int i = 0; i < mTransform.childCount; i++) 
+					mTransform.GetChild (i).gameObject.SetActive (true);
+				
+			} else {
+				CarGameEventController.OnNotifyText ("Scanned letter first");
+//				Debug.Log ("Player has not scanned letter");
 			}
-			_machine.changeState <CGWaitForTargetState> ();
+		} else {		// LOST MAP
+//			for (int i = 0; i < mTransform.childCount; i++) 
+//				mTransform.GetChild (i).gameObject.SetActive (false);
+//			_machine.changeState <CGWaitForMapState> ();
 		}
 	}
 
@@ -98,15 +119,17 @@ public class CarGameController : MonoBehaviour {
 
 	#region Mono
 	void OnEnable () {
-		CarGameEventController.TargetTracking += OnTargetTracking;
+		CarGameEventController.LetterTracking += OnLetterTracking;
+		CarGameEventController.MapTracking += OnMapTracking;
 		CarGameEventController.ResetGame += OnResetGame;
 		CarGameEventController.CollectLetter += OnCollectLetter;
 		CarGameEventController.GatherLetter += OnGatherLetter;
 	}
 
 	void OnDisable () {
-		CarGameEventController.TargetTracking -= OnTargetTracking;
-		CarGameEventController.ResetGame += OnResetGame;
+		CarGameEventController.LetterTracking -= OnLetterTracking;
+		CarGameEventController.MapTracking -= OnMapTracking;
+		CarGameEventController.ResetGame -= OnResetGame;
 		CarGameEventController.CollectLetter -= OnCollectLetter;
 		CarGameEventController.GatherLetter -= OnGatherLetter;
 	}
@@ -115,8 +138,9 @@ public class CarGameController : MonoBehaviour {
 		mTransform = this.transform;
 
 		// setup finite state machine
-		_machine = new SKStateMachine <CarGameController> (this, new CGWaitForTargetState ());
+		_machine = new SKStateMachine <CarGameController> (this, new CGWaitForLetterState ());
 		_machine.addState (new CGInitState ());
+		_machine.addState (new CGWaitForMapState ());
 		_machine.addState (new CGStartState ());
 		_machine.addState (new CGPlayState ());
 		_machine.addState (new CGPauseState ());

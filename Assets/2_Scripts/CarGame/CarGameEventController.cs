@@ -3,7 +3,9 @@
 public static class CarGameEventController {
 
 	#region public delegates
-	public delegate void TargetTrackingEventHandler (bool isFound, Transform parent, string letter);
+	public delegate void LetterTrackingEventHandler (bool isFound, string letter);
+
+	public delegate void MapTrackingEventHandler (bool isFound, Transform parent);
 
 	// Game State 
 	public delegate void InitGameEventHandler (string _letter);
@@ -34,12 +36,17 @@ public static class CarGameEventController {
 	public delegate void ToggleGameOverPanelEventHandler (bool _isToggled);
 
 	public delegate void SelectCarEventHandler (int index);
+
+	public delegate void NotifyTextEventHandler (string _text);
 	// Others
 
 	#endregion public delegates
 
 	#region EventsisPaused
-	public static event TargetTrackingEventHandler TargetTracking;
+	public static event LetterTrackingEventHandler LetterTracking;
+
+	public static event MapTrackingEventHandler MapTracking;
+
 
 	// Game State
 	public static event InitGameEventHandler InitGame;
@@ -71,15 +78,24 @@ public static class CarGameEventController {
 
 	public static event SelectCarEventHandler SelectCar;
 
+	public static event NotifyTextEventHandler NotifyText;
+
 	// Others
 	#endregion Events
 
 	#region Event Invoker Methods
 
-	public static void OnTargetTracking (bool _isFound, Transform _parent, string _letter) {
-		var handler = TargetTracking;
+	public static void OnLetterTracking (bool _isFound, string _letter) {
+		var handler = LetterTracking;
 		if (handler != null) {
-			handler (_isFound, _parent, _letter);
+			handler (_isFound, _letter);
+		}
+	}
+
+	public static void OnMapTracking (bool _isFound, Transform _parent) {
+		var handler = MapTracking;
+		if (handler != null) {
+			handler (_isFound, _parent);
 		}
 	}
 
@@ -175,6 +191,13 @@ public static class CarGameEventController {
 		var handler = SelectCar;
 		if (handler != null) {
 			handler (_index);
+		}
+	}
+
+	public static void OnNotifyText (string _text) {
+		var handler = NotifyText;
+		if(handler != null) {
+			handler (_text);
 		}
 	}
 	#endregion Event Invoker Methods

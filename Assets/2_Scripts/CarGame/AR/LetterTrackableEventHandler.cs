@@ -2,7 +2,7 @@
 using System.Collections;
 using Vuforia;
 
-public class TargetTrackableEventHandler : MonoBehaviour, ITrackableEventHandler {
+public class LetterTrackableEventHandler : MonoBehaviour, ITrackableEventHandler {
 
 	#region public members
 	public string letter = "a";
@@ -28,15 +28,13 @@ public class TargetTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 	void OnTrackingFound () 
 	{
 		// send letter to game controller
-		CarGameEventController.OnTargetTracking(true, mTransform, letter);
+		CarGameEventController.OnLetterTracking(true, letter);
 	}
 
 	void OnTrackingLost () 
 	{
-		// send lost message pause game controller
-		CarGameEventController.OnTargetTracking(false, mTransform, letter);
-		// unparent game controller
-
+		// send lost event to game controller
+		CarGameEventController.OnLetterTracking(false, letter);
 	}
 	#endregion
 

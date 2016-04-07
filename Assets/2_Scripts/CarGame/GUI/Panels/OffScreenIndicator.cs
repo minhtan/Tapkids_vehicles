@@ -61,6 +61,7 @@ public class OffScreenIndicator : MonoBehaviour {
 		// pre setup car indicator
 		offScreenCar = Instantiate (carIndicator) as RectTransform;
 		offScreenCar.SetParent (mRectTransform);
+		offScreenCar.gameObject.SetActive (false);
 
 		//TODO: pre setup letter's indicators
 //		offScreenLetters = new RectTransform[_word.Length];
@@ -68,8 +69,10 @@ public class OffScreenIndicator : MonoBehaviour {
 //			offScreenLetters[i] = Instantiate (letterIndicator) as RectTransform; 
 //			offScreenLetters[i].GetComponentInChildren <Text> ().text = _word[i].ToString ();
 //			offScreenLetters[i].SetParent (mRectTransform);
+//			offScreenLetters[i].gameObject.SetActive (false);
 //		}
-//		isInitiated = true;
+
+		isInitiated = true;
 	}
 
 	private void CarIndicator () {
