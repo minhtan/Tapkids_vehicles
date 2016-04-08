@@ -13,8 +13,15 @@ public class WordGameController : MonoBehaviour {
         fsm = gameObject.GetComponent<PlayMakerFSM>();
     }
 
+	void OnEnable(){
+		Messenger.AddListener<bool>( EventManager.GameState.PAUSEGAME.ToString(), ToggleGamePause );
+		Messenger.AddListener( EventManager.GameState.RESETGAME.ToString(), _ResetGame );
+	}
+
 	void OnDestroy(){
+		Messenger.Cleanup ();
 		ArController.Instance.ToggleAR (false);
+		GUIController.Instance.ToggleGUI (false);
 	}
 
 	void Update(){
@@ -66,15 +73,6 @@ public class WordGameController : MonoBehaviour {
 	#endregion
 
 	#region UI funcs
-    public void _ReadyGame()
-    {
-        fsm.Fsm.Event("ready");
-    }
-
-	public void _ResetGame(){
-		fsm.Fsm.Event ("reset");
-	}
-
 	void _UpdateStartUI(){
 		txt_answers.text = "";
 		txt_letters.text = "";
@@ -103,9 +101,26 @@ public class WordGameController : MonoBehaviour {
 	void UpdateScoreSliderValue(){
 		sld_score.value = GetCurrentScorePercentage ();
 	}
+
+	void _ToggleMenuUI(bool state){
+		GUIController.Instance.ToggleGUI (state);
+	}
 	#endregion
 
 	#region Game funcs
+	void ToggleGamePause(bool state){
+		fsm.Fsm.GetFsmBool ("isPause").Value = state;
+	}
+
+	public void _ReadyGame()
+	{
+		fsm.Fsm.Event("ready");
+	}
+
+	public void _ResetGame(){
+		fsm.Fsm.Event ("reset");
+	}
+
 	void _PreInit(){
 		FSMTrackable[] imgTargs = FindObjectsOfType<FSMTrackable>();
 		for (int i = 0; i < imgTargs.Length; i++)
@@ -115,7 +130,7 @@ public class WordGameController : MonoBehaviour {
 		GetDataList ();
 		ArController.Instance.ToggleAR (true);
 		ArController.Instance.SetCenterMode (true);
-		ArController.Instance.SetArMaxStimTargets (5);
+		GUIController.Instance.ToggleGUI (true);
 	}
 
 	void _InitGame(){
@@ -153,6 +168,7 @@ public class WordGameController : MonoBehaviour {
 
 	void _Win(){
 		//add score
+		PlayerDataController.Instance.UpdatePlayerCredit(currentScore);
 	}
 
     void _AddPlayableTarget(string letter) {

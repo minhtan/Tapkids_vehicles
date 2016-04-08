@@ -25,11 +25,13 @@ public class GaragaController : MonoBehaviour {
 
 	#region Mono
 	void OnEnable () {
-		CarGameEventController.SelectCar += OnSelectCar;
+//		CarGameEventController.SelectCar += OnSelectCar;
+		Messenger.AddListener <int> (EventManager.GUI.SELECTCAR.ToString (), OnSelectCar);
 	}
 
 	void OnDisable () {
-		CarGameEventController.SelectCar -= OnSelectCar;
+//		CarGameEventController.SelectCar -= OnSelectCar;
+		Messenger.RemoveListener <int> (EventManager.GUI.SELECTCAR.ToString (), OnSelectCar);
 	}
 
 	void Start () {
@@ -43,7 +45,7 @@ public class GaragaController : MonoBehaviour {
 		vehicleDemos = new GameObject[transform.childCount];
 		for (int i = 0; i < vehicleDemos.Length; i++) {
 			vehicleDemos[i] = transform.GetChild (i).gameObject;
-			if (PlayerDataController.Instance.mPlayer.currentVehicleIndex == i) 
+			if (PlayerDataController.Instance.mPlayer.currentVehicle.id == i) 
 				vehicleDemos[i].SetActive (true);
 			else
 				vehicleDemos[i].SetActive (false);

@@ -67,15 +67,28 @@ namespace WordDraw
 
 		public static Letters GetGestureResult (Result result)
 		{
-			byte[] asciiBytes = Encoding.ASCII.GetBytes (result.GestureClass);
+			string name = result.GestureClass[0] + "";
+			byte[] asciiBytes = Encoding.ASCII.GetBytes (name);
 			int index = asciiBytes [0] - 65;
 			return (index >= 0 && index <= 26) ? LetterEnum [index] : LetterEnum[LetterNumber - 1];
+		}
+
+		public static Letters GetLetterFromName(string letterName)
+		{
+			letterName = letterName.ToUpper ();
+			for(int i = 0; i <LetterEnumNames.Length; i++ )
+			{
+				if (LetterEnumNames [i] == letterName)
+					return LetterEnum [i];
+			}
+
+			return Letters.NULL;
 		}
 
 		public static bool CompareLetterWithResult(UILetterButton letterBut, Result detectedResult)
 		{
 			Letters resultLetter = GetGestureResult (detectedResult);
-
+			
 			if (letterBut.Letter == resultLetter)
 				return true;
 

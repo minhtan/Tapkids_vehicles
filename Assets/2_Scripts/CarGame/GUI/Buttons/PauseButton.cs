@@ -16,8 +16,9 @@ public class PauseButton : MonoBehaviour {
 		pauseButton = GetComponent <Button> ();
 		if(pauseButton != null) {
 			pauseButton.onClick.AddListener (delegate {
-				CarGameEventController.OnPauseGame (true);
+				//CarGameEventController.OnPauseGame (true);
 //				CarGameEventController.OnTogglePanel ("pause");
+				Messenger.Broadcast<bool> ( EventManager.GameState.PAUSEGAME.ToString(), true);
 			});
 		}
 	}

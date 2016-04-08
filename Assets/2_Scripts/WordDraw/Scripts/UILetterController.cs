@@ -41,10 +41,14 @@ public class UILetterController : MonoBehaviour
 		_flyLetterList = new List<UILetterButton> (_adjacentLetterNum * 2 + 1);
 	}
 
-	public void ResetLettersPosition()
+	public void SetActiveScroll(bool active)
 	{
-		foreach(UILetterButton uiLetter in _flyLetterList)
-		{
+		_scrollRect.enabled = active;
+	}
+
+	public void ResetLettersPosition ()
+	{
+		foreach (UILetterButton uiLetter in _flyLetterList) {
 			uiLetter.ReturnToOriginalPosition ();
 		}
 
@@ -68,7 +72,7 @@ public class UILetterController : MonoBehaviour
 			else
 				_uiLetter [i].Explode (new Vector2 (1f, 2f), _explodeForce);
 
-			_flyLetterList.Add (_uiLetter[i]);
+			_flyLetterList.Add (_uiLetter [i]);
 		}
 	}
 

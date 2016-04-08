@@ -16,12 +16,14 @@ namespace Vuforia
 	ITrackableEventHandler
 	{
 		public string targetName;
+		public bool isLetter = false;
 
 		#region PRIVATE_MEMBER_VARIABLES
 
 		private TrackableBehaviour mTrackableBehaviour;
 		private PlayMakerFSM fsm;
 		private GameObject go;
+		private Animator go_anim;
 		#endregion // PRIVATE_MEMBER_VARIABLES
 
 
@@ -79,7 +81,6 @@ namespace Vuforia
 			fsm.Fsm.Event("found");
 		}
 
-
 		private void OnTrackingLost(){
 			fsm.Fsm.Event("lost");
 		}
@@ -91,8 +92,13 @@ namespace Vuforia
 		void _ShowModel(){
 			StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (AssetController.bundleName, targetName, (bundle) => {
 				go = GameObject.Instantiate(bundle);
-				go.transform.localScale += new Vector3(50f, 50f, 50f);
+				go.transform.localScale += new Vector3(49f, 49f, 49f);
 				go.transform.SetParent (transform, false);
+				go_anim = go.GetComponentInChildren<Animator>();
+
+				if(isLetter){
+					Messenger.Broadcast<bool, string>(EventManager.AR.LETTERTRACKING.ToString(), true, targetName);
+				}
 			}));
 		}
 
@@ -101,6 +107,11 @@ namespace Vuforia
 				GameObject.Destroy(go);
 				Resources.UnloadUnusedAssets();
 				go = null;
+				go_anim = null;
+
+				if(isLetter){
+					Messenger.Broadcast<bool, string>(EventManager.AR.LETTERTRACKING.ToString(), false, targetName);
+				}
 			}
 		}
 		#endregion // PRIVATE_METHODS

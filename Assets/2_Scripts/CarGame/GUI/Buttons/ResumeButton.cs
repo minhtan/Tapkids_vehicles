@@ -16,8 +16,9 @@ public class ResumeButton : MonoBehaviour {
 		mButton = GetComponent <Button> ();
 		if (mButton != null) {
 			mButton.onClick.AddListener (delegate {
-				CarGameEventController.OnPauseGame (false);	
+//				CarGameEventController.OnPauseGame (false);	
 //				CarGameEventController.OnTogglePanel ("ingame");	
+				Messenger.Broadcast<bool> ( EventManager.GameState.PAUSEGAME.ToString(), false);
 			});
 		}
 	}

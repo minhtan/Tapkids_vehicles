@@ -11,7 +11,7 @@ public class UIAlignHorizontal : MonoBehaviour {
 		RectTransform rootRectTrans = GetComponent<RectTransform> ();
 
 		Vector3 tmp = rootRectTrans.localPosition;
-		tmp.y = 0f;
+		tmp.y = Screen.height / 4;
 
 		transform.position = tmp;
 

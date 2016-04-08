@@ -31,9 +31,8 @@ public class LeanGestureRecognizer : MonoBehaviour
 
 	public List<Gesture> GestureList{ get { return _gestureList; } }
 
-	private Coroutine _delayCor;
+	private Coroutine _delayCor;	
 	private int _strokeId = -1;
-	private bool _isInProgress = false;
 
 	public int MaxStrokeNumber {
 		get {
@@ -91,7 +90,6 @@ public class LeanGestureRecognizer : MonoBehaviour
 	{
 		_gestureList.Clear ();
 		GestureIO.LoadPremadeGestureTemplates ("GestureTemplates", _gestureList);
-		GestureIO.LoadCustomGestureTemplates (_gestureList);
 
 		if (OnGestureLoaded != null)
 			OnGestureLoaded (_gestureList);
@@ -101,8 +99,10 @@ public class LeanGestureRecognizer : MonoBehaviour
 	{
 		if (IsReachMaxStroke)
 			return;
+
+		if (_delayCor != null)
+			StopCoroutine (_delayCor);
 		
-		_isInProgress = true;
 		++_strokeId;
 	}
 
@@ -110,7 +110,7 @@ public class LeanGestureRecognizer : MonoBehaviour
 	{
 		if (IsReachMaxStroke)
 			return;
-		
+
 		_pointList.Add (new Point (finger.ScreenPosition.x, -finger.ScreenPosition.y, _strokeId));
 	}
 
@@ -118,8 +118,8 @@ public class LeanGestureRecognizer : MonoBehaviour
 	{
 		if (!_autoRecognize)
 			return;
-		
-		if (IsReachMaxStroke) { // strokeId from 0
+
+		if (IsReachMaxStroke || _delayThreshold == 0f) { // strokeId from 0
 			Recognizing ();
 		} else { 
 			DelayRecognizing ();
@@ -128,12 +128,7 @@ public class LeanGestureRecognizer : MonoBehaviour
 
 	private void DelayRecognizing ()
 	{
-		_isInProgress = false;
-	
-		if (_delayCor != null)
-			StopCoroutine (_delayCor);
-		
-		_delayCor = StartCoroutine (DelayRecognizingCorroutine());
+		_delayCor = StartCoroutine (DelayRecognizingCorroutine ());
 	}
 
 	IEnumerator DelayRecognizingCorroutine ()
@@ -142,9 +137,6 @@ public class LeanGestureRecognizer : MonoBehaviour
 
 		while (true) {
 			timer += Time.deltaTime;
-
-			if (_isInProgress)
-				yield break;
 
 			if (timer >= _delayThreshold) {
 				Recognizing ();
@@ -156,7 +148,7 @@ public class LeanGestureRecognizer : MonoBehaviour
 		}
 	}
 
-	public void ChangeToNextStroke()
+	public void ChangeToNextStroke ()
 	{
 		_strokeId++;
 	}
@@ -165,7 +157,7 @@ public class LeanGestureRecognizer : MonoBehaviour
 	{
 		if (_pointList == null || _pointList.Count == 0)
 			return;
-		
+
 		_currentGesture.SetGesture (_pointList.ToArray ());
 		Result r = PointCloudRecognizer.Classify (_currentGesture, _gestureList.ToArray ());
 
@@ -179,7 +171,6 @@ public class LeanGestureRecognizer : MonoBehaviour
 
 	public void ResetGesture ()
 	{
-		_isInProgress = false;
 		_pointList.Clear ();
 		_strokeId = -1;
 
@@ -192,13 +183,13 @@ public class LeanGestureRecognizer : MonoBehaviour
 		return _pointList;
 	}
 
-	public void SaveCurrentGesture(string newGestureName)
+	public void SaveCurrentGesture (string newGestureName)
 	{
-		string fileName = String.Format("{0}/{1}-{2}.xml", Application.persistentDataPath, newGestureName, DateTime.Now.ToFileTime());
+		string fileName = String.Format ("{0}/{1}-{2}.xml", Application.persistentDataPath, newGestureName, DateTime.Now.ToFileTime ());
 
 		#if !UNITY_WEBPLAYER
 		_currentGesture.SetGesture (_pointList.ToArray ());
-		GestureIO.WriteGesture(_currentGesture.Points, newGestureName, fileName);
+		GestureIO.WriteGesture (_currentGesture.Points, newGestureName, fileName);
 		#endif
 	}
 }

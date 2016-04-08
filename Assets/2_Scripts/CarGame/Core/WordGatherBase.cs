@@ -11,7 +11,8 @@ public class WordGatherBase : MonoBehaviour {
 	}
 
 	void OnTriggerEnter () {
-		CarGameEventController.OnGatherLetter();
+//		CarGameEventController.OnGatherLetter();
+		Messenger.Broadcast (EventManager.Vehicle.GATHER.ToString ());
 	}
 
 	// check valid word here?

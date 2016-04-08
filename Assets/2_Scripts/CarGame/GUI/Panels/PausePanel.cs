@@ -15,11 +15,13 @@ public class PausePanel : MonoBehaviour {
 	#region Mono
 	void OnEnable () {
 //		CarGameEventController.TogglePanel += OnTogglePanel;
-		CarGameEventController.PauseGame += OnPauseGame;
+//		CarGameEventController.PauseGame += OnPauseGame;
+		Messenger.AddListener <bool> (EventManager.GameState.PAUSEGAME.ToString (), HandlePauseGame);
 	}
 	void Disable () {
 //		CarGameEventController.TogglePanel -= OnTogglePanel;
-		CarGameEventController.PauseGame -= OnPauseGame;
+//		CarGameEventController.PauseGame -= OnPauseGame;
+		Messenger.RemoveListener <bool> (EventManager.GameState.PAUSEGAME.ToString (), HandlePauseGame);
 	}
 
 	void Start () {
@@ -32,7 +34,7 @@ public class PausePanel : MonoBehaviour {
 	#endregion public functions
 
 	#region private functions
-	private void OnPauseGame (bool _isPaused) {
+	private void HandlePauseGame (bool _isPaused) {
 		mCanvasGroup.alpha = _isPaused ? 1f : 0f;
 		mCanvasGroup.interactable = _isPaused ? true : false;
 		mCanvasGroup.blocksRaycasts = _isPaused ? true : false;
