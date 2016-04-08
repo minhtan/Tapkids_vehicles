@@ -17,11 +17,13 @@ public class TutorialPanel : MonoBehaviour, IPointerClickHandler {
 
 	#region Mono
 	void OnEnable () {
-		CarGameEventController.ToggleTutorialPanel += OnToggleTutorialPanel;
+//		CarGameEventController.ToggleTutorialPanel += OnToggleTutorialPanel;
+		Messenger.AddListener <bool> (EventManager.GUI.TOGGLE_TUTORIAL.ToString (), OnToggleTutorialPanel);
 	}
 
 	void Disable () {
-		CarGameEventController.ToggleTutorialPanel -= OnToggleTutorialPanel;
+//		CarGameEventController.ToggleTutorialPanel -= OnToggleTutorialPanel;
+		Messenger.RemoveListener <bool> (EventManager.GUI.TOGGLE_TUTORIAL.ToString (), OnToggleTutorialPanel);
 	}
 
 	void Start () {

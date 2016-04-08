@@ -34,11 +34,15 @@ public class OffScreenIndicator : MonoBehaviour {
 
 	#region MONO
 	void OnEnable () {
-		CarGameEventController.InitGame += OnInitGame;
+//		CarGameEventController.InitGame += OnInitGame;
+		Messenger.AddListener <string> (EventManager.GameState.INITGAME.ToString (), OnInitGame);
+		Messenger.AddListener (EventManager.GameState.STARTGAME.ToString (), OnStartGame);
 	}
 
 	void OnDisable () {
-		CarGameEventController.InitGame -= OnInitGame;
+//		CarGameEventController.InitGame -= OnInitGame;
+		Messenger.RemoveListener <string> (EventManager.GameState.INITGAME.ToString (), OnInitGame);
+		Messenger.AddListener (EventManager.GameState.STARTGAME.ToString (), OnStartGame);
 	}
 
 	void Start () {
@@ -61,14 +65,19 @@ public class OffScreenIndicator : MonoBehaviour {
 		// pre setup car indicator
 		offScreenCar = Instantiate (carIndicator) as RectTransform;
 		offScreenCar.SetParent (mRectTransform);
+		offScreenCar.gameObject.SetActive (false);
 
-		// pre setup letter's indicators
+		//TODO: pre setup letter's indicators
 		offScreenLetters = new RectTransform[_word.Length];
 		for (int i = 0; i < _word.Length; i++) {
 			offScreenLetters[i] = Instantiate (letterIndicator) as RectTransform; 
 			offScreenLetters[i].GetComponentInChildren <Text> ().text = _word[i].ToString ();
 			offScreenLetters[i].SetParent (mRectTransform);
+			offScreenLetters[i].gameObject.SetActive (false);
 		}
+	}
+
+	void OnStartGame () {
 		isInitiated = true;
 	}
 
@@ -93,7 +102,6 @@ public class OffScreenIndicator : MonoBehaviour {
 
 				if (onScreenPosition.z < 0) {
 					onScreenPosition = -onScreenPosition;
-
 				}
 
 				if (onScreenPosition.x > screenWidth) {
@@ -112,8 +120,7 @@ public class OffScreenIndicator : MonoBehaviour {
 					y = screenOffSet;
 				}
 
-				if (!offScreenCar.gameObject.activeInHierarchy)
-					offScreenCar.gameObject.SetActive (true);
+				offScreenCar.gameObject.SetActive (true);
 				offScreenCar.position = new Vector3 (x, y, 0);
 			}
 		}
@@ -130,7 +137,6 @@ public class OffScreenIndicator : MonoBehaviour {
 		for (int i = 0; i < letters.Count; i++) {
 			if (!letters[i].activeInHierarchy) {
 				offScreenLetters[i].gameObject.SetActive (false);
-				return;
 			} else {
 				Vector3 onScreenPosition = Camera.main.WorldToScreenPoint (letters[i].transform.position);
 
@@ -162,8 +168,7 @@ public class OffScreenIndicator : MonoBehaviour {
 						y = screenOffSet;
 					}
 
-					if (!offScreenLetters[i].gameObject.activeInHierarchy)
-						offScreenLetters[i].gameObject.SetActive (true);
+					offScreenLetters[i].gameObject.SetActive (true);
 					offScreenLetters[i].position = new Vector3 (x, y, 0);
 				}
 			}

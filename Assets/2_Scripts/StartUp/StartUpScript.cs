@@ -12,6 +12,7 @@ public class StartUpScript : MonoBehaviour {
 		snapShot = GameObject.FindObjectOfType<CaptureAndSave>();
 	}
 
+
 	void Start () {
 		ArController.Instance.ToggleAR (true);
 		ArController.Instance.SetCenterMode (true);

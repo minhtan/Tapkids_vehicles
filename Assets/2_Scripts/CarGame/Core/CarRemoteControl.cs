@@ -19,9 +19,12 @@ namespace UnityStandardAssets.CrossPlatformInput
 		#region Mono
 		void OnEnable()
 		{
-			CarGameEventController.StartGame += OnStartGame;
-			CarGameEventController.PauseGame += OnPauseGame;
-			CarGameEventController.ResetGame += OnResetGame;
+//			CarGameEventController.StartGame += OnStartGame;
+			Messenger.AddListener (EventManager.GameState.STARTGAME.ToString (), OnStartGame);
+//			CarGameEventController.PauseGame += OnPauseGame;
+			Messenger.AddListener <bool> (EventManager.GameState.PAUSEGAME.ToString (), OnPauseGame);
+//			CarGameEventController.ResetGame += OnResetGame;
+			Messenger.AddListener (EventManager.GameState.RESETGAME.ToString (), OnResetGame);
 
 			CreateVirtualAxes();	
 		}
@@ -75,9 +78,12 @@ namespace UnityStandardAssets.CrossPlatformInput
 
 		void OnDisable()
 		{
-			CarGameEventController.StartGame -= OnStartGame;
-			CarGameEventController.PauseGame -= OnPauseGame;
-			CarGameEventController.ResetGame -= OnResetGame;
+//			CarGameEventController.StartGame -= OnStartGame;
+			Messenger.RemoveListener (EventManager.GameState.STARTGAME.ToString (), OnStartGame);
+//			CarGameEventController.PauseGame -= OnPauseGame;
+			Messenger.RemoveListener <bool> (EventManager.GameState.PAUSEGAME.ToString (), OnPauseGame);
+//			CarGameEventController.ResetGame -= OnResetGame;
+			Messenger.RemoveListener (EventManager.GameState.RESETGAME.ToString (), OnResetGame);
 
 			if (CrossPlatformInputManager.AxisExists (steerInputName))
 				CrossPlatformInputManager.UnRegisterVirtualAxis (steerInputName);
@@ -91,14 +97,16 @@ namespace UnityStandardAssets.CrossPlatformInput
 		private void OnStartGame () {
 			mAccelerate.Update (1f);
 		}
+
 		private void OnPauseGame (bool _isPaused) {
 			if (_isPaused)
 				mAccelerate.Update (0f);
 		}
+
 		private void OnResetGame () {
 			mAccelerate.Update (0f);
-
 		}
+
 		private void CreateVirtualAxes()
 		{
 			// create new axes based on axes to use

@@ -11,6 +11,8 @@ public class StartupWord : MonoBehaviour {
 	public GestureLineDrawing _drawer;
 	public GameObject _letterHolder;
 	public UITutText _tutText;
+	public GameObject _drawLetterBut;
+	public GameObject _exitBut;
 	public float _showTemplateDuration = 2f;
 
 	private UILetterButton _currentLetterBut;
@@ -20,6 +22,7 @@ public class StartupWord : MonoBehaviour {
 		GestureAutoDrawer.OnDrawGestureDone += OnDrawGestureDone;
 		LeanGestureRecognizer.OnGestureDetected += OnGestureDetected;
 		LeanGestureRecognizer.OnGestureReset += OnGestureReset;
+		Messenger.AddListener<bool, string> (EventManager.AR.LETTERTRACKING.ToString(), OnLetterFound);
 	}
 
 	void OnDisable ()
@@ -32,8 +35,28 @@ public class StartupWord : MonoBehaviour {
 
 	public void OnClick()
 	{
+		ArController.Instance.ToggleAR (false);
 		DrawTutorial ();
+	}
+
+	public void OnExitClick()
+	{
+		ArController.Instance.ToggleAR (true);
+		_exitBut.SetActive (false);
+	}
+
+	private void OnLetterFound(bool found, string letterName)
+	{
+		if (!found) {
+			_drawLetterBut.SetActive (false);
+			return;
+		}
+
 		_currentLetterBut = _letterHolder.transform.GetChild (0).GetComponent<UILetterButton> ();
+
+		_currentLetterBut.Letter = WordDrawConfig.GetLetterFromName (letterName);
+
+		_drawLetterBut.SetActive (true);
 	}
 
 	private void OnDrawGestureDone (Gesture gesture)
@@ -96,5 +119,6 @@ public class StartupWord : MonoBehaviour {
 
 		_autoDrawer.ResetStroke ();
 		_tutText.SetTutText (UITutText.TutText.LET_WRITE);
+		_exitBut.SetActive (true);
 	}
 }

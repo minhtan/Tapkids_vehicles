@@ -27,13 +27,17 @@ public class ArcadeCarController : MonoBehaviour {
 
 	#region MONO
 	void OnEnable () {
-		CarGameEventController.GameOver += OnGameOver;
-		CarGameEventController.ResetGame += OnResetGame;
+//		CarGameEventController.GameOver += OnGameOver;
+		Messenger.AddListener (EventManager.GameState.GAMEOVER.ToString (), OnGameOver);
+//		CarGameEventController.ResetGame += OnResetGame;
+		Messenger.AddListener (EventManager.GameState.RESETGAME.ToString (), OnResetGame);
 	}
 
 	void OnDisable () {
-		CarGameEventController.GameOver += OnGameOver;
-		CarGameEventController.ResetGame -= OnResetGame;
+//		CarGameEventController.GameOver += OnGameOver;
+		Messenger.RemoveListener (EventManager.GameState.GAMEOVER.ToString (), OnGameOver);
+//		CarGameEventController.ResetGame -= OnResetGame;
+		Messenger.RemoveListener (EventManager.GameState.RESETGAME.ToString (), OnResetGame);
 	}
 
 	void Start () {

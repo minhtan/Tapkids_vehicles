@@ -73,9 +73,20 @@ namespace WordDraw
 			return (index >= 0 && index <= 26) ? LetterEnum [index] : LetterEnum[LetterNumber - 1];
 		}
 
+		public static Letters GetLetterFromName(string letterName)
+		{
+			letterName = letterName.ToUpper ();
+			for(int i = 0; i <LetterEnumNames.Length; i++ )
+			{
+				if (LetterEnumNames [i] == letterName)
+					return LetterEnum [i];
+			}
+
+			return Letters.NULL;
+		}
+
 		public static bool CompareLetterWithResult(UILetterButton letterBut, Result detectedResult)
 		{
-			Debug.Log (detectedResult.GestureClass);
 			Letters resultLetter = GetGestureResult (detectedResult);
 			
 			if (letterBut.Letter == resultLetter)

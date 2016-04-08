@@ -14,11 +14,13 @@ public class InGamePanel : MonoBehaviour {
 
 	#region Mono
 	void OnEnable () {
-		CarGameEventController.ToggleInGamePanel += OnToggleInGamePanel;
+//		CarGameEventController.ToggleInGamePanel += OnToggleInGamePanel;
+		Messenger.AddListener <bool> (EventManager.GUI.TOGGLE_INGAME.ToString (), OnToggleInGamePanel);
 	}
 
 	void OnDisable () {
-		CarGameEventController.ToggleInGamePanel -= OnToggleInGamePanel;
+//		CarGameEventController.ToggleInGamePanel -= OnToggleInGamePanel;
+		Messenger.RemoveListener <bool> (EventManager.GUI.TOGGLE_INGAME.ToString (), OnToggleInGamePanel);
 	}
 
 	void Start () {
