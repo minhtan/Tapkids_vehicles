@@ -20,11 +20,11 @@ namespace UnityStandardAssets.CrossPlatformInput
 		void OnEnable()
 		{
 //			CarGameEventController.StartGame += OnStartGame;
-			Messenger.AddListener (EventManager.GameState.STARTGAME.ToString (), OnStartGame);
+			Messenger.AddListener (EventManager.GameState.STARTGAME.ToString (), HandleStartGame);
 //			CarGameEventController.PauseGame += OnPauseGame;
-			Messenger.AddListener <bool> (EventManager.GameState.PAUSEGAME.ToString (), OnPauseGame);
+			Messenger.AddListener <bool> (EventManager.GameState.PAUSEGAME.ToString (), HandlePauseGame);
 //			CarGameEventController.ResetGame += OnResetGame;
-			Messenger.AddListener (EventManager.GameState.RESETGAME.ToString (), OnResetGame);
+			Messenger.AddListener (EventManager.GameState.RESETGAME.ToString (), HandleResetGame);
 
 			CreateVirtualAxes();	
 		}
@@ -79,11 +79,11 @@ namespace UnityStandardAssets.CrossPlatformInput
 		void OnDisable()
 		{
 //			CarGameEventController.StartGame -= OnStartGame;
-			Messenger.RemoveListener (EventManager.GameState.STARTGAME.ToString (), OnStartGame);
+			Messenger.RemoveListener (EventManager.GameState.STARTGAME.ToString (), HandleStartGame);
 //			CarGameEventController.PauseGame -= OnPauseGame;
-			Messenger.RemoveListener <bool> (EventManager.GameState.PAUSEGAME.ToString (), OnPauseGame);
+			Messenger.RemoveListener <bool> (EventManager.GameState.PAUSEGAME.ToString (), HandlePauseGame);
 //			CarGameEventController.ResetGame -= OnResetGame;
-			Messenger.RemoveListener (EventManager.GameState.RESETGAME.ToString (), OnResetGame);
+			Messenger.RemoveListener (EventManager.GameState.RESETGAME.ToString (), HandleResetGame);
 
 			if (CrossPlatformInputManager.AxisExists (steerInputName))
 				CrossPlatformInputManager.UnRegisterVirtualAxis (steerInputName);
@@ -94,16 +94,16 @@ namespace UnityStandardAssets.CrossPlatformInput
 		#endregion Mono
 
 		#region private methods
-		private void OnStartGame () {
+		private void HandleStartGame () {
 			mAccelerate.Update (1f);
 		}
 
-		private void OnPauseGame (bool _isPaused) {
+		private void HandlePauseGame (bool _isPaused) {
 			if (_isPaused)
 				mAccelerate.Update (0f);
 		}
 
-		private void OnResetGame () {
+		private void HandleResetGame () {
 			mAccelerate.Update (0f);
 		}
 

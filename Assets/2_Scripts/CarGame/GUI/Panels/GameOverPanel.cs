@@ -13,11 +13,11 @@ public class GameOverPanel : MonoBehaviour {
 
 	#region Mono
 	void OnEnable () {
-
+		Messenger.AddListener (EventManager.GameState.GAMEOVER.ToString (), HandleGameOver);
 	}
 
 	void OnDisable () {
-
+		Messenger.RemoveListener (EventManager.GameState.GAMEOVER.ToString (), HandleGameOver);
 	}
 
 	void Start () {
@@ -29,10 +29,14 @@ public class GameOverPanel : MonoBehaviour {
 	#endregion public functions
 
 	#region private functions
-	private void OnToggleGameOverPanel (bool _isToggled) {
-		mCanvasGroup.alpha = _isToggled ? 1f : 0f;
-		mCanvasGroup.interactable = _isToggled ? true : false;
-		mCanvasGroup.blocksRaycasts = _isToggled ? true : false;
+	private void HandleGameOver () {
+		mCanvasGroup.alpha = 1f;
+		mCanvasGroup.interactable = true;
+		mCanvasGroup.blocksRaycasts = true;
+//
+//		mCanvasGroup.alpha = _isToggled ? 1f : 0f;
+//		mCanvasGroup.interactable = _isToggled ? true : false;
+//		mCanvasGroup.blocksRaycasts = _isToggled ? true : false;
 	}
 	#endregion private functions
 

@@ -18,12 +18,12 @@ public class TutorialPanel : MonoBehaviour, IPointerClickHandler {
 	#region Mono
 	void OnEnable () {
 //		CarGameEventController.ToggleTutorialPanel += OnToggleTutorialPanel;
-		Messenger.AddListener <bool> (EventManager.GUI.TOGGLE_TUTORIAL.ToString (), OnToggleTutorialPanel);
+		Messenger.AddListener <bool> (EventManager.GUI.TOGGLE_TUTORIAL.ToString (), HandleToggleTutorialPanel);
 	}
 
 	void Disable () {
 //		CarGameEventController.ToggleTutorialPanel -= OnToggleTutorialPanel;
-		Messenger.RemoveListener <bool> (EventManager.GUI.TOGGLE_TUTORIAL.ToString (), OnToggleTutorialPanel);
+		Messenger.RemoveListener <bool> (EventManager.GUI.TOGGLE_TUTORIAL.ToString (), HandleToggleTutorialPanel);
 	}
 
 	void Start () {
@@ -49,12 +49,12 @@ public class TutorialPanel : MonoBehaviour, IPointerClickHandler {
 					transform.GetChild (++currentStep).gameObject.SetActive (true);
 				if (currentStep > 3) {
 //					CarGameEventController.OnTogglePanel ("ingame");
-					OnToggleTutorialPanel (false);
+					HandleToggleTutorialPanel (false);
 					currentStep = -1;
 				}
 			} else { // SKIP
 //				CarGameEventController.OnTogglePanel ("ingame");
-				OnToggleTutorialPanel (false);
+				HandleToggleTutorialPanel (false);
 				currentStep = -1;
 			}
 //			Debug.Log("LocalCursor:" + localCursor);
@@ -66,7 +66,7 @@ public class TutorialPanel : MonoBehaviour, IPointerClickHandler {
 	#endregion public functions
 
 	#region private functions
-	private void OnToggleTutorialPanel (bool _isToggled) {
+	private void HandleToggleTutorialPanel (bool _isToggled) {
 		mCanvasGroup.alpha =_isToggled ? 1f : 0f;
 		mCanvasGroup.interactable = _isToggled ? true : false;
 		mCanvasGroup.blocksRaycasts = _isToggled ? true : false;
