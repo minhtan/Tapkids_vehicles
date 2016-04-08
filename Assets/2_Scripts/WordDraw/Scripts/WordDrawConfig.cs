@@ -67,15 +67,17 @@ namespace WordDraw
 
 		public static Letters GetGestureResult (Result result)
 		{
-			byte[] asciiBytes = Encoding.ASCII.GetBytes (result.GestureClass);
+			string name = result.GestureClass[0] + "";
+			byte[] asciiBytes = Encoding.ASCII.GetBytes (name);
 			int index = asciiBytes [0] - 65;
 			return (index >= 0 && index <= 26) ? LetterEnum [index] : LetterEnum[LetterNumber - 1];
 		}
 
 		public static bool CompareLetterWithResult(UILetterButton letterBut, Result detectedResult)
 		{
+			Debug.Log (detectedResult.GestureClass);
 			Letters resultLetter = GetGestureResult (detectedResult);
-
+			
 			if (letterBut.Letter == resultLetter)
 				return true;
 

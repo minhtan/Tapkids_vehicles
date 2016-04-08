@@ -22,6 +22,11 @@ public class UILetterButton : MonoBehaviour
 		get{ return _letter; }
 	}
 
+	public Letters AlphabetLetter { 
+		set { _letter = value; }
+		get { return _letter; }
+	}
+
 	public int AlphabetIndex {
 		get{ return (int)_letter; }
 	}

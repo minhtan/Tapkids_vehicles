@@ -90,7 +90,6 @@ public class LeanGestureRecognizer : MonoBehaviour
 	{
 		_gestureList.Clear ();
 		GestureIO.LoadPremadeGestureTemplates ("GestureTemplates", _gestureList);
-		GestureIO.LoadCustomGestureTemplates (_gestureList);
 
 		if (OnGestureLoaded != null)
 			OnGestureLoaded (_gestureList);
