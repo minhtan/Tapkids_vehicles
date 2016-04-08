@@ -15,7 +15,8 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 		AR = 1,
 		MENU = 2, 
 		WORDGAME = 3,
-		CARGAME = 4
+		CARGAME = 4,
+		STARTUP	= 5
 	}
 	#endregion
 

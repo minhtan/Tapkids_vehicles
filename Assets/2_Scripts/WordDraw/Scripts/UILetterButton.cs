@@ -19,6 +19,7 @@ public class UILetterButton : MonoBehaviour
 	private Button _button;
 
 	public Letters Letter {
+		set { _letter = value; }
 		get{ return _letter; }
 	}
 

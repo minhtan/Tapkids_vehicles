@@ -16,6 +16,7 @@ namespace Vuforia
 	ITrackableEventHandler
 	{
 		public string targetName;
+		public bool isLetter = false;
 
 		#region PRIVATE_MEMBER_VARIABLES
 
@@ -80,7 +81,6 @@ namespace Vuforia
 			fsm.Fsm.Event("found");
 		}
 
-
 		private void OnTrackingLost(){
 			fsm.Fsm.Event("lost");
 		}
@@ -95,6 +95,10 @@ namespace Vuforia
 				go.transform.localScale += new Vector3(49f, 49f, 49f);
 				go.transform.SetParent (transform, false);
 				go_anim = go.GetComponentInChildren<Animator>();
+
+				if(isLetter){
+					Messenger.Broadcast<bool, string>(EventManager.AR.LETTERTRACKING.ToString(), true, targetName);
+				}
 			}));
 		}
 
@@ -104,6 +108,10 @@ namespace Vuforia
 				Resources.UnloadUnusedAssets();
 				go = null;
 				go_anim = null;
+
+				if(isLetter){
+					Messenger.Broadcast<bool, string>(EventManager.AR.LETTERTRACKING.ToString(), false, targetName);
+				}
 			}
 		}
 		#endregion // PRIVATE_METHODS
