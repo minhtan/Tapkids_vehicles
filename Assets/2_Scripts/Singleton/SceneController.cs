@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
+using AssetBundles;
 
 public class SceneController : UnitySingletonPersistent<SceneController>
 {
@@ -40,15 +41,17 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 		StartCoroutine (LoadingOperation(id, 0f));
 	}
 
+
+
 	private IEnumerator LoadingOperation(SceneID id, float delay = 0f){
 		if (delay > 0f)
 			yield return new WaitForSeconds (delay);
 
 		if (OnStartLoading != null)
 			OnStartLoading ();
-		
-		AsyncOperation async = SceneManager.LoadSceneAsync ((int)id);
 	
+		AsyncOperation async = SceneManager.LoadSceneAsync ((int)id);
+		
 		async.allowSceneActivation = false;
 		
 		while(!async.isDone)

@@ -11,6 +11,8 @@ namespace WordDraw
 		public GestureLineDrawing _drawer;
 		public Text _statusText;
 		public Text _resultText;
+		public LetterSpawner _spawner;
+		public WordDrawScore _wordDrawScore;
 
 		void OnEnable ()
 		{
@@ -26,6 +28,22 @@ namespace WordDraw
 			LeanGestureRecognizer.OnGestureDetected -= OnResult;
 		}
 
+		void Start()
+		{
+			StartCoroutine (GameCoroutine());
+		}
+
+		private IEnumerator GameCoroutine()
+		{
+			while(true)
+			{
+				if (_wordDrawScore.CurrentScore > _spawner.CurrentDifficulty.RequiredScore)
+					_spawner.ChangeToMextDifficulty ();
+				
+				yield return null;
+			}
+		}
+
 		private void OnGestureReset ()
 		{
 			_drawer.ResetStroke ();
@@ -34,6 +52,8 @@ namespace WordDraw
 		private void OnGameOver()
 		{
 			_statusText.text = "GAMEOVER";
+			_drawer.enabled = false;
+			_wordDrawScore.enabled = false;
 		}
 
 		private void OnResult(Result result)
