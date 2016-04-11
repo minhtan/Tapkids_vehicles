@@ -23,7 +23,8 @@ namespace WordDraw
 
 		public WordDrawDifficulty CurrentDifficulty { get { return _difficulties [_curDifficulty]; } }
 
-		public static UnityAction<bool, Letters, Letters> OnReturnRecognizedResult;  //Return result compared gesture, correct letter, user input letter
+		public static UnityAction<bool, Letters, Letters> OnReturnRecognizedResult;
+		public static UnityAction<int> OnReturnBonusCount;
 
 		void OnEnable ()
 		{
@@ -55,18 +56,26 @@ namespace WordDraw
 
 		private void DestroyResultGesture (Letters target)
 		{
-			for (int i = _letterList.Count - 1; i >= 0; i--) {
-				UILetter letter = _letterList [i];
-				if (target == letter.Letter) {
-					Destroy (letter.gameObject);
-					_letterList.RemoveAt (i);
+			List<UILetter> destroyedLetter = new List<UILetter> (_maxStackCap);
+			UILetter letter;
+			int correctCount = 0;
 
-					if(OnReturnRecognizedResult != null)
-					{
+			for (int i = _letterList.Count - 1; i >= 0; i--) {
+				letter = _letterList [i];
+				if (target == letter.Letter) {
+					correctCount++;
+					destroyedLetter.Add (letter);
+					_letterList.RemoveAt (i);
+					Destroy (letter.gameObject);
+
+					if (OnReturnRecognizedResult != null) {
 						OnReturnRecognizedResult (true, letter.Letter, target);
 					}
 				}
 			}
+
+			if (OnReturnBonusCount != null)
+				OnReturnBonusCount (correctCount);
 		}
 
 		private void SpawnLetters ()
@@ -74,7 +83,7 @@ namespace WordDraw
 			StartCoroutine (SpawnCor (CurrentDifficulty.SpawnPeriod));
 		}
 
-		private void ChangeToMextDifficulty ()
+		public void ChangeToMextDifficulty ()
 		{
 			_curDifficulty++;
 		}
@@ -87,6 +96,7 @@ namespace WordDraw
 		IEnumerator SpawnCor (float period)
 		{
 			while (true) {
+
 				GameObject letter = Instantiate (GetRandomLetterPrefab ());
 				letter.transform.SetParent (_spawnPoint, false);
 
