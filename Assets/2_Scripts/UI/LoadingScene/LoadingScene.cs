@@ -25,6 +25,12 @@ public class LoadingScene : MonoBehaviour {
 
 	private void OnEndLoading()	
 	{
+		StartCoroutine (DelayHide());
+	}
+
+	IEnumerator DelayHide()
+	{
+		yield return new WaitForSeconds (.5f);
 		foreach(Transform trans in transform)
 		{
 			trans.gameObject.SetActive (false);

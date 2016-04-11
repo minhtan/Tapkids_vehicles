@@ -20,7 +20,7 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 		MENU = 1,
 		WORDGAME = 2,
 		CARGAME = 3,
-		STARTUP	= 4
+		STARTUP	= 4,
 	}
 
 	#endregion
@@ -59,12 +59,11 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 		async.allowSceneActivation = false;	
 
 		float averagePercent = 0f;
-		while (!async.isDone && !AssetBundleManager.IsInprogress()) {
-			
+		while (true) {
 			if (OnLoadingScene != null)
-				OnLoadingScene (async.progress);	
+				OnLoadingScene (averagePercent);	
 			
-			_text.text = "" + AssetBundleManager.ReturnProgress () + " " + AssetBundleManager.IsInprogress();
+			_text.text = async.progress + " " + AssetBundleManager.ReturnProgress();
 
 			if(AssetBundleManager.IsInprogress())
 			{
@@ -76,7 +75,6 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 			}
 
 			if (averagePercent == 0.95f) {
-
 				if (OnEndLoading != null)
 					OnEndLoading ();
 				async.allowSceneActivation = true;

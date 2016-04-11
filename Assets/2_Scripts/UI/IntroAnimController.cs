@@ -9,27 +9,20 @@ public class IntroAnimController : MonoBehaviour {
 
 	void OnEnable()
 	{
-		SceneController.OnStartLoading += OnStartLoading;
+		SceneController.OnEndLoading += OnEndLoading;
 	}
 
 	void OnDisable()
 	{
-		SceneController.OnStartLoading -= OnStartLoading;
+		SceneController.OnEndLoading -= OnEndLoading;
 	}
 
-	private void OnStartLoading()
+	private void OnEndLoading()
 	{
 		SetActiveGO (_enableGO, true);
 		SetActiveGO (_disableGO, false);
 	}
-
-	private int LoadingContent()
-	{
-		SetActiveGO (_enableGO, true);
-		SetActiveGO (_disableGO, false);
-		return 0;
-	}
-
+		
 	public void OnAnimationEnd()
 	{
 		SceneController.Instance.LoadingSceneAsync (SceneController.SceneID.MENU);

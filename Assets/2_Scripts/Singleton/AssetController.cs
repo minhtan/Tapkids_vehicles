@@ -13,6 +13,7 @@ public class AssetController : UnitySingletonPersistent<AssetController> {
 
 	#region Mono
 	IEnumerator Start (){
+		Caching.CleanCache ();
 		yield return StartCoroutine( Initialize() );
 	}
 	#endregion
@@ -40,6 +41,11 @@ public class AssetController : UnitySingletonPersistent<AssetController> {
 		var request = AssetBundleManager.Initialize();
 		if (request != null) {
 			yield return StartCoroutine (request);
+		}
+
+		AssetBundleLoadAssetOperation rq = AssetBundleManager.LoadAssetAsync (bundleName, "a", typeof(GameObject));
+		if(rq != null){
+			yield return StartCoroutine (rq);
 		}
 	}
 
