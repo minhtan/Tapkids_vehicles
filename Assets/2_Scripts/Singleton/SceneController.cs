@@ -11,14 +11,16 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 	[SerializeField]
 	private SceneContainer[] _sceneGroup;
 
-	public enum SceneID{
-		INTRO = 0, 
+	public enum SceneID
+	{
+		INTRO = 0,
 		AR = 1,
-		MENU = 2, 
+		MENU = 2,
 		WORDGAME = 3,
 		CARGAME = 4,
 		STARTUP	= 5
 	}
+
 	#endregion
 
 	public static UnityAction OnStartLoading;
@@ -31,19 +33,20 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 		InitSceneGroup ();
 	}
 
-	public void ReloadCurrentScene()
+	public void ReloadCurrentScene ()
 	{
-		SceneManager.LoadScene (SceneManager.GetActiveScene().buildIndex);
+		SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex);
 	}
 
 	public void LoadingSceneAsync (SceneID id)
 	{
-		StartCoroutine (LoadingOperation(id, 0f));
+		StartCoroutine (LoadingOperation (id, 0f));
 	}
 
 
 
-	private IEnumerator LoadingOperation(SceneID id, float delay = 0f){
+	private IEnumerator LoadingOperation (SceneID id, float delay = 0f)
+	{
 		if (delay > 0f)
 			yield return new WaitForSeconds (delay);
 
@@ -51,19 +54,24 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 			OnStartLoading ();
 	
 		AsyncOperation async = SceneManager.LoadSceneAsync ((int)id);
+				
+		async.allowSceneActivation = false;	
 		
-		async.allowSceneActivation = false;
-		
-		while(!async.isDone)
-		{
+		while (!async.isDone) {
 			if (OnLoadingScene != null)
 				OnLoadingScene (async.progress);	
 
 			if (async.progress == 0.9f) {
-				if(OnEndLoading != null)
-					OnEndLoading ();
-				async.allowSceneActivation = true;
-				yield break;
+
+				if (AssetBundleManager.IsInprogress)
+					yield return null;
+				else {
+				
+					if (OnEndLoading != null)
+						OnEndLoading ();
+					async.allowSceneActivation = true;
+					yield break;
+				}
 			}
 			
 			yield return null;
@@ -71,6 +79,7 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 	}
 
 	#region PRIVATE METHOD
+
 	private void InitSceneGroup ()
 	{
 		_sceneGroup = new SceneContainer[SceneManager.sceneCount];
@@ -82,15 +91,15 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 		}
 	}
 
-	private Scene GetSceneByID(SceneID id)
+	private Scene GetSceneByID (SceneID id)
 	{
-		for(int i = 0; i< _sceneGroup.Length; i++)
-		{
+		for (int i = 0; i < _sceneGroup.Length; i++) {
 			if (id == _sceneGroup [i].ID)
 				return _sceneGroup [i].SceneData;
 		}
-		return _sceneGroup[0].SceneData;
+		return _sceneGroup [0].SceneData;
 	}
+
 	#endregion
 
 	[System.Serializable]
