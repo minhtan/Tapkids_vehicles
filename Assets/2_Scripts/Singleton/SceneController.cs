@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 using AssetBundles;
+using UnityEngine.UI;
+using System;
 
 public class SceneController : UnitySingletonPersistent<SceneController>
 {
@@ -11,14 +13,14 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 	[SerializeField]
 	private SceneContainer[] _sceneGroup;
 
+	public Text _text;
 	public enum SceneID
 	{
 		INTRO = 0,
-		AR = 1,
-		MENU = 2,
-		WORDGAME = 3,
-		CARGAME = 4,
-		STARTUP	= 5
+		MENU = 1,
+		WORDGAME = 2,
+		CARGAME = 3,
+		STARTUP	= 4
 	}
 
 	#endregion
@@ -38,14 +40,13 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 		SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex);
 	}
 
-	public void LoadingSceneAsync (SceneID id)
+	public void LoadingSceneAsync (SceneID id, float delay = 0f)
 	{
-		StartCoroutine (LoadingOperation (id, 0f));
+		StartCoroutine (LoadingOperation (id, delay));
 	}
 
 
-
-	private IEnumerator LoadingOperation (SceneID id, float delay = 0f)
+	private IEnumerator LoadingOperation (SceneID id, float delay)
 	{
 		if (delay > 0f)
 			yield return new WaitForSeconds (delay);
@@ -56,22 +57,30 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 		AsyncOperation async = SceneManager.LoadSceneAsync ((int)id);
 				
 		async.allowSceneActivation = false;	
-		
-		while (!async.isDone) {
+
+		float averagePercent = 0f;
+		while (!async.isDone && !AssetBundleManager.IsInprogress()) {
+			
 			if (OnLoadingScene != null)
 				OnLoadingScene (async.progress);	
+			
+			_text.text = "" + AssetBundleManager.ReturnProgress () + " " + AssetBundleManager.IsInprogress();
 
-			if (async.progress == 0.9f) {
+			if(AssetBundleManager.IsInprogress())
+			{
+				averagePercent = (async.progress + AssetBundleManager.ReturnProgress()) / 2;
+			}
+			else
+			{
+				averagePercent = (async.progress + 1f) / 2;
+			}
 
-				if (AssetBundleManager.IsInprogress)
-					yield return null;
-				else {
-				
-					if (OnEndLoading != null)
-						OnEndLoading ();
-					async.allowSceneActivation = true;
-					yield break;
-				}
+			if (averagePercent == 0.95f) {
+
+				if (OnEndLoading != null)
+					OnEndLoading ();
+				async.allowSceneActivation = true;
+				yield break;
 			}
 			
 			yield return null;

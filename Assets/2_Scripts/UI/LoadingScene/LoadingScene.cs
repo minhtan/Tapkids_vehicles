@@ -3,11 +3,6 @@ using System.Collections;
 
 public class LoadingScene : MonoBehaviour {
 
-	// Use this for initialization
-	public void StartLoading () {
-		SceneController.Instance.LoadingSceneAsync (SceneController.SceneID.AR);
-	}
-
 	void OnEnable()
 	{
 		SceneController.OnStartLoading += OnStartLoading;
