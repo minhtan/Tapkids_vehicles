@@ -2,11 +2,15 @@
 using System.Collections;
 using Prime31.StateKit;
 
-public class CGWaitForLetterState : SKState<CarGameController> {
+public class CGLetterState : SKState<CarGameController> {
+
+//	public string message =  "Please scan a letter card";
 
 	public override void begin ()
 	{
 		Debug.Log("Wait Letter State >>>");
+
+		Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString(), GameMessages.LetterScanMessage, 1f);
 
 		// TODO: setting ar camera
 //		ArController.Instance.ToggleAR (true);

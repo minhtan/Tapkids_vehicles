@@ -9,16 +9,19 @@ public class CGStartState : SKState<CarGameController> {
 		Debug.Log("Start State >>>");
 		// send event start game: enable mobile input, 
 
-//		CarGameEventController.OnStartGame ();
+
 		Messenger.Broadcast (EventManager.GameState.STARTGAME.ToString());
 
 	}
 
 	public override void reason ()
 	{
+		
 	}
 	public override void update (float deltaTime)
 	{
+		
+
 	}
 
 	public override void end ()

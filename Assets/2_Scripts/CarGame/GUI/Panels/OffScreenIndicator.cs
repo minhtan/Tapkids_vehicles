@@ -35,14 +35,14 @@ public class OffScreenIndicator : MonoBehaviour {
 	#region MONO
 	void OnEnable () {
 //		CarGameEventController.InitGame += OnInitGame;
-		Messenger.AddListener <string> (EventManager.GameState.INITGAME.ToString (), OnInitGame);
-		Messenger.AddListener (EventManager.GameState.STARTGAME.ToString (), OnStartGame);
+		Messenger.AddListener <string> (EventManager.GameState.INITGAME.ToString (), HandleInitGame);
+		Messenger.AddListener (EventManager.GameState.STARTGAME.ToString (), HandleStartGame);
 	}
 
 	void OnDisable () {
 //		CarGameEventController.InitGame -= OnInitGame;
-		Messenger.RemoveListener <string> (EventManager.GameState.INITGAME.ToString (), OnInitGame);
-		Messenger.AddListener (EventManager.GameState.STARTGAME.ToString (), OnStartGame);
+		Messenger.RemoveListener <string> (EventManager.GameState.INITGAME.ToString (), HandleInitGame);
+		Messenger.RemoveListener (EventManager.GameState.STARTGAME.ToString (), HandleStartGame);
 	}
 
 	void Start () {
@@ -59,7 +59,7 @@ public class OffScreenIndicator : MonoBehaviour {
 	#endregion MONO
 
 	#region private functions
-	void OnInitGame (string _word) {
+	void HandleInitGame (string _word) {
 		if(_word.Length <= 0) return;
 
 		// pre setup car indicator
@@ -77,7 +77,7 @@ public class OffScreenIndicator : MonoBehaviour {
 		}
 	}
 
-	void OnStartGame () {
+	void HandleStartGame () {
 		isInitiated = true;
 	}
 

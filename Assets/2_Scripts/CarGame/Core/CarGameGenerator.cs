@@ -47,7 +47,7 @@ public class CarGameGenerator : MonoBehaviour {
 	void OnEnable () {
 
 //		CarGameEventController.InitGame += OnInitGame;
-		Messenger.AddListener <string> (EventManager.GameState.INITGAME.ToString(), OnInitGame);
+		Messenger.AddListener <string> (EventManager.GameState.INITGAME.ToString(), HandleInitGame);
 
 		//TODO: handle player gathers word, respawn letter at new point
 //		CarGameEventController.ValidateWord += OnValidateWord;
@@ -55,7 +55,7 @@ public class CarGameGenerator : MonoBehaviour {
 	void OnDisable () {
 
 //		CarGameEventController.InitGame -= OnInitGame;
-		Messenger.RemoveListener <string> (EventManager.GameState.INITGAME.ToString(), OnInitGame);
+		Messenger.RemoveListener <string> (EventManager.GameState.INITGAME.ToString(), HandleInitGame);
 //		CarGameEventController.ValidateWord -= OnValidateWord;
 	}
 
@@ -100,7 +100,7 @@ public class CarGameGenerator : MonoBehaviour {
 		}));
 	}
 
-	private void OnInitGame (string _letter) {
+	private void HandleInitGame (string _letter) {
 		#region demo
 		if (car == null)
 		{

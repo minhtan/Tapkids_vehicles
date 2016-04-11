@@ -5,23 +5,25 @@ using System.Collections;
 public class NotifyText : MonoBehaviour {
 
 	private Text mText;
-
+	private CanvasGroup mCanvasGroup;
 	void OnEnable () {
 //		CarGameEventController.NotifyText += OnNotifyText;
-		Messenger.AddListener <string> (EventManager.GUI.NOTIFY.ToString (), OnNotifyText);
+		Messenger.AddListener <string, float> (EventManager.GUI.NOTIFY.ToString (), HandleNotifyText);
 	}
 
 	void OnDisable () {
-		Messenger.RemoveListener <string> (EventManager.GUI.NOTIFY.ToString (), OnNotifyText);
+		Messenger.RemoveListener <string, float> (EventManager.GUI.NOTIFY.ToString (), HandleNotifyText);
 //		CarGameEventController.NotifyText -= OnNotifyText;
 	}
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		mText = GetComponent <Text> ();
 
 		if (mText != null) {
 			
 		}
+
+		mCanvasGroup = GetComponent <CanvasGroup> ();
 	}
 	
 	// Update is called once per frame
@@ -29,14 +31,13 @@ public class NotifyText : MonoBehaviour {
 	
 	}
 
-	private void OnNotifyText (string _text) {
-		
-		mText.text = _text;
-		LeanTween.scale (gameObject, Vector3.one, 1f);
-		LeanTween.delayedCall (gameObject, 1.5f, FadeOut);
+	private void HandleNotifyText (string _text, float time) {
+		mText.text = _text.ToUpper ();
+		LeanTween.value (gameObject, 0f, 1f, 1f).setOnUpdate ((float alpha) => mCanvasGroup.alpha = alpha);
+		LeanTween.delayedCall (gameObject, 1f, FadeOut);
 	}
 
 	private void FadeOut () {
-		LeanTween.scale (gameObject, Vector3.zero, 1f);
+		LeanTween.value (gameObject, 1f, 0f, 0f).setOnUpdate ((float alpha) => mCanvasGroup.alpha = alpha);
 	}
 }

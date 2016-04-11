@@ -17,6 +17,9 @@ public class CarGameController : MonoBehaviour {
 
 	public Text gatherLetterText;
 	public Text successText;
+
+	[HideInInspector]
+	public	float countDownTimer = 3f;
 	#endregion public members
 
 	#region private members
@@ -39,7 +42,30 @@ public class CarGameController : MonoBehaviour {
 	#endregion private members
 
 	#region public functions
-
+//	public void CountDown () {
+////		string message = "GO";
+//		if (countDownTimer <= 0) {
+//			CancelInvoke ();
+//			return;
+////			Messenger.Broadcast <string> (EventManager.GUI.NOTIFY.ToString (), message);
+//		} else {
+//			Debug.Log ("count");
+//			Messenger.Broadcast <string> (EventManager.GUI.NOTIFY.ToString (), countDownTimer.ToString());
+//		}
+//		countDownTimer--;
+//	}
+	IEnumerator CountDownCo () {
+		for (int i = 0; i < 3; i++) {
+			Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), countDownTimer.ToString(), 1f);
+			countDownTimer--;
+			yield return new WaitForSeconds (1f);
+		}
+//		string message = "GO";
+//		if (countDownTimer <= 0) {
+//			Messenger.Broadcast <string> (EventManager.GUI.NOTIFY.ToString (), message);
+//		} 
+		yield return null;
+	}
 	#endregion public functions
 
 	#region private functions
@@ -57,7 +83,7 @@ public class CarGameController : MonoBehaviour {
 			
 			if (letter.Equals (_letter)) {	// deja vu
 				_machine.changeState <CGInitState> ();
-				Debug.Log (letter);
+				Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), letter, 1f);
 			} else {
 				// DO NOTHING
 			}
@@ -67,24 +93,22 @@ public class CarGameController : MonoBehaviour {
 	}
 
 	void OnMapTracking (bool _isFound, Transform _parent) {
-		if (_isFound) {	// FOUND MAP
-			// check letter if null show warning
-			if (letter.Length > 0) {
-				mTransform.SetParent (_parent, true);
-				for (int i = 0; i < mTransform.childCount; i++) 
-					mTransform.GetChild (i).gameObject.SetActive (true);
+		if (letter.Length > 0) {
+			if (_isFound) {	// FOUND MAP
+				// check letter if null show warning
 
-				_machine.changeState <CGStartState> ();
-				
-			} else {
-//				CarGameEventController.OnNotifyText ("Scanned letter first");
-				Messenger.Broadcast <string> (EventManager.GUI.NOTIFY.ToString(), "Scanned letter first");
-//				Debug.Log ("Player has not scanned letter");
+					mTransform.SetParent (_parent, true);
+					for (int i = 0; i < mTransform.childCount; i++) 
+						mTransform.GetChild (i).gameObject.SetActive (true);
+
+					_machine.changeState <CGMapState> ();
+			} else {		// LOST MAP
+	//			for (int i = 0; i < mTransform.childCount; i++) 
+	//				mTransform.GetChild (i).gameObject.SetActive (false);
+	//			_machine.changeState <CGMapState> ();
 			}
-		} else {		// LOST MAP
-//			for (int i = 0; i < mTransform.childCount; i++) 
-//				mTransform.GetChild (i).gameObject.SetActive (false);
-//			_machine.changeState <CGWaitForMapState> ();
+		} else {
+//			Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString(), GameMessages.LetterScanMessage, 1f);
 		}
 	}
 
@@ -117,31 +141,31 @@ public class CarGameController : MonoBehaviour {
 		collectedLetters.Clear ();
 		gatherLetterText.text = "Result";
 	}
-
 	#endregion private functions
 
 	#region Mono
 	void OnEnable () {
+		
+	}
+
+	void OnDisable () {
+		Messenger.RemoveListener <bool, string> (EventManager.AR.LETTERTRACKING.ToString(), OnLetterTracking);
+
+		Messenger.RemoveListener <bool, Transform> (EventManager.AR.MAPTRACKING.ToString(), OnMapTracking);
+
+	}
+
+	void Awake () {
 		Messenger.AddListener <bool, string> (EventManager.AR.LETTERTRACKING.ToString(), OnLetterTracking);
 
 		Messenger.AddListener <bool, Transform> (EventManager.AR.MAPTRACKING.ToString(), OnMapTracking);
 
-//		CarGameEventController.ResetGame += OnResetGame;
-//		CarGameEventController.CollectLetter += OnCollectLetter;
-//		CarGameEventController.GatherLetter += OnGatherLetter;
-	}
-
-	void OnDisable () {
-//		Messenger.Cleanup ();
-	}
-
-	void Awake () {
 		mTransform = this.transform;
 
 		// setup finite state machine
-		_machine = new SKStateMachine <CarGameController> (this, new CGWaitForLetterState ());
+		_machine = new SKStateMachine <CarGameController> (this, new CGLetterState ());
 		_machine.addState (new CGInitState ());
-		_machine.addState (new CGWaitForMapState ());
+		_machine.addState (new CGMapState ());
 		_machine.addState (new CGStartState ());
 		_machine.addState (new CGPlayState ());
 		_machine.addState (new CGPauseState ());
@@ -151,6 +175,7 @@ public class CarGameController : MonoBehaviour {
 
 	void Start () {
 		collectedLetters = new List <string> ();
+		StartCoroutine (CountDownCo ());
 	}
 
 	void Update () {
