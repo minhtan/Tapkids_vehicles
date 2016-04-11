@@ -443,6 +443,7 @@ GameObject:
   - 114: {fileID: 649138224}
   - 114: {fileID: 649138225}
   - 114: {fileID: 649138226}
+  - 114: {fileID: 649138227}
   m_Layer: 0
   m_Name: GameManagers
   m_TagString: Untagged
@@ -478,6 +479,8 @@ MonoBehaviour:
   _drawer: {fileID: 1896293676}
   _statusText: {fileID: 630925354}
   _resultText: {fileID: 1496290270}
+  _spawner: {fileID: 649138225}
+  _wordDrawScore: {fileID: 649138226}
 --- !u!114 &649138224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -503,14 +506,19 @@ MonoBehaviour:
   _difficulties:
   - _spawnPeriod: 4
     _requiredScore: 50
+    _fallingSpeed: 1
   - _spawnPeriod: 3
     _requiredScore: 100
+    _fallingSpeed: 10
   - _spawnPeriod: 2
     _requiredScore: 200
+    _fallingSpeed: 20
   - _spawnPeriod: 1
     _requiredScore: 300
+    _fallingSpeed: 30
   _spawnPoint: {fileID: 1036007925}
   _maxStackCap: 8
+  _curDifficulty: 0
 --- !u!114 &649138226
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -523,8 +531,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _scoreText: {fileID: 92322980}
-  _baseScore: 10
-  _bonusPerX2Combo: 5
+  _baseScore: 4
+  _bonusPerX2Combo: 2
+--- !u!114 &649138227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 649138221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45afe6471a7364f24b17c91fe60fe9ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sceneGroup: []
 --- !u!1 &749714124
 GameObject:
   m_ObjectHideFlags: 0
@@ -987,7 +1007,7 @@ GameObject:
   - 114: {fileID: 1876799843}
   - 114: {fileID: 1876799842}
   m_Layer: 5
-  m_Name: Button
+  m_Name: RestartBut
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
