@@ -13,6 +13,8 @@ namespace WordDraw
 
 		private int _currentSessionScore = 0;
 
+		public int CurrentScore { get { return _currentSessionScore; } }
+
 		void OnEnable ()
 		{
 			LetterSpawner.OnReturnRecognizedResult += OnReturnRecognizedResult;

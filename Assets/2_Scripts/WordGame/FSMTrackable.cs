@@ -81,7 +81,6 @@ namespace Vuforia
 			fsm.Fsm.Event("found");
 		}
 
-
 		private void OnTrackingLost(){
 			fsm.Fsm.Event("lost");
 		}
@@ -109,10 +108,10 @@ namespace Vuforia
 				Resources.UnloadUnusedAssets();
 				go = null;
 				go_anim = null;
-			}
 
-			if(isLetter){
-				Messenger.Broadcast<bool, string>(EventManager.AR.LETTERTRACKING.ToString(), false, targetName);
+				if(isLetter){
+					Messenger.Broadcast<bool, string>(EventManager.AR.LETTERTRACKING.ToString(), false, targetName);
+				}
 			}
 		}
 		#endregion // PRIVATE_METHODS

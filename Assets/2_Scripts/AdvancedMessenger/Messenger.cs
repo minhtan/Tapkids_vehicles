@@ -23,7 +23,7 @@
 //#define LOG_ALL_MESSAGES
 //#define LOG_ADD_LISTENER
 //#define LOG_BROADCAST_MESSAGE
-#define REQUIRE_LISTENER
+//#define REQUIRE_LISTENER
 
 using System;
 using System.Collections.Generic;
@@ -302,6 +302,6 @@ public sealed class MessengerHelper : MonoBehaviour {
 
 	//Clean up eventTable every time a new level loads.
 	public void OnLevelWasLoaded(int unused) {
-		Messenger.Cleanup();
+//		Messenger.Cleanup();
 	}
 }

@@ -19,6 +19,8 @@ namespace WordDraw
 
 		private List<UILetter> _letterList;
 		private GameObject[] _letterPrefabs;
+			
+		[SerializeField]
 		private int _curDifficulty = 0;
 
 		public WordDrawDifficulty CurrentDifficulty { get { return _difficulties [_curDifficulty]; } }
@@ -45,7 +47,7 @@ namespace WordDraw
 		{
 			_letterList = new List<UILetter> ();
 			_letterPrefabs = Resources.LoadAll <GameObject> ("Letters");
-			SpawnLetters ();
+			SpawnLetters ();	
 		}
 
 		void OnGestureDetected (Result result)
@@ -80,7 +82,7 @@ namespace WordDraw
 
 		private void SpawnLetters ()
 		{
-			StartCoroutine (SpawnCor (CurrentDifficulty.SpawnPeriod));
+			StartCoroutine (SpawnCor ());
 		}
 
 		public void ChangeToMextDifficulty ()
@@ -93,13 +95,16 @@ namespace WordDraw
 			return _letterPrefabs [Random.Range (0, _letterPrefabs.Length)];
 		}
 
-		IEnumerator SpawnCor (float period)
+		IEnumerator SpawnCor ()
 		{
 			while (true) {
 
-				GameObject letter = Instantiate (GetRandomLetterPrefab ());
-				letter.transform.SetParent (_spawnPoint, false);
+				//GameObject letter = Instantiate (GetRandomLetterPrefab ());
+				GameObject letter = Instantiate (_letterPrefabs [0]);
 
+				letter.transform.SetParent (_spawnPoint, false);
+				 
+				letter.GetComponent<Rigidbody2D> ().mass = CurrentDifficulty.FallingSpeed;
 				_letterList.Add (letter.GetComponent<UILetter> ());
 
 				if (_letterList.Count > _maxStackCap) {
@@ -108,7 +113,7 @@ namespace WordDraw
 					yield break;
 				}
 
-				yield return new WaitForSeconds (period);
+				yield return new WaitForSeconds (CurrentDifficulty.SpawnPeriod);
 			}
 		}
 	}
@@ -127,5 +132,10 @@ namespace WordDraw
 		public int RequiredScore {
 			get { return _requiredScore; }
 		}
+
+		[SerializeField]
+		private float _fallingSpeed;
+
+		public float FallingSpeed { get { return _fallingSpeed; } }
 	}
 }

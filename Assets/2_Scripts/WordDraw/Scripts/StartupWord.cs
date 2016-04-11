@@ -23,6 +23,7 @@ public class StartupWord : MonoBehaviour {
 		LeanGestureRecognizer.OnGestureDetected += OnGestureDetected;
 		LeanGestureRecognizer.OnGestureReset += OnGestureReset;
 		Messenger.AddListener<bool, string> (EventManager.AR.LETTERTRACKING.ToString(), OnLetterFound);
+
 	}
 
 	void OnDisable ()
@@ -30,6 +31,7 @@ public class StartupWord : MonoBehaviour {
 		GestureAutoDrawer.OnDrawGestureDone -= OnDrawGestureDone;
 		LeanGestureRecognizer.OnGestureDetected -= OnGestureDetected;
 		LeanGestureRecognizer.OnGestureReset -= OnGestureReset;
+		Messenger.Cleanup ();
 	}
 
 
