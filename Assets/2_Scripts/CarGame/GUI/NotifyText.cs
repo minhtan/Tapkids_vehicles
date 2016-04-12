@@ -32,9 +32,9 @@ public class NotifyText : MonoBehaviour {
 	}
 
 	private void HandleNotifyText (string _text, float time) {
-		mText.text = _text.ToUpper ();
-		LeanTween.value (gameObject, 0f, 1f, 1f).setOnUpdate ((float alpha) => mCanvasGroup.alpha = alpha);
-		LeanTween.delayedCall (gameObject, 1f, FadeOut);
+		mText.text = _text;
+		LeanTween.value (gameObject, 0f, 1f, 0f).setOnUpdate ((float alpha) => mCanvasGroup.alpha = alpha);
+		LeanTween.delayedCall (gameObject, time, FadeOut);
 	}
 
 	private void FadeOut () {

@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using System.IO;
 
 public class DataUltility {	
@@ -40,7 +42,7 @@ public class DataUltility {
 		}
 		return answers;
 	}
-
+	#if UNITY_EDITOR
 	public static void WriteTextFile (string data, string fileName, string directoryPath)
 	{
 		string assetPath = directoryPath + "/" + fileName + ".txt";
@@ -56,4 +58,5 @@ public class DataUltility {
 
 		sr.Close ();
 	}
+	#endif
 }
