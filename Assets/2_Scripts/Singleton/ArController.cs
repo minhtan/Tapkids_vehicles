@@ -27,7 +27,7 @@ public class ArController : UnitySingletonPersistent<ArController> {
 	void OnVuforiaStarted(){
 		ArController.Instance.ToggleAR (false);
 		isVuforiaReady = true;
-		SceneController.Instance.LoadingSceneAsync (SceneController.SceneID.MENU);
+//		SceneController.Instance.LoadingSceneAsync (SceneController.SceneID.MENU);
 	}
 
 	public void SetArMaxStimTargets(int targetNums){

@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.IO;
-using UnityEditor;
 
+#if UNITY_EDITOR
+using UnityEditor;
 
 public class TextToJSON : MonoBehaviour
 {
@@ -33,3 +34,4 @@ public class TextToJSON : MonoBehaviour
 		DataUltility.WriteTextFile (encodedJSON, _desFileName, Application.dataPath + "/Resources/");
 	}
 }
+#endif
