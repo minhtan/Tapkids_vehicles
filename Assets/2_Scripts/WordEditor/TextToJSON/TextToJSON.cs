@@ -1,9 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.IO;
+<<<<<<< HEAD
 #if UNITY_EDITOR
 using UnityEditor;
+=======
+>>>>>>> 6318629eb8111dfb492b75f740dc44a4f358c240
 
+#if UNITY_EDITOR
+using UnityEditor;
 
 public class TextToJSON : MonoBehaviour
 {

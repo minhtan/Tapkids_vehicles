@@ -50,7 +50,7 @@ namespace AssetBundles
 	#endif
 	
 		static Dictionary<string, LoadedAssetBundle> m_LoadedAssetBundles = new Dictionary<string, LoadedAssetBundle> ();
-		static Dictionary<string, WWW> m_DownloadingWWWs = new Dictionary<string, WWW> ();
+		public static Dictionary<string, WWW> m_DownloadingWWWs = new Dictionary<string, WWW> ();
 		static Dictionary<string, string> m_DownloadingErrors = new Dictionary<string, string> ();
 		static List<AssetBundleLoadOperation> m_InProgressOperations = new List<AssetBundleLoadOperation> ();
 		static Dictionary<string, string[]> m_Dependencies = new Dictionary<string, string[]> ();

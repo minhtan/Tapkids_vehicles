@@ -2,6 +2,9 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
+using AssetBundles;
+using UnityEngine.UI;
+using System;
 
 public class SceneController : UnitySingletonPersistent<SceneController>
 {
@@ -10,14 +13,16 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 	[SerializeField]
 	private SceneContainer[] _sceneGroup;
 
-	public enum SceneID{
-		INTRO = 0, 
-		AR = 1,
-		MENU = 2, 
-		WORDGAME = 3,
-		CARGAME = 4,
-		STARTUP	= 5
+	public Text _text;
+	public enum SceneID
+	{
+		INTRO = 0,
+		MENU = 1,
+		WORDGAME = 2,
+		CARGAME = 3,
+		STARTUP	= 4,
 	}
+
 	#endregion
 
 	public static UnityAction OnStartLoading;
@@ -30,34 +35,47 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 		InitSceneGroup ();
 	}
 
-	public void ReloadCurrentScene()
+	public void ReloadCurrentScene ()
 	{
-		SceneManager.LoadScene (SceneManager.GetActiveScene().buildIndex);
+		SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex);
 	}
 
-	public void LoadingSceneAsync (SceneID id)
+	public void LoadingSceneAsync (SceneID id, float delay = 0f)
 	{
-		StartCoroutine (LoadingOperation(id, 0f));
+		StartCoroutine (LoadingOperation (id, delay));
 	}
 
-	private IEnumerator LoadingOperation(SceneID id, float delay = 0f){
+
+	private IEnumerator LoadingOperation (SceneID id, float delay)
+	{
 		if (delay > 0f)
 			yield return new WaitForSeconds (delay);
 
 		if (OnStartLoading != null)
 			OnStartLoading ();
-		
-		AsyncOperation async = SceneManager.LoadSceneAsync ((int)id);
 	
-		async.allowSceneActivation = false;
-		
-		while(!async.isDone)
-		{
-			if (OnLoadingScene != null)
-				OnLoadingScene (async.progress);	
+		AsyncOperation async = SceneManager.LoadSceneAsync ((int)id);
+				
+		async.allowSceneActivation = false;	
 
-			if (async.progress == 0.9f) {
-				if(OnEndLoading != null)
+		float averagePercent = 0f;
+		while (true) {
+			if (OnLoadingScene != null)
+				OnLoadingScene (averagePercent);	
+			
+			_text.text = async.progress + " " + AssetBundleManager.ReturnProgress();
+
+			if(AssetBundleManager.IsInprogress())
+			{
+				averagePercent = (async.progress + AssetBundleManager.ReturnProgress()) / 2;
+			}
+			else
+			{
+				averagePercent = (async.progress + 1f) / 2;
+			}
+
+			if (averagePercent == 0.95f) {
+				if (OnEndLoading != null)
 					OnEndLoading ();
 				async.allowSceneActivation = true;
 				yield break;
@@ -68,6 +86,7 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 	}
 
 	#region PRIVATE METHOD
+
 	private void InitSceneGroup ()
 	{
 		_sceneGroup = new SceneContainer[SceneManager.sceneCount];
@@ -79,15 +98,15 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 		}
 	}
 
-	private Scene GetSceneByID(SceneID id)
+	private Scene GetSceneByID (SceneID id)
 	{
-		for(int i = 0; i< _sceneGroup.Length; i++)
-		{
+		for (int i = 0; i < _sceneGroup.Length; i++) {
 			if (id == _sceneGroup [i].ID)
 				return _sceneGroup [i].SceneData;
 		}
-		return _sceneGroup[0].SceneData;
+		return _sceneGroup [0].SceneData;
 	}
+
 	#endregion
 
 	[System.Serializable]

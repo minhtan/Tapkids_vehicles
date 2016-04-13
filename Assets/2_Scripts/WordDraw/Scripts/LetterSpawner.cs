@@ -19,11 +19,14 @@ namespace WordDraw
 
 		private List<UILetter> _letterList;
 		private GameObject[] _letterPrefabs;
+			
+		[SerializeField]
 		private int _curDifficulty = 0;
 
 		public WordDrawDifficulty CurrentDifficulty { get { return _difficulties [_curDifficulty]; } }
 
-		public static UnityAction<bool, Letters, Letters> OnReturnRecognizedResult;  //Return result compared gesture, correct letter, user input letter
+		public static UnityAction<bool, Letters, Letters> OnReturnRecognizedResult;
+		public static UnityAction<int> OnReturnBonusCount;
 
 		void OnEnable ()
 		{
@@ -44,7 +47,7 @@ namespace WordDraw
 		{
 			_letterList = new List<UILetter> ();
 			_letterPrefabs = Resources.LoadAll <GameObject> ("Letters");
-			SpawnLetters ();
+			SpawnLetters ();	
 		}
 
 		void OnGestureDetected (Result result)
@@ -55,26 +58,34 @@ namespace WordDraw
 
 		private void DestroyResultGesture (Letters target)
 		{
-			for (int i = _letterList.Count - 1; i >= 0; i--) {
-				UILetter letter = _letterList [i];
-				if (target == letter.Letter) {
-					Destroy (letter.gameObject);
-					_letterList.RemoveAt (i);
+			List<UILetter> destroyedLetter = new List<UILetter> (_maxStackCap);
+			UILetter letter;
+			int correctCount = 0;
 
-					if(OnReturnRecognizedResult != null)
-					{
+			for (int i = _letterList.Count - 1; i >= 0; i--) {
+				letter = _letterList [i];
+				if (target == letter.Letter) {
+					correctCount++;
+					destroyedLetter.Add (letter);
+					_letterList.RemoveAt (i);
+					Destroy (letter.gameObject);
+
+					if (OnReturnRecognizedResult != null) {
 						OnReturnRecognizedResult (true, letter.Letter, target);
 					}
 				}
 			}
+
+			if (OnReturnBonusCount != null)
+				OnReturnBonusCount (correctCount);
 		}
 
 		private void SpawnLetters ()
 		{
-			StartCoroutine (SpawnCor (CurrentDifficulty.SpawnPeriod));
+			StartCoroutine (SpawnCor ());
 		}
 
-		private void ChangeToMextDifficulty ()
+		public void ChangeToMextDifficulty ()
 		{
 			_curDifficulty++;
 		}
@@ -84,12 +95,16 @@ namespace WordDraw
 			return _letterPrefabs [Random.Range (0, _letterPrefabs.Length)];
 		}
 
-		IEnumerator SpawnCor (float period)
+		IEnumerator SpawnCor ()
 		{
 			while (true) {
-				GameObject letter = Instantiate (GetRandomLetterPrefab ());
-				letter.transform.SetParent (_spawnPoint, false);
 
+				//GameObject letter = Instantiate (GetRandomLetterPrefab ());
+				GameObject letter = Instantiate (_letterPrefabs [0]);
+
+				letter.transform.SetParent (_spawnPoint, false);
+				 
+				letter.GetComponent<Rigidbody2D> ().mass = CurrentDifficulty.FallingSpeed;
 				_letterList.Add (letter.GetComponent<UILetter> ());
 
 				if (_letterList.Count > _maxStackCap) {
@@ -98,7 +113,7 @@ namespace WordDraw
 					yield break;
 				}
 
-				yield return new WaitForSeconds (period);
+				yield return new WaitForSeconds (CurrentDifficulty.SpawnPeriod);
 			}
 		}
 	}
@@ -117,5 +132,10 @@ namespace WordDraw
 		public int RequiredScore {
 			get { return _requiredScore; }
 		}
+
+		[SerializeField]
+		private float _fallingSpeed;
+
+		public float FallingSpeed { get { return _fallingSpeed; } }
 	}
 }
