@@ -5,23 +5,27 @@ using UnityEngine.Events;
 using AssetBundles;
 using UnityEngine.UI;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 public class SceneController : UnitySingletonPersistent<SceneController>
 {
 	#region VAR
 
-	[SerializeField]
-	private SceneContainer[] _sceneGroup;
-
 	public Text _text;
+
 	public enum SceneID
 	{
-		INTRO = 0,
-		MENU = 1,
-		WORDGAME = 2,
-		CARGAME = 3,
-		STARTUP	= 4,
+		STARTUP,
+		INTRO,
+		MENU,
+		WORDGAME,
+		CARGAME,
+		WORDDRAW
 	}
+
+	private Dictionary<SceneID, string> _sceneDict;
 
 	#endregion
 
@@ -45,7 +49,6 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 		StartCoroutine (LoadingOperation (id, delay));
 	}
 
-
 	private IEnumerator LoadingOperation (SceneID id, float delay)
 	{
 		if (delay > 0f)
@@ -53,9 +56,9 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 
 		if (OnStartLoading != null)
 			OnStartLoading ();
-	
-		AsyncOperation async = SceneManager.LoadSceneAsync ((int)id);
-				
+		
+		AsyncOperation async = SceneManager.LoadSceneAsync (_sceneDict [id]);
+
 		async.allowSceneActivation = false;	
 
 		float averagePercent = 0f;
@@ -63,14 +66,11 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 			if (OnLoadingScene != null)
 				OnLoadingScene (averagePercent);	
 			
-			_text.text = async.progress + " " + AssetBundleManager.ReturnProgress();
+			_text.text = async.progress + " " + AssetBundleManager.ReturnProgress ();
 
-			if(AssetBundleManager.IsInprogress())
-			{
-				averagePercent = (async.progress + AssetBundleManager.ReturnProgress()) / 2;
-			}
-			else
-			{
+			if (AssetBundleManager.IsInprogress ()) {
+				averagePercent = (async.progress + AssetBundleManager.ReturnProgress ()) / 2;
+			} else {
 				averagePercent = (async.progress + 1f) / 2;
 			}
 
@@ -89,37 +89,37 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 
 	private void InitSceneGroup ()
 	{
-		_sceneGroup = new SceneContainer[SceneManager.sceneCount];
-		for (int i = 0; i < SceneManager.sceneCount; i++) {
-			SceneContainer container = new SceneContainer ();
+		string scenePath = Application.dataPath + "/1_Scenes";
+		string[] sceneFiles = Directory.GetFiles (scenePath, "*.unity");
+		string[] sceneFileNames = new string[sceneFiles.Length];
+		string[] separator = { "." };
 
-			container.SceneData = SceneManager.GetSceneAt (i);
-			_sceneGroup [i] = container;
+		for(int i = 0; i < sceneFileNames.Length; i++)
+		{
+			sceneFileNames[i] = Path.GetFileName (sceneFiles[i]).Split(separator, 0)[0];
 		}
-	}
+		
+		_sceneDict = new Dictionary<SceneID, string> ();
 
-	private Scene GetSceneByID (SceneID id)
-	{
-		for (int i = 0; i < _sceneGroup.Length; i++) {
-			if (id == _sceneGroup [i].ID)
-				return _sceneGroup [i].SceneData;
+		string[] sceneEnumNames = Enum.GetNames (typeof(SceneID));
+		Array sceneids = Enum.GetValues (typeof(SceneID));
+
+		int length = SceneManager.sceneCountInBuildSettings;
+		string tmpSceneName = null;
+
+		Debug.Log (length);
+		for (int i = 0; i < length; i++) {
+			tmpSceneName = sceneFileNames [i];
+		
+			for (int k = 0; k < length; k++) {
+
+				if (tmpSceneName.ToUpper ().Contains (sceneEnumNames [k])) {
+					_sceneDict.Add ((SceneID)sceneids.GetValue (k), tmpSceneName);
+					break;
+				}
+			}
 		}
-		return _sceneGroup [0].SceneData;
 	}
 
 	#endregion
-
-	[System.Serializable]
-	public class SceneContainer : System.Object
-	{
-		[SerializeField]
-		private SceneID _sceneID;
-
-		public SceneID ID{ set { _sceneID = value; } get { return _sceneID; } }
-
-		[SerializeField]
-		private Scene _scene;
-
-		public Scene SceneData{ set { _scene = value; } get { return _scene; } }
-	}
 }
