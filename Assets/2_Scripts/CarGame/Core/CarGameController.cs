@@ -12,7 +12,7 @@ using UnityEngine.UI;
 public class CarGameController : MonoBehaviour {
 
 	#region public members
-	[HideInInspector]
+//	[HideInInspector]
 //	public float gameTime = 10f;	// there is no more game time
 
 	public Text gatherLetterText;
@@ -42,28 +42,14 @@ public class CarGameController : MonoBehaviour {
 	#endregion private members
 
 	#region public functions
-//	public void CountDown () {
-////		string message = "GO";
-//		if (countDownTimer <= 0) {
-//			CancelInvoke ();
-//			return;
-////			Messenger.Broadcast <string> (EventManager.GUI.NOTIFY.ToString (), message);
-//		} else {
-//			Debug.Log ("count");
-//			Messenger.Broadcast <string> (EventManager.GUI.NOTIFY.ToString (), countDownTimer.ToString());
-//		}
-//		countDownTimer--;
-//	}
 	IEnumerator CountDownCo () {
+		countDownTimer = 3f;
 		for (int i = 0; i < 3; i++) {
 			Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), countDownTimer.ToString(), 1f);
 			countDownTimer--;
 			yield return new WaitForSeconds (1f);
 		}
-//		string message = "GO";
-//		if (countDownTimer <= 0) {
-//			Messenger.Broadcast <string> (EventManager.GUI.NOTIFY.ToString (), message);
-//		} 
+		Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), "Go", 1f);
 		yield return null;
 	}
 	#endregion public functions
@@ -93,22 +79,24 @@ public class CarGameController : MonoBehaviour {
 	}
 
 	void OnMapTracking (bool _isFound, Transform _parent) {
-		if (letter.Length > 0) {
-			if (_isFound) {	// FOUND MAP
-				// check letter if null show warning
-
-					mTransform.SetParent (_parent, true);
-					for (int i = 0; i < mTransform.childCount; i++) 
-						mTransform.GetChild (i).gameObject.SetActive (true);
-
-					_machine.changeState <CGMapState> ();
-			} else {		// LOST MAP
-	//			for (int i = 0; i < mTransform.childCount; i++) 
-	//				mTransform.GetChild (i).gameObject.SetActive (false);
-	//			_machine.changeState <CGMapState> ();
+		if (_isFound) {	// FOUND MAP
+			if (letter.Length <= 0) {	// check letter if null show warning
+				Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString(), GameMessages.LetterScanMessage, 1f);
 			}
-		} else {
-//			Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString(), GameMessages.LetterScanMessage, 1f);
+			if(_machine.currentState.GetType () == typeof (CGMapState)) {
+				mTransform.SetParent (_parent, true);
+				for (int i = 0; i < mTransform.childCount; i++) 
+					mTransform.GetChild (i).gameObject.SetActive (true);
+
+				_machine.changeState <CGStartState> ();
+			}
+		} else {		// LOST MAP
+			if(_machine.currentState.GetType () == typeof (CGStartState)) {
+				_machine.changeState <CGMapState> ();
+
+				for (int i = 0; i < mTransform.childCount; i++) 
+					mTransform.GetChild (i).gameObject.SetActive (false);
+			}
 		}
 	}
 
@@ -175,7 +163,7 @@ public class CarGameController : MonoBehaviour {
 
 	void Start () {
 		collectedLetters = new List <string> ();
-		StartCoroutine (CountDownCo ());
+//		StartCoroutine (CountDownCo ());
 	}
 
 	void Update () {
