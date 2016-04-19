@@ -27,13 +27,9 @@ namespace WordDraw
 			LetterSpawner.OnReturnBonusCount -= BonusCount;
 		}
 
-		private void OnReturnRecognizedResult (bool isCorrect, Letters correctLetter, Letters inputLetter)
+		private void OnReturnRecognizedResult (Letters correctLetter)
 		{
-			if (isCorrect) {
-				AddScore ();
-			} else {
-				
-			}
+			AddScore ();
 		}
 
 		private void AddScore ()
