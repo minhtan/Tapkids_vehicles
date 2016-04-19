@@ -25,7 +25,7 @@ namespace WordDraw
 
 		public WordDrawDifficulty CurrentDifficulty { get { return _difficulties [_curDifficulty]; } }
 
-		public static UnityAction<bool, Letters, Letters> OnReturnRecognizedResult;
+		public static UnityAction<Letters> OnReturnRecognizedResult;
 		public static UnityAction<int> OnReturnBonusCount;
 
 		void OnEnable ()
@@ -71,7 +71,7 @@ namespace WordDraw
 					Destroy (letter.gameObject);
 
 					if (OnReturnRecognizedResult != null) {
-						OnReturnRecognizedResult (true, letter.Letter, target);
+						OnReturnRecognizedResult (letter.Letter);
 					}
 				}
 			}
