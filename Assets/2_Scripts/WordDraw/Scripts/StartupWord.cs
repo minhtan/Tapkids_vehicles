@@ -22,7 +22,7 @@ public class StartupWord : MonoBehaviour {
 		GestureAutoDrawer.OnDrawGestureDone += OnDrawGestureDone;
 		LeanGestureRecognizer.OnGestureDetected += OnGestureDetected;
 		LeanGestureRecognizer.OnGestureReset += OnGestureReset;
-		Messenger.AddListener<bool, string> (EventManager.AR.LETTERTRACKING.ToString(), OnLetterFound);
+		Messenger.AddListener<bool, string> (EventManager.AR.IMAGETRACKING.ToString(), OnLetterFound);
 
 	}
 

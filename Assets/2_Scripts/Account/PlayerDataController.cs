@@ -7,11 +7,9 @@ using System;
 public class PlayerDataController : UnitySingletonPersistent<PlayerDataController> {
 
 	public Player mPlayer;
-	string fileName = "player";
 
 	#region MONO
 	void Awake () {
-//		mPlayer = JsonUtility.FromJson <Player> (ReadJsonFile(fileName, Application.persistentDataPath));
 		AddDemoData ();
 
 		mPlayer = TapkidsData.GetPlayerById(0);
@@ -59,17 +57,4 @@ public class PlayerDataController : UnitySingletonPersistent<PlayerDataControlle
 
 	}
 	#endregion demo data
-
-//	#region JSON functions
-//	private void WriteJsonFile (string fileName, string data)
-//	{
-//		var sr = File.CreateText (Application.persistentDataPath + "/" + fileName + ".json");
-//		sr.Write (data);
-//		sr.Close ();
-//	}
-//
-//	private string ReadJsonFile (string fileName, string directoryPath) {
-//		return File.ReadAllText (Application.persistentDataPath + "/" + fileName + ".json");
-//	}
-//	#endregion JSON functions
 }

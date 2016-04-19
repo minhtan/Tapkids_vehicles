@@ -43,10 +43,10 @@ public class AssetController : UnitySingletonPersistent<AssetController> {
 			yield return StartCoroutine (request);
 		}
 
-		AssetBundleLoadAssetOperation rq = AssetBundleManager.LoadAssetAsync (bundleName, "a", typeof(GameObject));
-		if(rq != null){
-			yield return StartCoroutine (rq);
-		}
+//		AssetBundleLoadAssetOperation rq = AssetBundleManager.LoadAssetAsync (bundleName, "a", typeof(GameObject));
+//		if(rq != null){
+//			yield return StartCoroutine (rq);
+//		}
 	}
 
 	public IEnumerator InstantiateGameObjectAsync (string assetBundleName, string assetName, Action<GameObject> callback)

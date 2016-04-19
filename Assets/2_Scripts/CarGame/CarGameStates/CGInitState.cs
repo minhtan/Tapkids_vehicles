@@ -18,11 +18,15 @@ public class CGInitState : SKState<CarGameController> {
 //		_context.gameTime = 10f;
 
 		// get word data
-		_context.wordGameData = DataUltility.ReadDataForCarGame (_context.letter);
+//		_context.wordGameData = DataUltility.ReadDataForCarGame (_context.letters);
 		// send event init game environment
-		_context.answers = DataUltility.GetAnswersList (_context.wordGameData);
+//		_context.answers = DataUltility.GetAnswersList (_context.wordGameData);
+
 //		CarGameEventController.OnInitGame (_context.wordGameData.letters);
-		Messenger.Broadcast <string> (EventManager.GameState.INITGAME.ToString (), _context.wordGameData.letters);
+//		Messenger.Broadcast <string> (EventManager.GameState.INITGAME.ToString (), _context.wordGameData.letters);
+		Messenger.Broadcast <string> (EventManager.GameState.INITGAME.ToString (), _context.letters);
+
+		_machine.changeState <CGMapState> ();
 	}
 
 	public override void reason ()

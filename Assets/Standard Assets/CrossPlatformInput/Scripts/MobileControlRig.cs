@@ -49,21 +49,17 @@ namespace UnityStandardAssets.CrossPlatformInput
             EditorApplication.update += Update;
         }
 
-
         private void OnDisable()
         {
             EditorUserBuildSettings.activeBuildTargetChanged -= Update;
             EditorApplication.update -= Update;
         }
 
-
         private void Update()
         {
             CheckEnableControlRig();
         }
 #endif
-
-
         private void CheckEnableControlRig()
         {
 #if MOBILE_INPUT
@@ -72,7 +68,6 @@ namespace UnityStandardAssets.CrossPlatformInput
             EnableControlRig(false);
 #endif
         }
-
 
         private void EnableControlRig(bool enabled)
         {
