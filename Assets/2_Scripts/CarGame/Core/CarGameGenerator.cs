@@ -12,11 +12,11 @@ public class CarGameGenerator : MonoBehaviour {
 	// - re generate missing letters after player gather word, whether true or false
 
 	#region public members
-	public GameObject[] letterPrefabs; 	// Todo: should replace this prefab hard references with loading assetbundle method
-
-	public GameObject[] obstaclePrefabs;
-
-	public GameObject carPrefab;
+//	public GameObject[] letterPrefabs; 	// Todo: should replace this prefab hard references with loading assetbundle method
+//
+//	public GameObject[] obstaclePrefabs;
+//
+//	public GameObject carPrefab;
 
 	#endregion public members
 
@@ -118,7 +118,7 @@ public class CarGameGenerator : MonoBehaviour {
 		}
 		letterGameObjects.Clear ();
 		for (int i = 0; i < _word.Length; i++) {
-			SetupLetter (_word[i].ToString ());
+			SetupLetter (_word[i].ToString (), letterPoints[i].transform.position);
 		}
 
 		// setup obstacles
@@ -182,9 +182,9 @@ public class CarGameGenerator : MonoBehaviour {
 //		car.SetActive (false);
 	}
 
-	private void SetupLetter (string _letter) {
+	private void SetupLetter (string _letter, Vector3 position) {
 		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (assetBundleName, _letter, (bundle) => {
-			GameObject letterGameObject = Instantiate (bundle) as GameObject;
+			GameObject letterGameObject = Instantiate (bundle, position, Quaternion.identity) as GameObject;
 			letterGameObject.AddComponent <LetterController> ();
 			letterGameObject.GetComponent <LetterController> ().letterName = _letter;
 			letterGameObject.transform.SetParent (mTransform, false);
