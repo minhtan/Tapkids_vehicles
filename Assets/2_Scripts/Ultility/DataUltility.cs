@@ -24,6 +24,10 @@ public class DataUltility
 		return JsonUtility.FromJson <WordGameData> (Resources.Load <TextAsset> ("CarGame/" + letter).text);
 	}
 
+	public static Sprite GetLetterImage(string name){
+		return Resources.Load<Sprite> ("LettersImage/" + name);
+	}
+
 	public static List<string> GetPlayableLetters (WordGameData data)
 	{
 		List<string> letters = new List<string> ();
