@@ -23,10 +23,13 @@ public class CarGameController : MonoBehaviour {
 	#endregion public members
 
 	#region private members
-	private List<string> collectedLetters;
+	[HideInInspector]
+//	public List <string> collectedLetters;
+	public string collectedLetters;
 
 	// mono
-	private Transform mTransform;
+	[HideInInspector]
+	public Transform mTransform;
 
 	// SK STATE
 	private SKStateMachine <CarGameController> _machine;
@@ -35,10 +38,15 @@ public class CarGameController : MonoBehaviour {
 	[HideInInspector]
 	public WordGameData wordGameData;		// contains given letters and, answers
 	[HideInInspector]
-	public string letter;					// founded image target
+	public string letters;					// founded image target
 	[HideInInspector]
-	public List<string> answers;
-
+//	public List<string> answers;
+	public string answer;
+	[HideInInspector]
+	public List<string> vehicles = new List<string> (new string[] {"airplane", "bus", "car", "delivery truck", "electric bike", "fire truck", "garbage truck", "helicopter", 
+		"ice-cream truck", "jet ski", "kayak", "limousine", "motorcycle", "navy submarine", "outrigger canoe", "police car", "quadbike", "rickshaw", 
+		"space shuttle", "train", "ultralight craft", "van", "windjammer", "excavator", "yacht", "zeppelin"});
+	
 	#endregion private members
 
 	#region public functions
@@ -62,71 +70,79 @@ public class CarGameController : MonoBehaviour {
 	// 2. notify player what letter they scanned 
 	// 3. what if player scan new letter? 
 
-	void OnLetterTracking (bool _isFound, string _letter) {
+	void HandleImageTracking (bool _isFound, string _letters) {
+//		if (_machine.currentState.GetType () != typeof (CGLetterState)) return;
+
 		if (_isFound) {	// FOUND LETTER
-			if(letter.Length <= 0)
-				letter = _letter;
-			
-			if (letter.Equals (_letter)) {	// deja vu
+//			if (letters.Length <= 0) {
+				letters = _letters;
 				_machine.changeState <CGInitState> ();
-				Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), letter, 1f);
-			} else {
-				// DO NOTHING
-			}
+				Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), letters, 1f);
+//			}
 		} else {		// LOST LETTER
 			// DO NOTHING
 		}
 	}
 
-	void OnMapTracking (bool _isFound, Transform _parent) {
+	void HandleMapTracking (bool _isFound, Transform _parent) {
 		if (_isFound) {	// FOUND MAP
-			if (letter.Length <= 0) {	// check letter if null show warning
+			if (letters.Length > 0) {	// check given letters
+				if (_machine.currentState.GetType () == typeof (CGMapState)) 
+				{	
+					_machine.changeState <CGStartState> ();
+					mTransform.SetParent (_parent);
+				}
+			} else {
 				Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString(), GameMessages.LetterScanMessage, 1f);
 			}
-			if(_machine.currentState.GetType () == typeof (CGMapState)) {
-				mTransform.SetParent (_parent, true);
-				for (int i = 0; i < mTransform.childCount; i++) 
-					mTransform.GetChild (i).gameObject.SetActive (true);
-
-				_machine.changeState <CGStartState> ();
-			}
 		} else {		// LOST MAP
-			if(_machine.currentState.GetType () == typeof (CGStartState)) {
+			if(_machine.currentState.GetType () == typeof (CGStartState))
 				_machine.changeState <CGMapState> ();
-
-				for (int i = 0; i < mTransform.childCount; i++) 
-					mTransform.GetChild (i).gameObject.SetActive (false);
-			}
 		}
 	}
 
-	void OnCollectLetter (string letter) {
-//		collectedLetters.Add (letter);
-//		gatherLetterText.text =  string.Join ("", collectedLetters.ToArray ());
+	void HandleCollectLetter (string _letter) {
+		collectedLetters = string.Concat (collectedLetters, _letter);
+		Messenger.Broadcast <string> (EventManager.GUI.UPDATECOLLECTEDLETTER.ToString (), collectedLetters);
 	}
 
-	void OnGatherLetter () {
-		if (collectedLetters.Count > 0) {
-			string gather = string.Join ("", collectedLetters.ToArray ());
-			if(collectedLetters.ToArray ().Length > 0) {
-				if (answers.Contains (gather)) {
-					successText.text = "Correct";
-					_machine.changeState <CGPauseState> ();
-				} else {
-					successText.text = "Wrong";
-					collectedLetters.Clear ();
-					gatherLetterText.text = "Result";
-					// respawn letter
+	void HandleDropLetter () {
+		if (collectedLetters.Length > 0) {
+			collectedLetters = collectedLetters.Substring (0, collectedLetters.Length - 1);
+			Messenger.Broadcast <string> (EventManager.GUI.UPDATECOLLECTEDLETTER.ToString (), collectedLetters);
+		}
+	}
 
+	void HandleGatherLetter () {
+		if (collectedLetters.Length > 0) {
+			// TODO: need a vehicle list data to compare
+			if (vehicles.Contains (collectedLetters)) {
+				_machine.changeState <CGGameOverState> ();
+
+				Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), GameMessages.CorrectMessage, 1f);
+			} else {
+				Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), GameMessages.WrongMessage, 2f);
+			}
+		}
+//		if (collectedLetters.Count > 0) {
+//			string gather = string.Join ("", collectedLetters.ToArray ());
+//			if(collectedLetters.ToArray ().Length > 0) {
+//				if (answers.Contains (gather)) {
+//					successText.text = "Correct";
+//					_machine.changeState <CGPauseState> ();
+//				} else {
+//					successText.text = "Wrong";
+//					collectedLetters.Clear ();
+//					gatherLetterText.text = "Result";
+//					// respawn letter
 //					CarGameEventController.OnValidateWord();
-				}
-			}
-		}
+//				}
+//		}
 	}
 
 	void OnResetGame () {
 		successText.text = "";
-		collectedLetters.Clear ();
+//		collectedLetters.Clear ();
 		gatherLetterText.text = "Result";
 	}
 	#endregion private functions
@@ -137,16 +153,27 @@ public class CarGameController : MonoBehaviour {
 	}
 
 	void OnDisable () {
-		Messenger.RemoveListener <bool, string> (EventManager.AR.LETTERTRACKING.ToString(), OnLetterTracking);
+		Messenger.RemoveListener <bool, string> (EventManager.AR.IMAGETRACKING.ToString(), HandleImageTracking);
 
-		Messenger.RemoveListener <bool, Transform> (EventManager.AR.MAPTRACKING.ToString(), OnMapTracking);
+		Messenger.RemoveListener <bool, Transform> (EventManager.AR.MAPTRACKING.ToString(), HandleMapTracking);
 
+		Messenger.RemoveListener <string> (EventManager.Vehicle.COLLECTLETTER.ToString (), HandleCollectLetter);
+
+		Messenger.RemoveListener (EventManager.Vehicle.DROPLETTER.ToString (), HandleDropLetter);
+
+		Messenger.RemoveListener (EventManager.Vehicle.GATHERLETTER.ToString (), HandleGatherLetter);
 	}
 
 	void Awake () {
-		Messenger.AddListener <bool, string> (EventManager.AR.LETTERTRACKING.ToString(), OnLetterTracking);
+		Messenger.AddListener <bool, string> (EventManager.AR.IMAGETRACKING.ToString(), HandleImageTracking);
 
-		Messenger.AddListener <bool, Transform> (EventManager.AR.MAPTRACKING.ToString(), OnMapTracking);
+		Messenger.AddListener <bool, Transform> (EventManager.AR.MAPTRACKING.ToString(), HandleMapTracking);
+
+		Messenger.AddListener <string> (EventManager.Vehicle.COLLECTLETTER.ToString (), HandleCollectLetter);
+
+		Messenger.AddListener (EventManager.Vehicle.DROPLETTER.ToString (), HandleDropLetter);
+
+		Messenger.AddListener (EventManager.Vehicle.GATHERLETTER.ToString (), HandleGatherLetter);
 
 		mTransform = this.transform;
 
@@ -162,7 +189,7 @@ public class CarGameController : MonoBehaviour {
 	}
 
 	void Start () {
-		collectedLetters = new List <string> ();
+//		collectedLetters = new List <string> ();
 //		StartCoroutine (CountDownCo ());
 	}
 

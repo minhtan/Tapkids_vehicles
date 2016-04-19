@@ -42,7 +42,7 @@ public class LetterController : MonoBehaviour {
 
 	void OnTriggerEnter (Collider other) {
 		// collect letter
-		Messenger.Broadcast <string> (EventManager.Vehicle.COLLECT.ToString (), letterName);
+		Messenger.Broadcast <string> (EventManager.Vehicle.COLLECTLETTER.ToString (), letterName);
 
 		// disable letter
 		gameObject.SetActive (false);

@@ -99,7 +99,7 @@ namespace Vuforia
 				go_anim = go.GetComponentInChildren<Animator>();
 
 				if(isLetter){
-					Messenger.Broadcast<bool, string>(EventManager.AR.LETTERTRACKING.ToString(), true, targetName);
+					Messenger.Broadcast<bool, string>(EventManager.AR.IMAGETRACKING.ToString(), true, targetName);
 				}
 			}));
 		}
@@ -112,7 +112,7 @@ namespace Vuforia
 				go_anim = null;
 
 				if(isLetter){
-					Messenger.Broadcast<bool, string>(EventManager.AR.LETTERTRACKING.ToString(), false, targetName);
+					Messenger.Broadcast<bool, string>(EventManager.AR.IMAGETRACKING.ToString(), false, targetName);
 				}
 			}
 		}

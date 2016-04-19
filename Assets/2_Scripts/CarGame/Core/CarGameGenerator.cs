@@ -48,18 +48,15 @@ public class CarGameGenerator : MonoBehaviour {
 
 		Messenger.AddListener <string> (EventManager.GameState.INITGAME.ToString(), HandleInitGame);
 		Messenger.AddListener (EventManager.GameState.STARTGAME.ToString (), HandleGameStart);
+
 		//TODO: handle player gathers word, respawn letter at new point
-//		CarGameEventController.ValidateWord += OnValidateWord;
+// 		CarGameEventController.ValidateWord += OnValidateWord;
 	}
 	void OnDisable () {
 
 		Messenger.RemoveListener <string> (EventManager.GameState.INITGAME.ToString(), HandleInitGame);
 		Messenger.RemoveListener (EventManager.GameState.STARTGAME.ToString (), HandleGameStart);
 //		CarGameEventController.ValidateWord -= OnValidateWord;
-
-		for (int i = 0; i < transform.childCount; i++) {
-			transform.GetChild (i).gameObject.SetActive (false);
-		}
 	}
 
 	void Start () {
@@ -79,7 +76,13 @@ public class CarGameGenerator : MonoBehaviour {
 		if (cartPoint == null) 
 			Debug.Log ("Setup Error, There is no Car Point in the environment");
 	}
-
+//	void Update () {
+//		if (Input.GetKeyDown (KeyCode.Space)) {
+//			StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync ("car_asset", "c", (bundle) => {
+//				GameObject go = Instantiate (bundle) as GameObject;
+//			}));
+//		}
+//	}
 	#endregion MONO
 
 	#region private functions
@@ -93,17 +96,18 @@ public class CarGameGenerator : MonoBehaviour {
 	}
 
 	// get letter from asset bundle then put it into a list
-	private IEnumerator GetLetterAssetBundle (string _letter) {
-		yield return StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (assetBundleName, _letter, (bundle) => {
-			for (int i = 0; i < _letter.Length; i++) {
-				GameObject letterGameObject = Instantiate (bundle) as GameObject;
-				letterGameObject.transform.SetParent (mTransform, false);
-				letterGameObjects.Add (letterGameObject);
-			}
-		}));
+	private void GetLetterAssetBundle (string _letter) {
+//		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (assetBundleName, _letter, (bundle) => {
+//			GameObject letterGameObject = Instantiate (bundle) as GameObject;
+//			letterGameObject.transform.SetParent (mTransform, false);
+//			letterGameObjects.Add (letterGameObject);
+//		}));
 	}
 
 	private void HandleInitGame (string _letter) {
+//		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync ("car_asset", "c", (bundle) => {
+//			GameObject go = Instantiate (bundle) as GameObject;
+//		}));
 		#region demo
 		SetupCar ();
 		SetupLetter (_letter);
@@ -116,20 +120,27 @@ public class CarGameGenerator : MonoBehaviour {
 	}
 
 	private void HandleGameStart () {
+//		Debug.Log ("setup objects");
 		car.SetActive (true);
 		StopAllCoroutines ();
 		StartCoroutine (HandleGameStartCo ());
 	}
 
 	private IEnumerator HandleGameStartCo () {
-		for (int i = 0; i < obstacleGameObjects.Count; i++) {
-			obstacleGameObjects[i].SetActive (true);
-			yield return new WaitForSeconds (.5f);
+		if (obstacleGameObjects.Count > 0) {
+			for (int i = 0; i < obstacleGameObjects.Count; i++) {
+				if (obstacleGameObjects[i] != null)
+					obstacleGameObjects[i].SetActive (true);
+				yield return new WaitForSeconds (.25f);
+			}
 		}
 
-		for (int i = 0; i < letterGameObjects.Count; i++) {
-			letterGameObjects[i].SetActive (true);
-			yield return new WaitForSeconds (.5f);
+		if (letterGameObjects.Count > 0) {
+			for (int i = 0; i < letterGameObjects.Count; i++) {
+				if (letterGameObjects [i] != null)
+					letterGameObjects[i].SetActive (true);
+				yield return new WaitForSeconds (.25f);
+			}
 		}
 	}
 
@@ -142,27 +153,24 @@ public class CarGameGenerator : MonoBehaviour {
 	}
 
 	private void SetupCar () {
-		if (car == null)
-		{
-			car = Instantiate (carPrefab, cartPoint.position + pointOffset, Quaternion.identity) as GameObject;
-			car.transform.SetParent (mTransform, false);
-		} else {
-			car.transform.position = cartPoint.position + pointOffset;
-			car.transform.rotation = Quaternion.identity;
-		}
+		car = Instantiate (carPrefab, cartPoint.position + pointOffset, Quaternion.identity) as GameObject;
+		car.transform.SetParent (mTransform, false);
+		car.transform.position = cartPoint.position + pointOffset;
+		car.transform.rotation = Quaternion.identity;
 		car.SetActive (false);
 	}
 
-	private void SetupLetter (string _letter) {
+	private void SetupLetter (string _word) {
 		for (int i = 0; i < letterGameObjects.Count; i++) {
 			GameObject.Destroy (letterGameObjects[i]);
 		}
 
 		letterGameObjects.Clear ();
 
-		for (int i = 0; i < _letter.Length; i++) {
+		for (int i = 0; i < _word.Length; i++) {
+			GetLetterAssetBundle (_word[i].ToString ());
 			for (int j = 0; j < letterPrefabs.Length; j++) {
-				if (_letter[i].ToString ().Equals (letterPrefabs[j].name)) {
+				if (_word[i].ToString ().Equals (letterPrefabs[j].name)) {
 					GameObject letterGameObject = (GameObject) Instantiate (letterPrefabs [j], letterPoints [i].transform.position + pointOffset, Quaternion.identity);
 					letterGameObject.AddComponent <LetterController> ();
 					letterGameObject.GetComponent <LetterController> ().letterName = letterPrefabs[j].name;

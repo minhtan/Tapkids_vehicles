@@ -9,12 +9,15 @@ public class EventManager {
 		TOGGLE_TUTORIAL,
 		//
 		TOGGLE_SOUND,
-		TOGGLE_MUSIC
+		TOGGLE_MUSIC,
+		//
+		UPDATECOLLECTEDLETTER
 	}
 
 	//
 	public enum AR {
 		LETTERTRACKING,
+		IMAGETRACKING,
 		MAPTRACKING
 	}
 
@@ -27,7 +30,8 @@ public class EventManager {
 	}
 
 	public enum Vehicle {
-		COLLECT,
-		GATHER
+		COLLECTLETTER,
+		DROPLETTER,
+		GATHERLETTER
 	}
 }
