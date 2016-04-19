@@ -19,6 +19,7 @@ public class ExitButton : MonoBehaviour {
 			mButton.onClick.AddListener ( delegate {
 				// back to menu
 				SceneController.Instance.LoadingSceneAsync (SceneController.SceneID.MENU);
+				Messenger.Broadcast<bool>(EventManager.GameState.PAUSEGAME.ToString(), false);
 			});
 		}
 	}

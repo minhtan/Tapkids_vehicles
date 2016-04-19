@@ -197,5 +197,8 @@ public class CarGameController : MonoBehaviour {
 		_machine.update (Time.deltaTime);
 	}
 
+	void OnDestroy () {
+		ArController.Instance.ToggleAR (false);
+	}
 	#endregion Mono
 }
