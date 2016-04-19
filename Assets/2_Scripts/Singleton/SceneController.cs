@@ -22,7 +22,7 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 		MENU,
 		WORDGAME,
 		CARGAME,
-		WORDDRAW
+		WORDDRAWGAME
 	}
 
 	private Dictionary<SceneID, string> _sceneDict;
@@ -104,14 +104,13 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 		string[] sceneEnumNames = Enum.GetNames (typeof(SceneID));
 		Array sceneids = Enum.GetValues (typeof(SceneID));
 
-		int length = SceneManager.sceneCountInBuildSettings;
+		int length = sceneFiles.Length;
 		string tmpSceneName = null;
 
-		Debug.Log (length);
 		for (int i = 0; i < length; i++) {
 			tmpSceneName = sceneFileNames [i];
 		
-			for (int k = 0; k < length; k++) {
+			for (int k = 0; k < sceneEnumNames.Length; k++) {
 
 				if (tmpSceneName.ToUpper ().Contains (sceneEnumNames [k])) {
 					_sceneDict.Add ((SceneID)sceneids.GetValue (k), tmpSceneName);

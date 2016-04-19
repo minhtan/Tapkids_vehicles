@@ -27,6 +27,7 @@ namespace WordDraw
 
 		public static UnityAction<Letters> OnReturnRecognizedResult;
 		public static UnityAction<int> OnReturnBonusCount;
+		public static UnityAction OnNoMatchResult;
 
 		void OnEnable ()
 		{
@@ -76,8 +77,15 @@ namespace WordDraw
 				}
 			}
 
+
 			if (OnReturnBonusCount != null)
 				OnReturnBonusCount (correctCount);
+
+			if (correctCount > 0)
+				return;
+
+			if (OnNoMatchResult != null)
+				OnNoMatchResult ();
 		}
 
 		private void SpawnLetters ()
@@ -99,8 +107,7 @@ namespace WordDraw
 		{
 			while (true) {
 
-				//GameObject letter = Instantiate (GetRandomLetterPrefab ());
-				GameObject letter = Instantiate (_letterPrefabs [0]);
+				GameObject letter = Instantiate (GetRandomLetterPrefab ());
 
 				letter.transform.SetParent (_spawnPoint, false);
 				 
