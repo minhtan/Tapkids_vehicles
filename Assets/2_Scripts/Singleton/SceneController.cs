@@ -57,7 +57,9 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 		if (OnStartLoading != null)
 			OnStartLoading ();
 		
-		AsyncOperation async = SceneManager.LoadSceneAsync (_sceneDict [id]);
+		_text.text = "id " + id;
+
+		AsyncOperation async = SceneManager.LoadSceneAsync ((int)id);
 
 		async.allowSceneActivation = false;	
 
@@ -89,8 +91,18 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 
 	private void InitSceneGroup ()
 	{
-		string scenePath = Application.dataPath + "/1_Scenes";
-		string[] sceneFiles = Directory.GetFiles (scenePath, "*.unity");
+		/*string scenePath = "1_Scenes/";
+
+		TextAsset[] sceneArray = Resources.LoadAll<TextAsset>(scenePath);
+		Debug.Log (sceneArray.Length);
+
+		for(int i = 0; i < sceneArray.Length; i++)
+		{
+			Debug.Log (sceneArray[i].name);
+		}
+
+		string[] sceneFiles = new string[sceneArray.Length];
+			
 		string[] sceneFileNames = new string[sceneFiles.Length];
 		string[] separator = { "." };
 
@@ -98,7 +110,13 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 		{
 			sceneFileNames[i] = Path.GetFileName (sceneFiles[i]).Split(separator, 0)[0];
 		}
-		
+
+		for(int i = 0; i < sceneArray.Length; i++)
+		{
+			sceneFileNames [i] = sceneArray [i].name;
+			Debug.Log (sceneFileNames[i]);
+		}
+
 		_sceneDict = new Dictionary<SceneID, string> ();
 
 		string[] sceneEnumNames = Enum.GetNames (typeof(SceneID));
@@ -117,7 +135,7 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 					break;
 				}
 			}
-		}
+		}*/
 	}
 
 	#endregion
