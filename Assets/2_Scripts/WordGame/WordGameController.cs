@@ -56,6 +56,7 @@ public class WordGameController : MonoBehaviour {
 	//GUI
 	public Text txt_answers;
 	public Slider sld_score;
+	public Text txt_timer;
 	public GameObject pnl_TargetsTofind;
 	public GameObject pref_LetterToFind;
 	#endregion
@@ -112,6 +113,11 @@ public class WordGameController : MonoBehaviour {
 
 	void UpdateScoreSliderValue(){
 		sld_score.value = GetCurrentScorePercentage ();
+	}
+
+	void _UpdateTimerValue(){
+		int time = fsm.FsmVariables.GetFsmInt ("timer").Value;
+		txt_timer.text = Mathf.Floor (time / 60) + ":" + (time % 60).ToString ("D2");
 	}
 
 	void _ToggleMenuUI(bool state){
