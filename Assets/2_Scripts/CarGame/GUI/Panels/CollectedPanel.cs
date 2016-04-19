@@ -8,9 +8,9 @@ public class CollectedPanel : MonoBehaviour {
 	 
 	private List <GameObject> collectedLetters = new List<GameObject> ();
 
+	private Transform mTransform;
 	void OnEnable () {
 		Messenger.AddListener <string> (EventManager.GameState.INITGAME.ToString (), HandleInitGame);
-		//
 		Messenger.AddListener <string> (EventManager.GUI.UPDATECOLLECTEDLETTER.ToString (), HandleUpdateCollectLetter);
 
 		// TODO: handle drop text
@@ -18,13 +18,15 @@ public class CollectedPanel : MonoBehaviour {
 
 	void Disable () {
 		Messenger.RemoveListener <string> (EventManager.GameState.INITGAME.ToString (), HandleInitGame);
-
 		Messenger.RemoveListener <string> (EventManager.GUI.UPDATECOLLECTEDLETTER.ToString (), HandleUpdateCollectLetter);
+	}
+
+	void Start () {
+		mTransform = GetComponent <Transform> ();
 	}
 
 	void HandleInitGame (string _letters) {
 		if (collectedTextPrefab == null) return;
-
 
 		// convert this to pool 
 		for (int i = 0; i < collectedLetters.Count; i++) {
@@ -36,7 +38,7 @@ public class CollectedPanel : MonoBehaviour {
 		if (_letters.Length > 0) {
 			for (int i = 0; i < _letters.Length; i++ ) {
 				GameObject letter = Instantiate (collectedTextPrefab) as GameObject;
-				letter.transform.SetParent (transform);
+				letter.transform.SetParent (mTransform);
 				collectedLetters.Add (letter);
 			}
 		}
