@@ -76,6 +76,13 @@ public class CarGameGenerator : MonoBehaviour {
 		if (cartPoint == null) 
 			Debug.Log ("Setup Error, There is no Car Point in the environment");
 	}
+//	void Update () {
+//		if (Input.GetKeyDown (KeyCode.Space)) {
+//			StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync ("car_asset", "c", (bundle) => {
+//				GameObject go = Instantiate (bundle) as GameObject;
+//			}));
+//		}
+//	}
 	#endregion MONO
 
 	#region private functions
@@ -89,17 +96,18 @@ public class CarGameGenerator : MonoBehaviour {
 	}
 
 	// get letter from asset bundle then put it into a list
-	private IEnumerator GetLetterAssetBundle (string _letter) {
-		yield return StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (assetBundleName, _letter, (bundle) => {
-			for (int i = 0; i < _letter.Length; i++) {
-				GameObject letterGameObject = Instantiate (bundle) as GameObject;
-				letterGameObject.transform.SetParent (mTransform, false);
-				letterGameObjects.Add (letterGameObject);
-			}
-		}));
+	private void GetLetterAssetBundle (string _letter) {
+//		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (assetBundleName, _letter, (bundle) => {
+//			GameObject letterGameObject = Instantiate (bundle) as GameObject;
+//			letterGameObject.transform.SetParent (mTransform, false);
+//			letterGameObjects.Add (letterGameObject);
+//		}));
 	}
 
 	private void HandleInitGame (string _letter) {
+//		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync ("car_asset", "c", (bundle) => {
+//			GameObject go = Instantiate (bundle) as GameObject;
+//		}));
 		#region demo
 		SetupCar ();
 		SetupLetter (_letter);
@@ -152,16 +160,17 @@ public class CarGameGenerator : MonoBehaviour {
 		car.SetActive (false);
 	}
 
-	private void SetupLetter (string _letter) {
+	private void SetupLetter (string _word) {
 		for (int i = 0; i < letterGameObjects.Count; i++) {
 			GameObject.Destroy (letterGameObjects[i]);
 		}
 
 		letterGameObjects.Clear ();
 
-		for (int i = 0; i < _letter.Length; i++) {
+		for (int i = 0; i < _word.Length; i++) {
+			GetLetterAssetBundle (_word[i].ToString ());
 			for (int j = 0; j < letterPrefabs.Length; j++) {
-				if (_letter[i].ToString ().Equals (letterPrefabs[j].name)) {
+				if (_word[i].ToString ().Equals (letterPrefabs[j].name)) {
 					GameObject letterGameObject = (GameObject) Instantiate (letterPrefabs [j], letterPoints [i].transform.position + pointOffset, Quaternion.identity);
 					letterGameObject.AddComponent <LetterController> ();
 					letterGameObject.GetComponent <LetterController> ().letterName = letterPrefabs[j].name;

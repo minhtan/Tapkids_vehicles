@@ -119,9 +119,9 @@ public class CarGameController : MonoBehaviour {
 			if (vehicles.Contains (collectedLetters)) {
 				_machine.changeState <CGGameOverState> ();
 
-				Messenger.Broadcast <string> (EventManager.GUI.NOTIFY.ToString (), GameMessages.CorrectMessage);
+				Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), GameMessages.CorrectMessage, 1f);
 			} else {
-				Messenger.Broadcast <string> (EventManager.GUI.NOTIFY.ToString (), GameMessages.WrongMessage);
+				Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), GameMessages.WrongMessage, 2f);
 			}
 		}
 //		if (collectedLetters.Count > 0) {
