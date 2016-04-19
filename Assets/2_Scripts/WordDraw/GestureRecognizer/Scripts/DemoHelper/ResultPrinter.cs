@@ -24,6 +24,6 @@ public class ResultPrinter : MonoBehaviour {
 
 	void LeanGestureRecognizer_OnGestureDetected (PDollarGestureRecognizer.Result result)
 	{
-		_resultText.text = result.GestureClass;
+		_resultText.text = result.GestureClass + " " + result.Score;
 	}
 }

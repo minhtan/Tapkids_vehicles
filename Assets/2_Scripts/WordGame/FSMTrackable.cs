@@ -92,8 +92,10 @@ namespace Vuforia
 		void _ShowModel(){
 			StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (AssetController.bundleName, targetName, (bundle) => {
 				go = GameObject.Instantiate(bundle);
-				go.transform.localScale += new Vector3(49f, 49f, 49f);
+				go.transform.Rotate(90f, 0f, 0f);
+				go.transform.position = new Vector3(0f, 0.25f, -0.5f);
 				go.transform.SetParent (transform, false);
+			
 				go_anim = go.GetComponentInChildren<Animator>();
 
 				if(isLetter){
