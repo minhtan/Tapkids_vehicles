@@ -11,9 +11,9 @@ public class CGLetterState : SKState<CarGameController> {
 		Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString(), GameMessages.LetterScanMessage, 3f);
 
 		// TODO: setting ar camera
-		ArController.Instance.ToggleAR (true);
-		ArController.Instance.SetCenterMode (false);
-		ArController.Instance.SetArMaxStimTargets (1);
+//		ArController.Instance.ToggleAR (true);
+//		ArController.Instance.SetCenterMode (false);
+//		ArController.Instance.SetArMaxStimTargets (1);
 	}
 
 	public override void reason ()
