@@ -19,9 +19,8 @@ public class WordGameController : MonoBehaviour {
 	}
 
 	void OnDestroy(){
-		Messenger.Cleanup ();
+//		Messenger.Cleanup ();
 		ArController.Instance.ToggleAR (false);
-		GUIController.Instance.ToggleGUI (false);
 	}
 
 	void Update(){
@@ -55,9 +54,11 @@ public class WordGameController : MonoBehaviour {
 	public AudioClip correctSound;
 
 	//GUI
-	public Text txt_letters;
 	public Text txt_answers;
 	public Slider sld_score;
+	public Text txt_timer;
+	public GameObject pnl_TargetsTofind;
+	public GameObject pref_LetterToFind;
 	#endregion
 
 	#region Data funcs
@@ -75,13 +76,25 @@ public class WordGameController : MonoBehaviour {
 	#region UI funcs
 	void _UpdateStartUI(){
 		txt_answers.text = "";
-		txt_letters.text = "";
+
+		//Clear letters in start UI
+		ClearTargetsToFind();
+
+		//Fill in letters to find
+		FillInLettersToFind();
+	}
+
+	void ClearTargetsToFind(){
+		for(int i = 0; i < pnl_TargetsTofind.transform.childCount; i++){
+			Destroy (pnl_TargetsTofind.transform.GetChild (i).gameObject);
+		}
+	}
+
+	void FillInLettersToFind(){
 		for(int i = 0; i < playableLetters.Count; i++){
-			if (i > 0) {
-				txt_letters.text = txt_letters.text + " " + playableLetters [i];
-			} else {
-				txt_letters.text = txt_letters.text + playableLetters [i];
-			}
+			GameObject go = Instantiate (pref_LetterToFind);
+			go.GetComponentInChildren<UnityEngine.UI.Image> ().sprite = DataUltility.GetLetterImage (playableLetters [i]);
+			go.transform.SetParent (pnl_TargetsTofind.transform, false);
 		}
 	}
 
@@ -102,8 +115,13 @@ public class WordGameController : MonoBehaviour {
 		sld_score.value = GetCurrentScorePercentage ();
 	}
 
+	void _UpdateTimerValue(){
+		int time = fsm.FsmVariables.GetFsmInt ("timer").Value;
+		txt_timer.text = Mathf.Floor (time / 60) + ":" + (time % 60).ToString ("D2");
+	}
+
 	void _ToggleMenuUI(bool state){
-		GUIController.Instance.ToggleGUI (state);
+		Messenger.Broadcast<bool> (EventManager.GameState.PAUSEGAME.ToString (), state);
 	}
 	#endregion
 
@@ -130,7 +148,6 @@ public class WordGameController : MonoBehaviour {
 		GetDataList ();
 		ArController.Instance.ToggleAR (true);
 		ArController.Instance.SetCenterMode (true);
-		GUIController.Instance.ToggleGUI (true);
 	}
 
 	void _InitGame(){

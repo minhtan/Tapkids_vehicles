@@ -8,7 +8,28 @@ public class LetterController : MonoBehaviour {
 	private Camera mainCamera;
 	private Transform mTransform;
 
+	Vector3 originPos;
+	Quaternion originRot;
+	Vector3 originScale;
 	#region MONO
+	void Awake () {
+		originPos = transform.localPosition;
+		originRot = transform.localRotation;
+		originScale = transform.localScale;
+	}
+
+	void OnEnable () {
+		transform.localPosition = new Vector3 (transform.localPosition.x, transform.localPosition.y - 1f, transform.localPosition.z);
+
+		LeanTween.moveLocal (gameObject, originPos, 1f).setEase (LeanTweenType.easeOutBack);
+	}
+
+	void OnDisable () {
+		transform.localPosition = originPos;
+		transform.localRotation = originRot;
+		transform.localScale = originScale;
+	}
+
 	void Start () {
 		mainCamera = Camera.main;
 		mTransform = GetComponent <Transform> ();
@@ -21,8 +42,7 @@ public class LetterController : MonoBehaviour {
 
 	void OnTriggerEnter (Collider other) {
 		// collect letter
-//		CarGameEventController.OnCollectLetter (letterName);
-		Messenger.Broadcast <string> (EventManager.Vehicle.COLLECT.ToString (), letterName);
+		Messenger.Broadcast <string> (EventManager.Vehicle.COLLECTLETTER.ToString (), letterName);
 
 		// disable letter
 		gameObject.SetActive (false);

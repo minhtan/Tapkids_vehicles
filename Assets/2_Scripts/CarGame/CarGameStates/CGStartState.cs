@@ -3,13 +3,15 @@ using System.Collections;
 using Prime31.StateKit;
 
 public class CGStartState : SKState<CarGameController> {
+	// send event start game: enable mobile input, 
 
 	public override void begin ()
 	{
 		Debug.Log("Start State >>>");
-		// send event start game: enable mobile input, 
 
-
+		for (int i = 0; i < _context.mTransform.childCount; i++) 
+			_context.mTransform.GetChild (i).gameObject.SetActive (true);
+		
 		Messenger.Broadcast (EventManager.GameState.STARTGAME.ToString());
 
 	}

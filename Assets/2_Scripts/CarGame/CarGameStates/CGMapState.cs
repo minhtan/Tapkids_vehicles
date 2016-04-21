@@ -4,30 +4,34 @@ using Prime31.StateKit;
 
 public class CGMapState : SKState<CarGameController> {
 
-	private float countDownTimer;
+//	private float countDownTimer;
 
 	public override void begin ()
 	{
-		Debug.Log("Wait Map State >>>");
+		Debug.Log("Map State >>>");
+
+//		for (int i = 0; i < _context.mTransform.childCount; i++) 
+//			_context.mTransform.GetChild (i).gameObject.SetActive (false);
+		
 		// reset countdown
-		countDownTimer = 3f;
+//		countDownTimer = 3f;
 	}
 
 
 	public override void reason ()
 	{
-		if (countDownTimer <= 0f) {
-			_machine.changeState <CGStartState> ();
-		}
+//		if (countDownTimer <= 0f) {
+//			_machine.changeState <CGStartState> ();
+//		}
 	}
 	public override void update (float deltaTime)
 	{
-		countDownTimer -= Time.deltaTime;
+//		countDownTimer -= Time.deltaTime;
 	}
 
 	public override void end ()
 	{
-		Debug.Log("Wait Map State <<<");
+		Debug.Log("Map State <<<");
 	}
 
 	#region public members

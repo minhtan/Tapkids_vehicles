@@ -8,6 +8,7 @@ public class ArController : UnitySingletonPersistent<ArController> {
 
 	#region Vars
 	bool isVuforiaReady = false;
+	Camera camera;
 
 	public bool IsVuforiaReady {
 		get {
@@ -21,6 +22,7 @@ public class ArController : UnitySingletonPersistent<ArController> {
 	{
 		base.Awake ();
 		VuforiaBehaviour.Instance.RegisterVuforiaStartedCallback (OnVuforiaStarted);
+		camera = GetComponentInChildren<Camera> ();
 	}
 	#endregion
 
@@ -36,6 +38,7 @@ public class ArController : UnitySingletonPersistent<ArController> {
 
 	public void ToggleAR(bool state){
 		VuforiaBehaviour.Instance.enabled = state;
+		camera.enabled = state;
 	}
 
 	public void SetCenterMode(bool isCameraCenter){
