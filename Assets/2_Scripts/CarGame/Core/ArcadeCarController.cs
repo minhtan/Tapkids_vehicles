@@ -56,8 +56,10 @@ public class ArcadeCarController : MonoBehaviour {
 			Quaternion quaternion;
 			Vector3 position;
 			wheelColliders[i].GetWorldPose(out position, out quaternion);
-			wheelMeshes[i].transform.position = position;
-			wheelMeshes[i].transform.rotation = quaternion;
+			if (wheelMeshes[i] != null) {
+				wheelMeshes[i].transform.position = position;
+				wheelMeshes[i].transform.rotation = quaternion;
+			}
 		}
 
 		// clamp input value
