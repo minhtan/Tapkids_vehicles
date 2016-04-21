@@ -125,6 +125,9 @@ namespace WordDraw
 		}
 	}
 
+	/// <summary>
+	/// Contain difficulty property
+	/// </summary>
 	[System.Serializable]
 	public class WordDrawDifficulty : System.Object
 	{
