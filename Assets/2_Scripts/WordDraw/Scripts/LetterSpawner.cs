@@ -17,11 +17,24 @@ namespace WordDraw
 		[SerializeField]
 		private int _maxStackCap = 9;
 
-		private List<UILetter> _letterList;
-		private GameObject[] _letterPrefabs;
-			
 		[SerializeField]
 		private int _curDifficulty = 0;
+
+		private List<UILetter> _letterList;
+		private GameObject[] _letterPrefabs;
+		private List<UILetter> _noDuplicateLetterList;
+
+		public List<UILetter> CurrentInStackLetters {
+			get {
+				if (_noDuplicateLetterList == null) {
+					_noDuplicateLetterList = new List<UILetter> (26);
+				} else {
+					return WordDrawConfig.GetNonDuplicate (_letterList, _noDuplicateLetterList);
+				}
+
+				return null;
+			}
+		}
 
 		public WordDrawDifficulty CurrentDifficulty { get { return _difficulties [_curDifficulty]; } }
 
@@ -125,6 +138,9 @@ namespace WordDraw
 		}
 	}
 
+	/// <summary>
+	/// Contain difficulty property
+	/// </summary>
 	[System.Serializable]
 	public class WordDrawDifficulty : System.Object
 	{

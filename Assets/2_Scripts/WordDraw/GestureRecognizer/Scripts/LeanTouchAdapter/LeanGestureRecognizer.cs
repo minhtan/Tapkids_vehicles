@@ -8,7 +8,7 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 
 
-public class LeanGestureRecognizer : MonoBehaviour
+public abstract class LeanGestureRecognizer : MonoBehaviour
 {
 	[SerializeField]
 	private int _maxStrokeNumber;
@@ -31,7 +31,7 @@ public class LeanGestureRecognizer : MonoBehaviour
 
 	public List<Gesture> GestureList{ get { return _gestureList; } }
 
-	private Coroutine _delayCor;	
+	private Coroutine _delayCor;
 	private int _strokeId = -1;
 
 	public int MaxStrokeNumber {
@@ -62,38 +62,44 @@ public class LeanGestureRecognizer : MonoBehaviour
 	public static UnityAction OnGestureReset;
 	public static UnityAction<List<Gesture>> OnGestureLoaded;
 
-	void OnEnable ()
+	protected virtual void OnEnable ()
 	{
 		GestureDrawing.OnStrokeStart += OnStrokeStart;
 		GestureDrawing.OnStrokeDrag += OnStrokeDrag;
 		GestureDrawing.OnStrokeEnd += OnStrokeEnd;
 	}
 
-	void OnDisable ()
+	protected virtual void OnDisable ()
 	{
 		GestureDrawing.OnStrokeStart -= OnStrokeStart;
 		GestureDrawing.OnStrokeDrag -= OnStrokeDrag;
 		GestureDrawing.OnStrokeEnd -= OnStrokeEnd;
 	}
 
-	void Awake ()
+	protected virtual void Awake ()
 	{
 		_currentGesture = new Gesture ();
 		_gestureList = new List<Gesture> ();
 		_pointList = new List<Point> ();
 
-		LoadGestures ();
-
+		LoadGesturesList ();
 	}
 
-	public void LoadGestures ()
+	private void LoadGesturesList ()
 	{
 		_gestureList.Clear ();
+
 		GestureIO.LoadPremadeGestureTemplates ("GestureTemplates", _gestureList);
+
+		LoadGestures ();
 
 		if (OnGestureLoaded != null)
 			OnGestureLoaded (_gestureList);
 	}
+
+	protected abstract void LoadGestures ();
+
+	protected abstract List<Gesture> GetOptimizedGestureSet ();
 
 	private void OnStrokeStart (Lean.LeanFinger finger)
 	{
@@ -119,19 +125,24 @@ public class LeanGestureRecognizer : MonoBehaviour
 		if (!_autoRecognize)
 			return;
 
+		List<Gesture> optimizedList = GetOptimizedGestureSet ();
+
+		if (optimizedList == null)
+			return;
+		
 		if (IsReachMaxStroke || _delayThreshold == 0f) { // strokeId from 0
-			Recognizing ();
+			Recognizing (optimizedList);
 		} else { 
-			DelayRecognizing ();
+			DelayRecognizing (optimizedList);
 		}
 	}
 
-	private void DelayRecognizing ()
+	private void DelayRecognizing (List<Gesture> gestureSet)
 	{
-		_delayCor = StartCoroutine (DelayRecognizingCorroutine ());
+		_delayCor = StartCoroutine (DelayRecognizingCorroutine (gestureSet));
 	}
 
-	IEnumerator DelayRecognizingCorroutine ()
+	IEnumerator DelayRecognizingCorroutine (List<Gesture> gestureSet)
 	{
 		float timer = 0f;
 
@@ -139,7 +150,7 @@ public class LeanGestureRecognizer : MonoBehaviour
 			timer += Time.deltaTime;
 
 			if (timer >= _delayThreshold) {
-				Recognizing ();
+				Recognizing (gestureSet);
 				_delayCor = null;
 				yield break;
 			}
@@ -153,13 +164,13 @@ public class LeanGestureRecognizer : MonoBehaviour
 		_strokeId++;
 	}
 
-	public void Recognizing ()
+	public void Recognizing (List<Gesture> gestureSet)
 	{
 		if (_pointList == null || _pointList.Count == 0)
 			return;
 
 		_currentGesture.SetGesture (_pointList.ToArray ());
-		Result r = PointCloudRecognizer.Classify (_currentGesture, _gestureList.ToArray ());
+		Result r = PointCloudRecognizer.Classify (_currentGesture, gestureSet.ToArray ());
 
 		if (OnGestureDetected != null) {
 			OnGestureDetected (r);

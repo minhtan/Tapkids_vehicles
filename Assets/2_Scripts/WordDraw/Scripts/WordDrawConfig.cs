@@ -42,7 +42,7 @@ namespace WordDraw
 	{
 		private static string[] _letterEnumNames;
 
-		private static string[] LetterEnumNames {
+		public static string[] LetterEnumNames {
 			get {
 				if (_letterEnumNames == null) {
 					_letterEnumNames = Enum.GetNames (typeof(Letters));
@@ -54,7 +54,7 @@ namespace WordDraw
 
 		private static Letters[] _letterEnum;
 
-		private static Letters[] LetterEnum {
+		public static Letters[] LetterEnum {
 			get {
 				if (_letterEnum == null)
 					_letterEnum = Enum.GetValues (typeof(Letters)) as Letters[];
@@ -88,12 +88,36 @@ namespace WordDraw
 		public static bool CompareLetterWithResult(UILetterButton letterBut, Result detectedResult)
 		{
 			Letters resultLetter = GetGestureResult (detectedResult);
-			
+
 			if (letterBut.Letter == resultLetter)
 				return true;
 
 			return false;
 		}
 
+		public static List<UILetter> GetNonDuplicate(List<UILetter> source, List<UILetter> des)
+		{
+			des.Clear ();
+			for(int i = 0; i < source.Count; i++)
+			{
+				if (des.Count == 0) {
+					des.Add (source [i]);
+					continue;
+				}
+
+				for(int k = 0; k < des.Count; k++)
+				{
+					if (source [i].Letter == des [k].Letter)
+						break;
+					else
+					{
+						if (k == des.Count - 1)
+							des.Add (source[i]);
+					}
+				}
+			}
+
+			return des;
+		}
 	}
 }
