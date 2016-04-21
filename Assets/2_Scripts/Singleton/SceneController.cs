@@ -17,7 +17,6 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 
 	public enum SceneID
 	{
-		STARTUP,
 		INTRO,
 		MENU,
 		WORDGAME,
