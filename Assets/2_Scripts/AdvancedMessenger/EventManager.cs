@@ -11,7 +11,10 @@ public class EventManager {
 		TOGGLE_SOUND,
 		TOGGLE_MUSIC,
 		//
-		UPDATECOLLECTEDLETTER
+		ADDLETTER,
+		REMOVELETTER,
+		//
+		DROPBUTTON
 	}
 
 	//

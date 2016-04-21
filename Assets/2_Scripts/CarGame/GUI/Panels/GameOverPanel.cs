@@ -5,6 +5,8 @@ using System.Collections;
 public class GameOverPanel : MonoBehaviour {
 
 	#region public members
+	public Text gameOverMessage;
+	public Image[] starImages;
 	#endregion public members
 
 	#region private members
@@ -13,11 +15,11 @@ public class GameOverPanel : MonoBehaviour {
 
 	#region Mono
 	void OnEnable () {
-		Messenger.AddListener (EventManager.GameState.GAMEOVER.ToString (), HandleGameOver);
+		Messenger.AddListener <int> (EventManager.GameState.GAMEOVER.ToString (), HandleGameOver);
 	}
 
 	void OnDisable () {
-		Messenger.RemoveListener (EventManager.GameState.GAMEOVER.ToString (), HandleGameOver);
+		Messenger.RemoveListener <int> (EventManager.GameState.GAMEOVER.ToString (), HandleGameOver);
 	}
 
 	void Start () {
@@ -29,10 +31,22 @@ public class GameOverPanel : MonoBehaviour {
 	#endregion public functions
 
 	#region private functions
-	private void HandleGameOver () {
+	private void HandleGameOver (int _starNum) {
 		mCanvasGroup.alpha = 1f;
 		mCanvasGroup.interactable = true;
 		mCanvasGroup.blocksRaycasts = true;
+
+		if (gameOverMessage != null) {
+			gameOverMessage.text = GameMessages.WinMessage;
+		}
+
+		if (starImages.Length > 0 && starImages.Length <= _starNum) {
+			int i = 0; 
+			while (i < _starNum) {
+				starImages[i].enabled = true;
+				i++;
+			}
+		}
 //
 //		mCanvasGroup.alpha = _isToggled ? 1f : 0f;
 //		mCanvasGroup.interactable = _isToggled ? true : false;

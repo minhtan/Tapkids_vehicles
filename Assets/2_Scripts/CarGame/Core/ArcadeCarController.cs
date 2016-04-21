@@ -28,14 +28,14 @@ public class ArcadeCarController : MonoBehaviour {
 	#region MONO
 	void OnEnable () {
 //		CarGameEventController.GameOver += OnGameOver;
-		Messenger.AddListener (EventManager.GameState.GAMEOVER.ToString (), HandleGameOver);
+		Messenger.AddListener <int> (EventManager.GameState.GAMEOVER.ToString (), HandleGameOver);
 //		CarGameEventController.ResetGame += OnResetGame;
 		Messenger.AddListener(EventManager.GameState.RESETGAME.ToString (), HandleResetGame);
 	}
 
 	void OnDisable () {
 //		CarGameEventController.GameOver += OnGameOver;
-		Messenger.RemoveListener (EventManager.GameState.GAMEOVER.ToString (), HandleGameOver);
+		Messenger.RemoveListener <int> (EventManager.GameState.GAMEOVER.ToString (), HandleGameOver);
 //		CarGameEventController.ResetGame -= OnResetGame;
 		Messenger.RemoveListener (EventManager.GameState.RESETGAME.ToString (), HandleResetGame);
 	}
@@ -112,7 +112,7 @@ public class ArcadeCarController : MonoBehaviour {
 	#endregion private functions
 
 	#region event subscribers
-	private void HandleGameOver () {
+	private void HandleGameOver (int _starAmount) {
 		for (int i = 0; i < 4; i++) 
 			wheelColliders[i].brakeTorque = brakeTorque;
 	}
