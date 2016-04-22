@@ -73,7 +73,7 @@ namespace PDollarGestureRecognizer
         public string Name = "";                 // gesture class
 		public int StrokeCount = 0;
 
-        private const int SAMPLING_RESOLUTION = 96;
+        private const int SAMPLING_RESOLUTION = 64;
 
         public Gesture()
         {

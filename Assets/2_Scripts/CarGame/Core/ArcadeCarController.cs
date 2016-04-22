@@ -28,14 +28,14 @@ public class ArcadeCarController : MonoBehaviour {
 	#region MONO
 	void OnEnable () {
 //		CarGameEventController.GameOver += OnGameOver;
-		Messenger.AddListener (EventManager.GameState.GAMEOVER.ToString (), HandleGameOver);
+		Messenger.AddListener <int> (EventManager.GameState.GAMEOVER.ToString (), HandleGameOver);
 //		CarGameEventController.ResetGame += OnResetGame;
 		Messenger.AddListener(EventManager.GameState.RESETGAME.ToString (), HandleResetGame);
 	}
 
 	void OnDisable () {
 //		CarGameEventController.GameOver += OnGameOver;
-		Messenger.RemoveListener (EventManager.GameState.GAMEOVER.ToString (), HandleGameOver);
+		Messenger.RemoveListener <int> (EventManager.GameState.GAMEOVER.ToString (), HandleGameOver);
 //		CarGameEventController.ResetGame -= OnResetGame;
 		Messenger.RemoveListener (EventManager.GameState.RESETGAME.ToString (), HandleResetGame);
 	}
@@ -56,8 +56,10 @@ public class ArcadeCarController : MonoBehaviour {
 			Quaternion quaternion;
 			Vector3 position;
 			wheelColliders[i].GetWorldPose(out position, out quaternion);
-			wheelMeshes[i].transform.position = position;
-			wheelMeshes[i].transform.rotation = quaternion;
+			if (wheelMeshes[i] != null) {
+				wheelMeshes[i].transform.position = position;
+				wheelMeshes[i].transform.rotation = quaternion;
+			}
 		}
 
 		// clamp input value
@@ -112,7 +114,7 @@ public class ArcadeCarController : MonoBehaviour {
 	#endregion private functions
 
 	#region event subscribers
-	private void HandleGameOver () {
+	private void HandleGameOver (int _starAmount) {
 		for (int i = 0; i < 4; i++) 
 			wheelColliders[i].brakeTorque = brakeTorque;
 	}

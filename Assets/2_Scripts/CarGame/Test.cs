@@ -1,17 +1,28 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Test : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		ArController.Instance.ToggleAR (true);
-		ArController.Instance.SetCenterMode (false);
-		ArController.Instance.SetArMaxStimTargets (1);
+	IEnumerable<int> UniqueRandom(int minInclusive, int maxInclusive)
+	{
+		List<int> candidates = new List<int>();
+		for (int i = minInclusive; i <= maxInclusive; i++)
+		{
+			candidates.Add(i);
+		}
+		System.Random rnd = new System.Random();
+		while (candidates.Count > 0)
+		{
+			int index = rnd.Next(candidates.Count);
+			yield return candidates[index];
+			candidates.RemoveAt(index);
+		}
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+
+	void Start () {
+		foreach (int i in UniqueRandom(0, 100)) {
+			Debug.Log (i);
+		}
 	}
 }
