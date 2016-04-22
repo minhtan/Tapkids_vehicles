@@ -14,16 +14,16 @@ public class MainMenuController : MonoBehaviour {
 
 	void Start(){
 		width = Screen.width;
-		car.anchoredPosition = new Vector2(-car.sizeDelta.x/4, car.anchoredPosition.y);
+		offset = menu.sizeDelta.x + (width - menu.sizeDelta.x - car.sizeDelta.x) / 2; 
+		car.anchoredPosition = new Vector2(-offset, car.anchoredPosition.y);
 		carInitPos = car.anchoredPosition.x;
 		menuInitPos = menu.anchoredPosition.x;
 		garageInitPos = garage.anchoredPosition.x;
-		offset = (width / 2) - car.sizeDelta.x;
 	}
 
 	public void _OpenGarage(){
 		LeanTween.moveX (menu, menu.sizeDelta.x, 0.5f).setEase(LeanTweenType.easeInBack);
-		LeanTween.moveX (car, -carInitPos*2 + offset, 0.5f).setEase(LeanTweenType.easeInBack);
+		LeanTween.moveX (car, 0, 0.5f).setEase(LeanTweenType.easeInBack);
 		LeanTween.moveX (garage, 0, 0.5f).setEase(LeanTweenType.easeInBack);
 	}
 
