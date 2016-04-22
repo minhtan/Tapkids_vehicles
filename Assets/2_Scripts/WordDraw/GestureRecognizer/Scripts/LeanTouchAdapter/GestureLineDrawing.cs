@@ -33,7 +33,10 @@ public class GestureLineDrawing : GestureDrawing
 
 		// Used for .sqrMagnitude, which is faster than .magnitude
 		sqrMinPixelMove = minPixelMove * minPixelMove;
+	}
 
+	void Start()
+	{
 		GameObject vestrosityGO = GameObject.Find ("VectorCanvas");
 		vestrosityGO.AddComponent<DestroyOnLoad> ();
 	}

@@ -21,6 +21,7 @@ namespace WordDraw
 			LetterSpawner.OnNoMatchResult += OnNoMatch;
 			LeanGestureRecognizer.OnGestureDetected += OnResult;
 			Messenger.AddListener<bool> (EventManager.GameState.PAUSEGAME.ToString(), Pause);
+			UICountDownText.OnEndCountDown += OnStartGame;
 		}
 
 		void OnDisable ()
@@ -29,9 +30,10 @@ namespace WordDraw
 			LetterSpawner.OnGameOver -= OnGameOver;
 			LetterSpawner.OnNoMatchResult -= OnNoMatch;
 			LeanGestureRecognizer.OnGestureDetected -= OnResult;
+			UICountDownText.OnEndCountDown -= OnStartGame;
 		}
 
-		void Start()
+		void OnStartGame()
 		{
 			StartCoroutine (GameCoroutine());
 		}
@@ -46,12 +48,14 @@ namespace WordDraw
 
 		public void Exit()
 		{
+			Messenger.Broadcast(EventManager.GameState.EXIT_TO_MENU.ToString());
 			SceneController.Instance.LoadingSceneAsync (SceneController.SceneID.MENU);
 		}
 
 		public void Restart ()
 		{
 			_drawer.ResetStroke ();
+			Messenger.Broadcast(EventManager.GameState.RESETGAME.ToString());
 			SceneController.Instance.ReloadCurrentScene ();
 		}
 
