@@ -64,16 +64,22 @@ public abstract class LeanGestureRecognizer : MonoBehaviour
 
 	protected virtual void OnEnable ()
 	{
-		GestureDrawing.OnStrokeStart += OnStrokeStart;
-		GestureDrawing.OnStrokeDrag += OnStrokeDrag;
-		GestureDrawing.OnStrokeEnd += OnStrokeEnd;
+		UICountDownText.OnEndCountDown += OnStartGame;
 	}
 
 	protected virtual void OnDisable ()
 	{
+		UICountDownText.OnEndCountDown -= OnStartGame;
 		GestureDrawing.OnStrokeStart -= OnStrokeStart;
 		GestureDrawing.OnStrokeDrag -= OnStrokeDrag;
 		GestureDrawing.OnStrokeEnd -= OnStrokeEnd;
+	}
+
+	private void OnStartGame()
+	{
+		GestureDrawing.OnStrokeStart += OnStrokeStart;
+		GestureDrawing.OnStrokeDrag += OnStrokeDrag;
+		GestureDrawing.OnStrokeEnd += OnStrokeEnd;
 	}
 
 	protected virtual void Awake ()
@@ -81,7 +87,10 @@ public abstract class LeanGestureRecognizer : MonoBehaviour
 		_currentGesture = new Gesture ();
 		_gestureList = new List<Gesture> ();
 		_pointList = new List<Point> ();
+	}
 
+	protected virtual void Start()
+	{
 		LoadGesturesList ();
 	}
 
@@ -127,8 +136,10 @@ public abstract class LeanGestureRecognizer : MonoBehaviour
 
 		List<Gesture> optimizedList = GetOptimizedGestureSet ();
 
-		if (optimizedList == null)
+		if (optimizedList == null) {
+			Debug.Log ("NULL");
 			return;
+		}
 		
 		if (IsReachMaxStroke || _delayThreshold == 0f) { // strokeId from 0
 			Recognizing (optimizedList);

@@ -26,7 +26,8 @@ public class EventManager {
 		STARTGAME,
 		PAUSEGAME,
 		RESETGAME,
-		GAMEOVER
+		GAMEOVER,
+		EXIT_TO_MENU
 	}
 
 	public enum Vehicle {

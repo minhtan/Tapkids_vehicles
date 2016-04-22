@@ -18,17 +18,18 @@ public class LetterGestureRecognizer : LeanGestureRecognizer {
 		base.Awake ();
 	}
 
-	void Start()
+	protected override void Start ()
 	{
-		_optimizedGestureList = new List<Gesture> ();
+		base.Start ();
 	}
-
+		
 	/// <summary>
 	/// Loads the gestures.
 	/// </summary>
 	protected override void LoadGestures ()
 	{
 		_gestureDict = new Dictionary<Letters, List<Gesture>> ();
+		_optimizedGestureList = new List<Gesture> ();
 	
 		Letters[] letters = WordDrawConfig.LetterEnum;
 		for(int i = 0; i < letters.Length; i++)

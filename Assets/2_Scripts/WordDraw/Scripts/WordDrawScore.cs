@@ -9,7 +9,7 @@ namespace WordDraw
 	{
 		public Text _scoreText;
 		public int _baseScore = 1;
-		public int _bonusPerX2Combo;
+		public int _bonusPerX2Combo = 1;
 
 		private int _currentSessionScore = 0;
 
@@ -35,11 +35,12 @@ namespace WordDraw
 		private void AddScore ()
 		{
 			_currentSessionScore += _baseScore;
+			_scoreText.text = _currentSessionScore.ToString ();
 		}
 
 		private void BonusCount (int count)
 		{
-			_currentSessionScore += count * _bonusPerX2Combo;
+			_currentSessionScore += (count - 1) * _bonusPerX2Combo;
 
 			_scoreText.text = _currentSessionScore.ToString ();
 		}
