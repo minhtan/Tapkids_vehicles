@@ -68,14 +68,17 @@ public class CarGameController : MonoBehaviour {
 
 	// handle car events
 	void HandleCollectLetter (string _letter) {
+		Messenger.Broadcast <string> (EventManager.GUI.ADDLETTER.ToString (), _letter);
+
 		collectedLetters = string.Concat (collectedLetters, _letter);
-		Messenger.Broadcast <string> (EventManager.GUI.UPDATECOLLECTEDLETTER.ToString (), collectedLetters);
 	}
 
 	void HandleDropLetter () {
 		if (collectedLetters.Length > 0) {
+			string letter = collectedLetters[collectedLetters.Length - 1].ToString ();
+			Messenger.Broadcast <string> (EventManager.GUI.REMOVELETTER.ToString (), letter);
+
 			collectedLetters = collectedLetters.Substring (0, collectedLetters.Length - 1);
-			Messenger.Broadcast <string> (EventManager.GUI.UPDATECOLLECTEDLETTER.ToString (), collectedLetters);
 		}
 	}
 
@@ -84,10 +87,10 @@ public class CarGameController : MonoBehaviour {
 			// TODO: need a vehicle list data to compare
 			if (vehicles.Contains (collectedLetters)) {
 				_machine.changeState <CGGameOverState> ();
-
-				Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), GameMessages.CorrectMessage, 1f);
+//				Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), GameMessages.CorrectMessage, 1f);
+				Messenger.Broadcast <int> (EventManager.GameState.GAMEOVER.ToString (), 0);
 			} else {
-				Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), GameMessages.WrongMessage, 2f);
+				Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), GameMessages.WrongMessage, 1f);
 			}
 		}
 	}
@@ -102,7 +105,7 @@ public class CarGameController : MonoBehaviour {
 
 		Messenger.RemoveListener <string> (EventManager.Vehicle.COLLECTLETTER.ToString (), HandleCollectLetter);
 
-		Messenger.RemoveListener (EventManager.Vehicle.DROPLETTER.ToString (), HandleDropLetter);
+		Messenger.RemoveListener (EventManager.GUI.DROPBUTTON.ToString (), HandleDropLetter);
 
 		Messenger.RemoveListener (EventManager.Vehicle.GATHERLETTER.ToString (), HandleGatherLetter);
 	}
@@ -114,7 +117,7 @@ public class CarGameController : MonoBehaviour {
 
 		Messenger.AddListener <string> (EventManager.Vehicle.COLLECTLETTER.ToString (), HandleCollectLetter);
 
-		Messenger.AddListener (EventManager.Vehicle.DROPLETTER.ToString (), HandleDropLetter);
+		Messenger.AddListener (EventManager.GUI.DROPBUTTON.ToString (), HandleDropLetter);
 
 		Messenger.AddListener (EventManager.Vehicle.GATHERLETTER.ToString (), HandleGatherLetter);
 

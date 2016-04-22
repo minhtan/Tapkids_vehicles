@@ -11,7 +11,7 @@ public class DropButton : MonoBehaviour {
 		mButton = GetComponent <Button> ();
 		if (mButton != null) {
 			mButton.onClick.AddListener (delegate {
-				Messenger.Broadcast (EventManager.Vehicle.DROPLETTER.ToString ());	
+				Messenger.Broadcast (EventManager.GUI.DROPBUTTON.ToString ());	
 			});
 		}
 	}

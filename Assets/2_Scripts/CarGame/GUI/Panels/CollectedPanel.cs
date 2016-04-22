@@ -11,14 +11,16 @@ public class CollectedPanel : MonoBehaviour {
 	private Transform mTransform;
 	void OnEnable () {
 		Messenger.AddListener <string> (EventManager.GameState.INITGAME.ToString (), HandleInitGame);
-		Messenger.AddListener <string> (EventManager.GUI.UPDATECOLLECTEDLETTER.ToString (), HandleUpdateCollectLetter);
+		Messenger.AddListener <string> (EventManager.GUI.ADDLETTER.ToString (), HandleAddLetter);
+		Messenger.AddListener <string> (EventManager.GUI.REMOVELETTER.ToString (), HandleRemoveLetter);
 
 		// TODO: handle drop text
 	}
 
 	void Disable () {
 		Messenger.RemoveListener <string> (EventManager.GameState.INITGAME.ToString (), HandleInitGame);
-		Messenger.RemoveListener <string> (EventManager.GUI.UPDATECOLLECTEDLETTER.ToString (), HandleUpdateCollectLetter);
+		Messenger.RemoveListener <string> (EventManager.GUI.ADDLETTER.ToString (), HandleAddLetter);
+		Messenger.RemoveListener <string> (EventManager.GUI.REMOVELETTER.ToString (), HandleRemoveLetter);
 	}
 
 	void Start () {
@@ -28,7 +30,7 @@ public class CollectedPanel : MonoBehaviour {
 	void HandleInitGame (string _letters) {
 		if (collectedTextPrefab == null) return;
 
-		// convert this to pool 
+		// TODO: convert this to pool 
 		for (int i = 0; i < collectedLetters.Count; i++) {
 			Destroy(collectedLetters[i]);
 		}
@@ -38,18 +40,28 @@ public class CollectedPanel : MonoBehaviour {
 		if (_letters.Length > 0) {
 			for (int i = 0; i < _letters.Length; i++ ) {
 				GameObject letter = Instantiate (collectedTextPrefab) as GameObject;
-				letter.transform.SetParent (mTransform);
+				letter.transform.SetParent (mTransform, false);
 				collectedLetters.Add (letter);
 			}
 		}
 	}
 
-	void HandleUpdateCollectLetter (string _letters) {
+	void HandleAddLetter (string _letter) {
 		for (int i = 0; i < collectedLetters.Count; i++) {
-			collectedLetters [i].GetComponentInChildren <Text> ().text = "";
+			if (string.IsNullOrEmpty (collectedLetters [i].GetComponentInChildren <Text> ().text)) {
+				collectedLetters [i].GetComponentInChildren <Text> ().text = _letter;
+				return;
+			}
 		}
-		for (int i = 0; i < _letters.Length; i++) {
-			collectedLetters [i].GetComponentInChildren <Text> ().text = _letters[i].ToString ();
+	}
+
+	void HandleRemoveLetter (string _letter) {
+		for (int i = 0; i < collectedLetters.Count; i++) {
+			if (collectedLetters [i].GetComponentInChildren <Text> ().text == _letter) {
+				collectedLetters [i].GetComponentInChildren <Text> ().text = "";
+				return;
+			}
 		}
+
 	}
 }

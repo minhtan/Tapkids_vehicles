@@ -28,6 +28,7 @@ public class OffScreenIndicator : MonoBehaviour {
 	private float screenOffSet = 15f;
 
 	private bool isInitiated;
+	private int letterCount;
 
 	private RectTransform mRectTransform;
 	#endregion private member
@@ -47,7 +48,7 @@ public class OffScreenIndicator : MonoBehaviour {
 
 	void Start () {
 		mRectTransform = GetComponent <RectTransform> ();
-		letters = new List<GameObject> ();
+//		letters = new List<GameObject> ();
 	}
 
 	void Update () {
@@ -72,7 +73,7 @@ public class OffScreenIndicator : MonoBehaviour {
 		for (int i = 0; i < _word.Length; i++) {
 			offScreenLetters[i] = Instantiate (letterIndicator) as RectTransform; 
 			offScreenLetters[i].GetComponentInChildren <Text> ().text = _word[i].ToString ();
-			offScreenLetters[i].SetParent (mRectTransform);
+			offScreenLetters[i].SetParent (mRectTransform, false);
 			offScreenLetters[i].gameObject.SetActive (false);
 		}
 	}
@@ -127,12 +128,12 @@ public class OffScreenIndicator : MonoBehaviour {
 	}
 
 	private void LetterIndicator () {
-
-		if (letters.Count <= 0) {
-			GameObject[] a_letters = GameObject.FindGameObjectsWithTag ("Letter");
-			letters = new List<GameObject> (a_letters);
+		if (letterCount < offScreenLetters.Length) {
+			GameObject[]  _letters = GameObject.FindGameObjectsWithTag ("Letter");
+			letterCount = _letters.Length;
+			letters = new List<GameObject> (_letters);
 			return;
-		} 
+		}
 
 		for (int i = 0; i < letters.Count; i++) {
 			if (!letters[i].activeInHierarchy) {

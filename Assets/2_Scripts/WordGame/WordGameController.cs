@@ -20,11 +20,13 @@ public class WordGameController : MonoBehaviour {
 
 	void OnDestroy(){
 //		Messenger.Cleanup ();
-		ArController.Instance.ToggleAR (false);
+		if(ArController.Instance != null){
+			ArController.Instance.ToggleAR (false);
+		}
 	}
 
 	void Update(){
-		UpdateScoreSliderValue ();
+		UpdateScoreValue ();
 	}
 	#region Vars
 	//Core
@@ -39,6 +41,7 @@ public class WordGameController : MonoBehaviour {
 	//Data
 	private List<WordGameData> dataList;
 	private WordGameData data;
+	private int lastRandomIndex = -1;
 
 	//Score
 	private int minWordLength;
@@ -69,7 +72,12 @@ public class WordGameController : MonoBehaviour {
     void RandomData()
     {
         UnityEngine.Random.seed = Environment.TickCount;
-		data = dataList[Mathf.RoundToInt (UnityEngine.Random.Range (0, dataList.Count))];
+		int rd;
+		do {
+			rd = Mathf.RoundToInt (UnityEngine.Random.Range (0, dataList.Count));
+		} while(rd == lastRandomIndex);
+		lastRandomIndex = rd;
+		data = dataList[rd];
     }
 	#endregion
 
@@ -111,13 +119,13 @@ public class WordGameController : MonoBehaviour {
 		}
 	}
 
-	void UpdateScoreSliderValue(){
+	void UpdateScoreValue(){
 		sld_score.value = GetCurrentScorePercentage ();
 	}
 
 	void _UpdateTimerValue(){
 		int time = fsm.FsmVariables.GetFsmInt ("timer").Value;
-		txt_timer.text = Mathf.Floor (time / 60) + ":" + (time % 60).ToString ("D2");
+		txt_timer.text = Mathf.FloorToInt(time / 60).ToString("D2") + ":" + (time % 60).ToString ("D2");
 	}
 
 	void _ToggleMenuUI(bool state){
@@ -185,7 +193,9 @@ public class WordGameController : MonoBehaviour {
 
 	void _Win(){
 		//add score
-		PlayerDataController.Instance.UpdatePlayerCredit(currentScore);
+		if(PlayerDataController.Instance != null){
+			PlayerDataController.Instance.UpdatePlayerCredit(currentScore);
+		}
 	}
 
     void _AddPlayableTarget(string letter) {

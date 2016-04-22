@@ -17,6 +17,9 @@ public class ExitButton : MonoBehaviour {
 		mButton = GetComponent <Button> ();
 		if(mButton != null) {
 			mButton.onClick.AddListener ( delegate {
+
+				// TODO: save player data proccess
+
 				// back to menu
 				SceneController.Instance.LoadingSceneAsync (SceneController.SceneID.MENU);
 				Messenger.Broadcast<bool>(EventManager.GameState.PAUSEGAME.ToString(), false);
