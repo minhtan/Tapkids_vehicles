@@ -8,7 +8,7 @@ namespace WordDraw
 	public class WordDrawScore : MonoBehaviour
 	{
 		public Text _scoreText;
-		public int _baseScore = 10;
+		public int _baseScore = 1;
 		public int _bonusPerX2Combo;
 
 		private int _currentSessionScore = 0;
