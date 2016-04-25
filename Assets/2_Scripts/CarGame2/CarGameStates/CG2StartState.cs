@@ -1,27 +1,35 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Prime31.StateKit;
-public class CGResetGameState : SKState<CarGameController> {
 
+public class CG2StartState : SKState<CarGameController2> {
+	// send event start game: enable mobile input, 
 
 	public override void begin ()
 	{
-		Debug.Log("Reset State >>>");
-		
+		Debug.Log("Start State >>>");
+
+		for (int i = 0; i < _context.mTransform.childCount; i++) 
+			_context.mTransform.GetChild (i).gameObject.SetActive (true);
+
+		Messenger.Broadcast (EventManager.GameState.STARTGAME.ToString());
+
 	}
 
 	public override void reason ()
 	{
+
 	}
 	public override void update (float deltaTime)
 	{
+
+
 	}
 
 	public override void end ()
 	{
-		Debug.Log("Reset State <<<");
+		Debug.Log("Start State <<<");
 	}
-
 	#region public members
 	#endregion public members
 

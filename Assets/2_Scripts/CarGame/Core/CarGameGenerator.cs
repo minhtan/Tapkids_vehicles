@@ -12,12 +12,6 @@ public class CarGameGenerator : MonoBehaviour {
 	// - re generate missing letters after player gather word, whether true or false
 
 	#region public members
-//	public GameObject[] letterPrefabs; 	// Todo: should replace this prefab hard references with loading assetbundle method
-//
-//	public GameObject[] obstaclePrefabs;
-//
-//	public GameObject carPrefab;
-
 	#endregion public members
 
 	#region private members
@@ -26,14 +20,10 @@ public class CarGameGenerator : MonoBehaviour {
 
 	private Transform cartPoint;
 	private GameObject[] letterPoints;	// stores letter's positions in environment
-	private GameObject[] obstaclePoints;
+	private GameObject[] obstaclePoints;	
 
-	private Dictionary <string, GameObject> letterPointDictionary = new Dictionary<string, GameObject> ();
-
-	private List<GameObject> letterGameObjects;		// stores game object letter
-//	private Dictionary <int, GameObject> IndexToLetterDictionary = new Dictionary<int, GameObject> ();
-
-	private List<GameObject> obstacleGameObjects;
+	private Dictionary <string, GameObject> letterDictionary;
+	private List <GameObject> obstacleGameObjects;
 	private Vehicle currentVehicle;
 	private GameObject carGameObject;
 
@@ -65,29 +55,17 @@ public class CarGameGenerator : MonoBehaviour {
 	void Start () {
 		mTransform = GetComponent <Transform> ();
 
-		letterGameObjects = new List<GameObject> ();
-		letterPoints = GameObject.FindGameObjectsWithTag ("LetterPoint");
-
-		if (letterPoints.Length <= 0) 
-			Debug.Log ("Setup Error, There is no Letter Point in the environment");
-
-		obstacleGameObjects = new List<GameObject> ();
-		obstaclePoints= GameObject.FindGameObjectsWithTag ("ObstaclePoint");
-		if (obstaclePoints.Length <= 0) 
-			Debug.Log ("Setup Error, There is no Obstacle Point in the environment");
-		
-		cartPoint = GameObject.FindWithTag ("CarPoint").transform;
-		if (cartPoint == null) 
-			Debug.Log ("Setup Error, There is no Car Point in the environment");
+//		if (letterPoints.Length <= 0) 
+//			Debug.Log ("Setup Error, There is no Letter Point in the environment");
+//
+//		if (obstaclePoints.Length <= 0) 
+//			Debug.Log ("Setup Error, There is no Obstacle Point in the environment");
+//		
+//	
+//		if (cartPoint == null) 
+//			Debug.Log ("Setup Error, There is no Car Point in the environment");
 	}
 
-//	void Update () {
-//		if (Input.GetKeyDown (KeyCode.Space)) {
-//			StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync ("car_asset", "c", (bundle) => {
-//				GameObject go = Instantiate (bundle) as GameObject;
-//			}));
-//		}
-//	}
 	#endregion MONO
 
 	#region private functions
@@ -109,26 +87,31 @@ public class CarGameGenerator : MonoBehaviour {
 
 	private void HandleInitGame (string _word) {
 		#region demo
+		cartPoint = GameObject.FindWithTag ("CarPoint").transform;
 		SetupCar ();
-
-		// setup letters
-		for (int i = 0; i < letterGameObjects.Count; i++) {
-			GameObject.Destroy (letterGameObjects[i]);
-		}
-		letterGameObjects.Clear ();
-		for (int i = 0; i < _word.Length; i++) {
-			SetupLetter (_word[i].ToString (), letterPoints[i].transform.position);
-		}
-
-
-		// setup obstacles
-		for (int i = 0; i < obstacleGameObjects.Count; i++) {
-			GameObject.Destroy (obstacleGameObjects[i]);
-		}
-		obstacleGameObjects.Clear ();
-		for (int i = 0; i < obstaclePoints.Length; i++) {
-			SetupObstacle (obstaclePoints[i].transform.position);
-		}
+//
+//		letterDictionary = new Dictionary<string, GameObject> ();
+//		foreach (KeyValuePair <string, GameObject> pair in letterDictionary) {
+//			GameObject.Destroy (pair.Value);
+//		}
+//		letterDictionary.Clear ();
+//
+//		letterPoints = GameObject.FindGameObjectsWithTag ("LetterPoint");
+//		for (int i = 0; i < _word.Length; i++) {
+//			SetupLetter (_word[i].ToString (), letterPoints[i].transform.position);
+//		}
+//
+//		// setup obstacles
+//		obstacleGameObjects = new List<GameObject> ();
+//		for (int i = 0; i < obstacleGameObjects.Count; i++) {
+//			GameObject.Destroy (obstacleGameObjects[i]);
+//		}
+//		obstacleGameObjects.Clear ();
+//
+//		obstaclePoints= GameObject.FindGameObjectsWithTag ("ObstaclePoint");
+//		for (int i = 0; i < obstaclePoints.Length; i++) {
+//			SetupObstacle (obstaclePoints[i].transform.position);
+//		}
 		#endregion demo
 	}
 
@@ -140,6 +123,7 @@ public class CarGameGenerator : MonoBehaviour {
 	}
 
 	private void HandleResetGame () {
+		// TODO: reset game
 		// remove obstacle
 		// remove letter
 	}
@@ -153,16 +137,8 @@ public class CarGameGenerator : MonoBehaviour {
 			}
 		}
 
-//		if (letterGameObjects.Count > 0) {
-//			for (int i = 0; i < letterGameObjects.Count; i++) {
-//				if (letterGameObjects [i] != null)
-//					letterGameObjects[i].SetActive (true);
-//				yield return new WaitForSeconds (delayTime);
-//			}
-//		}
-//
-		if (letterPointDictionary.Count > 0) {
-			foreach (KeyValuePair <string, GameObject> pair in letterPointDictionary) {
+		if (letterDictionary.Count > 0) {
+			foreach (KeyValuePair <string, GameObject> pair in letterDictionary) {
 				pair.Value.SetActive (true);
 				yield return new WaitForSeconds (delayTime);
 			}
@@ -184,8 +160,7 @@ public class CarGameGenerator : MonoBehaviour {
 			letterGameObject.GetComponent <LetterController> ().letterName = _letter;
 			letterGameObject.transform.SetParent (mTransform, false);
 			letterGameObject.SetActive (false);
-//			letterGameObjects.Add (letterGameObject);
-			letterPointDictionary.Add (_letter, letterGameObject);
+			letterDictionary.Add (_letter, letterGameObject);
 		}));
 	}
 
@@ -200,9 +175,9 @@ public class CarGameGenerator : MonoBehaviour {
 	}
 
 	private void HandleDropLetter (string _letters) {
-		if (letterPointDictionary.ContainsKey (_letters)) {
+		if (letterDictionary.ContainsKey (_letters)) {
 			GameObject letter;
-			letterPointDictionary.TryGetValue (_letters, out letter);
+			letterDictionary.TryGetValue (_letters, out letter);
 			letter.SetActive (true);
 		}
 	}
