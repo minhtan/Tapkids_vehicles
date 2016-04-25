@@ -26,9 +26,9 @@ namespace WordList
 		{
 			switch (obj.type) {
 			case JSONObject.Type.OBJECT:
-				for (int i = 0; i < obj.list.Count; i++) {
+				foreach (JSONObject jsonObject in obj.list) {
 					//string key = (string)obj.keys [i];
-					JSONObject j = (JSONObject)obj.list [i];
+					JSONObject j = jsonObject;
 					AccessData (j);
 				}
 				break;
