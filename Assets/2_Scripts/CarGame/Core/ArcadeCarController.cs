@@ -51,7 +51,6 @@ public class ArcadeCarController : MonoBehaviour {
 	#region public functions
 	// handle car movement
 	public void Move (float steer, float accel) {
-		
 		for (int i = 0; i < 4; i++) {
 			Quaternion quaternion;
 			Vector3 position;
@@ -69,7 +68,7 @@ public class ArcadeCarController : MonoBehaviour {
 		wheelColliders[1].steerAngle = steerAngle;
 //		SteerHelper ();
 
-		accel = Mathf.Clamp (accel, 0, 1);
+//		accel = Mathf.Clamp (accel, 0, 1);
 		ApplyDrive (accel);
 
 		SteerHelper ();
@@ -78,16 +77,20 @@ public class ArcadeCarController : MonoBehaviour {
 
 	#region private functions
 	private void ApplyDrive (float accel) {
-		if (accel > 0) {
-			for (int i = 0; i < 4; i++) {
-				wheelColliders[i].brakeTorque = 0f;
-				wheelColliders[i].motorTorque = accel * maxMotorTorque;
-			}
+//		if (accel > 0) {
+		for (int i = 0; i < 4; i++) {
+			wheelColliders[i].brakeTorque = 0f;
+			wheelColliders[i].motorTorque = accel * maxMotorTorque;
 		}
-		else {
+		if (accel == 0) {
 			for (int i = 0; i < 4; i++) 
 				wheelColliders[i].brakeTorque = brakeTorque;
 		}
+//		}
+//		else {
+//			for (int i = 0; i < 4; i++) 
+//				wheelColliders[i].brakeTorque = brakeTorque;
+//		}
 	}
 
 	private void SteerHelper()

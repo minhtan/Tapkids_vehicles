@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class ResetButton : MonoBehaviour {
+public class UIResetButton : MonoBehaviour {
 
 	#region public members
 	#endregion public members

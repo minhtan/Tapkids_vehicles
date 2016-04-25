@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class CollectedPanel : MonoBehaviour {
+public class UICollectedPanel : MonoBehaviour {
 	public GameObject collectedTextPrefab;
 	 
 	private List <GameObject> collectedLetters = new List<GameObject> ();

@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class DropButton : MonoBehaviour {
+public class UIDropButton : MonoBehaviour {
 
 	private Button mButton;
 

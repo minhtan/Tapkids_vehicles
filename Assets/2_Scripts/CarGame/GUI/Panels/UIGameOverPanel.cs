@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class GameOverPanel : MonoBehaviour {
+public class UIGameOverPanel : MonoBehaviour {
 
 	#region public members
 	public Text gameOverMessage;

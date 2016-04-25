@@ -10,6 +10,7 @@ public class CG2MapState : SKState<CarGameController2> {
 	{
 		Debug.Log("Map State >>>");
 
+		Messenger.Broadcast <bool> (EventManager.GameState.STARTGAME.ToString(), false);
 		//		for (int i = 0; i < _context.mTransform.childCount; i++) 
 		//			_context.mTransform.GetChild (i).gameObject.SetActive (false);
 

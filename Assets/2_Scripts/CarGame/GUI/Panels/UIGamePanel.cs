@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class InGamePanel : MonoBehaviour {
+public class UIGamePanel : MonoBehaviour {
 
 	#region public members
 	public string panelName = "ingame";

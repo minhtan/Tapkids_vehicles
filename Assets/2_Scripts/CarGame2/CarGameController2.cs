@@ -18,7 +18,8 @@ public class CarGameController2 : MonoBehaviour {
 	public string collectedLetters;
 	[HideInInspector]
 	public string letters;
-	private WordGameData wordGameData;
+	[HideInInspector]
+	public WordGameData wordGameData;
 
 	#endregion private members
 
@@ -45,11 +46,11 @@ public class CarGameController2 : MonoBehaviour {
 
 	void Start () {
 		// TODO: get word from database
-		wordGameData = DataUltility.ReadDataForCarGame ();
-		RandomData();
+//		wordGameData = DataUltility.ReadDataForCarGame ();
+//		RandomData();
 	}
 
-	void RandomData()
+	public void RandomData()
 	{
 		UnityEngine.Random.seed = Environment.TickCount;
 		letters = wordGameData.wordlist [UnityEngine.Random.Range (0, wordGameData.wordlist.Length)];
@@ -84,18 +85,18 @@ public class CarGameController2 : MonoBehaviour {
 
 	void HandleMapTracking (bool _isFound, Transform _parent) {
 		if (_isFound) {	// FOUND MAP
-//			if (letters.Length > 0) {	// check given letters
-//				if (_machine.currentState.GetType () == typeof (CGMapState)) 
-//				{	
-//					_machine.changeState <CGStartState> ();
-//					mTransform.SetParent (_parent);
-//				}
-//			} else {
-//				Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString(), GameMessages.LetterScanMessage, 1f);
-//			}
+			if (_machine.currentState.GetType () == typeof (CG2MapState)) {
+				_machine.changeState <CG2StartState> ();
+				mTransform.SetParent (_parent);
+			} else {
+				// DO NOTHING
+			}
 		} else {		// LOST MAP
-			if(_machine.currentState.GetType () == typeof (CG2StartState))
+			if(_machine.currentState.GetType () == typeof (CG2StartState)) {
 				_machine.changeState <CG2MapState> ();
+			} else {
+				// DO NOTHING
+			}
 		}
 	}
 

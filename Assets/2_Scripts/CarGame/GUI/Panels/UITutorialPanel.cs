@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
 
-public class TutorialPanel : MonoBehaviour, IPointerClickHandler {
+public class UITutorialPanel : MonoBehaviour, IPointerClickHandler {
 
 	#region public members
 	public string panelName = "tutorial";

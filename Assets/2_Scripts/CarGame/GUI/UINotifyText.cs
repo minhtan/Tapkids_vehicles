@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class NotifyText : MonoBehaviour {
+public class UINotifyText : MonoBehaviour {
 
 	private Text mText;
 	private CanvasGroup mCanvasGroup;

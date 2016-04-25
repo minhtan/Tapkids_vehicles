@@ -39,14 +39,14 @@ public class CarGameGenerator : MonoBehaviour {
 	void OnEnable () {
 
 		Messenger.AddListener <string> (EventManager.GameState.INITGAME.ToString(), HandleInitGame);
-		Messenger.AddListener (EventManager.GameState.STARTGAME.ToString (), HandleStartGame);
+		Messenger.AddListener <bool> (EventManager.GameState.STARTGAME.ToString (), HandleStartGame);
 		Messenger.AddListener (EventManager.GameState.RESETGAME.ToString (), HandleResetGame);
 
 		Messenger.AddListener <string> (EventManager.GUI.REMOVELETTER.ToString (), HandleDropLetter);
 	}
 	void OnDisable () {
 		Messenger.RemoveListener <string> (EventManager.GameState.INITGAME.ToString(), HandleInitGame);
-		Messenger.RemoveListener (EventManager.GameState.STARTGAME.ToString (), HandleStartGame);
+		Messenger.RemoveListener <bool> (EventManager.GameState.STARTGAME.ToString (), HandleStartGame);
 		Messenger.RemoveListener (EventManager.GameState.RESETGAME.ToString (), HandleResetGame);
 
 		Messenger.RemoveListener <string> (EventManager.GUI.REMOVELETTER.ToString (), HandleDropLetter);
@@ -88,35 +88,36 @@ public class CarGameGenerator : MonoBehaviour {
 	private void HandleInitGame (string _word) {
 		#region demo
 		cartPoint = GameObject.FindWithTag ("CarPoint").transform;
-		SetupCar ();
-//
-//		letterDictionary = new Dictionary<string, GameObject> ();
-//		foreach (KeyValuePair <string, GameObject> pair in letterDictionary) {
-//			GameObject.Destroy (pair.Value);
-//		}
-//		letterDictionary.Clear ();
-//
-//		letterPoints = GameObject.FindGameObjectsWithTag ("LetterPoint");
-//		for (int i = 0; i < _word.Length; i++) {
-//			SetupLetter (_word[i].ToString (), letterPoints[i].transform.position);
-//		}
-//
-//		// setup obstacles
-//		obstacleGameObjects = new List<GameObject> ();
-//		for (int i = 0; i < obstacleGameObjects.Count; i++) {
-//			GameObject.Destroy (obstacleGameObjects[i]);
-//		}
-//		obstacleGameObjects.Clear ();
-//
-//		obstaclePoints= GameObject.FindGameObjectsWithTag ("ObstaclePoint");
-//		for (int i = 0; i < obstaclePoints.Length; i++) {
-//			SetupObstacle (obstaclePoints[i].transform.position);
-//		}
+		StartCoroutine(SetupCar ());
+
+		letterDictionary = new Dictionary<string, GameObject> ();
+		foreach (KeyValuePair <string, GameObject> pair in letterDictionary) {
+			GameObject.Destroy (pair.Value);
+		}
+		letterDictionary.Clear ();
+
+		letterPoints = GameObject.FindGameObjectsWithTag ("LetterPoint");
+		for (int i = 0; i < _word.Length; i++) {
+			StartCoroutine(SetupLetter (_word[i].ToString (), letterPoints[i].transform.position));
+		}
+
+		// setup obstacles
+		obstacleGameObjects = new List<GameObject> ();
+		for (int i = 0; i < obstacleGameObjects.Count; i++) {
+			GameObject.Destroy (obstacleGameObjects[i]);
+		}
+		obstacleGameObjects.Clear ();
+
+		obstaclePoints= GameObject.FindGameObjectsWithTag ("ObstaclePoint");
+		for (int i = 0; i < obstaclePoints.Length; i++) {
+			StartCoroutine (SetupObstacle (obstaclePoints[i].transform.position));
+		}
 		#endregion demo
 	}
 
-	private void HandleStartGame () {
-		carGameObject.SetActive (true);
+	private void HandleStartGame (bool state) {
+		if (carGameObject != null)
+			carGameObject.SetActive (true);
 
 		StopAllCoroutines ();
 		StartCoroutine (HandleGameStartCo ());
@@ -140,12 +141,14 @@ public class CarGameGenerator : MonoBehaviour {
 		if (letterDictionary.Count > 0) {
 			foreach (KeyValuePair <string, GameObject> pair in letterDictionary) {
 				pair.Value.SetActive (true);
+				pair.Value.transform.localScale = new Vector3 (2f, 2f, 2f);
 				yield return new WaitForSeconds (delayTime);
 			}
 		}
 	}
 
-	private void SetupCar () {
+	private IEnumerator SetupCar () {
+		yield return new WaitForSeconds (1f);
 		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (assetBundleName, "arcadecar", (bundle) => {
 			carGameObject = Instantiate (bundle, cartPoint.position + pointOffset, Quaternion.identity) as GameObject;
 			carGameObject.transform.SetParent (mTransform, false);
@@ -153,18 +156,21 @@ public class CarGameGenerator : MonoBehaviour {
 		}));
 	}
 
-	private void SetupLetter (string _letter, Vector3 position) {
+	private IEnumerator SetupLetter (string _letter, Vector3 position) {
+		yield return new WaitForSeconds (1f);
 		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (assetBundleName, _letter, (bundle) => {
 			GameObject letterGameObject = Instantiate (bundle, position + pointOffset, Quaternion.identity) as GameObject;
 			letterGameObject.AddComponent <LetterController> ();
 			letterGameObject.GetComponent <LetterController> ().letterName = _letter;
+//			letterGameObject.transform.localScale = new Vector3 (2f, 2f, 2f);
 			letterGameObject.transform.SetParent (mTransform, false);
 			letterGameObject.SetActive (false);
 			letterDictionary.Add (_letter, letterGameObject);
 		}));
 	}
 
-	private void SetupObstacle (Vector3 position) {
+	private IEnumerator SetupObstacle (Vector3 position) {
+		yield return new WaitForSeconds (1f);
 		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (assetBundleName, "tree", (bundle) => {
 			GameObject obstacleGameObject = Instantiate (bundle, position, Quaternion.identity) as GameObject;
 			obstacleGameObject.AddComponent <ObstacleController> ();

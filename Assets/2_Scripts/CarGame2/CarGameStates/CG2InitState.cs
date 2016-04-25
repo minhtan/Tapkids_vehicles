@@ -14,8 +14,10 @@ public class CG2InitState : SKState<CarGameController2> {
 	{
 		Debug.Log("Init State >>>");
 
+		_context.wordGameData = DataUltility.ReadDataForCarGame ();
+		_context.RandomData();
 		// broadcast event load car, letter, obstacle
-		Messenger.Broadcast <string> (EventManager.GameState.INITGAME.ToString (), _context.letters);
+		Messenger.Broadcast <string> (EventManager.GameState.INITGAME.ToString (), "land");//_context.letters);
 	}
 
 	public override void reason ()
@@ -26,7 +28,9 @@ public class CG2InitState : SKState<CarGameController2> {
 	}
 	public override void update (float deltaTime)
 	{
-		countDownTimer -= Time.deltaTime;
+		if (countDownTimer > 0) {
+			countDownTimer -= Time.deltaTime;
+		}
 	}
 
 	public override void end ()

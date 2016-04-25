@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class OffScreenIndicator : MonoBehaviour {
+public class UIOffScreenIndicator : MonoBehaviour {
 
 	//	public Image OnScreenSprite; // can use gameobject with spriterenderer, or reference a Sprite here, and create a new gameobject, add a sprite renderer to it.
 //	public Image offScreenSprite;
@@ -37,13 +37,13 @@ public class OffScreenIndicator : MonoBehaviour {
 	void OnEnable () {
 //		CarGameEventController.InitGame += OnInitGame;
 		Messenger.AddListener <string> (EventManager.GameState.INITGAME.ToString (), HandleInitGame);
-		Messenger.AddListener (EventManager.GameState.STARTGAME.ToString (), HandleStartGame);
+		Messenger.AddListener <bool> (EventManager.GameState.STARTGAME.ToString (), HandleStartGame);
 	}
 
 	void OnDisable () {
 //		CarGameEventController.InitGame -= OnInitGame;
 		Messenger.RemoveListener <string> (EventManager.GameState.INITGAME.ToString (), HandleInitGame);
-		Messenger.RemoveListener (EventManager.GameState.STARTGAME.ToString (), HandleStartGame);
+		Messenger.RemoveListener <bool>  (EventManager.GameState.STARTGAME.ToString (), HandleStartGame);
 	}
 
 	void Start () {
@@ -78,7 +78,7 @@ public class OffScreenIndicator : MonoBehaviour {
 		}
 	}
 
-	void HandleStartGame () {
+	void HandleStartGame (bool state) {
 		isInitiated = true;
 	}
 

@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class TutorialButton : MonoBehaviour {
+public class UITutorialButton : MonoBehaviour {
 
 	#region public members
 	#endregion public members

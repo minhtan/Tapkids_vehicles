@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class PausePanel : MonoBehaviour {
+public class UIPausePanel : MonoBehaviour {
 
 	#region public members
 	public string panelName = "pause";

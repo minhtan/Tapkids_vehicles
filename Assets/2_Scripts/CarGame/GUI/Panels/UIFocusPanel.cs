@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class FocusPanel : MonoBehaviour {
+public class UIFocusPanel : MonoBehaviour {
 
 	private CanvasGroup mCanvasGroup;
 
