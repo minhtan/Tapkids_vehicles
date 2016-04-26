@@ -10,7 +10,7 @@ using UnityEngine.UI;
 /// </summary>
 public class CarGameController : MonoBehaviour {
 
-	#region private members
+	#region public members
 	[HideInInspector]
 	public string collectedLetters;
 	[HideInInspector]
@@ -22,10 +22,68 @@ public class CarGameController : MonoBehaviour {
 	private SKStateMachine <CarGameController> _machine;
 	[HideInInspector]
 	public Transform mTransform;
-	#endregion private members
+	#endregion public members
 
 	#region private members
 	#endregion private members
+
+	#region Mono
+	void Awake () {
+		mTransform = this.transform;
+	}
+
+	void OnEnable () {
+		Messenger.AddListener <bool, string> (EventManager.AR.IMAGETRACKING.ToString(), HandleVehicleTracking);
+
+		Messenger.AddListener <bool, Transform> (EventManager.AR.MAPTRACKING.ToString(), HandleMapTracking);
+
+		Messenger.AddListener <string> (EventManager.Vehicle.COLLECTLETTER.ToString (), HandleCollectLetter);
+
+		Messenger.AddListener (EventManager.GUI.DROPBUTTON.ToString (), HandleDropLetter);
+
+		Messenger.AddListener (EventManager.Vehicle.GATHERLETTER.ToString (), HandleGatherLetter);
+	}
+	void Start () {
+		if (ArController.Instance != null) {
+			ArController.Instance.ToggleAR (true);
+			ArController.Instance.SetCenterMode (false);
+			ArController.Instance.SetArMaxStimTargets (1);
+		}
+
+		// setup finite state machine
+		_machine = new SKStateMachine <CarGameController> (this, new CGLetterState ());
+		_machine.addState (new CGInitState ());
+		_machine.addState (new CGMapState ());
+		_machine.addState (new CGStartState ());
+		_machine.addState (new CGPlayState ());
+		_machine.addState (new CGPauseState ());
+		_machine.addState (new CGGameOverState ());
+		_machine.addState (new CGResetState ());
+
+
+	}
+
+	void Update () {
+		_machine.update (Time.deltaTime);
+	}
+
+	void OnDisable () {
+		Messenger.RemoveListener <bool, string> (EventManager.AR.IMAGETRACKING.ToString(), HandleVehicleTracking);
+
+		Messenger.RemoveListener <bool, Transform> (EventManager.AR.MAPTRACKING.ToString(), HandleMapTracking);
+
+		Messenger.RemoveListener <string> (EventManager.Vehicle.COLLECTLETTER.ToString (), HandleCollectLetter);
+
+		Messenger.RemoveListener (EventManager.GUI.DROPBUTTON.ToString (), HandleDropLetter);
+
+		Messenger.RemoveListener (EventManager.Vehicle.GATHERLETTER.ToString (), HandleGatherLetter);
+	}
+
+	void OnDestroy () {
+		if (ArController.Instance != null)
+			ArController.Instance.ToggleAR (false);
+	}
+	#endregion Mono
 
 	#region public functions
 	#endregion public functions
@@ -43,6 +101,8 @@ public class CarGameController : MonoBehaviour {
 	}
 
 	private void HandleMapTracking (bool _isFound, Transform _parent) {
+		if (_machine == null) return;
+
 		if (_isFound) {	// FOUND MAP
 			if (letters.Length > 0) {	// check given letters
 				if (_machine.currentState.GetType () == typeof (CGMapState)) 
@@ -88,56 +148,5 @@ public class CarGameController : MonoBehaviour {
 
 	#endregion private functions
 
-	#region Mono
 
-
-	void Awake () {
-		mTransform = this.transform;
-
-		// setup finite state machine
-		_machine = new SKStateMachine <CarGameController> (this, new CGLetterState ());
-		_machine.addState (new CGInitState ());
-		_machine.addState (new CGMapState ());
-		_machine.addState (new CGStartState ());
-		_machine.addState (new CGPlayState ());
-		_machine.addState (new CGPauseState ());
-		_machine.addState (new CGGameOverState ());
-		_machine.addState (new CGResetState ());
-	}
-
-	void OnEnable () {
-		Messenger.AddListener <bool, string> (EventManager.AR.IMAGETRACKING.ToString(), HandleVehicleTracking);
-
-		Messenger.AddListener <bool, Transform> (EventManager.AR.MAPTRACKING.ToString(), HandleMapTracking);
-
-		Messenger.AddListener <string> (EventManager.Vehicle.COLLECTLETTER.ToString (), HandleCollectLetter);
-
-		Messenger.AddListener (EventManager.GUI.DROPBUTTON.ToString (), HandleDropLetter);
-
-		Messenger.AddListener (EventManager.Vehicle.GATHERLETTER.ToString (), HandleGatherLetter);
-	}
-	void Start () {
-	}
-
-	void Update () {
-		_machine.update (Time.deltaTime);
-	}
-
-	void OnDisable () {
-		Messenger.RemoveListener <bool, string> (EventManager.AR.IMAGETRACKING.ToString(), HandleVehicleTracking);
-
-		Messenger.RemoveListener <bool, Transform> (EventManager.AR.MAPTRACKING.ToString(), HandleMapTracking);
-
-		Messenger.RemoveListener <string> (EventManager.Vehicle.COLLECTLETTER.ToString (), HandleCollectLetter);
-
-		Messenger.RemoveListener (EventManager.GUI.DROPBUTTON.ToString (), HandleDropLetter);
-
-		Messenger.RemoveListener (EventManager.Vehicle.GATHERLETTER.ToString (), HandleGatherLetter);
-	}
-
-	void OnDestroy () {
-		if (ArController.Instance != null)
-			ArController.Instance.ToggleAR (false);
-	}
-	#endregion Mono
 }

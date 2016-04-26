@@ -41,6 +41,12 @@ public class CarGameController2 : MonoBehaviour {
 	void Start () {
 		RandomWord();
 
+		if (ArController.Instance != null) {
+			ArController.Instance.ToggleAR (true);
+			ArController.Instance.SetCenterMode (false);
+			ArController.Instance.SetArMaxStimTargets (1);
+		}
+
 		_machine = new SKStateMachine <CarGameController2> (this, new CG2InitState ());
 		_machine.addState (new CG2MapState ());
 		_machine.addState (new CG2StartState ());
@@ -48,12 +54,6 @@ public class CarGameController2 : MonoBehaviour {
 		_machine.addState (new CG2PauseState ());
 		_machine.addState (new CG2GameOverState ());
 		_machine.addState (new CG2ResetState ());
-
-		if (ArController.Instance != null) {
-			ArController.Instance.ToggleAR (true);
-			ArController.Instance.SetCenterMode (false);
-			ArController.Instance.SetArMaxStimTargets (1);
-		}
 	}
 
 	public void RandomWord()
@@ -89,6 +89,8 @@ public class CarGameController2 : MonoBehaviour {
 
 	#region private functions
 	void HandleMapTracking (bool _isFound, Transform _parent) {
+		if (_machine == null) return;
+
 		if (_isFound) {	// FOUND MAP
 			if (_machine.currentState.GetType () == typeof (CG2MapState)) {
 				_machine.changeState <CG2StartState> ();

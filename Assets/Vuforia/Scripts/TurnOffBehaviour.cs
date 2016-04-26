@@ -18,15 +18,15 @@ namespace Vuforia
 
         void Awake()
         {
-//            if (VuforiaRuntimeUtilities.IsVuforiaEnabled())
-//            {
-//                // We remove the mesh components at run-time only, but keep them for
-//                // visualization when running in the editor:
-//                MeshRenderer targetMeshRenderer = this.GetComponent<MeshRenderer>();
-//                Destroy(targetMeshRenderer);
-//                MeshFilter targetMesh = this.GetComponent<MeshFilter>();
-//                Destroy(targetMesh);
-//            }
+            if (VuforiaRuntimeUtilities.IsVuforiaEnabled())
+            {
+                // We remove the mesh components at run-time only, but keep them for
+                // visualization when running in the editor:
+                MeshRenderer targetMeshRenderer = this.GetComponent<MeshRenderer>();
+                Destroy(targetMeshRenderer);
+                MeshFilter targetMesh = this.GetComponent<MeshFilter>();
+                Destroy(targetMesh);
+            }
         }
 
         #endregion // UNITY_MONOBEHAVIOUR_METHODS

@@ -9,14 +9,6 @@ public class CGLetterState : SKState<CarGameController> {
 		Debug.Log("Wait Letter State >>>");
 
 		Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString(), GameMessages.LetterScanMessage, 3f);
-
-		// TODO: setting ar camera
-		if (ArController.Instance != null) {
-			ArController.Instance.ToggleAR (true);
-			ArController.Instance.SetCenterMode (false);
-			ArController.Instance.SetArMaxStimTargets (1);
-		}
-
 	}
 
 	public override void reason ()
