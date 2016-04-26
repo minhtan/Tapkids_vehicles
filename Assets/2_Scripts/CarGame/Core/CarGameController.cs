@@ -92,16 +92,6 @@ public class CarGameController : MonoBehaviour {
 
 
 	void Awake () {
-		Messenger.AddListener <bool, string> (EventManager.AR.IMAGETRACKING.ToString(), HandleVehicleTracking);
-
-		Messenger.AddListener <bool, Transform> (EventManager.AR.MAPTRACKING.ToString(), HandleMapTracking);
-
-		Messenger.AddListener <string> (EventManager.Vehicle.COLLECTLETTER.ToString (), HandleCollectLetter);
-
-		Messenger.AddListener (EventManager.GUI.DROPBUTTON.ToString (), HandleDropLetter);
-
-		Messenger.AddListener (EventManager.Vehicle.GATHERLETTER.ToString (), HandleGatherLetter);
-
 		mTransform = this.transform;
 
 		// setup finite state machine
@@ -115,6 +105,17 @@ public class CarGameController : MonoBehaviour {
 		_machine.addState (new CGResetState ());
 	}
 
+	void OnEnable () {
+		Messenger.AddListener <bool, string> (EventManager.AR.IMAGETRACKING.ToString(), HandleVehicleTracking);
+
+		Messenger.AddListener <bool, Transform> (EventManager.AR.MAPTRACKING.ToString(), HandleMapTracking);
+
+		Messenger.AddListener <string> (EventManager.Vehicle.COLLECTLETTER.ToString (), HandleCollectLetter);
+
+		Messenger.AddListener (EventManager.GUI.DROPBUTTON.ToString (), HandleDropLetter);
+
+		Messenger.AddListener (EventManager.Vehicle.GATHERLETTER.ToString (), HandleGatherLetter);
+	}
 	void Start () {
 	}
 

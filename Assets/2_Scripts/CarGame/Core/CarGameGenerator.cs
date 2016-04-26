@@ -116,11 +116,13 @@ public class CarGameGenerator : MonoBehaviour {
 	}
 
 	private void HandleStartGame (bool state) {
-		if (carGameObject != null)
-			carGameObject.SetActive (true);
+		if (state) {
+			if (carGameObject != null)
+				carGameObject.SetActive (true);
 
-		StopAllCoroutines ();
-		StartCoroutine (HandleGameStartCo ());
+			StopAllCoroutines ();
+			StartCoroutine (HandleGameStartCo ());
+		}
 	}
 
 	private void HandleResetGame () {
