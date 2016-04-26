@@ -16,9 +16,9 @@ public class TextToJSON : MonoBehaviour
 		TextAsset text = Resources.Load<TextAsset> (_sourceFileName);
 		string data = text.text;
 
-		string[] seperator = { ","};
+		string[] seperator = { "\n"};
 		string[] words = data.Split (seperator, 0);
-
+			
 		JSONObject json = new JSONObject (JSONObject.Type.OBJECT);
 	
 		JSONObject arr = new JSONObject (JSONObject.Type.ARRAY);

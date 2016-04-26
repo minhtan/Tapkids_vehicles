@@ -20,7 +20,7 @@ namespace UnityStandardAssets.CrossPlatformInput
 		void OnEnable()
 		{
 //			CarGameEventController.StartGame += OnStartGame;
-			Messenger.AddListener (EventManager.GameState.STARTGAME.ToString (), HandleStartGame);
+			Messenger.AddListener <bool> (EventManager.GameState.STARTGAME.ToString (), HandleStartGame);
 //			CarGameEventController.PauseGame += OnPauseGame;
 			Messenger.AddListener <bool> (EventManager.GameState.PAUSEGAME.ToString (), HandlePauseGame);
 //			CarGameEventController.ResetGame += OnResetGame;
@@ -79,7 +79,7 @@ namespace UnityStandardAssets.CrossPlatformInput
 		void OnDisable()
 		{
 //			CarGameEventController.StartGame -= OnStartGame;
-			Messenger.RemoveListener (EventManager.GameState.STARTGAME.ToString (), HandleStartGame);
+			Messenger.RemoveListener <bool> (EventManager.GameState.STARTGAME.ToString (), HandleStartGame);
 //			CarGameEventController.PauseGame -= OnPauseGame;
 			Messenger.RemoveListener <bool> (EventManager.GameState.PAUSEGAME.ToString (), HandlePauseGame);
 //			CarGameEventController.ResetGame -= OnResetGame;
@@ -94,8 +94,8 @@ namespace UnityStandardAssets.CrossPlatformInput
 		#endregion Mono
 
 		#region private methods
-		private void HandleStartGame () {
-			mAccelerate.Update (1f);
+		private void HandleStartGame (bool state) {
+			mAccelerate.Update (state ? 1f : 0f);
 		}
 
 		private void HandlePauseGame (bool _isPaused) {

@@ -28,6 +28,7 @@ namespace WordDraw
 			get {
 				if (_noDuplicateLetterList == null) {
 					_noDuplicateLetterList = new List<UILetter> (26);
+					return _noDuplicateLetterList;
 				} else {
 					return WordDrawConfig.GetNonDuplicate (_letterList, _noDuplicateLetterList);
 				}
@@ -45,11 +46,13 @@ namespace WordDraw
 		void OnEnable ()
 		{
 			LeanGestureRecognizer.OnGestureDetected += OnGestureDetected;
+			UICountDownText.OnEndCountDown += OnStartGame;
 		}
 
 		void OnDisable ()
 		{
 			LeanGestureRecognizer.OnGestureDetected -= OnGestureDetected;
+			UICountDownText.OnEndCountDown -= OnStartGame;
 		}
 
 		public delegate void OnGameOverEvent ();
@@ -61,6 +64,10 @@ namespace WordDraw
 		{
 			_letterList = new List<UILetter> ();
 			_letterPrefabs = Resources.LoadAll <GameObject> ("Letters");
+		}
+
+		private void OnStartGame ()
+		{
 			SpawnLetters ();	
 		}
 
@@ -82,7 +89,7 @@ namespace WordDraw
 					correctCount++;
 					destroyedLetter.Add (letter);
 					_letterList.RemoveAt (i);
-					Destroy (letter.gameObject);
+					letter.DestroyLetter (_curDifficulty);
 
 					if (OnReturnRecognizedResult != null) {
 						OnReturnRecognizedResult (letter.Letter);
@@ -90,15 +97,13 @@ namespace WordDraw
 				}
 			}
 
-
-			if (OnReturnBonusCount != null)
-				OnReturnBonusCount (correctCount);
-
-			if (correctCount > 0)
-				return;
-
-			if (OnNoMatchResult != null)
-				OnNoMatchResult ();
+			if (correctCount > 1) {
+				if (OnReturnBonusCount != null)
+					OnReturnBonusCount (correctCount);
+			} else if (correctCount == 0) {
+				if (OnNoMatchResult != null)
+					OnNoMatchResult ();
+			}
 		}
 
 		private void SpawnLetters ()
@@ -108,7 +113,8 @@ namespace WordDraw
 
 		public void ChangeToMextDifficulty ()
 		{
-			_curDifficulty++;
+			if (_curDifficulty < _difficulties.Length - 1)
+				_curDifficulty++;
 		}
 
 		private GameObject GetRandomLetterPrefab ()

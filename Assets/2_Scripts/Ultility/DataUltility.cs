@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
-
 public class DataUltility
 {
 	
@@ -19,10 +18,18 @@ public class DataUltility
 		return list;
 	}
 
-	public static WordGameData ReadDataForCarGame (string letter)
+//	public static WordGameData GetWordByLetter (string letter)
+//	{
+//		return JsonUtility.FromJson <WordGameData> (Resources.Load <TextAsset> ("CarGame/" + letter).text);
+//	}
+
+	public static WordGameData ReadDataForCarGame ()
 	{
-		return JsonUtility.FromJson <WordGameData> (Resources.Load <TextAsset> ("CarGame/" + letter).text);
+		TextAsset asset = Resources.Load ("CarGame/basic-word-list") as TextAsset;
+
+		return JsonUtility.FromJson <WordGameData> (asset.text);
 	}
+
 
 	public static Sprite GetLetterImage(string name){
 		return Resources.Load<Sprite> ("LettersImage/" + name);

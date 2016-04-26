@@ -45,6 +45,11 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 
 	public void LoadingSceneAsync (SceneID id, float delay = 0f)
 	{
+		if (!NetworkManager.Instance.HasInternetAvailable()) {
+			_text.text = "Please check your internet connection";
+			return;
+		}
+
 		StartCoroutine (LoadingOperation (id, delay));
 	}
 

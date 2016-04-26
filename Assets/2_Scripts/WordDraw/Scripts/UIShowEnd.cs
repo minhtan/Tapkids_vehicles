@@ -12,26 +12,25 @@ namespace WordDraw
 			LetterSpawner.OnGameOver += OnGameOver;
 		}
 
-		void OnDisable()
+		void OnDisable ()
 		{
 			LetterSpawner.OnGameOver += OnGameOver;
 		}
 
-		void Start()
+		void Start ()
 		{
 			_childGOs = new GameObject[transform.childCount];
-			for(int i = 0; i < _childGOs.Length; i++)
-			{
-				_childGOs [i] = transform.GetChild (i).gameObject;
+			for (int i = 0; i < _childGOs.Length; i++) {
+					_childGOs [i] = transform.GetChild (i).gameObject;
 			}
 		}
 
 
-		private void OnGameOver()
+		private void OnGameOver ()
 		{
-			for(int i = 0; i < _childGOs.Length; i++)
-			{
-				_childGOs [i].SetActive (true);
+			for (int i = 0; i < _childGOs.Length; i++) {
+				if (_childGOs [i] != null)
+					_childGOs [i].SetActive (true);
 			}
 		}
 	}
