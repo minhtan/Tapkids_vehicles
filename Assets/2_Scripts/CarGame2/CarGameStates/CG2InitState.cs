@@ -14,8 +14,9 @@ public class CG2InitState : SKState<CarGameController2> {
 	{
 		Debug.Log("Init State >>>");
 
-		_context.wordGameData = DataUltility.ReadDataForCarGame ();
-		_context.RandomData();
+//		_context.wordGameData = DataUltility.ReadDataForCarGame ();
+//		_context.RandomWord();
+
 		// broadcast event load car, letter, obstacle
 		Messenger.Broadcast <string> (EventManager.GameState.INITGAME.ToString (), "land");//_context.letters);
 	}
