@@ -5,7 +5,11 @@ public class SteeringWheel : MonoBehaviour {
 
 	float initAngle;
 	float dragAngle;
-	float angleThreshold = 90f;
+	float angleDiff;
+	public static float angleThreshold = 90f;
+	public float AngleThreshold {
+		get {return angleThreshold;}
+	}
 
 	Vector2 rectWordPos;
 	RectTransform rectTran;
@@ -13,7 +17,9 @@ public class SteeringWheel : MonoBehaviour {
 	bool isPressingOnWheel;
 
 	public void _OnWheelPress(bool state){
-		isPressingOnWheel = state;
+		if(rectTran.localRotation == Quaternion.identity){
+			isPressingOnWheel = state;
+		}
 	}
 
 	void OnEnable () {
@@ -22,35 +28,42 @@ public class SteeringWheel : MonoBehaviour {
 		Lean.LeanTouch.OnFingerDrag += OnFingerDrag;
 	}
 
+	void OnDisable(){
+		Lean.LeanTouch.OnFingerDown -= OnFingerDown;
+		Lean.LeanTouch.OnFingerUp -= OnFingerUp;
+		Lean.LeanTouch.OnFingerDrag -= OnFingerDrag;
+	}
+
 	void Start(){
 		rectTran = GetComponent<RectTransform> ();
 		rectWordPos = RectTransformExtension.GetScreenWorldPos (rectTran);
 	}
 	
 	void OnFingerDown(Lean.LeanFinger fg){
-		if(!isPressingOnWheel){
-			return;
+		if(isPressingOnWheel){
+			initAngle = fg.GetDegrees (rectWordPos);
+			dragAngle = initAngle;
+			angleDiff = 0;
 		}
-		initAngle = fg.GetDegrees (rectWordPos);
-		dragAngle = initAngle;
 	}
 
 	void OnFingerDrag(Lean.LeanFinger fg){
-		if(!isPressingOnWheel){
-			return;
-		}
-		dragAngle += fg.GetDeltaDegrees(rectWordPos);
-		float angleDiff = (dragAngle - initAngle) * -1;
+		if(isPressingOnWheel){
+			dragAngle += fg.GetDeltaDegrees(rectWordPos);
+			angleDiff = (dragAngle - initAngle) * -1;
 
-		if(Mathf.Abs(angleDiff) < angleThreshold){
-			rectTran.Rotate (Vector3.forward, fg.GetDeltaDegrees(rectWordPos));
+			if(Mathf.Abs(angleDiff) < angleThreshold){
+				rectTran.Rotate (Vector3.forward, fg.GetDeltaDegrees(rectWordPos));
+				Messenger.Broadcast<float> (EventManager.GUI.MENUWHEELTURN.ToString (), angleDiff);
+			}
 		}
 	}
 
 	void OnFingerUp(Lean.LeanFinger fg){
-		float angle = rectTran.localRotation.z;
-		Debug.Log (angle);
-		LeanTween.rotate(rectTran, 0f, 0.5f);
+		Messenger.Broadcast<float> (EventManager.GUI.MENUWHEELRELEASE.ToString (), angleDiff);
+		float angle = rectTran.localRotation.eulerAngles.z;
+		angle = angle > 180f ? (angle - 360) * -1 : angle * -1;
+		LeanTween.rotate(rectTran, angle, 0.5f);
 		_OnWheelPress (false);
 	}
 }

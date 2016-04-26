@@ -16,7 +16,9 @@ public class EventManager {
 		//
 		DROPBUTTON,
 		// 
-		COUNTDOWN
+		COUNTDOWN,
+		MENUWHEELTURN,
+		MENUWHEELRELEASE
 	}
 
 	//

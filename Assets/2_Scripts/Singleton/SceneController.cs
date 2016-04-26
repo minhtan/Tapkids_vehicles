@@ -21,7 +21,9 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 		MENU,
 		WORDGAME,
 		CARGAME,
-		WORDDRAWGAME
+		WORDDRAWGAME,
+		CARGAME2,
+		STARTUP
 	}
 
 	private Dictionary<SceneID, string> _sceneDict;
