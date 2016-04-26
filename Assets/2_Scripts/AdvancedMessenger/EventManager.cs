@@ -14,7 +14,9 @@ public class EventManager {
 		ADDLETTER,
 		REMOVELETTER,
 		//
-		DROPBUTTON
+		DROPBUTTON,
+		// 
+		COUNTDOWN
 	}
 
 	//

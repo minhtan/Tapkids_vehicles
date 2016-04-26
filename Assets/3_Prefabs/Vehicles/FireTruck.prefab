@@ -11,7 +11,7 @@ GameObject:
   - 33: {fileID: 3322978}
   - 23: {fileID: 2333176}
   m_Layer: 0
-  m_Name: Rear_Right
+  m_Name: Rear_Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,7 +45,7 @@ GameObject:
   - 4: {fileID: 498914}
   - 146: {fileID: 14665656}
   m_Layer: 9
-  m_Name: Front_Right
+  m_Name: Front_Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -62,7 +62,7 @@ GameObject:
   - 33: {fileID: 3380208}
   - 23: {fileID: 2398194}
   m_Layer: 0
-  m_Name: Rear_Left
+  m_Name: Rear_Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -127,7 +127,7 @@ GameObject:
   - 4: {fileID: 497580}
   - 146: {fileID: 14622234}
   m_Layer: 9
-  m_Name: Rear_Right
+  m_Name: Rear_Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -144,7 +144,7 @@ GameObject:
   - 33: {fileID: 3305970}
   - 23: {fileID: 2310558}
   m_Layer: 0
-  m_Name: Front_Right
+  m_Name: Front_Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -161,7 +161,7 @@ GameObject:
   - 33: {fileID: 3316448}
   - 23: {fileID: 2346416}
   m_Layer: 0
-  m_Name: Front_Left
+  m_Name: Front_Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -177,7 +177,7 @@ GameObject:
   - 4: {fileID: 490264}
   - 146: {fileID: 14645568}
   m_Layer: 9
-  m_Name: Front_Left
+  m_Name: Front_Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -193,7 +193,7 @@ GameObject:
   - 4: {fileID: 489410}
   - 146: {fileID: 14617852}
   m_Layer: 9
-  m_Name: Rear_Left
+  m_Name: Rear_Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -225,12 +225,12 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 440192}
-  - {fileID: 413528}
   - {fileID: 494642}
-  - {fileID: 462252}
+  - {fileID: 413528}
   - {fileID: 421772}
+  - {fileID: 462252}
   m_Father: {fileID: 494198}
-  m_RootOrder: 0
+  m_RootOrder: 1
 --- !u!4 &413528
 Transform:
   m_ObjectHideFlags: 1
@@ -242,7 +242,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 403406}
-  m_RootOrder: 1
+  m_RootOrder: 2
 --- !u!4 &421772
 Transform:
   m_ObjectHideFlags: 1
@@ -254,7 +254,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 403406}
-  m_RootOrder: 4
+  m_RootOrder: 3
 --- !u!4 &424290
 Transform:
   m_ObjectHideFlags: 1
@@ -265,12 +265,12 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 498914}
   - {fileID: 490264}
-  - {fileID: 497580}
+  - {fileID: 498914}
   - {fileID: 489410}
+  - {fileID: 497580}
   m_Father: {fileID: 494198}
-  m_RootOrder: 1
+  m_RootOrder: 0
 --- !u!4 &429172
 Transform:
   m_ObjectHideFlags: 1
@@ -306,7 +306,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 403406}
-  m_RootOrder: 3
+  m_RootOrder: 4
 --- !u!4 &489410
 Transform:
   m_ObjectHideFlags: 1
@@ -318,7 +318,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 424290}
-  m_RootOrder: 3
+  m_RootOrder: 2
 --- !u!4 &490264
 Transform:
   m_ObjectHideFlags: 1
@@ -330,7 +330,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 424290}
-  m_RootOrder: 1
+  m_RootOrder: 0
 --- !u!4 &494198
 Transform:
   m_ObjectHideFlags: 1
@@ -338,11 +338,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 107962}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.7, y: 2.27, z: 0}
+  m_LocalPosition: {x: -9.62, y: 2.27, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 403406}
   - {fileID: 424290}
+  - {fileID: 403406}
   - {fileID: 429172}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -357,7 +357,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 403406}
-  m_RootOrder: 2
+  m_RootOrder: 1
 --- !u!4 &497580
 Transform:
   m_ObjectHideFlags: 1
@@ -369,7 +369,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 424290}
-  m_RootOrder: 2
+  m_RootOrder: 3
 --- !u!4 &498914
 Transform:
   m_ObjectHideFlags: 1
@@ -381,7 +381,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 424290}
-  m_RootOrder: 0
+  m_RootOrder: 1
 --- !u!23 &2310558
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -599,15 +599,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   vehicleName: 
   wheelColliders:
-  - {fileID: 14665656}
   - {fileID: 14645568}
-  - {fileID: 14622234}
+  - {fileID: 14665656}
   - {fileID: 14617852}
+  - {fileID: 14622234}
   wheelMeshes:
-  - {fileID: 161774}
   - {fileID: 164074}
-  - {fileID: 101844}
+  - {fileID: 161774}
   - {fileID: 138432}
+  - {fileID: 101844}
   centerOfMass: {x: 0, y: -1, z: 0}
   steerHelper: 0.5
   maximumSteerAngle: 30

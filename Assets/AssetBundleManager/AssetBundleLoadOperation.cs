@@ -69,7 +69,7 @@ namespace AssetBundles
 		protected bool 					m_IsAdditive;
 		protected string 				m_DownloadingError;
 		protected AsyncOperation		m_Request;
-	
+					
 		public AssetBundleLoadLevelOperation (string assetbundleName, string levelName, bool isAdditive)
 		{
 			m_AssetBundleName = assetbundleName;
@@ -102,6 +102,7 @@ namespace AssetBundles
 			if (m_Request == null && m_DownloadingError != null)
 			{
 				Debug.LogError(m_DownloadingError);
+				
 				return true;
 			}
 			
@@ -116,7 +117,7 @@ namespace AssetBundles
 	
 	public class AssetBundleLoadAssetOperationSimulation : AssetBundleLoadAssetOperation
 	{
-		Object							m_SimulatedObject;
+		Object	m_SimulatedObject;
 		
 		public AssetBundleLoadAssetOperationSimulation (Object simulatedObject)
 		{
@@ -147,6 +148,9 @@ namespace AssetBundles
 		protected System.Type 			m_Type;
 		protected AssetBundleRequest	m_Request = null;
 	
+		public delegate void OnAssetBundleDownloadingErrorEvent();
+		public static event OnAssetBundleDownloadingErrorEvent OnAssetBundleDowloadingError;
+
 		public AssetBundleLoadAssetOperationFull (string bundleName, string assetName, System.Type type)
 		{
 			m_AssetBundleName = bundleName;
@@ -188,6 +192,10 @@ namespace AssetBundles
 			if (m_Request == null && m_DownloadingError != null)
 			{
 				Debug.LogError(m_DownloadingError);
+
+				if (OnAssetBundleDowloadingError != null)
+					OnAssetBundleDowloadingError ();
+				
 				return true;
 			}
 	
