@@ -79,7 +79,8 @@ public class UIOffScreenIndicator : MonoBehaviour {
 	}
 
 	void HandleStartGame (bool state) {
-		isInitiated = true;
+		if (state) 
+			isInitiated = true;
 	}
 
 	private void CarIndicator () {

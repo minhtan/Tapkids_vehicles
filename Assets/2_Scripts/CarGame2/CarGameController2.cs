@@ -25,6 +25,10 @@ public class CarGameController2 : MonoBehaviour {
 
 	#region MONO
 	void Awake () {
+		mTransform = this.transform;
+	}
+
+	void OnEnable () {
 		Messenger.AddListener <bool, Transform> (EventManager.AR.MAPTRACKING.ToString(), HandleMapTracking);
 
 		Messenger.AddListener <string> (EventManager.Vehicle.COLLECTLETTER.ToString (), HandleCollectLetter);
@@ -32,8 +36,16 @@ public class CarGameController2 : MonoBehaviour {
 		Messenger.AddListener (EventManager.GUI.DROPBUTTON.ToString (), HandleDropLetter);
 
 		Messenger.AddListener (EventManager.Vehicle.GATHERLETTER.ToString (), HandleGatherLetter);
+	}
 
-		mTransform = this.transform;
+	void Start () {
+		RandomWord();
+
+		if (ArController.Instance != null) {
+			ArController.Instance.ToggleAR (true);
+			ArController.Instance.SetCenterMode (false);
+			ArController.Instance.SetArMaxStimTargets (1);
+		}
 
 		_machine = new SKStateMachine <CarGameController2> (this, new CG2InitState ());
 		_machine.addState (new CG2MapState ());
@@ -44,17 +56,11 @@ public class CarGameController2 : MonoBehaviour {
 		_machine.addState (new CG2ResetState ());
 	}
 
-	void Start () {
-		// TODO: get word from database
-//		wordGameData = DataUltility.ReadDataForCarGame ();
-//		RandomData();
-	}
-
-	public void RandomData()
+	public void RandomWord()
 	{
+		wordGameData = DataUltility.ReadDataForCarGame ();
 		UnityEngine.Random.seed = Environment.TickCount;
 		letters = wordGameData.wordlist [UnityEngine.Random.Range (0, wordGameData.wordlist.Length)];
-//		Debug.Log (letters);
 	}
 
 	void Update () {
@@ -82,8 +88,9 @@ public class CarGameController2 : MonoBehaviour {
 	#endregion MONO
 
 	#region private functions
-
 	void HandleMapTracking (bool _isFound, Transform _parent) {
+		if (_machine == null) return;
+
 		if (_isFound) {	// FOUND MAP
 			if (_machine.currentState.GetType () == typeof (CG2MapState)) {
 				_machine.changeState <CG2StartState> ();
