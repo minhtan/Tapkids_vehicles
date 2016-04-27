@@ -113,12 +113,12 @@ public class MainMenuController : MonoBehaviour {
 
 	#region wheel handling
 	void OnMenuWheelTurn(float angle){
+		
 	}
 
 	void OnMenuWheelRelease(float angle){
 		if(Mathf.Abs(angle) > SteeringWheel.angleThreshold/2){
 			bool isNext = angle > 0 ? true : false;
-			Debug.Log (isNext);
 			if (isNext) {
 				currentIndex++;
 			} else{
