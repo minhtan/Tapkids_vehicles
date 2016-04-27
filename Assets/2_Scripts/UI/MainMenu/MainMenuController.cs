@@ -58,6 +58,7 @@ public class MainMenuController : MonoBehaviour {
 
 	#region tween menu
 	void InitPosition(){
+		Debug.Log (width/2);
 		LeanTween.moveX (car, -width/2, 0f);
 		LeanTween.moveX (garage, -width/2, 0f);
 		menuInitPos = menu.anchoredPosition.x;
@@ -76,8 +77,8 @@ public class MainMenuController : MonoBehaviour {
 	}
 
 	void CreateCarTexture(){
-		width = Screen.width;
-		height = Screen.height;
+		width = GetComponent<RectTransform>().sizeDelta.x;
+		height = GetComponent<RectTransform>().sizeDelta.y;
 
 		RenderTexture rt = new RenderTexture ((int)(width / 2), (int)height, 24);
 		carRenderCam.targetTexture = rt;
@@ -113,12 +114,12 @@ public class MainMenuController : MonoBehaviour {
 
 	#region wheel handling
 	void OnMenuWheelTurn(float angle){
+
 	}
 
 	void OnMenuWheelRelease(float angle){
 		if(Mathf.Abs(angle) > SteeringWheel.angleThreshold/2){
 			bool isNext = angle > 0 ? true : false;
-			Debug.Log (isNext);
 			if (isNext) {
 				currentIndex++;
 			} else{
@@ -180,8 +181,8 @@ public class MainMenuController : MonoBehaviour {
 
 		float tempDis = isNext ? -displacement : displacement;
 		LeanTween.moveX (nextTitle.GetComponent<RectTransform> (), tempDis, 0f).setOnComplete( () => {
-			LeanTween.moveX (nextTitle.GetComponent<RectTransform> (), 0, 0.5f);
-			LeanTween.moveX (txtGameTitle.GetComponent<RectTransform> (), -tempDis, 0.5f).setDestroyOnComplete(true);
+			LeanTween.moveX (nextTitle.GetComponent<RectTransform> (), 0, 0.5f).setEase(LeanTweenType.easeOutBack);
+			LeanTween.moveX (txtGameTitle.GetComponent<RectTransform> (), -tempDis, 0.5f).setEase(LeanTweenType.easeOutBack).setDestroyOnComplete(true);
 			txtGameTitle = nextTitle;
 		});
 	}

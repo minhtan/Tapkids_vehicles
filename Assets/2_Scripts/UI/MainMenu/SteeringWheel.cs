@@ -43,7 +43,6 @@ public class SteeringWheel : MonoBehaviour {
 		if(isPressingOnWheel){
 			initAngle = fg.GetDegrees (rectWordPos);
 			dragAngle = initAngle;
-			angleDiff = 0;
 		}
 	}
 
@@ -60,10 +59,13 @@ public class SteeringWheel : MonoBehaviour {
 	}
 
 	void OnFingerUp(Lean.LeanFinger fg){
-		Messenger.Broadcast<float> (EventManager.GUI.MENUWHEELRELEASE.ToString (), angleDiff);
-		float angle = rectTran.localRotation.eulerAngles.z;
-		angle = angle > 180f ? (angle - 360) * -1 : angle * -1;
-		LeanTween.rotate(rectTran, angle, 0.5f);
-		_OnWheelPress (false);
+		if (isPressingOnWheel) {
+			float angle = rectTran.localRotation.eulerAngles.z;
+			angle = angle > 180f ? (angle - 360) * -1 : angle * -1;
+			Messenger.Broadcast<float> (EventManager.GUI.MENUWHEELRELEASE.ToString (), angle);
+			LeanTween.rotate (rectTran, angle, 0.5f).setEase(LeanTweenType.easeOutBack);
+
+			isPressingOnWheel = false;
+		}
 	}
 }

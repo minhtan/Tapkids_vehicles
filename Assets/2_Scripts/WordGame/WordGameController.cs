@@ -28,6 +28,12 @@ public class WordGameController : MonoBehaviour {
 	void Update(){
 		UpdateScoreValue ();
 	}
+
+	void Start(){
+		if (GUIController.Instance != null) {
+			Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_INGAME.ToString (), true);
+		}
+	}
 	#region Vars
 	//Core
 	private Dictionary<string, FSMTrackable> letterToImgTarget = new Dictionary<string, FSMTrackable>();
