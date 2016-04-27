@@ -113,7 +113,7 @@ public class MainMenuController : MonoBehaviour {
 
 	#region wheel handling
 	void OnMenuWheelTurn(float angle){
-		
+
 	}
 
 	void OnMenuWheelRelease(float angle){
@@ -180,8 +180,8 @@ public class MainMenuController : MonoBehaviour {
 
 		float tempDis = isNext ? -displacement : displacement;
 		LeanTween.moveX (nextTitle.GetComponent<RectTransform> (), tempDis, 0f).setOnComplete( () => {
-			LeanTween.moveX (nextTitle.GetComponent<RectTransform> (), 0, 0.5f);
-			LeanTween.moveX (txtGameTitle.GetComponent<RectTransform> (), -tempDis, 0.5f).setDestroyOnComplete(true);
+			LeanTween.moveX (nextTitle.GetComponent<RectTransform> (), 0, 0.5f).setEase(LeanTweenType.easeOutBack);
+			LeanTween.moveX (txtGameTitle.GetComponent<RectTransform> (), -tempDis, 0.5f).setEase(LeanTweenType.easeOutBack).setDestroyOnComplete(true);
 			txtGameTitle = nextTitle;
 		});
 	}

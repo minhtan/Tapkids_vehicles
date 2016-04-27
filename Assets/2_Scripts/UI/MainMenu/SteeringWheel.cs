@@ -60,13 +60,14 @@ public class SteeringWheel : MonoBehaviour {
 	}
 
 	void OnFingerUp(Lean.LeanFinger fg){
-		Messenger.Broadcast<float> (EventManager.GUI.MENUWHEELRELEASE.ToString (), angleDiff);
+		if (isPressingOnWheel) {
+			float angle = rectTran.localRotation.eulerAngles.z;
+			angle = angle > 180f ? (angle - 360) * -1 : angle * -1;
+			Messenger.Broadcast<float> (EventManager.GUI.MENUWHEELRELEASE.ToString (), angle);
+			LeanTween.rotate (rectTran, angle, 0.5f).setEase(LeanTweenType.easeOutBack);
 
-		float angle = rectTran.localRotation.eulerAngles.z;
-		angle = angle > 180f ? (angle - 360) * -1 : angle * -1;
-		LeanTween.rotate(rectTran, angle, 0.5f);
-
-		isPressingOnWheel = false;
-		angleDiff = 0;
+			isPressingOnWheel = false;
+			angleDiff = 0;
+		}
 	}
 }
