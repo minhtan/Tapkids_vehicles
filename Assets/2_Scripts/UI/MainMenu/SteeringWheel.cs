@@ -43,7 +43,6 @@ public class SteeringWheel : MonoBehaviour {
 		if(isPressingOnWheel){
 			initAngle = fg.GetDegrees (rectWordPos);
 			dragAngle = initAngle;
-			angleDiff = 0;
 		}
 	}
 
@@ -67,7 +66,6 @@ public class SteeringWheel : MonoBehaviour {
 			LeanTween.rotate (rectTran, angle, 0.5f).setEase(LeanTweenType.easeOutBack);
 
 			isPressingOnWheel = false;
-			angleDiff = 0;
 		}
 	}
 }

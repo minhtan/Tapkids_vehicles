@@ -58,6 +58,7 @@ public class MainMenuController : MonoBehaviour {
 
 	#region tween menu
 	void InitPosition(){
+		Debug.Log (width/2);
 		LeanTween.moveX (car, -width/2, 0f);
 		LeanTween.moveX (garage, -width/2, 0f);
 		menuInitPos = menu.anchoredPosition.x;
@@ -76,8 +77,8 @@ public class MainMenuController : MonoBehaviour {
 	}
 
 	void CreateCarTexture(){
-		width = Screen.width;
-		height = Screen.height;
+		width = GetComponent<RectTransform>().sizeDelta.x;
+		height = GetComponent<RectTransform>().sizeDelta.y;
 
 		RenderTexture rt = new RenderTexture ((int)(width / 2), (int)height, 24);
 		carRenderCam.targetTexture = rt;
