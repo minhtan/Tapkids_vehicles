@@ -50,6 +50,10 @@ public class CarGameController : MonoBehaviour {
 			ArController.Instance.SetArMaxStimTargets (1);
 		}
 
+		if (GUIController.Instance != null) {
+			Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_INGAME.ToString (), true);
+		}
+
 		// setup finite state machine
 		_machine = new SKStateMachine <CarGameController> (this, new CGLetterState ());
 		_machine.addState (new CGInitState ());

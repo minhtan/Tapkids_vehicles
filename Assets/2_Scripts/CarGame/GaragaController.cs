@@ -16,7 +16,7 @@ public class GaragaController : MonoBehaviour {
 	#endregion public members
 
 	#region private members
-	private string[] demoGarage = new string[] {"police", "ambulance"};
+//	private string[] demoGarage = new string[] {"police", "ambulance"};
 
 	private GameObject[] vehicleDemos;
 
@@ -35,6 +35,9 @@ public class GaragaController : MonoBehaviour {
 	}
 
 	void Start () {
+		for (int i = 0; i < 12; i++) {
+
+		}
 		// get player unlocked list
 
 		// compare with avaiable vehicle list
@@ -49,6 +52,12 @@ public class GaragaController : MonoBehaviour {
 				vehicleDemos[i].SetActive (true);
 			else
 				vehicleDemos[i].SetActive (false);
+		}
+	}
+
+	void Update () {
+		if (Input.GetKeyDown (KeyCode.Space)) {
+			Debug.Log (AssetController.Instance.GetTotalLoadedAssetBundle ().ToString ());
 		}
 	}
 	#endregion Mono

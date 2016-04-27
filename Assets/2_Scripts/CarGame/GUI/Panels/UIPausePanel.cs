@@ -21,7 +21,7 @@ public class UIPausePanel : MonoBehaviour {
 	void Disable () {
 //		CarGameEventController.TogglePanel -= OnTogglePanel;
 //		CarGameEventController.PauseGame -= OnPauseGame;
-//		Messenger.RemoveListener <bool> (EventManager.GameState.PAUSEGAME.ToString (), HandlePauseGame);
+		Messenger.RemoveListener <bool> (EventManager.GameState.PAUSEGAME.ToString (), HandlePauseGame);
 	}
 
 	void Start () {

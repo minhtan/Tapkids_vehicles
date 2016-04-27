@@ -49,7 +49,7 @@ namespace AssetBundles
 		const string kSimulateAssetBundles = "SimulateAssetBundles";
 	#endif
 	
-		static Dictionary<string, LoadedAssetBundle> m_LoadedAssetBundles = new Dictionary<string, LoadedAssetBundle> ();
+		public static Dictionary<string, LoadedAssetBundle> m_LoadedAssetBundles = new Dictionary<string, LoadedAssetBundle> ();
 		public static Dictionary<string, WWW> m_DownloadingWWWs = new Dictionary<string, WWW> ();
 		static Dictionary<string, string> m_DownloadingErrors = new Dictionary<string, string> ();
 		static List<AssetBundleLoadOperation> m_InProgressOperations = new List<AssetBundleLoadOperation> ();
@@ -527,5 +527,10 @@ namespace AssetBundles
 	
 			return operation;
 		}
+
+
+
 	} // End of AssetBundleManager.
+
+
 }

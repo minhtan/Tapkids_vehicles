@@ -72,6 +72,10 @@ public class AssetController : UnitySingletonPersistent<AssetController> {
 		Debug.Log(assetName + (prefab == null ? " was not" : " was")+ " loaded successfully in " + elapsedTime + " seconds" );
 	}
 
+	// fdj: addition feature
+	public int GetTotalLoadedAssetBundle () {
+		return AssetBundleManager.m_LoadedAssetBundles.Count;
+	}
 	/* use as follow
 	 private IEnumerator mymethod ()
 		{
