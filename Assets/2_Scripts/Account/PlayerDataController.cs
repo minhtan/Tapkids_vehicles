@@ -40,7 +40,7 @@ public class PlayerDataController : UnitySingletonPersistent<PlayerDataControlle
 
 	#region demo data
 	private void AddDemoData () {
-		Vehicle police = new  Vehicle (0, "police", 100, 10);
+		Vehicle police = new  Vehicle (0, GameConstant.vehicles [0], 100, 10);
 		Vehicle ambulance = new Vehicle (1, "ambulance", 200, 20);
 		List <Vehicle> unlockedVehicles= new List <Vehicle> ();
 

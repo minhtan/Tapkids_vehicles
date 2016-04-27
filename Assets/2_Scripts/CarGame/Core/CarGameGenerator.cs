@@ -16,8 +16,6 @@ public class CarGameGenerator : MonoBehaviour {
 
 	#region private members
 
-	private string assetBundleName = "car_asset";
-
 	private Transform cartPoint;
 	private GameObject[] letterPoints;	// stores letter's positions in environment
 	private GameObject[] obstaclePoints;	
@@ -32,18 +30,16 @@ public class CarGameGenerator : MonoBehaviour {
 	private float delayTime = .5f;
 	private Transform mTransform;
 	#endregion private members
-	//
 
 	#region MONO
-
 	void OnEnable () {
-
 		Messenger.AddListener <string> (EventManager.GameState.INITGAME.ToString(), HandleInitGame);
 		Messenger.AddListener <bool> (EventManager.GameState.STARTGAME.ToString (), HandleStartGame);
 		Messenger.AddListener (EventManager.GameState.RESETGAME.ToString (), HandleResetGame);
 
 		Messenger.AddListener <string> (EventManager.GUI.REMOVELETTER.ToString (), HandleDropLetter);
 	}
+
 	void OnDisable () {
 		Messenger.RemoveListener <string> (EventManager.GameState.INITGAME.ToString(), HandleInitGame);
 		Messenger.RemoveListener <bool> (EventManager.GameState.STARTGAME.ToString (), HandleStartGame);
@@ -65,26 +61,9 @@ public class CarGameGenerator : MonoBehaviour {
 //		if (cartPoint == null) 
 //			Debug.Log ("Setup Error, There is no Car Point in the environment");
 	}
-
 	#endregion MONO
 
 	#region private functions
-	IEnumerable<int> UniqueRandom(int minInclusive, int maxInclusive)
-	{
-		List<int> candidates = new List<int>();
-		for (int i = minInclusive; i <= maxInclusive; i++)
-		{
-			candidates.Add(i);
-		}
-		System.Random rnd = new System.Random();
-		while (candidates.Count > 0)
-		{
-			int index = rnd.Next(candidates.Count);
-			yield return candidates[index];
-			candidates.RemoveAt(index);
-		}
-	}
-
 	private void HandleInitGame (string _word) {
 		#region demo
 		cartPoint = GameObject.FindWithTag ("CarPoint").transform;
@@ -151,7 +130,7 @@ public class CarGameGenerator : MonoBehaviour {
 
 	private IEnumerator SetupCar () {
 		yield return new WaitForSeconds (1f);
-		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (assetBundleName, "arcadecar", (bundle) => {
+		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (GameConstant.assetBundleName, "arcadecar", (bundle) => {
 			carGameObject = Instantiate (bundle, cartPoint.position + pointOffset, Quaternion.identity) as GameObject;
 			carGameObject.transform.SetParent (mTransform, false);
 			carGameObject.SetActive (false);
@@ -160,7 +139,7 @@ public class CarGameGenerator : MonoBehaviour {
 
 	private IEnumerator SetupLetter (string _letter, Vector3 position) {
 		yield return new WaitForSeconds (1f);
-		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (assetBundleName, _letter, (bundle) => {
+		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (GameConstant.assetBundleName, _letter, (bundle) => {
 			GameObject letterGameObject = Instantiate (bundle, position + pointOffset, Quaternion.identity) as GameObject;
 			letterGameObject.AddComponent <LetterController> ();
 			letterGameObject.GetComponent <LetterController> ().letterName = _letter;
@@ -173,7 +152,7 @@ public class CarGameGenerator : MonoBehaviour {
 
 	private IEnumerator SetupObstacle (Vector3 position) {
 		yield return new WaitForSeconds (1f);
-		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (assetBundleName, "tree", (bundle) => {
+		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (GameConstant.assetBundleName, "tree", (bundle) => {
 			GameObject obstacleGameObject = Instantiate (bundle, position, Quaternion.identity) as GameObject;
 			obstacleGameObject.AddComponent <ObstacleController> ();
 			obstacleGameObject.transform.SetParent (mTransform, false);

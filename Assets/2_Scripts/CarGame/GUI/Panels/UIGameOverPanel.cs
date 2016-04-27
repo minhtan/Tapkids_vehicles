@@ -37,7 +37,7 @@ public class UIGameOverPanel : MonoBehaviour {
 		mCanvasGroup.blocksRaycasts = true;
 
 		if (gameOverMessage != null) {
-			gameOverMessage.text = GameMessages.WinMessage;
+			gameOverMessage.text = GameConstant.WinMessage;
 		}
 
 		if (starImages.Length > 0 && starImages.Length <= _starNum) {
