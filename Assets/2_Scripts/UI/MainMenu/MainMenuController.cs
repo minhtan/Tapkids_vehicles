@@ -4,6 +4,7 @@ using System;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using Lean;
+using System.Linq;
 
 public class MainMenuController : MonoBehaviour {
 	#region var
@@ -173,10 +174,17 @@ public class MainMenuController : MonoBehaviour {
 		GameObject nextTitle = Instantiate (txtGameTitle);
 		nextTitle.GetComponent<Text> ().text = sceneName [currentIndex];
 		nextTitle.transform.SetParent (pnlTitles, false);
-		float tempDis;
-		tempDis = isNext ? -displacement : displacement;
-		LeanTween.moveX (nextTitle.GetComponent<RectTransform> (), tempDis, 0f);
 
+		float tempDis = isNext ? -displacement : displacement;
+		LeanTween.moveX (nextTitle.GetComponent<RectTransform> (), tempDis, 0f).setOnComplete( () => {
+			LeanTween.moveX (nextTitle.GetComponent<RectTransform> (), 0, 0.5f);
+			LeanTween.moveX (txtGameTitle.GetComponent<RectTransform> (), -tempDis, 0.5f).setDestroyOnComplete(true);
+			txtGameTitle = nextTitle;
+		});
+	}
+
+	public void _OnPlayClick(){
+		SceneController.Instance.LoadingSceneAsync (sceneToLeanTransPhrase.Keys.ElementAt(currentIndex));
 	}
 	#endregion
 }
