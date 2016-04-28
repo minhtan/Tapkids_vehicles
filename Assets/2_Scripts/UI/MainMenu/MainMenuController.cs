@@ -21,12 +21,17 @@ public class MainMenuController : MonoBehaviour {
 
 	bool isPressingOnWheel = false;
 	Dictionary<SceneController.SceneID, string> sceneToLeanTransPhrase;
-	List<string> sceneName = new List<string>();
+	List<string> gameNames = new List<string>();
 	int currentIndex = 0;
 
 	public RectTransform pnlTitles;
 	public GameObject txtGameTitle;
-	float displacement;
+	float displacmentOfText;
+
+	List<Sprite> gameImages = new List<Sprite>();
+	public RectTransform pnlGameImages;
+	public GameObject imgGameImage;
+	float displacmentOfImage;
 	#endregion
 
 	#region mono
@@ -58,7 +63,6 @@ public class MainMenuController : MonoBehaviour {
 
 	#region tween menu
 	void InitPosition(){
-		Debug.Log (width/2);
 		LeanTween.moveX (car, -width/2, 0f);
 		LeanTween.moveX (garage, -width/2, 0f);
 		menuInitPos = menu.anchoredPosition.x;
@@ -128,21 +132,30 @@ public class MainMenuController : MonoBehaviour {
 
 			currentIndex = CycleIndex (currentIndex);
 			ChangeTitle (currentIndex, isNext);
+			ChangeImage (currentIndex, isNext);
 		}
 	}
 
 	public void UpdateLocalization()
 	{
 		try {
-			sceneName.Clear ();
+			gameNames.Clear ();
 			foreach(KeyValuePair<SceneController.SceneID, string> entry in sceneToLeanTransPhrase)
 			{
-				sceneName.Add (LeanLocalization.GetTranslation(entry.Value).Text);
+				gameNames.Add (LeanLocalization.GetTranslation(entry.Value).Text);
 			}
 			ChangeTitleToCurrentIndex();
 		} catch (NullReferenceException ex) {
 			Debug.Log (ex.ToString ());
 		}
+	}
+
+	void SetUpGameImages(){
+		foreach(KeyValuePair<SceneController.SceneID, string> entry in sceneToLeanTransPhrase)
+		{
+			gameImages.Add (DataUltility.GetGameImage(entry.Value));
+		}
+		ChangeGameImageToCurrentIndex ();
 	}
 
 	void SetUpSceneIndex(){
@@ -157,12 +170,19 @@ public class MainMenuController : MonoBehaviour {
 	}
 
 	void SetUpUI(){
-		displacement = pnlTitles.sizeDelta.x;
-		LeanTween.moveX (txtGameTitle.GetComponent<RectTransform> (), 0, 0f);
+		displacmentOfText = pnlTitles.sizeDelta.x;
+		displacmentOfImage = pnlGameImages.sizeDelta.x;
+		LeanTween.moveX (txtGameTitle.GetComponent<RectTransform> (), 0f, 0f);
+		LeanTween.moveX (imgGameImage.GetComponent<RectTransform> (), 0f, 0f);
+		SetUpGameImages ();
 	}
 
 	void ChangeTitleToCurrentIndex(){
-		txtGameTitle.GetComponent<Text> ().text = sceneName [currentIndex];
+		txtGameTitle.GetComponent<Text> ().text = gameNames [currentIndex];
+	}
+
+	void ChangeGameImageToCurrentIndex(){
+		imgGameImage.GetComponent<Image> ().sprite = gameImages [currentIndex];
 	}
 
 	int CycleIndex(int index){
@@ -176,14 +196,37 @@ public class MainMenuController : MonoBehaviour {
 
 	void ChangeTitle(int index, bool isNext){
 		GameObject nextTitle = Instantiate (txtGameTitle);
-		nextTitle.GetComponent<Text> ().text = sceneName [currentIndex];
+		nextTitle.GetComponent<Text> ().text = gameNames [index];
 		nextTitle.transform.SetParent (pnlTitles, false);
 
-		float tempDis = isNext ? -displacement : displacement;
+		float tempDis = isNext ? -displacmentOfText : displacmentOfText;
+		LeanTween.textAlpha (nextTitle.GetComponent<RectTransform> (), 0f, 0f);
 		LeanTween.moveX (nextTitle.GetComponent<RectTransform> (), tempDis, 0f).setOnComplete( () => {
-			LeanTween.moveX (nextTitle.GetComponent<RectTransform> (), 0, 0.5f).setEase(LeanTweenType.easeOutBack);
+			LeanTween.textAlpha (nextTitle.GetComponent<RectTransform> (), 1f, 0.5f).setEase(LeanTweenType.easeOutExpo);
+			LeanTween.moveX (nextTitle.GetComponent<RectTransform> (), 0f, 0.5f).setEase(LeanTweenType.easeOutBack);
+
+			LeanTween.textAlpha (txtGameTitle.GetComponent<RectTransform>(), 0f, 0.5f).setEase(LeanTweenType.easeOutExpo);
 			LeanTween.moveX (txtGameTitle.GetComponent<RectTransform> (), -tempDis, 0.5f).setEase(LeanTweenType.easeOutBack).setDestroyOnComplete(true);
+
 			txtGameTitle = nextTitle;
+		});
+	}
+
+	void ChangeImage(int index, bool isNext){
+		GameObject nextImage = Instantiate (imgGameImage);
+		nextImage.GetComponent<Image> ().sprite = gameImages [index];
+		nextImage.transform.SetParent (pnlGameImages, false);
+
+		float tempDis = isNext ? -displacmentOfImage : displacmentOfImage;
+		LeanTween.alpha (nextImage.GetComponent<RectTransform> (), 0f, 0f);
+		LeanTween.moveX (nextImage.GetComponent<RectTransform> (), tempDis, 0f).setOnComplete( () => {
+			LeanTween.alpha (nextImage.GetComponent<RectTransform> (), 1f, 0.5f).setEase(LeanTweenType.easeOutExpo);
+			LeanTween.moveX (nextImage.GetComponent<RectTransform> (), 0f, 0.5f).setEase(LeanTweenType.easeOutBack);
+
+			LeanTween.alpha (imgGameImage.GetComponent<RectTransform>(), 0f, 0.5f).setEase(LeanTweenType.easeOutExpo);
+			LeanTween.moveX (imgGameImage.GetComponent<RectTransform> (), -tempDis, 0.5f).setEase(LeanTweenType.easeOutBack).setDestroyOnComplete(true);
+
+			imgGameImage = nextImage;
 		});
 	}
 
