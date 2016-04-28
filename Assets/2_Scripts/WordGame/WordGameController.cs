@@ -59,9 +59,6 @@ public class WordGameController : MonoBehaviour {
 	public int letterPoint = 5;
 	public int scoreStep = 1;
 
-	//Sound
-	public AudioClip correctSound;
-
 	//GUI
 	public Text txt_answers;
 	public Slider sld_score;
@@ -113,7 +110,7 @@ public class WordGameController : MonoBehaviour {
 	}
 
 	void _UpdateWordFoundUI(){
-		SoundController.Instance.PlaySound(correctSound);
+		AudioManager.Instance.PlayOne(AudioManager.CLIPTYPE.TEMPORARY, AudioKey.UNIQUE_KEY.WORDGAME_CORRECT);
 
 		txt_answers.text = "";
 		for(int i=0; i < foundAnswers.Count; i++){

@@ -17,30 +17,63 @@ public class AudioManager : UnitySingletonPersistent<AudioManager>
 	public enum CLIPTYPE
 	{
 		BACKGROUND,
-		TEMPORARY
+		TEMPORARY,
+		UI
 	}
 
 	public AudioSource _backgroundSource;
 	public AudioSource _tempoSource;
 	public AudioSource _uiSource;
 
-	public AudioClipInfo[] _backgroundAudios;
-	public AudioClipInfo[] _tmpAudios;
-	public AudioClipInfo[] _uiAudios;
+	private AudioClipInfo[] _backgroundAudios;
+	private AudioClipInfo[] _tmpAudios;
+	private AudioClipInfo[] _uiAudios;
+
+	public LocalizedAudioWrapper[] _localizedAudioWrappers;
 
 	private Dictionary<AudioKey.UNIQUE_KEY, int> _clipInfoDict;
 
+	void OnEnable ()
+	{
+		Lean.LeanLocalization.OnLocalizationChanged += OnChangeLanguage;
+	}
+
+	void OnDisable ()
+	{
+		Lean.LeanLocalization.OnLocalizationChanged -= OnChangeLanguage;
+	}
+
 	void Awake ()
 	{
+		base.Awake ();
 		PreProcessingAudioArray ();
 	}
 
 	private void PreProcessingAudioArray ()
 	{
+		SetLanguage ();
 		_clipInfoDict = new Dictionary<AudioKey.UNIQUE_KEY, int> ();
 		AddAudioToDict (_backgroundAudios, _backgroundSource);
 		AddAudioToDict (_tmpAudios, _tempoSource);
 		AddAudioToDict (_uiAudios, _uiSource);
+	}
+
+	private void OnChangeLanguage ()
+	{
+		SetLanguage ();
+	}
+
+	private void SetLanguage()
+	{
+		string language = Lean.LeanLocalization.Instance.CurrentLanguage.ToLower ();
+		for (int i = 0; i < _localizedAudioWrappers.Length; i++) {
+			if (_localizedAudioWrappers [i].localizedKey.CompareTo (language) == 0) {
+				_backgroundAudios = _localizedAudioWrappers [i].backgroundAudios;
+				_tmpAudios = _localizedAudioWrappers [i].tmpAudios;
+				_uiAudios = _localizedAudioWrappers [i].uiAudios;
+				break;
+			}
+		}
 	}
 
 	private void AddAudioToDict (AudioClipInfo[] audioArray, AudioSource audioSource)
@@ -163,10 +196,25 @@ public class AudioManager : UnitySingletonPersistent<AudioManager>
 
 	private AudioClipInfo GetAudioClipInfo (CLIPTYPE type, AudioKey.UNIQUE_KEY key)
 	{
-		AudioClipInfo[] clipArray = type == CLIPTYPE.BACKGROUND ? _backgroundAudios : _tmpAudios;
+		AudioClipInfo[] clipArray = null;
 
-		if (!_clipInfoDict.ContainsKey (key))
-			return null;
+		if (type == CLIPTYPE.BACKGROUND)
+			clipArray = _backgroundAudios;
+		else if (type == CLIPTYPE.TEMPORARY)
+			clipArray = _tmpAudios;
+		else if (type == CLIPTYPE.UI)
+			clipArray = _uiAudios;
+
+		if (!_clipInfoDict.ContainsKey (key)) {
+			//Fallback to first
+			if (type == CLIPTYPE.BACKGROUND)
+				clipArray = _localizedAudioWrappers [0].backgroundAudios;
+			else if (type == CLIPTYPE.TEMPORARY)
+				clipArray = _localizedAudioWrappers [0].tmpAudios;
+			else if (type == CLIPTYPE.UI)
+				clipArray = _localizedAudioWrappers[0].uiAudios;
+			return clipArray[_clipInfoDict[key]];
+		}
 		
 		return clipArray [_clipInfoDict [key]];
 	}
@@ -182,4 +230,13 @@ public class AudioManager : UnitySingletonPersistent<AudioManager>
 	}
 
 	# endregion
+
+	[System.Serializable]
+	public class LocalizedAudioWrapper : System.Object
+	{
+		public string localizedKey;
+		public AudioClipInfo[] backgroundAudios;
+		public AudioClipInfo[] tmpAudios;
+		public AudioClipInfo[] uiAudios;
+	}
 }

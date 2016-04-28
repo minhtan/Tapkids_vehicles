@@ -35,6 +35,10 @@ public class DataUltility
 		return Resources.Load<Sprite> ("LettersImage/" + name);
 	}
 
+	public static Sprite GetGameImage(string name){
+		return Resources.Load<Sprite> ("GameImage/" + name);
+	}
+
 	public static List<string> GetPlayableLetters (WordGameData data)
 	{
 		List<string> letters = new List<string> ();

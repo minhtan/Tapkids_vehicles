@@ -25,7 +25,8 @@ public class EventManager {
 	public enum AR {
 		LETTERTRACKING,
 		IMAGETRACKING,
-		MAPTRACKING
+		MAPTRACKING,
+		VEHICLETRACING
 	}
 
 	public enum GameState {

@@ -12,10 +12,11 @@ namespace Vuforia
 	/// <summary>
 	/// A custom handler that implements the ITrackableEventHandler interface.
 	/// </summary>
-	public class FSMTrackable : MonoBehaviour,
+	public class FSMStartUpTrackable : MonoBehaviour,
 	ITrackableEventHandler
 	{
 		public string targetName;
+		public bool isLetter = false;
 
 		#region PRIVATE_MEMBER_VARIABLES
 
@@ -91,20 +92,30 @@ namespace Vuforia
 		void _ShowModel(){
 			StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (AssetController.bundleName, targetName, (bundle) => {
 				go = GameObject.Instantiate(bundle);
-				go.transform.Rotate(90f, 0f, 0f);
-				go.transform.position = new Vector3(0f, 0.25f, -0.5f);
 				go.transform.SetParent (transform, false);
-			
+
 				go_anim = go.GetComponentInChildren<Animator>();
+
+				if(isLetter){
+					Messenger.Broadcast<bool, string>(EventManager.AR.IMAGETRACKING.ToString(), true, targetName);
+				}else{
+					Messenger.Broadcast<bool>(EventManager.AR.VEHICLETRACING.ToString(), true);
+				}
 			}));
 		}
 
 		void _HideModel(){
 			if(go != null){
 				GameObject.Destroy(go);
-				Resources.UnloadUnusedAssets();
 				go = null;
 				go_anim = null;
+				Resources.UnloadUnusedAssets();
+
+				if (isLetter) {
+					Messenger.Broadcast<bool, string> (EventManager.AR.IMAGETRACKING.ToString (), false, targetName);
+				} else {
+					Messenger.Broadcast<bool>(EventManager.AR.VEHICLETRACING.ToString(), false);
+				}
 			}
 		}
 		#endregion // PRIVATE_METHODS
