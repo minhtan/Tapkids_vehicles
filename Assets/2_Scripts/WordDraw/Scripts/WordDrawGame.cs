@@ -35,6 +35,7 @@ namespace WordDraw
 
 		void OnStartGame()
 		{
+			AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.WORDGAME_CORRECT);
 			StartCoroutine (GameCoroutine());
 		}
 

@@ -14,6 +14,15 @@ public class AudioManager : UnitySingletonPersistent<AudioManager>
 		public AudioSource audioSource { set { _audioSource = value; } get { return _audioSource; } }
 	}
 
+	[System.Serializable]
+	public class LocalizedAudioWrapper : System.Object
+	{
+		public string localizedKey;
+		public AudioClipInfo[] backgroundAudios;
+		public AudioClipInfo[] tmpAudios;
+		public AudioClipInfo[] uiAudios;
+	}
+
 	public enum CLIPTYPE
 	{
 		BACKGROUND,
@@ -22,7 +31,7 @@ public class AudioManager : UnitySingletonPersistent<AudioManager>
 	}
 
 	public AudioSource _backgroundSource;
-	public AudioSource _tempoSource;
+	public AudioSource _tempSource;
 	public AudioSource _uiSource;
 
 	private AudioClipInfo[] _backgroundAudios;
@@ -31,7 +40,9 @@ public class AudioManager : UnitySingletonPersistent<AudioManager>
 
 	public LocalizedAudioWrapper[] _localizedAudioWrappers;
 
-	private Dictionary<AudioKey.UNIQUE_KEY, int> _clipInfoDict;
+	private string[] _languages;
+	private LocalizedAudioWrapper _currentLocalized;
+	private Dictionary<string, Dictionary<AudioKey.UNIQUE_KEY, CLIPTYPE>> _audioLocalizedDict;
 
 	void OnEnable ()
 	{
@@ -51,42 +62,48 @@ public class AudioManager : UnitySingletonPersistent<AudioManager>
 
 	private void PreProcessingAudioArray ()
 	{
-		SetLanguage ();
-		_clipInfoDict = new Dictionary<AudioKey.UNIQUE_KEY, int> ();
-		AddAudioToDict (_backgroundAudios, _backgroundSource);
-		AddAudioToDict (_tmpAudios, _tempoSource);
-		AddAudioToDict (_uiAudios, _uiSource);
+		Debug.Log (Lean.LeanLocalization.Instance.CurrentLanguage);
+
+		_languages = Lean.LeanLocalization.Instance.Languages.ToArray ();
+		_currentLocalized = GetCurrentLocalizedWrapper ();
+		_audioLocalizedDict = new Dictionary<string, Dictionary<AudioKey.UNIQUE_KEY, CLIPTYPE>> ();
+
+		for (int i = 0; i < _languages.Length; i++) {
+			_audioLocalizedDict.Add (_languages [i], new Dictionary<AudioKey.UNIQUE_KEY, CLIPTYPE> ());
+		}
+
+		for (int i = 0; i < _localizedAudioWrappers.Length; i++) {
+			AddAudioToDict (_localizedAudioWrappers [i].backgroundAudios, _backgroundSource, CLIPTYPE.BACKGROUND, _audioLocalizedDict [_localizedAudioWrappers [i].localizedKey]);
+			AddAudioToDict (_localizedAudioWrappers [i].tmpAudios, _tempSource, CLIPTYPE.TEMPORARY, _audioLocalizedDict [_localizedAudioWrappers [i].localizedKey]);
+			AddAudioToDict (_localizedAudioWrappers [i].uiAudios, _uiSource, CLIPTYPE.UI, _audioLocalizedDict [_localizedAudioWrappers [i].localizedKey]);
+		}
 	}
 
 	private void OnChangeLanguage ()
 	{
-		SetLanguage ();
 	}
 
-	private void SetLanguage()
-	{
-		string language = Lean.LeanLocalization.Instance.CurrentLanguage.ToLower ();
-		for (int i = 0; i < _localizedAudioWrappers.Length; i++) {
-			if (_localizedAudioWrappers [i].localizedKey.CompareTo (language) == 0) {
-				_backgroundAudios = _localizedAudioWrappers [i].backgroundAudios;
-				_tmpAudios = _localizedAudioWrappers [i].tmpAudios;
-				_uiAudios = _localizedAudioWrappers [i].uiAudios;
-				break;
-			}
-		}
-	}
-
-	private void AddAudioToDict (AudioClipInfo[] audioArray, AudioSource audioSource)
+	private void AddAudioToDict (AudioClipInfo[] audioArray, AudioSource audioSource, CLIPTYPE type, Dictionary<AudioKey.UNIQUE_KEY, CLIPTYPE> dict)
 	{
 		for (int i = 0; i < audioArray.Length; i++) {
-			_clipInfoDict.Add (audioArray [i].uniqueKey, i);
 			audioArray [i].audioSource = audioSource;
+			dict.Add (audioArray [i].uniqueKey, type);
 		}
 	}
 
 	#region PLAY AUDIO
 
-	public AudioSource PlayLoop (CLIPTYPE type, AudioKey.UNIQUE_KEY key)
+	public void PlayAudio (AudioKey.UNIQUE_KEY key)
+	{
+		CLIPTYPE type = _audioLocalizedDict [GetCurrentLocation ()] [key];
+
+		if (type == CLIPTYPE.BACKGROUND)
+			PlayLoop (type, key);
+		else
+			PlayOne (type, key);
+	}
+
+	private AudioSource PlayLoop (CLIPTYPE type, AudioKey.UNIQUE_KEY key)
 	{
 		AudioClipInfo clipInfo = GetAudioClipInfo (type, key);
 
@@ -100,7 +117,7 @@ public class AudioManager : UnitySingletonPersistent<AudioManager>
 		return clipInfo.audioSource;
 	}
 
-	public AudioSource PlayOne (CLIPTYPE type, AudioKey.UNIQUE_KEY key)
+	private AudioSource PlayOne (CLIPTYPE type, AudioKey.UNIQUE_KEY key)
 	{
 		AudioClipInfo clipInfo = GetAudioClipInfo (type, key);
 
@@ -196,27 +213,19 @@ public class AudioManager : UnitySingletonPersistent<AudioManager>
 
 	private AudioClipInfo GetAudioClipInfo (CLIPTYPE type, AudioKey.UNIQUE_KEY key)
 	{
-		AudioClipInfo[] clipArray = null;
-
+		AudioClipInfo[] audioArray = null;
 		if (type == CLIPTYPE.BACKGROUND)
-			clipArray = _backgroundAudios;
+			audioArray = _currentLocalized.backgroundAudios;
 		else if (type == CLIPTYPE.TEMPORARY)
-			clipArray = _tmpAudios;
+			audioArray = _currentLocalized.tmpAudios;
 		else if (type == CLIPTYPE.UI)
-			clipArray = _uiAudios;
-
-		if (!_clipInfoDict.ContainsKey (key)) {
-			//Fallback to first
-			if (type == CLIPTYPE.BACKGROUND)
-				clipArray = _localizedAudioWrappers [0].backgroundAudios;
-			else if (type == CLIPTYPE.TEMPORARY)
-				clipArray = _localizedAudioWrappers [0].tmpAudios;
-			else if (type == CLIPTYPE.UI)
-				clipArray = _localizedAudioWrappers[0].uiAudios;
-			return clipArray[_clipInfoDict[key]];
-		}
+			audioArray = _currentLocalized.uiAudios;
 		
-		return clipArray [_clipInfoDict [key]];
+		for (int i = 0; i < audioArray.Length; i++) {
+			if (audioArray [i].uniqueKey == key)
+				return audioArray [i];
+		}	
+		return null;
 	}
 
 	public AudioClipInfo GetRandomBackgroundClipInfo ()
@@ -229,14 +238,20 @@ public class AudioManager : UnitySingletonPersistent<AudioManager>
 		return _tmpAudios [Random.Range (0, _tmpAudios.Length)];
 	}
 
-	# endregion
-
-	[System.Serializable]
-	public class LocalizedAudioWrapper : System.Object
+	private string GetCurrentLocation ()
 	{
-		public string localizedKey;
-		public AudioClipInfo[] backgroundAudios;
-		public AudioClipInfo[] tmpAudios;
-		public AudioClipInfo[] uiAudios;
+		return Lean.LeanLocalization.Instance.CurrentLanguage.ToLower ();
 	}
+
+	private LocalizedAudioWrapper GetCurrentLocalizedWrapper ()
+	{
+		for (int i = 0; i < _localizedAudioWrappers.Length; i++) {
+			if (_localizedAudioWrappers [i].localizedKey == GetCurrentLocation ()) {
+				return _localizedAudioWrappers [i];
+			}
+		}
+		return null;
+	}
+
+	# endregion
 }
