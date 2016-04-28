@@ -85,46 +85,10 @@ NavMeshSettings:
     cellSize: 0.16666666
     manualCellSize: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &166036593
+--- !u!1 &166036593 stripped
 GameObject:
-  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 192842, guid: dfee7320f42534ae8821a3af61b6ea91, type: 2}
   m_PrefabInternal: {fileID: 770036733}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 166036595}
-  - 114: {fileID: 166036594}
-  m_Layer: 0
-  m_Name: RefreshGallery
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &166036594
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11492842, guid: dfee7320f42534ae8821a3af61b6ea91,
-    type: 2}
-  m_PrefabInternal: {fileID: 770036733}
-  m_GameObject: {fileID: 166036593}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d2c0efcbec414bd0b494f792b9c9b53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &166036595
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 492842, guid: dfee7320f42534ae8821a3af61b6ea91, type: 2}
-  m_PrefabInternal: {fileID: 770036733}
-  m_GameObject: {fileID: 166036593}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
 --- !u!1001 &770036733
 Prefab:
   m_ObjectHideFlags: 0
@@ -166,7 +130,6 @@ Prefab:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: dfee7320f42534ae8821a3af61b6ea91, type: 2}
-  m_RootGameObject: {fileID: 166036593}
   m_IsPrefabParent: 0
 --- !u!1001 &1535585484
 Prefab:
@@ -211,9 +174,20 @@ Prefab:
       propertyPath: refreshGalleryPrefab
       value: 
       objectReference: {fileID: 166036593}
+    - target: {fileID: 11400000, guid: 1881c1838b020924787d225329e1ba36, type: 2}
+      propertyPath: FILENAME_PREFIX
+      value: TapkidsScreenhot
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 1881c1838b020924787d225329e1ba36, type: 2}
+      propertyPath: folderName
+      value: Pictures
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 1881c1838b020924787d225329e1ba36, type: 2}
+      propertyPath: phpScriptURL
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1881c1838b020924787d225329e1ba36, type: 2}
-  m_RootGameObject: {fileID: 2014688900}
   m_IsPrefabParent: 0
 --- !u!1 &1678396019
 GameObject:
@@ -314,47 +288,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tex: {fileID: 2800000, guid: 894324abb05cb984fb866b87d29e4695, type: 3}
---- !u!1 &2014688900
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 100000, guid: 1881c1838b020924787d225329e1ba36, type: 2}
-  m_PrefabInternal: {fileID: 1535585484}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 2014688902}
-  - 114: {fileID: 2014688901}
-  m_Layer: 0
-  m_Name: CaptureAndSave
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2014688901
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400000, guid: 1881c1838b020924787d225329e1ba36,
-    type: 2}
-  m_PrefabInternal: {fileID: 1535585484}
-  m_GameObject: {fileID: 2014688900}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1385126310, guid: 0e1a30375b00645e5ac9efe922b811fc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  FILENAME_PREFIX: 53637265656e73686f74
-  folderName: 5069637475726573
-  phpScriptURL: 687474703a2f2f7777772e6d797765622e636f6d2f75706c6f61645f66696c652e706870
-  refreshGalleryPrefab: {fileID: 166036593}
---- !u!4 &2014688902
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 400000, guid: 1881c1838b020924787d225329e1ba36, type: 2}
-  m_PrefabInternal: {fileID: 1535585484}
-  m_GameObject: {fileID: 2014688900}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 0

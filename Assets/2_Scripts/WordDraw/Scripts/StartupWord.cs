@@ -17,13 +17,24 @@ public class StartupWord : MonoBehaviour {
 
 	private UILetterButton _currentLetterBut;
 
+	CaptureAndSave snapShot;
+	public GameObject pnlLetterUI;
+	public GameObject pnlVehicleUI;
+
+	void Start () {
+		snapShot = GameObject.FindObjectOfType<CaptureAndSave>();
+		ArController.Instance.ToggleAR (true);
+		ArController.Instance.SetCenterMode (true);
+		ArController.Instance.SetArMaxStimTargets (1);
+	}
+
 	void OnEnable ()
 	{
 		GestureAutoDrawer.OnDrawGestureDone += OnDrawGestureDone;
 		LeanGestureRecognizer.OnGestureDetected += OnGestureDetected;
 		LeanGestureRecognizer.OnGestureReset += OnGestureReset;
 		Messenger.AddListener<bool, string> (EventManager.AR.IMAGETRACKING.ToString(), OnLetterFound);
-
+		Messenger.AddListener<bool> (EventManager.AR.VEHICLETRACING.ToString(), OnVehicleFound);
 	}
 
 	void OnDisable ()
@@ -47,8 +58,14 @@ public class StartupWord : MonoBehaviour {
 		_exitBut.SetActive (false);
 	}
 
+	private void OnVehicleFound(bool state){
+		pnlVehicleUI.SetActive (state);
+	}
+
 	private void OnLetterFound(bool found, string letterName)
 	{
+		pnlLetterUI.SetActive (found);
+
 		if (!found) {
 			_drawLetterBut.SetActive (false);
 			return;
@@ -122,5 +139,9 @@ public class StartupWord : MonoBehaviour {
 		_autoDrawer.ResetStroke ();
 		_tutText.SetTutText (UITutText.TutText.LET_WRITE);
 		_exitBut.SetActive (true);
+	}
+
+	public void _CaptureAndSave(){
+		snapShot.CaptureAndSaveToAlbum();
 	}
 }
