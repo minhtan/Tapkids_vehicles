@@ -195,7 +195,7 @@ public class AudioManager : UnitySingletonPersistent<AudioManager>
 
 	private AudioClipInfo GetAudioClipInfo (CLIPTYPE type, AudioKey.UNIQUE_KEY key)
 	{
-		AudioClipInfo[] clipArray;
+		AudioClipInfo[] clipArray = null;
 
 		if (type == CLIPTYPE.BACKGROUND)
 			clipArray = _backgroundAudios;
@@ -212,7 +212,7 @@ public class AudioManager : UnitySingletonPersistent<AudioManager>
 				clipArray = _localizedAudioWrappers [0].tmpAudios;
 			else if (type == CLIPTYPE.UI)
 				clipArray = _localizedAudioWrappers[0].uiAudios;
-			return ;
+			return clipArray[_clipInfoDict[key]];
 		}
 		
 		return clipArray [_clipInfoDict [key]];
