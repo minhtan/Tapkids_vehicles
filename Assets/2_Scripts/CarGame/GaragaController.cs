@@ -16,45 +16,55 @@ public class GaragaController : MonoBehaviour {
 	#endregion public members
 
 	#region private members
-//	private string[] demoGarage = new string[] {"police", "ambulance"};
-
 	private GameObject[] vehicleDemos;
-
-	private Vehicle[] vehicles;
+	private Transform mTransform;
+//	private Vehicle[] vehicles;
 	#endregion private members
 
 	#region Mono
+	void Awake () {
+		mTransform = GetComponent <Transform> ();
+	}
 	void OnEnable () {
-//		CarGameEventController.SelectCar += OnSelectCar;
 		Messenger.AddListener <int> (EventManager.GUI.SELECTCAR.ToString (), OnSelectCar);
 	}
 
 	void OnDisable () {
-//		CarGameEventController.SelectCar -= OnSelectCar;
 		Messenger.RemoveListener <int> (EventManager.GUI.SELECTCAR.ToString (), OnSelectCar);
 	}
 
 	void Start () {
-		for (int i = 0; i < 12; i++) {
-
-		}
 		// get player unlocked list
 
 		// compare with avaiable vehicle list
 
 		// then setup garage
+		for (int i = 0; i < GameConstant.vehicles.Count; i++) {
+			StartCoroutine (SetupCar (GameConstant.vehicles[i]));
+		}
 
 		// demo setup garage
-		vehicleDemos = new GameObject[transform.childCount];
-		for (int i = 0; i < vehicleDemos.Length; i++) {
-			vehicleDemos[i] = transform.GetChild (i).gameObject;
-			if (PlayerDataController.Instance.mPlayer.currentVehicle.id == i) 
-				vehicleDemos[i].SetActive (true);
-			else
-				vehicleDemos[i].SetActive (false);
-		}
+//		vehicleDemos = new GameObject[transform.childCount];
+//		for (int i = 0; i < vehicleDemos.Length; i++) {
+//			vehicleDemos[i] = transform.GetChild (i).gameObject;
+//			if (PlayerDataController.Instance.mPlayer.currentVehicle.id == i) 
+//				vehicleDemos[i].SetActive (true);
+//			else
+//				vehicleDemos[i].SetActive (false);
+//		}
 	}
-
+	private IEnumerator SetupCar (string vehicleName) {
+		yield return new WaitForSeconds (1f);
+		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (GameConstant.assetBundleName, vehicleName, (bundle) => {
+			GameObject carGameObject = Instantiate (bundle) as GameObject;
+			carGameObject.transform.localPosition = Vector3.zero;
+			Destroy (carGameObject.GetComponent <ArcadeCarUserController> ());
+			Destroy (carGameObject.GetComponent <ArcadeCarController> ());
+			Destroy (carGameObject.GetComponent <Rigidbody> ());
+			carGameObject.transform.SetParent (mTransform, false);
+			carGameObject.SetActive (false);
+		}));
+	}
 	void Update () {
 		if (Input.GetKeyDown (KeyCode.Space)) {
 			Debug.Log (AssetController.Instance.GetTotalLoadedAssetBundle ().ToString ());

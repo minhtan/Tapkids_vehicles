@@ -15,10 +15,7 @@ public class CarGameController : MonoBehaviour {
 	public string collectedLetters;
 	[HideInInspector]
 	public string letters;					// founded image target
-	[HideInInspector]
-	public List<string> vehicles = new List<string> (new string[] {"airplane", "bus", "car", "delivery truck", "electric bike", "fire truck", "garbage truck", "helicopter", 
-		"ice-cream truck", "jet ski", "kayak", "limousine", "motorcycle", "navy submarine", "outrigger canoe", "police car", "quadbike", "rickshaw", 
-		"space shuttle", "train", "ultralight craft", "van", "windjammer", "excavator", "yacht", "zeppelin"});
+
 	private SKStateMachine <CarGameController> _machine;
 	[HideInInspector]
 	public Transform mTransform;
@@ -115,7 +112,7 @@ public class CarGameController : MonoBehaviour {
 					mTransform.SetParent (_parent);
 				}
 			} else {
-				Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString(), GameMessages.LetterScanMessage, 1f);
+				Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString(), GameConstant.LetterScanMessage, 1f);
 			}
 		} else {		// LOST MAP
 			if(_machine.currentState.GetType () == typeof (CGStartState))
@@ -141,11 +138,11 @@ public class CarGameController : MonoBehaviour {
 
 	private void HandleGatherLetter () {
 		if (collectedLetters.Length > 0) {
-			if (vehicles.Contains (collectedLetters)) {
+			if (GameConstant.vehicles.Contains (collectedLetters)) {
 				_machine.changeState <CGGameOverState> ();
 				Messenger.Broadcast <int> (EventManager.GameState.GAMEOVER.ToString (), 0);
 			} else {
-				Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), GameMessages.WrongMessage, 1f);
+				Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), GameConstant.WrongMessage, 1f);
 			}
 		}
 	}
