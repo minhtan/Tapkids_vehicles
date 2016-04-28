@@ -8,53 +8,59 @@ public class PlayerDataController : UnitySingletonPersistent<PlayerDataControlle
 
 	public Player mPlayer;
 
+	private int currentPlayer;
 	#region MONO
 	void Awake () {
-		AddDemoData ();
+		mPlayer = new Player ();
 
+		TapkidsData.Load ();
 		mPlayer = TapkidsData.GetPlayerById(0);
+
+		if (mPlayer == null) {
+			TapkidsData.players.Add (mPlayer);
+			TapkidsData.Save();
+		} else {
+			currentPlayer = mPlayer.id;
+		}
+
 	}
 	#endregion MONO
 
 	#region public functions
+
+	public void GetPlayers () {
+	}
+
+	public void SelectPlayer (int id) {
+	}
+
+
 	public void UpdatePlayerName (string _name) {
 		mPlayer.name = _name;
+		TapkidsData.players [currentPlayer].name = mPlayer.name;
+		TapkidsData.Save ();
 	}
 
 	public void UpdatePlayerCredit (int _point) {
 		mPlayer.currentCredit += _point;
+		TapkidsData.players [currentPlayer].currentCredit = mPlayer.currentCredit;
+		TapkidsData.Save ();
 	}
 
 	public void UpdatePlayerCurrentVehicle (Vehicle _newVehicle) {
 		mPlayer.currentVehicle = _newVehicle;
+		TapkidsData.players [currentPlayer].currentVehicle = mPlayer.currentVehicle;
+		TapkidsData.Save ();
 	}
 
-	public void UpdateUnlockedCar (Vehicle _unlockedVehicle) {
+	public void UpdateUnlockedVehicle (Vehicle _unlockedVehicle) {
 		mPlayer.unlockedVehicles.Add (_unlockedVehicle);
+		TapkidsData.players [currentPlayer].unlockedVehicles = mPlayer.unlockedVehicles;
+		TapkidsData.Save ();
 	}
-
-
 	#endregion public functions
 
-
-
 	#region demo data
-	private void AddDemoData () {
-		Vehicle police = new  Vehicle (0, GameConstant.vehicles [0], 100, 10);
-		Vehicle ambulance = new Vehicle (1, "ambulance", 200, 20);
-		List <Vehicle> unlockedVehicles= new List <Vehicle> ();
 
-		unlockedVehicles.Add (police);
-		unlockedVehicles.Add (ambulance);
-
-
-		// demo player data
-		Player demoPlayer1 = new Player (0, "fdj1", 10, police, unlockedVehicles);
-//		Player demoPlayer2 = new Player (1, "fdj2", 20, 1, unlockedVehicles);
-
-		TapkidsData.players.Add (demoPlayer1);
-		TapkidsData.Save();
-
-	}
 	#endregion demo data
 }

@@ -16,9 +16,12 @@ public class GaragaController : MonoBehaviour {
 	#endregion public members
 
 	#region private members
-	private GameObject[] vehicleDemos;
+	private List<GameObject> vehicles;
 	private Transform mTransform;
 //	private Vehicle[] vehicles;
+
+
+	private 
 	#endregion private members
 
 	#region Mono
@@ -34,56 +37,65 @@ public class GaragaController : MonoBehaviour {
 	}
 
 	void Start () {
+		vehicles = new List <GameObject> ();
 		// get player unlocked list
 
 		// compare with avaiable vehicle list
 
 		// then setup garage
-		for (int i = 0; i < GameConstant.vehicles.Count; i++) {
-			StartCoroutine (SetupCar (GameConstant.vehicles[i]));
+		for (int i = 0; i < GameConstant.fourWheels.Count; i++) {
+			StartCoroutine (SetupCar (GameConstant.fourWheels[i]));
 		}
-
-		// demo setup garage
-//		vehicleDemos = new GameObject[transform.childCount];
-//		for (int i = 0; i < vehicleDemos.Length; i++) {
-//			vehicleDemos[i] = transform.GetChild (i).gameObject;
-//			if (PlayerDataController.Instance.mPlayer.currentVehicle.id == i) 
-//				vehicleDemos[i].SetActive (true);
-//			else
-//				vehicleDemos[i].SetActive (false);
-//		}
 	}
 	private IEnumerator SetupCar (string vehicleName) {
 		yield return new WaitForSeconds (1f);
 		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (GameConstant.assetBundleName, vehicleName, (bundle) => {
 			GameObject carGameObject = Instantiate (bundle) as GameObject;
+			vehicles.Add (carGameObject);
 			carGameObject.transform.localPosition = Vector3.zero;
 			Destroy (carGameObject.GetComponent <ArcadeCarUserController> ());
 			Destroy (carGameObject.GetComponent <ArcadeCarController> ());
 			Destroy (carGameObject.GetComponent <Rigidbody> ());
 			carGameObject.transform.SetParent (mTransform, false);
-			carGameObject.SetActive (false);
+			if (vehicles.Count > 1) {
+				carGameObject.transform.localPosition = new Vector3 (0f, 0f, -10f);
+				carGameObject.SetActive (false);
+
+			}
 		}));
 	}
 	void Update () {
-		if (Input.GetKeyDown (KeyCode.Space)) {
-			Debug.Log (AssetController.Instance.GetTotalLoadedAssetBundle ().ToString ());
-		}
+//		if (Input.GetKeyDown (KeyCode.Space)) {
+//			Debug.Log (AssetController.Instance.GetTotalLoadedAssetBundle ().ToString ());
+//		}
 	}
 	#endregion Mono
 
 	#region public functions
 	#endregion public functions
-
+	bool valid = true;
 	#region private functions
 	private void OnSelectCar (int _index) {
+		
 
 		// handle car modle
-		if (currentSelectedCar + _index >= 0 && currentSelectedCar + _index < vehicleDemos.Length)
+		if (valid == false) return;
+
+		if (currentSelectedCar + _index >= 0 && currentSelectedCar + _index < vehicles.Count)
 		{
-			vehicleDemos [currentSelectedCar].SetActive (false);
-			currentSelectedCar += _index;
-			vehicleDemos [currentSelectedCar].SetActive (true);
+			valid = false;
+//			vehicles [currentSelectedCar].SetActive (false);
+			LeanTween.moveLocalZ (vehicles [currentSelectedCar], 20.0f, 1f).setEase(LeanTweenType.easeInBack).setOnComplete ( () => {
+				vehicles [currentSelectedCar].transform.localPosition = new Vector3 (0f, 0f, -20f);
+				vehicles [currentSelectedCar].SetActive (false);
+
+				currentSelectedCar = Mathf.Clamp (currentSelectedCar + _index, 0, vehicles.Count- 1);
+
+				vehicles [currentSelectedCar].SetActive (true);
+				LeanTween.moveLocalZ (vehicles [currentSelectedCar], 0f, 1f).setEase (LeanTweenType.easeOutBack).setOnComplete ( () => { 
+					valid = true;
+				});
+			});
 		}
 
 		// TODO: update car stats in GUI
