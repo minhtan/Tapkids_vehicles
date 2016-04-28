@@ -17,6 +17,13 @@ public class Player {
 	public Player () {
 	}
 
+	public Player (int _id, int _currentCredit, Vehicle _currentVehicle, List <Vehicle> _unlockedVehicles) {
+		this.id = _id;
+		this.currentCredit = _currentCredit;
+		this.currentVehicle = _currentVehicle;
+		this.unlockedVehicles = _unlockedVehicles;
+	}
+
 	public Player (int _id, string _name, int _currentCredit, Vehicle _currentVehicle, List <Vehicle> _unlockedVehicles) {
 		this.id = _id;
 		this.name = _name;
@@ -35,6 +42,10 @@ public class Vehicle {
 	// TODO: ... customize color index
 
 	public Vehicle () {
+	}
+
+	public Vehicle (string _name) {
+		this.name = _name;
 	}
 
 	public Vehicle (int _id, string _name, int _speed, int _costPoint) {
@@ -80,8 +91,6 @@ public static class TapkidsData {
 		}
 		return false;
 	}
-
-
 
 	public static bool RemoveAllPlayer () {
 		players.Clear ();

@@ -15,9 +15,9 @@ public class CarPanel : MonoBehaviour {
 	void Start () {
 		mText = GetComponentInChildren <Text> ();
 		if (mText != null) {
-			mText.text = "Name: " + PlayerDataController.Instance.mPlayer.currentVehicle.name + "\n" 
-				+ "Max Speed: " + PlayerDataController.Instance.mPlayer.currentVehicle.maxSpeed + "\n" 
-				+ "Cost: " + PlayerDataController.Instance.mPlayer.currentVehicle.costPoint;
+//			mText.text = "Name: " + PlayerDataController.Instance.mPlayer.currentVehicle.name + "\n" 
+//				+ "Max Speed: " + PlayerDataController.Instance.mPlayer.currentVehicle.maxSpeed + "\n" 
+//				+ "Cost: " + PlayerDataController.Instance.mPlayer.currentVehicle.costPoint;
 		}
 	}
 	#endregion Mono

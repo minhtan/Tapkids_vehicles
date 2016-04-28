@@ -6,7 +6,8 @@ using System.Collections.Generic;
 public class ArcadeCarController : MonoBehaviour {
 
 	#region public members
-	public string vehicleName;
+	[SerializeField]
+	public Vehicle vehicle;
 	#endregion
 
 	#region private members
@@ -23,6 +24,7 @@ public class ArcadeCarController : MonoBehaviour {
 
 	private Rigidbody mRigidbody;
 	private Transform mTransform;
+
 	#endregion private members
 
 	#region MONO

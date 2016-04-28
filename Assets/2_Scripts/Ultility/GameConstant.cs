@@ -7,8 +7,8 @@ public static class GameConstant  {
 		"IcecreamTruck", "JetSki", "Kayak", "Limousine", "Motorcycle", "NavySubmarine", "OutriggerCanoe", "PoliceCar", "Quadbike", "Rickshaw", 
 		"SpaceShuttle", "Train", "UltralightCraft", "Van", "Windjammer", "Excavator", "Yacht", "Zeppelin"});
 
-	public static readonly List<string> fourWheels = new List<string> (new string[] {"Ambulance", "Bus", "Car", "DeliveryTruck", "ElectricBike", "FireTruck", "GarbageTruck", 
-		"IcecreamTruck", "Limousine", "PoliceCar", "Van", "Windjammer", "Excavator"});
+	public static readonly List<string> fourWheels = new List<string> (new string[] {"Ambulance", "Bus", "Car", "DeliveryTruck", "FireTruck", "GarbageTruck", 
+		"IcecreamTruck", "Limousine", "PoliceCar", "Van", "Excavator"});
 	
 	public const string WinMessage = "You Win";
 	public const string LoseMessage = "You Lose";
