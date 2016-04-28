@@ -81,6 +81,7 @@ public class AudioManager : UnitySingletonPersistent<AudioManager>
 
 	private void OnChangeLanguage ()
 	{
+		
 	}
 
 	private void AddAudioToDict (AudioClipInfo[] audioArray, AudioSource audioSource, CLIPTYPE type, Dictionary<AudioKey.UNIQUE_KEY, CLIPTYPE> dict)
@@ -240,7 +241,7 @@ public class AudioManager : UnitySingletonPersistent<AudioManager>
 
 	private string GetCurrentLocation ()
 	{
-		return Lean.LeanLocalization.Instance.CurrentLanguage.ToLower ();
+		return Lean.LeanLocalization.Instance.CurrentLanguage;
 	}
 
 	private LocalizedAudioWrapper GetCurrentLocalizedWrapper ()

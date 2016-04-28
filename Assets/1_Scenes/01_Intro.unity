@@ -889,6 +889,75 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
+--- !u!1 &1039800459
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1039800463}
+  - 114: {fileID: 1039800462}
+  - 114: {fileID: 1039800461}
+  - 114: {fileID: 1039800460}
+  m_Layer: 0
+  m_Name: LocaliztionController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1039800460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1039800459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd370040bf94f4264a178a8751023687, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1039800461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1039800459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 086ae75064fca9f46b315403da7f5d20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SourceLanguage: English
+  Source: {fileID: 4900000, guid: 5b8118043fadb4482be381664a29c67c, type: 3}
+--- !u!114 &1039800462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1039800459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 806f0696300aeac44a0e17efee222854, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Languages:
+  - English
+  Phrases: []
+  CurrentLanguage: English
+--- !u!4 &1039800463
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1039800459}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 717.48535, y: 454.58313, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
 --- !u!1 &1223013693
 GameObject:
   m_ObjectHideFlags: 0
@@ -1853,7 +1922,7 @@ MonoBehaviour:
   _tempSource: {fileID: 1657837207}
   _uiSource: {fileID: 438593553}
   _localizedAudioWrappers:
-  - localizedKey: English
+  - localizedKey: english
     backgroundAudios:
     - audioClip: {fileID: 8300000, guid: 91e119ee380766e4692d63357cdcca3a, type: 3}
       uniqueKey: 0
