@@ -45,6 +45,7 @@ public class AudioManager : UnitySingletonPersistent<AudioManager>
 
 	void Awake ()
 	{
+		base.Awake ();
 		PreProcessingAudioArray ();
 	}
 
