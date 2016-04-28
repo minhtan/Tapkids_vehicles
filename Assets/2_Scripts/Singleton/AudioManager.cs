@@ -62,8 +62,6 @@ public class AudioManager : UnitySingletonPersistent<AudioManager>
 
 	private void PreProcessingAudioArray ()
 	{
-		Debug.Log (Lean.LeanLocalization.Instance.CurrentLanguage);
-
 		_languages = Lean.LeanLocalization.Instance.Languages.ToArray ();
 		_currentLocalized = GetCurrentLocalizedWrapper ();
 		_audioLocalizedDict = new Dictionary<string, Dictionary<AudioKey.UNIQUE_KEY, CLIPTYPE>> ();
@@ -96,17 +94,31 @@ public class AudioManager : UnitySingletonPersistent<AudioManager>
 
 	public void PlayAudio (AudioKey.UNIQUE_KEY key)
 	{
-		CLIPTYPE type = _audioLocalizedDict [GetCurrentLocation ()] [key];
+		CLIPTYPE type;
+
+		if (!_audioLocalizedDict [GetCurrentLocation ()].ContainsKey (key)) {
+			LocalizedAudioWrapper defaultLocal = _localizedAudioWrappers [0];
+			type = _audioLocalizedDict [defaultLocal.localizedKey] [key];
+
+			if (type == CLIPTYPE.BACKGROUND)
+				PlayLoop (defaultLocal, type, key);
+			else
+				PlayOne (defaultLocal, type, key);
+
+			return;
+		}
+		
+		type = _audioLocalizedDict [GetCurrentLocation ()] [key];
 
 		if (type == CLIPTYPE.BACKGROUND)
-			PlayLoop (type, key);
+			PlayLoop (_currentLocalized, type, key);
 		else
-			PlayOne (type, key);
+			PlayOne (_currentLocalized, type, key);
 	}
 
-	private AudioSource PlayLoop (CLIPTYPE type, AudioKey.UNIQUE_KEY key)
+	private AudioSource PlayLoop (LocalizedAudioWrapper localized, CLIPTYPE type, AudioKey.UNIQUE_KEY key)
 	{
-		AudioClipInfo clipInfo = GetAudioClipInfo (type, key);
+		AudioClipInfo clipInfo = GetAudioClipInfo (localized, type, key);
 
 		if (clipInfo == null)
 			return null;
@@ -118,9 +130,9 @@ public class AudioManager : UnitySingletonPersistent<AudioManager>
 		return clipInfo.audioSource;
 	}
 
-	private AudioSource PlayOne (CLIPTYPE type, AudioKey.UNIQUE_KEY key)
+	private AudioSource PlayOne (LocalizedAudioWrapper localized, CLIPTYPE type, AudioKey.UNIQUE_KEY key)
 	{
-		AudioClipInfo clipInfo = GetAudioClipInfo (type, key);
+		AudioClipInfo clipInfo = GetAudioClipInfo (localized, type, key);
 
 		if (clipInfo == null)
 			return null;
@@ -134,7 +146,7 @@ public class AudioManager : UnitySingletonPersistent<AudioManager>
 	public AudioSource PlayOneCustomSource (CLIPTYPE type, AudioKey.UNIQUE_KEY key, AudioSource customSource)
 	{
 
-		AudioClipInfo clipInfo = GetAudioClipInfo (type, key);
+		AudioClipInfo clipInfo = GetAudioClipInfo (_currentLocalized, type, key);
 
 		if (clipInfo == null)
 			return null;
@@ -152,7 +164,7 @@ public class AudioManager : UnitySingletonPersistent<AudioManager>
 	public void StopClip (CLIPTYPE type, AudioKey.UNIQUE_KEY key)
 	{
 
-		AudioClipInfo clipInfo = GetAudioClipInfo (type, key);
+		AudioClipInfo clipInfo = GetAudioClipInfo (_currentLocalized, type, key);
 
 		if (clipInfo == null)
 			return;
@@ -212,15 +224,15 @@ public class AudioManager : UnitySingletonPersistent<AudioManager>
 
 	# region GET METHODE
 
-	private AudioClipInfo GetAudioClipInfo (CLIPTYPE type, AudioKey.UNIQUE_KEY key)
+	private AudioClipInfo GetAudioClipInfo (LocalizedAudioWrapper localizedWrapper, CLIPTYPE type, AudioKey.UNIQUE_KEY key)
 	{
 		AudioClipInfo[] audioArray = null;
 		if (type == CLIPTYPE.BACKGROUND)
-			audioArray = _currentLocalized.backgroundAudios;
+			audioArray = localizedWrapper.backgroundAudios;
 		else if (type == CLIPTYPE.TEMPORARY)
-			audioArray = _currentLocalized.tmpAudios;
+			audioArray = localizedWrapper.tmpAudios;
 		else if (type == CLIPTYPE.UI)
-			audioArray = _currentLocalized.uiAudios;
+			audioArray = localizedWrapper.uiAudios;
 		
 		for (int i = 0; i < audioArray.Length; i++) {
 			if (audioArray [i].uniqueKey == key)
