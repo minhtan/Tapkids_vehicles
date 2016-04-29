@@ -53,10 +53,11 @@ public class GaragaController : MonoBehaviour {
 			GameObject carGameObject = Instantiate (bundle) as GameObject;
 			vehicles.Add (carGameObject);
 			carGameObject.transform.localPosition = Vector3.zero;
-			Destroy (carGameObject.GetComponent <ArcadeCarUserController> ());
-			Destroy (carGameObject.GetComponent <ArcadeCarController> ());
 			Destroy (carGameObject.GetComponent <Rigidbody> ());
 			carGameObject.transform.SetParent (mTransform, false);
+			if (vehicles.Count == 1) {
+				Messenger.Broadcast <Vehicle> (EventManager.GUI.UPDATECAR.ToString (), carGameObject.GetComponent <ArcadeCarController> ().vehicle);
+			}
 			if (vehicles.Count > 1) {
 				carGameObject.transform.localPosition = new Vector3 (0f, 0f, -10f);
 				carGameObject.SetActive (false);
@@ -73,11 +74,11 @@ public class GaragaController : MonoBehaviour {
 
 	#region public functions
 	#endregion public functions
-	bool valid = true;
-	#region private functions
-	private void OnSelectCar (int _index) {
-		
 
+
+	#region private functions
+	bool valid = true;
+	private void OnSelectCar (int _index) {
 		// handle car modle
 		if (valid == false) return;
 
@@ -92,6 +93,9 @@ public class GaragaController : MonoBehaviour {
 				currentSelectedCar = Mathf.Clamp (currentSelectedCar + _index, 0, vehicles.Count- 1);
 
 				vehicles [currentSelectedCar].SetActive (true);
+				// update car description
+				Messenger.Broadcast <Vehicle> (EventManager.GUI.UPDATECAR.ToString (), vehicles[currentSelectedCar].GetComponent <ArcadeCarController> ().vehicle);
+
 				LeanTween.moveLocalZ (vehicles [currentSelectedCar], 0f, 1f).setEase (LeanTweenType.easeOutBack).setOnComplete ( () => { 
 					valid = true;
 				});

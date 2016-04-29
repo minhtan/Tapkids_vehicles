@@ -21,6 +21,7 @@ public class ArcadeCarController : MonoBehaviour {
 
 	private float oldRotation;
 	private float steerAngle;
+	private bool isStart;
 
 	private Rigidbody mRigidbody;
 	private Transform mTransform;
@@ -28,31 +29,29 @@ public class ArcadeCarController : MonoBehaviour {
 	#endregion private members
 
 	#region MONO
+	void Awake () {
+		mTransform = this.transform;
+	}
+
 	void OnEnable () {
-//		CarGameEventController.GameOver += OnGameOver;
+		Messenger.AddListener <bool> (EventManager.GameState.STARTGAME.ToString (), HandleStartGame);
 		Messenger.AddListener <int> (EventManager.GameState.GAMEOVER.ToString (), HandleGameOver);
-//		CarGameEventController.ResetGame += OnResetGame;
 		Messenger.AddListener(EventManager.GameState.RESETGAME.ToString (), HandleResetGame);
+
 	}
 
 	void OnDisable () {
-//		CarGameEventController.GameOver += OnGameOver;
+		Messenger.AddListener <bool> (EventManager.GameState.STARTGAME.ToString (), HandleStartGame);
 		Messenger.RemoveListener <int> (EventManager.GameState.GAMEOVER.ToString (), HandleGameOver);
-//		CarGameEventController.ResetGame -= OnResetGame;
 		Messenger.RemoveListener (EventManager.GameState.RESETGAME.ToString (), HandleResetGame);
-	}
-
-	void Start () {
-		mRigidbody = GetComponent <Rigidbody> ();
-		mRigidbody.centerOfMass = centerOfMass;
-
-		mTransform = this.transform;
 	}
 	#endregion MONO
 
 	#region public functions
 	// handle car movement
 	public void Move (float steer, float accel) {
+		if (!isStart) return;
+
 		for (int i = 0; i < 4; i++) {
 			Quaternion quaternion;
 			Vector3 position;
@@ -119,7 +118,18 @@ public class ArcadeCarController : MonoBehaviour {
 	#endregion private functions
 
 	#region event subscribers
+	private void HandleStartGame (bool _state) {
+		if (_state) {
+			mRigidbody = GetComponent <Rigidbody> ();
+			mRigidbody.centerOfMass = centerOfMass;
+			isStart = true;
+		} else {
+
+		}
+	}
+
 	private void HandleGameOver (int _starAmount) {
+		isStart = false;
 		for (int i = 0; i < 4; i++) 
 			wheelColliders[i].brakeTorque = brakeTorque;
 	}

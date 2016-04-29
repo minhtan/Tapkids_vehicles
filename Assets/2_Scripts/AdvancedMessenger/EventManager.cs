@@ -5,6 +5,7 @@ public class EventManager {
 	public enum GUI{
 		NOTIFY,
 		SELECTCAR,
+		UPDATECAR,
 		TOGGLE_INGAME,
 		TOGGLE_TUTORIAL,
 		//
