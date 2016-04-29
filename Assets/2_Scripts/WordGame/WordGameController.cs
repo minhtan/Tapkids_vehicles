@@ -110,7 +110,7 @@ public class WordGameController : MonoBehaviour {
 	}
 
 	void _UpdateWordFoundUI(){
-		AudioManager.Instance.PlayOne(AudioManager.CLIPTYPE.TEMPORARY, AudioKey.UNIQUE_KEY.WORDGAME_CORRECT);
+		AudioManager.Instance.PlayAudio(AudioKey.UNIQUE_KEY.WORDGAME_CORRECT);
 
 		txt_answers.text = "";
 		for(int i=0; i < foundAnswers.Count; i++){

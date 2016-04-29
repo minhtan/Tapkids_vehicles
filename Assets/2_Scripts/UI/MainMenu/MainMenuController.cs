@@ -11,10 +11,16 @@ public class MainMenuController : MonoBehaviour {
 	float width;
 	float height;
 
+	float distance;
+	bool isGarageOpen = false;
+
 	public RectTransform menu;
 	public RectTransform car;
 	public RectTransform garage;
-	float menuInitPos;
+
+	float menuOFDpos;
+	float carOFDpos;
+	float garageOFDpos;
 
 	public Camera carRenderCam;
 	public RawImage carRawImage;
@@ -47,6 +53,9 @@ public class MainMenuController : MonoBehaviour {
 	}
 
 	void OnEnable(){
+		Lean.LeanTouch.OnFingerDown += OnFingerDown;
+		Lean.LeanTouch.OnFingerUp += OnFingerUp;
+		Lean.LeanTouch.OnFingerDrag += OnFingerDrag;
 		Lean.LeanTouch.OnFingerSwipe += OnFingerSwipe;
 		Messenger.AddListener<float> (EventManager.GUI.MENUWHEELTURN.ToString(), OnMenuWheelTurn);
 		Messenger.AddListener<float> (EventManager.GUI.MENUWHEELRELEASE.ToString(), OnMenuWheelRelease);
@@ -54,6 +63,9 @@ public class MainMenuController : MonoBehaviour {
 	}
 
 	void OnDisable(){
+		Lean.LeanTouch.OnFingerDown -= OnFingerDown;
+		Lean.LeanTouch.OnFingerUp -= OnFingerUp;
+		Lean.LeanTouch.OnFingerDrag -= OnFingerDrag;
 		Lean.LeanTouch.OnFingerSwipe -= OnFingerSwipe;
 		Messenger.RemoveListener<float> (EventManager.GUI.MENUWHEELTURN.ToString(), OnMenuWheelTurn);
 		Messenger.RemoveListener<float> (EventManager.GUI.MENUWHEELRELEASE.ToString(), OnMenuWheelRelease);
@@ -65,19 +77,20 @@ public class MainMenuController : MonoBehaviour {
 	void InitPosition(){
 		LeanTween.moveX (car, -width/2, 0f);
 		LeanTween.moveX (garage, -width/2, 0f);
-		menuInitPos = menu.anchoredPosition.x;
 	}
 
 	public void _OpenGarage(){
-		LeanTween.moveX (menu, menu.sizeDelta.x, 0.5f).setEase(LeanTweenType.easeInBack);
-		LeanTween.moveX (car, 0, 0.5f).setEase(LeanTweenType.easeInBack);
-		LeanTween.moveX (garage, 0, 0.5f).setEase(LeanTweenType.easeInBack);
+		LeanTween.moveX (menu, width/2, 0.5f).setEase(LeanTweenType.easeOutQuart);
+		LeanTween.moveX (car, 0, 0.5f).setEase(LeanTweenType.easeOutQuart);
+		LeanTween.moveX (garage, 0, 0.5f).setEase(LeanTweenType.easeOutQuart);
+		isGarageOpen = true;
 	}
 
 	public void _BackToMenu(){
-		LeanTween.moveX (menu, menuInitPos, 0.5f).setEase(LeanTweenType.easeInBack);
-		LeanTween.moveX (car, -width/2, 0.5f).setEase(LeanTweenType.easeInBack);
-		LeanTween.moveX (garage, -width/2, 0.5f).setEase(LeanTweenType.easeInBack);
+		LeanTween.moveX (menu, 0, 0.5f).setEase(LeanTweenType.easeOutQuart);
+		LeanTween.moveX (car, -width/2, 0.5f).setEase(LeanTweenType.easeOutQuart);
+		LeanTween.moveX (garage, -width/2, 0.5f).setEase(LeanTweenType.easeOutQuart);
+		isGarageOpen = false;
 	}
 
 	void CreateCarTexture(){
@@ -93,25 +106,75 @@ public class MainMenuController : MonoBehaviour {
 		isPressingOnWheel = isTouching;
 	}
 
-	void OnFingerSwipe(Lean.LeanFinger finger){
-		var swipe = finger.SwipeDelta;
+	void OnFingerDown(Lean.LeanFinger finger){
+		if (!isPressingOnWheel) {
+			distance = 0;
+			menuOFDpos = menu.anchoredPosition.x;
+			carOFDpos = car.anchoredPosition.x;
+			garageOFDpos = garage.anchoredPosition.x;
+		}
+	}
 
-		//swipe left
-		if (swipe.x < -Mathf.Abs(swipe.y))
-		{
-			if (!isPressingOnWheel) {
-				_BackToMenu ();
+	void OnFingerUp(Lean.LeanFinger finger){
+		if (!isPressingOnWheel) {
+			if (distance < -width / 4) {
+				MoveLeft ();
+			} else if (distance > width / 4) {
+				MoveRight ();
+			} else {
+				SnapBack ();
 			}
 		}
+		_OnWheelPress (false);
+	}
 
-		//swipe right
-		if (swipe.x > Mathf.Abs(swipe.y))
-		{
-			if (!isPressingOnWheel) {
+	void MoveLeft(){
+		if (isGarageOpen) {
+			_BackToMenu ();
+		} else {
+			
+		}
+	}
+
+	void MoveRight(){
+		if (isGarageOpen) {
+			_OpenGarage ();
+		} else {
+			
+		}
+	}
+
+	void SnapBack(){
+		if (isGarageOpen) {
+			_OpenGarage ();
+		} else {
+			_BackToMenu ();
+		}
+	}
+
+	void OnFingerDrag(Lean.LeanFinger finger){
+		if (!isPressingOnWheel) {
+			distance += finger.DeltaScreenPosition.x;
+			LeanTween.moveX (menu, menuOFDpos + distance, 0f);
+			LeanTween.moveX (car, carOFDpos + distance, 0f);
+			LeanTween.moveX (garage, garageOFDpos + distance, 0f);
+		}
+	}
+
+	void OnFingerSwipe(Lean.LeanFinger finger){
+		if (!isPressingOnWheel) {
+			var swipe = finger.SwipeDelta;
+
+			//swipe left
+			if (swipe.x < -Mathf.Abs (swipe.y)) {
+				_BackToMenu ();
+			}
+
+			//swipe right
+			if (swipe.x > Mathf.Abs (swipe.y)) {
 				_OpenGarage ();
 			}
 		}
-
 		_OnWheelPress (false);
 	}
 	#endregion
