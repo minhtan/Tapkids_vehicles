@@ -10,21 +10,20 @@ public class Player {
 	public int id;
 	public string name;
 	public int currentCredit;
-	public Vehicle currentVehicle;
-//	public Vehicle[] unlockedVehicles;
-	public List <Vehicle> unlockedVehicles;
+	public int currentVehicle;
+	public List <int> unlockedVehicles;
 
 	public Player () {
 	}
 
-	public Player (int _id, int _currentCredit, Vehicle _currentVehicle, List <Vehicle> _unlockedVehicles) {
+	public Player (int _id, int _currentCredit, int _currentVehicle, List <int> _unlockedVehicles) {
 		this.id = _id;
 		this.currentCredit = _currentCredit;
 		this.currentVehicle = _currentVehicle;
 		this.unlockedVehicles = _unlockedVehicles;
 	}
 
-	public Player (int _id, string _name, int _currentCredit, Vehicle _currentVehicle, List <Vehicle> _unlockedVehicles) {
+	public Player (int _id, string _name, int _currentCredit, int _currentVehicle, List <int> _unlockedVehicles) {
 		this.id = _id;
 		this.name = _name;
 		this.currentCredit = _currentCredit;
@@ -37,6 +36,7 @@ public class Player {
 public class Vehicle {
 	public int id;
 	public string name;
+	public string desc;
 	public int maxSpeed;
 	public int costPoint;
 	// TODO: ... customize color index
@@ -48,9 +48,10 @@ public class Vehicle {
 		this.name = _name;
 	}
 
-	public Vehicle (int _id, string _name, int _speed, int _costPoint) {
+	public Vehicle (int _id, string _name, string _desc, int _speed, int _costPoint) {
 		this.id = _id;
 		this.name = _name;
+		this.desc = _desc;
 		this.maxSpeed = _speed;
 		this.costPoint = _costPoint;
 	}
@@ -104,12 +105,15 @@ public static class TapkidsData {
 		file.Close();
 	}
 
-	public static void Load() {
+	public static bool Load() {
 		if(File.Exists(Application.persistentDataPath + "/player.tapkids")) {
 			BinaryFormatter bf = new BinaryFormatter();
 			FileStream file = File.Open(Application.persistentDataPath + "/player.tapkids", FileMode.Open);
 			players = (List<Player>)bf.Deserialize(file);
-			file.Close();
+			file.Close(); 
+			return true;
+		} else {
+			return false;
 		}
 	}
 	#endregion text file functions

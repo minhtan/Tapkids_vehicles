@@ -18,10 +18,7 @@ public class GaragaController : MonoBehaviour {
 	#region private members
 	private List<GameObject> vehicles;
 	private Transform mTransform;
-//	private Vehicle[] vehicles;
 
-
-	private 
 	#endregion private members
 
 	#region Mono
@@ -29,11 +26,15 @@ public class GaragaController : MonoBehaviour {
 		mTransform = GetComponent <Transform> ();
 	}
 	void OnEnable () {
-		Messenger.AddListener <int> (EventManager.GUI.SELECTCAR.ToString (), OnSelectCar);
+		Messenger.AddListener <int> (EventManager.GUI.SELECTVEHICLE.ToString (), HandleSelectCar);
+		Messenger.AddListener (EventManager.GUI.ENTERGARAGE.ToString (), HandleEnterGarage);
+		Messenger.AddListener (EventManager.GUI.PURCHASEVEHICLE.ToString (), HandlePurchaseVehicle);
 	}
 
 	void OnDisable () {
-		Messenger.RemoveListener <int> (EventManager.GUI.SELECTCAR.ToString (), OnSelectCar);
+		Messenger.RemoveListener <int> (EventManager.GUI.SELECTVEHICLE.ToString (), HandleSelectCar);
+		Messenger.RemoveListener (EventManager.GUI.ENTERGARAGE.ToString (), HandleEnterGarage);
+		Messenger.RemoveListener (EventManager.GUI.PURCHASEVEHICLE.ToString (), HandlePurchaseVehicle);
 	}
 
 	void Start () {
@@ -56,7 +57,7 @@ public class GaragaController : MonoBehaviour {
 			Destroy (carGameObject.GetComponent <Rigidbody> ());
 			carGameObject.transform.SetParent (mTransform, false);
 			if (vehicles.Count == 1) {
-				Messenger.Broadcast <Vehicle> (EventManager.GUI.UPDATECAR.ToString (), carGameObject.GetComponent <ArcadeCarController> ().vehicle);
+				Messenger.Broadcast <Vehicle> (EventManager.GUI.UPDATEVEHICLE.ToString (), carGameObject.GetComponent <ArcadeCarController> ().vehicle);
 			}
 			if (vehicles.Count > 1) {
 				carGameObject.transform.localPosition = new Vector3 (0f, 0f, -10f);
@@ -78,7 +79,7 @@ public class GaragaController : MonoBehaviour {
 
 	#region private functions
 	bool valid = true;
-	private void OnSelectCar (int _index) {
+	private void HandleSelectCar (int _index) {
 		// handle car modle
 		if (valid == false) return;
 
@@ -93,8 +94,8 @@ public class GaragaController : MonoBehaviour {
 				currentSelectedCar = Mathf.Clamp (currentSelectedCar + _index, 0, vehicles.Count- 1);
 
 				vehicles [currentSelectedCar].SetActive (true);
-				// update car description
-				Messenger.Broadcast <Vehicle> (EventManager.GUI.UPDATECAR.ToString (), vehicles[currentSelectedCar].GetComponent <ArcadeCarController> ().vehicle);
+				// update car 
+				Messenger.Broadcast <Vehicle> (EventManager.GUI.UPDATEVEHICLE.ToString (), vehicles[currentSelectedCar].GetComponent <ArcadeCarController> ().vehicle);
 
 				LeanTween.moveLocalZ (vehicles [currentSelectedCar], 0f, 1f).setEase (LeanTweenType.easeOutBack).setOnComplete ( () => { 
 					valid = true;
@@ -104,6 +105,22 @@ public class GaragaController : MonoBehaviour {
 
 		// TODO: update car stats in GUI
 		// is this unlocked vehicle ?
+	}
+
+	private void HandleEnterGarage () {
+		// get player current select car
+
+		// setup selected car
+	}
+
+	private void HandlePurchaseVehicle () {
+		if (PlayerDataController.Instance.mPlayer.currentCredit >= vehicles[currentSelectedCar].GetComponent <ArcadeCarController> ().vehicle.costPoint) {
+			PlayerDataController.Instance.UpdateUnlockedVehicle (vehicles[currentSelectedCar].GetComponent <ArcadeCarController> ().vehicle);
+			Messenger.Broadcast <Vehicle> (EventManager.GUI.UPDATEVEHICLE.ToString (), vehicles[currentSelectedCar].GetComponent <ArcadeCarController> ().vehicle);
+		} else {
+			// notify player
+			Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), GameConstant.PurchaseUnsuccessful, 1f);
+		}
 	}
 
 	// TODO: load vehicle only it is unlocked one
