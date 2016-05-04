@@ -4,7 +4,13 @@ using System.Collections;
 public class EventManager {
 	public enum GUI{
 		NOTIFY,
-		SELECTCAR,
+		//
+		ENTERGARAGE,
+		EXITGARAGE,
+		SELECTVEHICLE,
+		UPDATEVEHICLE,
+		PURCHASEVEHICLE,
+		//
 		TOGGLE_INGAME,
 		TOGGLE_TUTORIAL,
 		//

@@ -70,11 +70,11 @@ public class AudioManager : UnitySingletonPersistent<AudioManager>
 			_audioLocalizedDict.Add (_languages [i], new Dictionary<AudioKey.UNIQUE_KEY, CLIPTYPE> ());
 		}
 
-		for (int i = 0; i < _localizedAudioWrappers.Length; i++) {
-			AddAudioToDict (_localizedAudioWrappers [i].backgroundAudios, _backgroundSource, CLIPTYPE.BACKGROUND, _audioLocalizedDict [_localizedAudioWrappers [i].localizedKey]);
-			AddAudioToDict (_localizedAudioWrappers [i].tmpAudios, _tempSource, CLIPTYPE.TEMPORARY, _audioLocalizedDict [_localizedAudioWrappers [i].localizedKey]);
-			AddAudioToDict (_localizedAudioWrappers [i].uiAudios, _uiSource, CLIPTYPE.UI, _audioLocalizedDict [_localizedAudioWrappers [i].localizedKey]);
-		}
+//		for (int i = 0; i < _localizedAudioWrappers.Length; i++) {
+//			AddAudioToDict (_localizedAudioWrappers [i].backgroundAudios, _backgroundSource, CLIPTYPE.BACKGROUND, _audioLocalizedDict [_localizedAudioWrappers [i].localizedKey]);
+//			AddAudioToDict (_localizedAudioWrappers [i].tmpAudios, _tempSource, CLIPTYPE.TEMPORARY, _audioLocalizedDict [_localizedAudioWrappers [i].localizedKey]);
+//			AddAudioToDict (_localizedAudioWrappers [i].uiAudios, _uiSource, CLIPTYPE.UI, _audioLocalizedDict [_localizedAudioWrappers [i].localizedKey]);
+//		}
 	}
 
 	private void OnChangeLanguage ()
