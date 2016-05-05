@@ -18,7 +18,7 @@ public class GaragaController : MonoBehaviour {
 	#region private members
 	private List<GameObject> vehicles;
 	private Transform mTransform;
-
+	private Shader lockedShader;
 	#endregion private members
 
 	#region Mono
@@ -39,6 +39,7 @@ public class GaragaController : MonoBehaviour {
 
 	void Start () {
 		vehicles = new List <GameObject> ();
+		lockedShader = Shader.Find ("Custom/BlackOut");
 		// get player unlocked list
 
 		// compare with avaiable vehicle list
@@ -53,8 +54,16 @@ public class GaragaController : MonoBehaviour {
 		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (GameConstant.assetBundleName, vehicleName, (bundle) => {
 			GameObject carGameObject = Instantiate (bundle) as GameObject;
 			vehicles.Add (carGameObject);
-			carGameObject.transform.localPosition = Vector3.zero;
 			Destroy (carGameObject.GetComponent <Rigidbody> ());
+
+			if (!PlayerDataController.Instance.mPlayer.unlockedVehicles.Contains (carGameObject.GetComponent <ArcadeCarController> ().vehicle.id)) {
+				Renderer[] renderers = carGameObject.GetComponentsInChildren <Renderer> ();
+				for (int j = 0; j < renderers.Length; j++) {
+					renderers [j].material.shader = lockedShader;
+				}
+			}
+
+			carGameObject.transform.localPosition = Vector3.zero;
 			carGameObject.transform.SetParent (mTransform, false);
 			if (vehicles.Count == 1) {
 				Messenger.Broadcast <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), carGameObject.GetComponent <ArcadeCarController> ().vehicle);
