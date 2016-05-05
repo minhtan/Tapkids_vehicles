@@ -8,11 +8,11 @@ public class UIInputPanel : MonoBehaviour {
 
 
 	void OnEnable () {
-		Messenger.AddListener <bool> (EventManager.GameState.STARTGAME.ToString (), HandleStartGame);
+		Messenger.AddListener <bool> (EventManager.GameState.START.ToString (), HandleStartGame);
 	}
 
 	void OnDisable () {
-		Messenger.RemoveListener <bool> (EventManager.GameState.STARTGAME.ToString (), HandleStartGame);
+		Messenger.RemoveListener <bool> (EventManager.GameState.START.ToString (), HandleStartGame);
 
 	}
 	// Use this for initialization

@@ -30,15 +30,15 @@ public class CarGameController : MonoBehaviour {
 	}
 
 	void OnEnable () {
-		Messenger.AddListener <bool, string> (EventManager.AR.IMAGETRACKING.ToString(), HandleVehicleTracking);
+		Messenger.AddListener <bool, string> (EventManager.AR.VEHICLE_TRACKING.ToString(), HandleARCardTracking);
 
-		Messenger.AddListener <bool, Transform> (EventManager.AR.MAPTRACKING.ToString(), HandleMapTracking);
+		Messenger.AddListener <bool, Transform> (EventManager.AR.MAP_TRACKING.ToString(), HandleARMapTracking);
 
-		Messenger.AddListener <string> (EventManager.Vehicle.COLLECTLETTER.ToString (), HandleCollectLetter);
+		Messenger.AddListener <string> (EventManager.Vehicle.COLLECT_LETTER.ToString (), HandleCollectLetter);
 
 		Messenger.AddListener (EventManager.GUI.DROPBUTTON.ToString (), HandleDropLetter);
 
-		Messenger.AddListener (EventManager.Vehicle.GATHERLETTER.ToString (), HandleGatherLetter);
+		Messenger.AddListener (EventManager.Vehicle.GATHER_LETTER.ToString (), HandleGatherLetter);
 	}
 	void Start () {
 		if (ArController.Instance != null) {
@@ -52,9 +52,9 @@ public class CarGameController : MonoBehaviour {
 		}
 
 		// setup finite state machine
-		_machine = new SKStateMachine <CarGameController> (this, new CGLetterState ());
+		_machine = new SKStateMachine <CarGameController> (this, new CGARCardState ());
 		_machine.addState (new CGInitState ());
-		_machine.addState (new CGMapState ());
+		_machine.addState (new CGARMapState ());
 		_machine.addState (new CGStartState ());
 		_machine.addState (new CGPlayState ());
 		_machine.addState (new CGPauseState ());
@@ -69,15 +69,15 @@ public class CarGameController : MonoBehaviour {
 	}
 
 	void OnDisable () {
-		Messenger.RemoveListener <bool, string> (EventManager.AR.IMAGETRACKING.ToString(), HandleVehicleTracking);
+		Messenger.RemoveListener <bool, string> (EventManager.AR.VEHICLE_TRACKING.ToString(), HandleARCardTracking);
 
-		Messenger.RemoveListener <bool, Transform> (EventManager.AR.MAPTRACKING.ToString(), HandleMapTracking);
+		Messenger.RemoveListener <bool, Transform> (EventManager.AR.MAP_TRACKING.ToString(), HandleARMapTracking);
 
-		Messenger.RemoveListener <string> (EventManager.Vehicle.COLLECTLETTER.ToString (), HandleCollectLetter);
+		Messenger.RemoveListener <string> (EventManager.Vehicle.COLLECT_LETTER.ToString (), HandleCollectLetter);
 
 		Messenger.RemoveListener (EventManager.GUI.DROPBUTTON.ToString (), HandleDropLetter);
 
-		Messenger.RemoveListener (EventManager.Vehicle.GATHERLETTER.ToString (), HandleGatherLetter);
+		Messenger.RemoveListener (EventManager.Vehicle.GATHER_LETTER.ToString (), HandleGatherLetter);
 	}
 
 	void OnDestroy () {
@@ -91,7 +91,7 @@ public class CarGameController : MonoBehaviour {
 
 	#region private functions
 	// handle ar events
-	private void HandleVehicleTracking (bool _isFound, string _letters) {
+	private void HandleARCardTracking (bool _isFound, string _letters) {
 		if (_isFound) {	// FOUND LETTER
 				letters = _letters;
 				_machine.changeState <CGInitState> ();
@@ -101,12 +101,12 @@ public class CarGameController : MonoBehaviour {
 		}
 	}
 
-	private void HandleMapTracking (bool _isFound, Transform _parent) {
+	private void HandleARMapTracking (bool _isFound, Transform _parent) {
 		if (_machine == null) return;
 
 		if (_isFound) {	// FOUND MAP
 			if (letters.Length > 0) {	// check given letters
-				if (_machine.currentState.GetType () == typeof (CGMapState)) 
+				if (_machine.currentState.GetType () == typeof (CGARMapState)) 
 				{	
 					_machine.changeState <CGStartState> ();
 					mTransform.SetParent (_parent);
@@ -116,21 +116,20 @@ public class CarGameController : MonoBehaviour {
 			}
 		} else {		// LOST MAP
 			if(_machine.currentState.GetType () == typeof (CGStartState))
-				_machine.changeState <CGMapState> ();
+				_machine.changeState <CGARMapState> ();
 		}
 	}
 
 	// handle car events
 	private void HandleCollectLetter (string _letter) {
-		Messenger.Broadcast <string> (EventManager.GUI.ADDLETTER.ToString (), _letter);
-
+//		Messenger.Broadcast <string> (EventManager.GUI.ADD_LETTER.ToString (), _letter);
 		collectedLetters = string.Concat (collectedLetters, _letter);
 	}
 
 	private void HandleDropLetter () {
 		if (collectedLetters.Length > 0) {
 			string letter = collectedLetters[collectedLetters.Length - 1].ToString ();
-			Messenger.Broadcast <string> (EventManager.GUI.REMOVELETTER.ToString (), letter);
+			Messenger.Broadcast <string> (EventManager.GUI.REMOVE_LETTER.ToString (), letter);
 
 			collectedLetters = collectedLetters.Substring (0, collectedLetters.Length - 1);
 		}

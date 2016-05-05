@@ -4,12 +4,13 @@ using System.Collections;
 public class EventManager {
 	public enum GUI{
 		NOTIFY,
+		NEXT,
 		//
-		ENTERGARAGE,
-		EXITGARAGE,
-		SELECTVEHICLE,
-		UPDATEVEHICLE,
-		PURCHASEVEHICLE,
+		ENTER_GARAGE,
+		EXIT_GARAGE,
+		SELECT_VEHICLE,
+		UPDATE_VEHICLE,
+		PURCHASE_VEHICLE,
 		//
 		TOGGLE_INGAME,
 		TOGGLE_TUTORIAL,
@@ -17,8 +18,8 @@ public class EventManager {
 		TOGGLE_SOUND,
 		TOGGLE_MUSIC,
 		//
-		ADDLETTER,
-		REMOVELETTER,
+//		ADD_LETTER,
+		REMOVE_LETTER,
 		//
 		DROPBUTTON,
 		// 
@@ -29,24 +30,23 @@ public class EventManager {
 
 	//
 	public enum AR {
-		LETTERTRACKING,
-		IMAGETRACKING,
-		MAPTRACKING,
-		VEHICLETRACING
+		LETTER_TRACKING,
+		VEHICLE_TRACKING,
+		MAP_TRACKING
 	}
 
 	public enum GameState {
-		INITGAME,
-		STARTGAME,
-		PAUSEGAME,
-		RESETGAME,
+		INIT,
+		START,
+		PAUSE,
+		RESET,
 		GAMEOVER,
 		EXIT_TO_MENU
 	}
 
 	public enum Vehicle {
-		COLLECTLETTER,
-		DROPLETTER,
-		GATHERLETTER
+		COLLECT_LETTER,
+		DROP_LETTER,
+		GATHER_LETTER
 	}
 }

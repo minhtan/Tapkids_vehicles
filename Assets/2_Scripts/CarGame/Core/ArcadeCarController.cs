@@ -34,16 +34,16 @@ public class ArcadeCarController : MonoBehaviour {
 	}
 
 	void OnEnable () {
-		Messenger.AddListener <bool> (EventManager.GameState.STARTGAME.ToString (), HandleStartGame);
+		Messenger.AddListener <bool> (EventManager.GameState.START.ToString (), HandleStartGame);
 		Messenger.AddListener <int> (EventManager.GameState.GAMEOVER.ToString (), HandleGameOver);
-		Messenger.AddListener(EventManager.GameState.RESETGAME.ToString (), HandleResetGame);
+		Messenger.AddListener(EventManager.GameState.RESET.ToString (), HandleResetGame);
 
 	}
 
 	void OnDisable () {
-		Messenger.AddListener <bool> (EventManager.GameState.STARTGAME.ToString (), HandleStartGame);
+		Messenger.AddListener <bool> (EventManager.GameState.START.ToString (), HandleStartGame);
 		Messenger.RemoveListener <int> (EventManager.GameState.GAMEOVER.ToString (), HandleGameOver);
-		Messenger.RemoveListener (EventManager.GameState.RESETGAME.ToString (), HandleResetGame);
+		Messenger.RemoveListener (EventManager.GameState.RESET.ToString (), HandleResetGame);
 	}
 	#endregion MONO
 

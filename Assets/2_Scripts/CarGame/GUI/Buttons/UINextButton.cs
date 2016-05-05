@@ -4,29 +4,14 @@ using System.Collections;
 
 public class UINextButton : MonoBehaviour {
 
-	#region public members
-	#endregion public members
-
-	#region private members
 	private Button mButton;
-	#endregion private members
-
-	#region Mono
+	// Use this for initialization
 	void Start () {
 		mButton = GetComponent <Button> ();
 		if (mButton != null) {
 			mButton.onClick.AddListener (delegate {
-//				CarGameEventController.OnSelectCar (1);
-				Messenger.Broadcast <int> (EventManager.GUI.SELECTVEHICLE.ToString (), 1);
+				Messenger.Broadcast (EventManager.GUI.NEXT.ToString ());	
 			});
 		}
 	}
-	#endregion Mono
-
-	#region public functions
-	#endregion public functions
-
-	#region private functions
-	#endregion private functions
-
 }

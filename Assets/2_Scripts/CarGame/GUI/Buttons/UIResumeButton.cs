@@ -18,7 +18,7 @@ public class UIResumeButton : MonoBehaviour {
 			mButton.onClick.AddListener (delegate {
 //				CarGameEventController.OnPauseGame (false);	
 //				CarGameEventController.OnTogglePanel ("ingame");	
-				Messenger.Broadcast<bool> ( EventManager.GameState.PAUSEGAME.ToString(), false);
+				Messenger.Broadcast<bool> ( EventManager.GameState.PAUSE.ToString(), false);
 			});
 		}
 	}
