@@ -97,9 +97,9 @@ namespace Vuforia
 				go_anim = go.GetComponentInChildren<Animator>();
 
 				if(isLetter){
-					Messenger.Broadcast<bool, string>(EventManager.AR.IMAGETRACKING.ToString(), true, targetName);
+					Messenger.Broadcast<bool, string>(EventManager.AR.VEHICLE_TRACKING.ToString(), true, targetName);
 				}else{
-					Messenger.Broadcast<bool>(EventManager.AR.VEHICLETRACING.ToString(), true);
+					Messenger.Broadcast<bool>(EventManager.AR.VEHICLE_TRACKING.ToString(), true);
 				}
 			}));
 		}
@@ -112,9 +112,9 @@ namespace Vuforia
 				Resources.UnloadUnusedAssets();
 
 				if (isLetter) {
-					Messenger.Broadcast<bool, string> (EventManager.AR.IMAGETRACKING.ToString (), false, targetName);
+					Messenger.Broadcast<bool, string> (EventManager.AR.VEHICLE_TRACKING.ToString (), false, targetName);
 				} else {
-					Messenger.Broadcast<bool>(EventManager.AR.VEHICLETRACING.ToString(), false);
+					Messenger.Broadcast<bool>(EventManager.AR.VEHICLE_TRACKING.ToString(), false);
 				}
 			}
 		}

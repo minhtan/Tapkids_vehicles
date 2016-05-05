@@ -2,7 +2,7 @@
 using System.Collections;
 using Prime31.StateKit;
 
-public class CG2MapState : SKState<CarGameController2> {
+public class CG2ARMapState : SKState<CarGameController2> {
 
 	//	private float countDownTimer;
 
@@ -10,7 +10,7 @@ public class CG2MapState : SKState<CarGameController2> {
 	{
 		Debug.Log("Map State >>>");
 
-		Messenger.Broadcast <bool> (EventManager.GameState.STARTGAME.ToString(), false);
+		Messenger.Broadcast <bool> (EventManager.GameState.START.ToString(), false);
 		//		for (int i = 0; i < _context.mTransform.childCount; i++) 
 		//			_context.mTransform.GetChild (i).gameObject.SetActive (false);
 

@@ -14,8 +14,8 @@ public class WordGameController : MonoBehaviour {
     }
 
 	void OnEnable(){
-		Messenger.AddListener<bool>( EventManager.GameState.PAUSEGAME.ToString(), ToggleGamePause );
-		Messenger.AddListener( EventManager.GameState.RESETGAME.ToString(), _ResetGame );
+		Messenger.AddListener<bool>( EventManager.GameState.PAUSE.ToString(), ToggleGamePause );
+		Messenger.AddListener( EventManager.GameState.RESET.ToString(), _ResetGame );
 	}
 
 	void OnDestroy(){
@@ -132,7 +132,7 @@ public class WordGameController : MonoBehaviour {
 	}
 
 	void _ToggleMenuUI(bool state){
-		Messenger.Broadcast<bool> (EventManager.GameState.PAUSEGAME.ToString (), state);
+		Messenger.Broadcast<bool> (EventManager.GameState.PAUSE.ToString (), state);
 	}
 	#endregion
 

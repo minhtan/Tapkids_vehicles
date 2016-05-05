@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class UIResumeButton : MonoBehaviour {
+public class UINextVehicleButton : MonoBehaviour {
 
 	#region public members
 	#endregion public members
@@ -16,9 +16,8 @@ public class UIResumeButton : MonoBehaviour {
 		mButton = GetComponent <Button> ();
 		if (mButton != null) {
 			mButton.onClick.AddListener (delegate {
-//				CarGameEventController.OnPauseGame (false);	
-//				CarGameEventController.OnTogglePanel ("ingame");	
-				Messenger.Broadcast<bool> ( EventManager.GameState.PAUSE.ToString(), false);
+//				CarGameEventController.OnSelectCar (1);
+				Messenger.Broadcast <int> (EventManager.GUI.SELECT_VEHICLE.ToString (), 1);
 			});
 		}
 	}

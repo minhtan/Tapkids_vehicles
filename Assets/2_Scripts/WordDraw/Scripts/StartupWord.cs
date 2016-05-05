@@ -33,8 +33,8 @@ public class StartupWord : MonoBehaviour {
 		GestureAutoDrawer.OnDrawGestureDone += OnDrawGestureDone;
 		LeanGestureRecognizer.OnGestureDetected += OnGestureDetected;
 		LeanGestureRecognizer.OnGestureReset += OnGestureReset;
-		Messenger.AddListener<bool, string> (EventManager.AR.IMAGETRACKING.ToString(), OnLetterFound);
-		Messenger.AddListener<bool> (EventManager.AR.VEHICLETRACING.ToString(), OnVehicleFound);
+		Messenger.AddListener<bool, string> (EventManager.AR.VEHICLE_TRACKING.ToString(), OnLetterFound);
+		Messenger.AddListener<bool> (EventManager.AR.VEHICLE_TRACKING.ToString(), OnVehicleFound);
 	}
 
 	void OnDisable ()

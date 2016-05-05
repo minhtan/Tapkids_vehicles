@@ -33,19 +33,19 @@ public class CarGameGenerator : MonoBehaviour {
 
 	#region MONO
 	void OnEnable () {
-		Messenger.AddListener <string> (EventManager.GameState.INITGAME.ToString(), HandleInitGame);
-		Messenger.AddListener <bool> (EventManager.GameState.STARTGAME.ToString (), HandleStartGame);
-		Messenger.AddListener (EventManager.GameState.RESETGAME.ToString (), HandleResetGame);
+		Messenger.AddListener <string> (EventManager.GameState.INIT.ToString(), HandleInitGame);
+		Messenger.AddListener <bool> (EventManager.GameState.START.ToString (), HandleStartGame);
+		Messenger.AddListener (EventManager.GameState.RESET.ToString (), HandleResetGame);
 
-		Messenger.AddListener <string> (EventManager.GUI.REMOVELETTER.ToString (), HandleDropLetter);
+		Messenger.AddListener <string> (EventManager.GUI.REMOVE_LETTER.ToString (), HandleDropLetter);
 	}
 
 	void OnDisable () {
-		Messenger.RemoveListener <string> (EventManager.GameState.INITGAME.ToString(), HandleInitGame);
-		Messenger.RemoveListener <bool> (EventManager.GameState.STARTGAME.ToString (), HandleStartGame);
-		Messenger.RemoveListener (EventManager.GameState.RESETGAME.ToString (), HandleResetGame);
+		Messenger.RemoveListener <string> (EventManager.GameState.INIT.ToString(), HandleInitGame);
+		Messenger.RemoveListener <bool> (EventManager.GameState.START.ToString (), HandleStartGame);
+		Messenger.RemoveListener (EventManager.GameState.RESET.ToString (), HandleResetGame);
 
-		Messenger.RemoveListener <string> (EventManager.GUI.REMOVELETTER.ToString (), HandleDropLetter);
+		Messenger.RemoveListener <string> (EventManager.GUI.REMOVE_LETTER.ToString (), HandleDropLetter);
 	}
 
 	void Start () {
@@ -130,7 +130,8 @@ public class CarGameGenerator : MonoBehaviour {
 
 	private IEnumerator SetupCar () {
 		yield return new WaitForSeconds (1f);
-		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (GameConstant.assetBundleName, "arcadecar", (bundle) => {
+		// TODO: fix player current vehicle 
+		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (GameConstant.assetBundleName, "Car", (bundle) => {
 			carGameObject = Instantiate (bundle, cartPoint.position + pointOffset, Quaternion.identity) as GameObject;
 			carGameObject.transform.SetParent (mTransform, false);
 			carGameObject.SetActive (false);
