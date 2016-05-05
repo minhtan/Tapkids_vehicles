@@ -39,7 +39,7 @@ public class GaragaController : MonoBehaviour {
 
 	void Start () {
 		vehicles = new List <GameObject> ();
-		lockedShader = Shader.Find ("Custom/BlackOut");
+		lockedShader = Shader.Find ("Unlit/Color");
 		// get player unlocked list
 
 		// compare with avaiable vehicle list
