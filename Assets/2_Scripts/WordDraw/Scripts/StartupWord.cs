@@ -3,8 +3,10 @@ using System.Collections;
 using WordDraw;
 using PDollarGestureRecognizer;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
-public class StartupWord : MonoBehaviour {
+public class StartupWord : MonoBehaviour
+{
 
 	public LeanGestureRecognizer _recognizer;
 	public GestureAutoDrawer _autoDrawer;
@@ -21,8 +23,9 @@ public class StartupWord : MonoBehaviour {
 	public GameObject pnlLetterUI;
 	public GameObject pnlVehicleUI;
 
-	void Start () {
-		snapShot = GameObject.FindObjectOfType<CaptureAndSave>();
+	void Start ()
+	{
+		snapShot = GameObject.FindObjectOfType<CaptureAndSave> ();
 		ArController.Instance.ToggleAR (true);
 		ArController.Instance.SetCenterMode (true);
 		ArController.Instance.SetArMaxStimTargets (1);
@@ -31,38 +34,41 @@ public class StartupWord : MonoBehaviour {
 	void OnEnable ()
 	{
 		GestureAutoDrawer.OnDrawGestureDone += OnDrawGestureDone;
-		LeanGestureRecognizer.OnGestureDetected += OnGestureDetected;
-		LeanGestureRecognizer.OnGestureReset += OnGestureReset;
-		Messenger.AddListener<bool, string> (EventManager.AR.IMAGETRACKING.ToString(), OnLetterFound);
-		Messenger.AddListener<bool> (EventManager.AR.VEHICLETRACING.ToString(), OnVehicleFound);
+		StartupRecognizer.OnGestureDetected += OnGestureDetected;
+		StartupRecognizer.OnGestureReset += OnGestureReset;
+		Messenger.AddListener<bool, string> (EventManager.AR.IMAGETRACKING.ToString (), OnLetterFound);
+		Messenger.AddListener<bool> (EventManager.AR.VEHICLETRACING.ToString (), OnVehicleFound);
+		_recognizer.RegisterInputHandler ();
 	}
 
 	void OnDisable ()
 	{
 		GestureAutoDrawer.OnDrawGestureDone -= OnDrawGestureDone;
-		LeanGestureRecognizer.OnGestureDetected -= OnGestureDetected;
-		LeanGestureRecognizer.OnGestureReset -= OnGestureReset;
+		StartupRecognizer.OnGestureDetected -= OnGestureDetected;
+		StartupRecognizer.OnGestureReset -= OnGestureReset;
 		Messenger.Cleanup ();
 	}
 
 
-	public void OnClick()
+	public void OnClick ()
 	{
 		ArController.Instance.ToggleAR (false);
 		DrawTutorial ();
 	}
 
-	public void OnExitClick()
+	public void OnExitClick ()
 	{
 		ArController.Instance.ToggleAR (true);
+		_drawer.ResetStroke ();
 		_exitBut.SetActive (false);
 	}
 
-	private void OnVehicleFound(bool state){
+	private void OnVehicleFound (bool state)
+	{
 		pnlVehicleUI.SetActive (state);
 	}
 
-	private void OnLetterFound(bool found, string letterName)
+	private void OnLetterFound (bool found, string letterName)
 	{
 		pnlLetterUI.SetActive (found);
 
@@ -75,16 +81,20 @@ public class StartupWord : MonoBehaviour {
 
 		_currentLetterBut.Letter = WordDrawConfig.GetLetterFromName (letterName);
 
+		GameObject letterGo = Resources.Load<GameObject> ("Letters/" + letterName.ToUpper ());
+
+		_letterHolder.transform.GetChild (0).GetComponent<Image> ().sprite = letterGo.GetComponent<Image> ().sprite;
 		_drawLetterBut.SetActive (true);
 	}
 
 	private void OnDrawGestureDone (Gesture gesture)
 	{
-		StartCoroutine (DelayResetStroke ());
+		StartCoroutine (DelayResetStroke ());	
 	}
 
 	private void OnGestureDetected (Result result)
 	{
+		Debug.Log (result.GestureClass);
 		if (WordDrawConfig.CompareLetterWithResult (_currentLetterBut, result)) {
 			_tutText.SetTutText (UITutText.TutText.CORRECT);
 		} else {
@@ -94,20 +104,17 @@ public class StartupWord : MonoBehaviour {
 
 	private void OnSessionResult (bool isPass)
 	{
-		if (isPass)
-		{
+		if (isPass) {
 			_tutText.SetTutText (UITutText.TutText.GOOD_JOB);
 			EndLetterSession ();
-		}
-		else
-		{
+		} else {
 			_tutText.SetTutText (UITutText.TutText.OPPS_LET_SEE_AGAIN);
 			DrawTutorial ();
 			SetActiveInputGesture (false);
 		}
 	}
 
-	private void SetActiveInputGesture(bool active)
+	private void SetActiveInputGesture (bool active)
 	{
 		_drawer.enabled = active;
 		_recognizer.enabled = active;
@@ -127,7 +134,8 @@ public class StartupWord : MonoBehaviour {
 
 	private void DrawTutorial ()
 	{
-		_autoDrawer.AutoDrawGesture ("Atraining");
+		string gestureName = _currentLetterBut.Letter.ToString () + "training";
+		_autoDrawer.AutoDrawGesture (gestureName);
 	}
 
 	private IEnumerator DelayResetStroke ()
@@ -141,7 +149,8 @@ public class StartupWord : MonoBehaviour {
 		_exitBut.SetActive (true);
 	}
 
-	public void _CaptureAndSave(){
-		snapShot.CaptureAndSaveToAlbum();
+	public void _CaptureAndSave ()
+	{
+		snapShot.CaptureAndSaveToAlbum ();
 	}
 }

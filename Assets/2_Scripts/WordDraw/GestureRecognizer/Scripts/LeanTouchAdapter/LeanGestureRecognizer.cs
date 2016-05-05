@@ -77,6 +77,11 @@ public abstract class LeanGestureRecognizer : MonoBehaviour
 
 	private void OnStartGame()
 	{
+		RegisterInputHandler ();
+	}
+
+	public void RegisterInputHandler()
+	{
 		GestureDrawing.OnStrokeStart += OnStrokeStart;
 		GestureDrawing.OnStrokeDrag += OnStrokeDrag;
 		GestureDrawing.OnStrokeEnd += OnStrokeEnd;
@@ -97,8 +102,6 @@ public abstract class LeanGestureRecognizer : MonoBehaviour
 	private void LoadGesturesList ()
 	{
 		_gestureList.Clear ();
-
-		GestureIO.LoadPremadeGestureTemplates ("GestureTemplates", _gestureList);
 
 		LoadGestures ();
 
@@ -140,7 +143,7 @@ public abstract class LeanGestureRecognizer : MonoBehaviour
 			Debug.Log ("NULL");
 			return;
 		}
-		
+
 		if (IsReachMaxStroke || _delayThreshold == 0f) { // strokeId from 0
 			Recognizing (optimizedList);
 		} else { 
