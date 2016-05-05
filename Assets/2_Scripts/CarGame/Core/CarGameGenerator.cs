@@ -131,7 +131,7 @@ public class CarGameGenerator : MonoBehaviour {
 	private IEnumerator SetupCar () {
 		yield return new WaitForSeconds (1f);
 		// TODO: fix player current vehicle 
-		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (GameConstant.assetBundleName, "Car", (bundle) => {
+		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (GameConstant.assetBundleName, PlayerDataController.Instance.mPlayer.vehicleName, (bundle) => {
 			carGameObject = Instantiate (bundle, cartPoint.position + pointOffset, Quaternion.identity) as GameObject;
 			carGameObject.transform.SetParent (mTransform, false);
 			carGameObject.SetActive (false);

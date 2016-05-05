@@ -20,7 +20,7 @@ public class PlayerDataController : UnitySingletonPersistent<PlayerDataControlle
 //			newCarList.Add (1);
 //			newCarList.Add (2);
 				
-			mPlayer = new Player (0, 100, 1, newCarList); 
+			mPlayer = new Player (0, 100, 2, "Car", newCarList); 
 
 			TapkidsData.AddPlayer (mPlayer);
 			TapkidsData.Save ();
@@ -58,14 +58,14 @@ public class PlayerDataController : UnitySingletonPersistent<PlayerDataControlle
 	}
 
 	public void UpdatePlayerCredit (int _point) {
-		mPlayer.currentCredit += _point;
-		TapkidsData.players [currentPlayer].currentCredit = mPlayer.currentCredit;
+		mPlayer.credit += _point;
+		TapkidsData.players [currentPlayer].credit = mPlayer.credit;
 		TapkidsData.Save ();
 	}
 
 	public void UpdatePlayerCurrentVehicle (int _newVehicle) {
-		mPlayer.currentVehicle = _newVehicle;
-		TapkidsData.players [currentPlayer].currentVehicle = mPlayer.currentVehicle;
+		mPlayer.vehicleId = _newVehicle;
+		TapkidsData.players [currentPlayer].vehicleId = mPlayer.vehicleId;
 		TapkidsData.Save ();
 	}
 
@@ -83,7 +83,8 @@ public class PlayerDataController : UnitySingletonPersistent<PlayerDataControlle
 	void HandleSelectVehicle (Vehicle _newVehicle) {
 		// check unlocked car
 		if (mPlayer.unlockedVehicles.Contains (_newVehicle.id)) {
-			mPlayer.currentVehicle = _newVehicle.id;
+			mPlayer.vehicleId = _newVehicle.id;
+			mPlayer.vehicleName = _newVehicle.name;
 		} else {
 			// do nothing
 		}

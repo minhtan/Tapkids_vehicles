@@ -39,7 +39,7 @@ public class GaragaController : MonoBehaviour {
 
 	void Start () {
 		vehicles = new List <GameObject> ();
-		lockedShader = Shader.Find ("Unlit/Color");
+		lockedShader = Shader.Find ("Custom/Unlit/Color");
 		// get player unlocked list
 
 		// compare with avaiable vehicle list
@@ -123,8 +123,14 @@ public class GaragaController : MonoBehaviour {
 	}
 
 	private void HandlePurchaseVehicle () {
-		if (PlayerDataController.Instance.mPlayer.currentCredit >= vehicles[currentSelectedCar].GetComponent <ArcadeCarController> ().vehicle.costPoint) {
+		if (PlayerDataController.Instance.mPlayer.credit >= vehicles[currentSelectedCar].GetComponent <ArcadeCarController> ().vehicle.costPoint) {
 			PlayerDataController.Instance.UpdateUnlockedVehicle (vehicles[currentSelectedCar].GetComponent <ArcadeCarController> ().vehicle);
+
+			Renderer[] renderers = vehicles[currentSelectedCar].GetComponentsInChildren <Renderer> ();
+			for (int j = 0; j < renderers.Length; j++) {
+				renderers [j].material.shader = Shader.Find ("Standard");
+			}
+
 			Messenger.Broadcast <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), vehicles[currentSelectedCar].GetComponent <ArcadeCarController> ().vehicle);
 		} else {
 			// notify player
