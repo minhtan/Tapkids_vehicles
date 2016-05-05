@@ -17,8 +17,8 @@ public class PlayerDataController : UnitySingletonPersistent<PlayerDataControlle
 		} else {
 			List <int> newCarList = new List<int> ();
 			newCarList.Add (0);
-			newCarList.Add (1);
-			newCarList.Add (2);
+//			newCarList.Add (1);
+//			newCarList.Add (2);
 				
 			mPlayer = new Player (0, 100, 1, newCarList); 
 
