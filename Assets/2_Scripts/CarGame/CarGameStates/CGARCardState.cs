@@ -2,7 +2,7 @@
 using System.Collections;
 using Prime31.StateKit;
 
-public class CGLetterState : SKState<CarGameController> {
+public class CGARCardState : SKState<CarGameController> {
 
 	public override void begin ()
 	{

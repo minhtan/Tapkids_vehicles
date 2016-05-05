@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class UIPreviousButton : MonoBehaviour {
+public class UIPreviousVehicleButton : MonoBehaviour {
 
 	#region public members
 	#endregion public members
@@ -17,7 +17,7 @@ public class UIPreviousButton : MonoBehaviour {
 		if (mButton != null) {
 			mButton.onClick.AddListener (delegate {
 //				CarGameEventController.OnSelectCar (-1);
-				Messenger.Broadcast <int> (EventManager.GUI.SELECTVEHICLE.ToString (), -1);
+				Messenger.Broadcast <int> (EventManager.GUI.SELECT_VEHICLE.ToString (), -1);
 			});
 		}
 	}

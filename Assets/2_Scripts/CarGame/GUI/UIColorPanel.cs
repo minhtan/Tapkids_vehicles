@@ -6,11 +6,11 @@ public class UIColorPanel : MonoBehaviour {
 	private CanvasGroup mCanvasGroup;
 
 	void OnEnable () {
-		Messenger.AddListener <Vehicle> (EventManager.GUI.UPDATEVEHICLE.ToString (), HandleUpdateVehicle);
+		Messenger.AddListener <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), HandleUpdateVehicle);
 	}
 
 	void OnDisable () {
-		Messenger.RemoveListener <Vehicle> (EventManager.GUI.UPDATEVEHICLE.ToString (), HandleUpdateVehicle);
+		Messenger.RemoveListener <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), HandleUpdateVehicle);
 	}
 	// Use this for initialization
 	void Start () {

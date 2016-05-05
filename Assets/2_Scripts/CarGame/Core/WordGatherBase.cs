@@ -6,6 +6,6 @@ public class WordGatherBase : MonoBehaviour {
 	// TODO: make some effects to notify player when they collected correct word or wrong word
 
 	void OnTriggerEnter () {
-		Messenger.Broadcast (EventManager.Vehicle.GATHERLETTER.ToString ());
+		Messenger.Broadcast (EventManager.Vehicle.GATHER_LETTER.ToString ());
 	}
 }

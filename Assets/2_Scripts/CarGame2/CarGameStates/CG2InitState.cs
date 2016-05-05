@@ -18,13 +18,13 @@ public class CG2InitState : SKState<CarGameController2> {
 //		_context.RandomWord();
 
 		// broadcast event load car, letter, obstacle
-		Messenger.Broadcast <string> (EventManager.GameState.INITGAME.ToString (), "land");//_context.letters);
+		Messenger.Broadcast <string> (EventManager.GameState.INIT.ToString (), "land");//_context.letters);
 	}
 
 	public override void reason ()
 	{
 		if (countDownTimer <= 0f) {
-			_machine.changeState <CG2MapState> ();
+			_machine.changeState <CG2ARMapState> ();
 		}
 	}
 	public override void update (float deltaTime)

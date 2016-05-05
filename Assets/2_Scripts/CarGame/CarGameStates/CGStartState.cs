@@ -12,7 +12,7 @@ public class CGStartState : SKState<CarGameController> {
 		for (int i = 0; i < _context.mTransform.childCount; i++) 
 			_context.mTransform.GetChild (i).gameObject.SetActive (true);
 		
-		Messenger.Broadcast <bool> (EventManager.GameState.STARTGAME.ToString(), true);
+		Messenger.Broadcast <bool> (EventManager.GameState.START.ToString(), true);
 
 	}
 

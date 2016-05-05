@@ -28,7 +28,7 @@ public class PlayerDataController : UnitySingletonPersistent<PlayerDataControlle
 	}
 
 	void OnEnable () {
-		Messenger.AddListener <Vehicle> (EventManager.GUI.UPDATEVEHICLE.ToString (), HandleSelectVehicle);
+		Messenger.AddListener <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), HandleSelectVehicle);
 //		Messenger.AddListener (EventManager.GUI.PURCHASEVEHICLE.ToString (), HandlePurchaseVehicle);
 	}
 
@@ -37,7 +37,7 @@ public class PlayerDataController : UnitySingletonPersistent<PlayerDataControlle
 	}
 
 	void OnDisable () {
-		Messenger.RemoveListener <Vehicle> (EventManager.GUI.UPDATEVEHICLE.ToString (), HandleSelectVehicle);
+		Messenger.RemoveListener <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), HandleSelectVehicle);
 //		Messenger.RemoveListener (EventManager.GUI.PURCHASEVEHICLE.ToString (), HandlePurchaseVehicle);
 	}
 	#endregion MONO

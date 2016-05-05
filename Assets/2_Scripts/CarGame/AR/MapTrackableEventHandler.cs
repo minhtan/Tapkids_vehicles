@@ -27,13 +27,13 @@ public class MapTrackableEventHandler : MonoBehaviour, ITrackableEventHandler {
 	void OnTrackingFound () 
 	{
 //		CarGameEventController.OnMapTracking(true, mTransform);
-		Messenger.Broadcast <bool, Transform> (EventManager.AR.MAPTRACKING.ToString(), true, mTransform);
+		Messenger.Broadcast <bool, Transform> (EventManager.AR.MAP_TRACKING.ToString(), true, mTransform);
 	}
 
 	void OnTrackingLost () 
 	{
 //		CarGameEventController.OnMapTracking(false, mTransform);
-		Messenger.Broadcast <bool, Transform> (EventManager.AR.MAPTRACKING.ToString(), false, mTransform);
+		Messenger.Broadcast <bool, Transform> (EventManager.AR.MAP_TRACKING.ToString(), false, mTransform);
 	}
 	#endregion
 
