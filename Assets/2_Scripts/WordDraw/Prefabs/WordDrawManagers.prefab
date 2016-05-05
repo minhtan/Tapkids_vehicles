@@ -24,7 +24,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 494860}
-  - 114: {fileID: 11422872}
   - 114: {fileID: 11440576}
   - 114: {fileID: 11456316}
   - 114: {fileID: 11457738}
@@ -155,21 +154,7 @@ MonoBehaviour:
   _difficulties: []
   _spawnPoint: {fileID: 0}
   _maxStackCap: 8
---- !u!114 &11422872
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 116858}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49bb971fd6bdcb942992e77619083f99, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _maxStrokeNumber: 20
-  _autoRecognize: 1
-  _autoResetGesture: 1
-  _delayThreshold: 0.8
+  _curDifficulty: 0
 --- !u!114 &11430238
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -192,7 +177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42048163fa47f854d979b246dd98b807, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  recognizer: {fileID: 11422872}
+  recognizer: {fileID: 0}
   maxPoints: 1000
   minPixelMove: 5
   lineWidth: 20
@@ -211,7 +196,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7b9901e364f24352b852a2ac460bdd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _recognizer: {fileID: 11422872}
+  _recognizer: {fileID: 0}
   _inputField: {fileID: 0}
 --- !u!114 &11457738
 MonoBehaviour:
@@ -224,7 +209,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 582949924a28249a08d2c3705220e0ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  recognizer: {fileID: 11422872}
+  recognizer: {fileID: 0}
   _duration: 0.02
   _scaleFactor: 300
   lineWidth: 0.1
@@ -246,6 +231,8 @@ MonoBehaviour:
   _drawer: {fileID: 11440576}
   _statusText: {fileID: 0}
   _resultText: {fileID: 0}
+  _spawner: {fileID: 0}
+  _wordDrawScore: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
