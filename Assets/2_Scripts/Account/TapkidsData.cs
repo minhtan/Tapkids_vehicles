@@ -9,25 +9,28 @@ using System;
 public class Player {
 	public int id;
 	public string name;
-	public int currentCredit;
-	public int currentVehicle;
+	public int credit;
+	public int vehicleId;
+	public string vehicleName;
 	public List <int> unlockedVehicles;
 
 	public Player () {
 	}
 
-	public Player (int _id, int _currentCredit, int _currentVehicle, List <int> _unlockedVehicles) {
+	public Player (int _id, int _currentCredit, int _currentVehicleId, string _currentVehicleName, List <int> _unlockedVehicles) {
 		this.id = _id;
-		this.currentCredit = _currentCredit;
-		this.currentVehicle = _currentVehicle;
+		this.credit = _currentCredit;
+		this.vehicleId = _currentVehicleId;
+		this.vehicleName = _currentVehicleName;
 		this.unlockedVehicles = _unlockedVehicles;
 	}
 
-	public Player (int _id, string _name, int _currentCredit, int _currentVehicle, List <int> _unlockedVehicles) {
+	public Player (int _id, string _name, int _currentCredit, int _currentVehicleId, string _currentVehicleName, List <int> _unlockedVehicles) {
 		this.id = _id;
 		this.name = _name;
-		this.currentCredit = _currentCredit;
-		this.currentVehicle = _currentVehicle;
+		this.credit = _currentCredit;
+		this.vehicleId = _currentVehicleId;
+		this.vehicleName = _currentVehicleName;
 		this.unlockedVehicles = _unlockedVehicles;
 	}
 }
