@@ -117,11 +117,13 @@ public class MainMenuController : MonoBehaviour {
 
 	void OnFingerUp(Lean.LeanFinger finger){
 		if (!isPressingOnWheel) {
-			if (distance < -width / 4) {
+			if (distance <= -width / 4) {
 				MoveLeft ();
-			} else if (distance > width / 4) {
+			} 
+			else if (distance >= width / 4) {
 				MoveRight ();
-			} else {
+			} 
+			else {
 				SnapBack ();
 			}
 		}
@@ -129,19 +131,19 @@ public class MainMenuController : MonoBehaviour {
 	}
 
 	void MoveLeft(){
-		if (isGarageOpen) {
+//		if (isGarageOpen) {
 			_BackToMenu ();
-		} else {
-			
-		}
+//		} else {
+//			
+//		}
 	}
 
 	void MoveRight(){
-		if (isGarageOpen) {
+//		if (isGarageOpen) {
 			_OpenGarage ();
-		} else {
-			
-		}
+//		} else {
+//			
+//		}
 	}
 
 	void SnapBack(){
