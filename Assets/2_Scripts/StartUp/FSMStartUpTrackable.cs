@@ -97,7 +97,7 @@ namespace Vuforia
 				go_anim = go.GetComponentInChildren<Animator>();
 
 				if(isLetter){
-					Messenger.Broadcast<bool, string>(EventManager.AR.VEHICLE_TRACKING.ToString(), true, targetName);
+					Messenger.Broadcast<bool, string>(EventManager.AR.LETTER_TRACKING.ToString(), true, targetName);
 				}else{
 					Messenger.Broadcast<bool>(EventManager.AR.VEHICLE_TRACKING.ToString(), true);
 				}

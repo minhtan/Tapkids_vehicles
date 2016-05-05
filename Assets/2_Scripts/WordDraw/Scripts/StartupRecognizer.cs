@@ -18,7 +18,7 @@ public class StartupRecognizer : LeanGestureRecognizer
 
 	protected override void Awake ()
 	{
-		Messenger.AddListener<bool, string> (EventManager.AR.IMAGETRACKING.ToString (), OnLetterFound);
+		Messenger.AddListener<bool, string> (EventManager.AR.LETTER_TRACKING.ToString (), OnLetterFound);
 		base.Awake ();
 	}
 
