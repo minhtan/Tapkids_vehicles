@@ -109,6 +109,7 @@ public static class TapkidsData {
 	}
 
 	public static bool Load() {
+		Debug.Log (Application.persistentDataPath + "/player.tapkids");
 		if(File.Exists(Application.persistentDataPath + "/player.tapkids")) {
 			BinaryFormatter bf = new BinaryFormatter();
 			FileStream file = File.Open(Application.persistentDataPath + "/player.tapkids", FileMode.Open);

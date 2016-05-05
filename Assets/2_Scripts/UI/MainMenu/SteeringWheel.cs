@@ -3,6 +3,7 @@ using System.Collections;
 
 public class SteeringWheel : MonoBehaviour {
 
+	public bool updateEveryFrame = false;
 	float initAngle;
 	float dragAngle;
 	float angleDiff;
@@ -37,6 +38,15 @@ public class SteeringWheel : MonoBehaviour {
 	void Start(){
 		rectTran = GetComponent<RectTransform> ();
 		rectWordPos = RectTransformExtension.GetScreenWorldPos (rectTran);
+	}
+
+	void Update(){
+		if(updateEveryFrame){
+//			Messenger.Broadcast<float> (EventManager.GUI.MENUWHEELTURN.ToString (), angleDiff);
+			float angle = rectTran.localRotation.eulerAngles.z;
+			angle = angle > 180f ? (angle - 360) * -1 : angle * -1;
+			Debug.Log(angle);
+		}
 	}
 	
 	void OnFingerDown(Lean.LeanFinger fg){

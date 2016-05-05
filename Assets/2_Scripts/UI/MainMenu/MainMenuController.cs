@@ -80,17 +80,21 @@ public class MainMenuController : MonoBehaviour {
 	}
 
 	public void _OpenGarage(){
+//		LeanTween.cancelAll ();
 		LeanTween.moveX (menu, width/2, 0.5f).setEase(LeanTweenType.easeOutQuart);
 		LeanTween.moveX (car, 0, 0.5f).setEase(LeanTweenType.easeOutQuart);
 		LeanTween.moveX (garage, 0, 0.5f).setEase(LeanTweenType.easeOutQuart);
 		isGarageOpen = true;
+		Messenger.Broadcast (EventManager.GUI.ENTER_GARAGE.ToString ());
 	}
 
 	public void _BackToMenu(){
+//		LeanTween.cancelAll ();
 		LeanTween.moveX (menu, 0, 0.5f).setEase(LeanTweenType.easeOutQuart);
 		LeanTween.moveX (car, -width/2, 0.5f).setEase(LeanTweenType.easeOutQuart);
 		LeanTween.moveX (garage, -width/2, 0.5f).setEase(LeanTweenType.easeOutQuart);
 		isGarageOpen = false;
+		Messenger.Broadcast (EventManager.GUI.EXIT_GARAGE.ToString ());
 	}
 
 	void CreateCarTexture(){
