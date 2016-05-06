@@ -84,7 +84,6 @@ public class MainMenuController : MonoBehaviour {
 	void CancelMenuTweens(){
 		for (int i = 0; i < menutweenIds.Length; i++) {
 			if(menutweenIds[i] != null && menutweenIds[i] != 0){
-				Debug.Log (menutweenIds[i]);
 				LeanTween.cancel (menutweenIds[i]);
 			}
 		}
