@@ -141,8 +141,8 @@ public class MainMenuController : MonoBehaviour {
 			else {
 				SnapBack ();
 			}
+			_OnWheelPress (false);
 		}
-		_OnWheelPress (false);
 	}
 
 	void MoveLeft(){
