@@ -42,10 +42,9 @@ public class SteeringWheel : MonoBehaviour {
 
 	void Update(){
 		if(updateEveryFrame){
-//			Messenger.Broadcast<float> (EventManager.GUI.MENUWHEELTURN.ToString (), angleDiff);
 			float angle = rectTran.localRotation.eulerAngles.z;
 			angle = angle > 180f ? (angle - 360) * -1 : angle * -1;
-			Debug.Log(angle);
+			Messenger.Broadcast<float> (EventManager.GUI.MENU_WHEEL_FRAME_TURN.ToString (), angle);
 		}
 	}
 	
@@ -63,7 +62,7 @@ public class SteeringWheel : MonoBehaviour {
 
 			if(Mathf.Abs(angleDiff) < angleThreshold){
 				rectTran.Rotate (Vector3.forward, fg.GetDeltaDegrees(rectWordPos));
-				Messenger.Broadcast<float> (EventManager.GUI.MENUWHEELTURN.ToString (), angleDiff);
+				Messenger.Broadcast<float> (EventManager.GUI.MENU_WHEEL_TURN.ToString (), angleDiff);
 			}
 		}
 	}
@@ -72,7 +71,7 @@ public class SteeringWheel : MonoBehaviour {
 		if (isPressingOnWheel) {
 			float angle = rectTran.localRotation.eulerAngles.z;
 			angle = angle > 180f ? (angle - 360) * -1 : angle * -1;
-			Messenger.Broadcast<float> (EventManager.GUI.MENUWHEELRELEASE.ToString (), angle);
+			Messenger.Broadcast<float> (EventManager.GUI.MENU_WHEEL_RELEASE.ToString (), angle);
 			LeanTween.rotate (rectTran, angle, 0.5f).setEase(LeanTweenType.easeOutBack);
 
 			isPressingOnWheel = false;

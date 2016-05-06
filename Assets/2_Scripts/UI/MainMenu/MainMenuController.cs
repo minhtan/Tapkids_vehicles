@@ -59,8 +59,8 @@ public class MainMenuController : MonoBehaviour {
 		Lean.LeanTouch.OnFingerUp += OnFingerUp;
 		Lean.LeanTouch.OnFingerDrag += OnFingerDrag;
 		Lean.LeanTouch.OnFingerSwipe += OnFingerSwipe;
-		Messenger.AddListener<float> (EventManager.GUI.MENUWHEELTURN.ToString(), OnMenuWheelTurn);
-		Messenger.AddListener<float> (EventManager.GUI.MENUWHEELRELEASE.ToString(), OnMenuWheelRelease);
+		Messenger.AddListener<float> (EventManager.GUI.MENU_WHEEL_TURN.ToString(), OnMenuWheelTurn);
+		Messenger.AddListener<float> (EventManager.GUI.MENU_WHEEL_RELEASE.ToString(), OnMenuWheelRelease);
 		LeanLocalization.OnLocalizationChanged += UpdateLocalization;
 	}
 
@@ -69,8 +69,8 @@ public class MainMenuController : MonoBehaviour {
 		Lean.LeanTouch.OnFingerUp -= OnFingerUp;
 		Lean.LeanTouch.OnFingerDrag -= OnFingerDrag;
 		Lean.LeanTouch.OnFingerSwipe -= OnFingerSwipe;
-		Messenger.RemoveListener<float> (EventManager.GUI.MENUWHEELTURN.ToString(), OnMenuWheelTurn);
-		Messenger.RemoveListener<float> (EventManager.GUI.MENUWHEELRELEASE.ToString(), OnMenuWheelRelease);
+		Messenger.RemoveListener<float> (EventManager.GUI.MENU_WHEEL_TURN.ToString(), OnMenuWheelTurn);
+		Messenger.RemoveListener<float> (EventManager.GUI.MENU_WHEEL_RELEASE.ToString(), OnMenuWheelRelease);
 		LeanLocalization.OnLocalizationChanged -= UpdateLocalization;
 	}
 	#endregion

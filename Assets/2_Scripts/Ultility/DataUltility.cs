@@ -10,7 +10,7 @@ public class DataUltility
 	{
 		List<WordGameData> list = new List<WordGameData> ();
 
-		TextAsset[] textList = Resources.LoadAll<TextAsset> ("WordGame/");
+		TextAsset[] textList = Resources.LoadAll<TextAsset> ("WordGame/") as TextAsset[];
 		for (int i = 0; i < textList.Length; i++) {
 			list.Add (JsonUtility.FromJson<WordGameData> (textList [i].text));
 		}
