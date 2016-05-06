@@ -1756,7 +1756,7 @@ GameObject:
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &595050054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1771,13 +1771,10 @@ MonoBehaviour:
   mPlayer:
     id: 0
     name: 
-    currentCredit: 0
-    currentVehicle:
-      id: 0
-      name: 
-      maxSpeed: 0
-      costPoint: 0
-    unlockedVehicles: []
+    credit: 0
+    vehicleId: 0
+    vehicleName: 
+    unlockedVehicles: 
 --- !u!4 &595050055
 Transform:
   m_ObjectHideFlags: 0
@@ -3996,7 +3993,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 161188, guid: b19e96444ae544c4a9e391953a8632e0, type: 2}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b19e96444ae544c4a9e391953a8632e0, type: 2}

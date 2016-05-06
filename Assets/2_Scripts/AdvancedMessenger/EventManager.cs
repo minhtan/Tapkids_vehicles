@@ -12,6 +12,8 @@ public class EventManager {
 		UPDATE_VEHICLE,
 		PURCHASE_VEHICLE,
 		//
+		UPDATE_CREDIT,
+		//
 		TOGGLE_INGAME,
 		TOGGLE_TUTORIAL,
 		//

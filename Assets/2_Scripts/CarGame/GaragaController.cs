@@ -28,12 +28,14 @@ public class GaragaController : MonoBehaviour {
 	void OnEnable () {
 		Messenger.AddListener <int> (EventManager.GUI.SELECT_VEHICLE.ToString (), HandleSelectCar);
 		Messenger.AddListener (EventManager.GUI.ENTER_GARAGE.ToString (), HandleEnterGarage);
+		Messenger.AddListener (EventManager.GUI.EXIT_GARAGE.ToString (), HandleExitGarage);
 		Messenger.AddListener (EventManager.GUI.PURCHASE_VEHICLE.ToString (), HandlePurchaseVehicle);
 	}
 
 	void OnDisable () {
 		Messenger.RemoveListener <int> (EventManager.GUI.SELECT_VEHICLE.ToString (), HandleSelectCar);
 		Messenger.RemoveListener (EventManager.GUI.ENTER_GARAGE.ToString (), HandleEnterGarage);
+		Messenger.RemoveListener (EventManager.GUI.EXIT_GARAGE.ToString (), HandleExitGarage);
 		Messenger.RemoveListener (EventManager.GUI.PURCHASE_VEHICLE.ToString (), HandlePurchaseVehicle);
 	}
 
@@ -111,12 +113,14 @@ public class GaragaController : MonoBehaviour {
 				});
 			});
 		}
-
-		// TODO: update car stats in GUI
-		// is this unlocked vehicle ?
 	}
 
 	private void HandleEnterGarage () {
+		// get player current select car
+
+		// setup selected car
+	}
+	private void HandleExitGarage () {
 		// get player current select car
 
 		// setup selected car
@@ -132,6 +136,7 @@ public class GaragaController : MonoBehaviour {
 			}
 
 			Messenger.Broadcast <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), vehicles[currentSelectedCar].GetComponent <ArcadeCarController> ().vehicle);
+			Messenger.Broadcast <int> (EventManager.GUI.UPDATE_CREDIT.ToString (), PlayerDataController.Instance.mPlayer.credit);
 		} else {
 			// notify player
 			Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), GameConstant.PurchaseUnsuccessful, 1f);
