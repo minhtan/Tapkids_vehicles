@@ -70,6 +70,9 @@ public class WordGameController : MonoBehaviour {
 	#region Data funcs
 	void GetDataList(){
 		dataList = DataUltility.ReadDataForWordGame ();
+		foreach(WordGameData d in dataList){
+			Debug.Log (d.letters + " " + d.wordlist.Length);
+		}
 	}
 
     void RandomData()
