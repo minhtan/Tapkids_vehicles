@@ -611,8 +611,13 @@ MonoBehaviour:
   vehicle:
     id: 3
     name: DeliveryTruck
+    desc: 
+    matId: 0
     maxSpeed: 0
     costPoint: 40
+  mats:
+  - {fileID: 2100000, guid: a4ca887bcacb542ccae38fafeed41251, type: 2}
+  - {fileID: 2100000, guid: 65696fade12074834833157c96543205, type: 2}
   wheelColliders:
   - {fileID: 14645600}
   - {fileID: 14656942}
@@ -751,6 +756,10 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: mats.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: vehicle.name
       value: DeliveryTruck
