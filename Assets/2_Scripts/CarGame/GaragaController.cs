@@ -30,6 +30,7 @@ public class GaragaController : MonoBehaviour {
 		Messenger.AddListener (EventManager.GUI.ENTER_GARAGE.ToString (), HandleEnterGarage);
 		Messenger.AddListener (EventManager.GUI.EXIT_GARAGE.ToString (), HandleExitGarage);
 		Messenger.AddListener (EventManager.GUI.PURCHASE_VEHICLE.ToString (), HandlePurchaseVehicle);
+		Messenger.AddListener <int> (EventManager.GUI.CHANGE_MATERIAL.ToString (), HandleChangeMaterial);
 	}
 
 	void OnDisable () {
@@ -37,6 +38,7 @@ public class GaragaController : MonoBehaviour {
 		Messenger.RemoveListener (EventManager.GUI.ENTER_GARAGE.ToString (), HandleEnterGarage);
 		Messenger.RemoveListener (EventManager.GUI.EXIT_GARAGE.ToString (), HandleExitGarage);
 		Messenger.RemoveListener (EventManager.GUI.PURCHASE_VEHICLE.ToString (), HandlePurchaseVehicle);
+		Messenger.RemoveListener <int> (EventManager.GUI.CHANGE_MATERIAL.ToString (), HandleChangeMaterial);
 	}
 
 	void Start () {
@@ -58,7 +60,7 @@ public class GaragaController : MonoBehaviour {
 			vehicles.Add (carGameObject);
 			Destroy (carGameObject.GetComponent <Rigidbody> ());
 
-			if (!PlayerDataController.Instance.mPlayer.unlockedVehicles.Contains (carGameObject.GetComponent <ArcadeCarController> ().vehicle.id)) {
+			if (!PlayerDataController.Instance.unlockedIds.Contains (carGameObject.GetComponent <ArcadeCarController> ().vehicle.id)) {
 				Renderer[] renderers = carGameObject.GetComponentsInChildren <Renderer> ();
 				for (int j = 0; j < renderers.Length; j++) {
 					renderers [j].material.shader = lockedShader;
@@ -67,6 +69,7 @@ public class GaragaController : MonoBehaviour {
 
 			carGameObject.transform.localPosition = Vector3.zero;
 			carGameObject.transform.SetParent (mTransform, false);
+			// update first car 
 			if (vehicles.Count == 1) {
 				Messenger.Broadcast <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), carGameObject.GetComponent <ArcadeCarController> ().vehicle);
 			}
@@ -77,11 +80,7 @@ public class GaragaController : MonoBehaviour {
 			}
 		}));
 	}
-	void Update () {
-//		if (Input.GetKeyDown (KeyCode.Space)) {
-//			Debug.Log (AssetController.Instance.GetTotalLoadedAssetBundle ().ToString ());
-//		}
-	}
+
 	#endregion Mono
 
 	#region public functions
@@ -143,12 +142,13 @@ public class GaragaController : MonoBehaviour {
 		}
 	}
 
-	// TODO: load vehicle only it is unlocked one
-	private IEnumerator LoadVehicleFromAssetBundle (string _assetBundleName, string _vehicleName) {
-		yield return StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (_assetBundleName, _vehicleName, (bundle) => {
-			// GameObject vehicle = Instantiate (bundle) as GameObject;
-			// add vehicle to garage vehicles list
-		}));
+	void HandleChangeMaterial (int _matId) {
+		Debug.Log (_matId);
+		// update player data
+		Renderer[] renderers = vehicles [currentSelectedCar].GetComponentsInChildren<Renderer> ();
+		for (int i = 0; i < renderers.Length; i++) {
+			renderers[i].material = vehicles [currentSelectedCar].GetComponent <ArcadeCarController> ().mats[_matId];
+		}
 	}
 	#endregion private functions
 

@@ -7,23 +7,28 @@ using System;
 public class PlayerDataController : UnitySingletonPersistent<PlayerDataController> {
 
 	public Player mPlayer;
+	public List<int> unlockedIds = new List<int> ();
 
-	private int currentPlayer;
+	private int currentPlayer = 0;
 	#region MONO
 	void Awake () {
 		base.Awake ();
 		if (TapkidsData.Load ()) {
-			mPlayer = TapkidsData.GetPlayerById(0);
+			mPlayer = TapkidsData.GetPlayerById(currentPlayer);
 		} else {
-			List <int> newCarList = new List<int> ();
-			newCarList.Add (0);
-//			newCarList.Add (1);
-//			newCarList.Add (2);
-				
+			// pre setup player vehicle
+			Vehicle firstVehicle = new Vehicle (2, "Car", "", 0, 10);
+			List <Vehicle> newCarList = new List<Vehicle> ();
+			newCarList.Add (firstVehicle);
+
 			mPlayer = new Player (0, 100, 2, "Car", newCarList); 
 
 			TapkidsData.AddPlayer (mPlayer);
 			TapkidsData.Save ();
+		}
+
+		for (int i = 0; i < mPlayer.unlockedVehicles.Count; i++) {
+			unlockedIds.Add (mPlayer.unlockedVehicles[i].id);
 		}
 	}
 
@@ -70,7 +75,8 @@ public class PlayerDataController : UnitySingletonPersistent<PlayerDataControlle
 	}
 
 	public void UpdateUnlockedVehicle (Vehicle _unlockedVehicle) {
-		mPlayer.unlockedVehicles.Add (_unlockedVehicle.id);
+		mPlayer.unlockedVehicles.Add (_unlockedVehicle);
+		unlockedIds.Add (_unlockedVehicle.id);
 		Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), GameConstant.PurchaseSuccessful, 1f);
 
 		UpdatePlayerCredit (_unlockedVehicle.costPoint * -1);
@@ -82,7 +88,7 @@ public class PlayerDataController : UnitySingletonPersistent<PlayerDataControlle
 	#region private functions
 	void HandleSelectVehicle (Vehicle _newVehicle) {
 		// check unlocked car
-		if (mPlayer.unlockedVehicles.Contains (_newVehicle.id)) {
+		if (PlayerDataController.Instance.unlockedIds.Contains (_newVehicle.id)) {
 			mPlayer.vehicleId = _newVehicle.id;
 			mPlayer.vehicleName = _newVehicle.name;
 		} else {

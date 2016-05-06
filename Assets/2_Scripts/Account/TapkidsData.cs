@@ -12,12 +12,12 @@ public class Player {
 	public int credit;
 	public int vehicleId;
 	public string vehicleName;
-	public List <int> unlockedVehicles;
+	public List <Vehicle> unlockedVehicles;
 
 	public Player () {
 	}
 
-	public Player (int _id, int _currentCredit, int _currentVehicleId, string _currentVehicleName, List <int> _unlockedVehicles) {
+	public Player (int _id, int _currentCredit, int _currentVehicleId, string _currentVehicleName, List <Vehicle> _unlockedVehicles) {
 		this.id = _id;
 		this.credit = _currentCredit;
 		this.vehicleId = _currentVehicleId;
@@ -25,7 +25,7 @@ public class Player {
 		this.unlockedVehicles = _unlockedVehicles;
 	}
 
-	public Player (int _id, string _name, int _currentCredit, int _currentVehicleId, string _currentVehicleName, List <int> _unlockedVehicles) {
+	public Player (int _id, string _name, int _currentCredit, int _currentVehicleId, string _currentVehicleName, List <Vehicle> _unlockedVehicles) {
 		this.id = _id;
 		this.name = _name;
 		this.credit = _currentCredit;
@@ -40,6 +40,7 @@ public class Vehicle {
 	public int id;
 	public string name;
 	public string desc;
+	public int matId;
 	public int maxSpeed;
 	public int costPoint;
 	// TODO: ... customize color index

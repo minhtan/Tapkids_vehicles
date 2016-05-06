@@ -26,7 +26,7 @@ public class UIPurchaseButton : MonoBehaviour {
 	}
 
 	void HandleUpdateVehicle (Vehicle _vehicle) {
-		if (PlayerDataController.Instance.mPlayer.unlockedVehicles.Contains(_vehicle.id)) {
+		if (PlayerDataController.Instance.unlockedIds.Contains(_vehicle.id)) {
 			mCanvasGroup.alpha = 0f;
 			mCanvasGroup.interactable = false;
 			mCanvasGroup.blocksRaycasts = false;

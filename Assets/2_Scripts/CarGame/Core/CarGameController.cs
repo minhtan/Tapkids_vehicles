@@ -93,9 +93,11 @@ public class CarGameController : MonoBehaviour {
 	// handle ar events
 	private void HandleARCardTracking (bool _isFound, string _letters) {
 		if (_isFound) {	// FOUND LETTER
-				letters = _letters;
-				_machine.changeState <CGInitState> ();
-				Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), letters, 1f);
+			letters = _letters;
+			_machine.changeState <CGInitState> ();
+//			Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), letters, 1f);
+			Messenger.Broadcast <string> (EventManager.GUI.SHOWSUGGESTION.ToString (), _letters);
+
 		} else {		// LOST LETTER
 			// DO NOTHING
 		}

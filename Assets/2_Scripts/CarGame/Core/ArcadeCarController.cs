@@ -8,6 +8,7 @@ public class ArcadeCarController : MonoBehaviour {
 	#region public members
 	[SerializeField]
 	public Vehicle vehicle;
+	public Material [] mats;
 	#endregion
 
 	#region private members
@@ -138,6 +139,8 @@ public class ArcadeCarController : MonoBehaviour {
 		for (int i = 0; i < 4; i++) 
 			wheelColliders[i].brakeTorque = brakeTorque;
 	}
+
+
 	#endregion event subscribers
 
 }

@@ -4,6 +4,7 @@ using System.Collections;
 public class EventManager {
 	public enum GUI{
 		NOTIFY,
+		SHOWSUGGESTION,
 		NEXT,
 		//
 		ENTER_GARAGE,
@@ -11,6 +12,7 @@ public class EventManager {
 		SELECT_VEHICLE,
 		UPDATE_VEHICLE,
 		PURCHASE_VEHICLE,
+		CHANGE_MATERIAL,
 		//
 		UPDATE_CREDIT,
 		//

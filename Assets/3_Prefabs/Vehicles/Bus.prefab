@@ -600,8 +600,13 @@ MonoBehaviour:
   vehicle:
     id: 1
     name: Bus
+    desc: 
+    matId: 0
     maxSpeed: 0
     costPoint: 20
+  mats:
+  - {fileID: 2100000, guid: 866180584a1f2ee47ab1cb58160ac9fa, type: 2}
+  - {fileID: 2100000, guid: 221f970d19eb7456c91fae5318ce96e4, type: 2}
   wheelColliders:
   - {fileID: 14677660}
   - {fileID: 14697498}
@@ -751,6 +756,10 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: mats.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: vehicle.name
       value: Bus

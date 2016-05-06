@@ -611,8 +611,13 @@ MonoBehaviour:
   vehicle:
     id: 0
     name: Ambulance
+    desc: 
+    matId: 0
     maxSpeed: 0
     costPoint: 10
+  mats:
+  - {fileID: 2100000, guid: e6f4e03adf78d6c4985037cfa27757f7, type: 2}
+  - {fileID: 2100000, guid: cb9638f8de59c416799188e40114f335, type: 2}
   wheelColliders:
   - {fileID: 14607408}
   - {fileID: 14674336}
@@ -751,6 +756,10 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: mats.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: vehicle.name
       value: Ambulance
