@@ -60,9 +60,11 @@ public class WordGameController : MonoBehaviour {
 	public int scoreStep = 1;
 
 	//GUI
+	float timeToShowCard = 0.5f;
 	public Text txt_answers;
 	public Slider sld_score;
 	public Text txt_timer;
+	public GameObject btn_Start;
 	public GameObject pnl_TargetsTofind;
 	public GameObject pref_LetterToFind;
 	#endregion
@@ -87,12 +89,15 @@ public class WordGameController : MonoBehaviour {
 	#region UI funcs
 	void _UpdateStartUI(){
 		txt_answers.text = "";
+		btn_Start.SetActive (false);
 
 		//Clear letters in start UI
 		ClearTargetsToFind();
 
 		//Fill in letters to find
 		FillInLettersToFind();
+
+		StartCoroutine (ShowLettersToFind ());
 	}
 
 	void ClearTargetsToFind(){
@@ -102,10 +107,28 @@ public class WordGameController : MonoBehaviour {
 	}
 
 	void FillInLettersToFind(){
+		playableLetters.Shuffle ();
 		for(int i = 0; i < playableLetters.Count; i++){
 			GameObject go = Instantiate (pref_LetterToFind);
 			go.GetComponentInChildren<UnityEngine.UI.Image> ().sprite = DataUltility.GetLetterImage (playableLetters [i]);
 			go.transform.SetParent (pnl_TargetsTofind.transform, false);
+			LeanTween.rotateY (go, 90f, 0f);
+			go.SetActive (false);
+		}
+	}
+
+	IEnumerator ShowLettersToFind(){
+		int id = 0;
+		for (int i = 0; i < pnl_TargetsTofind.transform.childCount;) {
+			Debug.Log (LeanTween.isTweening (id));
+			if(!LeanTween.isTweening(id)){
+				pnl_TargetsTofind.transform.GetChild(i).gameObject.SetActive (true);
+				id = LeanTween.rotateAroundLocal(pnl_TargetsTofind.transform.GetChild(i).gameObject, Vector3.up, 270f, timeToShowCard).setEase(LeanTweenType.easeOutBack).setOnComplete(() => {
+					Debug.Log(i + " " + Time.time);
+					i ++;
+				}).id;
+			}
+			yield return null;
 		}
 	}
 
