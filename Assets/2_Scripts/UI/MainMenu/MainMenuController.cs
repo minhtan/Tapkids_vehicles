@@ -13,10 +13,12 @@ public class MainMenuController : MonoBehaviour {
 
 	float distance;
 	bool isGarageOpen = false;
+	float menuTweenTime = 0.3f;
 
 	public RectTransform menu;
 	public RectTransform car;
 	public RectTransform garage;
+	int[] menutweenIds = new int[3];
 
 	float menuOFDpos;
 	float carOFDpos;
@@ -79,20 +81,29 @@ public class MainMenuController : MonoBehaviour {
 		LeanTween.moveX (garage, -width/2, 0f);
 	}
 
+	void CancelMenuTweens(){
+		for (int i = 0; i < menutweenIds.Length; i++) {
+			if(menutweenIds[i] != null && menutweenIds[i] != 0){
+				Debug.Log (menutweenIds[i]);
+				LeanTween.cancel (menutweenIds[i]);
+			}
+		}
+	}
+
 	public void _OpenGarage(){
-//		LeanTween.cancelAll ();
-		LeanTween.moveX (menu, width/2, 0.5f).setEase(LeanTweenType.easeOutQuart);
-		LeanTween.moveX (car, 0, 0.5f).setEase(LeanTweenType.easeOutQuart);
-		LeanTween.moveX (garage, 0, 0.5f).setEase(LeanTweenType.easeOutQuart);
+		CancelMenuTweens ();
+		menutweenIds[0] = LeanTween.moveX (menu, width / 2, menuTweenTime).setEase (LeanTweenType.easeOutQuart).id;
+		menutweenIds[1] = LeanTween.moveX (car, 0, menuTweenTime).setEase (LeanTweenType.easeOutQuart).id;
+		menutweenIds[2] = LeanTween.moveX (garage, 0, menuTweenTime).setEase (LeanTweenType.easeOutQuart).id;
 		isGarageOpen = true;
 		Messenger.Broadcast (EventManager.GUI.ENTER_GARAGE.ToString ());
 	}
 
 	public void _BackToMenu(){
-//		LeanTween.cancelAll ();
-		LeanTween.moveX (menu, 0, 0.5f).setEase(LeanTweenType.easeOutQuart);
-		LeanTween.moveX (car, -width/2, 0.5f).setEase(LeanTweenType.easeOutQuart);
-		LeanTween.moveX (garage, -width/2, 0.5f).setEase(LeanTweenType.easeOutQuart);
+		CancelMenuTweens ();
+		menutweenIds[0] = LeanTween.moveX (menu, 0, menuTweenTime).setEase (LeanTweenType.easeOutQuart).id;
+		menutweenIds[1] = LeanTween.moveX (car, -width / 2, menuTweenTime).setEase (LeanTweenType.easeOutQuart).id;
+		menutweenIds[2] = LeanTween.moveX (garage, -width / 2, menuTweenTime).setEase (LeanTweenType.easeOutQuart).id;
 		isGarageOpen = false;
 		Messenger.Broadcast (EventManager.GUI.EXIT_GARAGE.ToString ());
 	}
