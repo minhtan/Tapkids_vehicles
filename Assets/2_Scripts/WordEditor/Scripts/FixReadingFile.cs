@@ -15,7 +15,7 @@ public class FixReadingFile : MonoBehaviour
 		for (int i = 0; i < allTextFile.Length; i++) {
 			TextAsset currentFile = allTextFile [i];
 
-			StreamWriter sw = File.AppendText (path);
+			StreamWriter sw = File.AppendText (path + "/" + currentFile.name);
 
 			sw.Write (appendedString);
 			sw.Close ();
