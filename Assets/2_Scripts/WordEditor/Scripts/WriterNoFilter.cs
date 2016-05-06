@@ -19,6 +19,7 @@ namespace WordList
 				arr.Add (word);
 		
 			string encodedJson = j.Print ();
+
 			WriteTextFile (encodedJson, fileName, directoryPath);
 		}
 
