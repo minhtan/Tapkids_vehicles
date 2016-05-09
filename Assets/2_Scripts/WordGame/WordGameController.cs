@@ -33,6 +33,7 @@ public class WordGameController : MonoBehaviour {
 	private List<string> foundAnswers = new List<string>();
     private PlayMakerFSM fsm;
     public int gameTimeInSeconds;
+	public int timeToShowHint;
 
 	//Data
 	private List<WordGameData> dataList;
@@ -46,6 +47,7 @@ public class WordGameController : MonoBehaviour {
 	public int scoreStep = 1;
 
 	//GUI
+	bool isTimerRed = false;
 	float timeToShowCard = 0.5f;
 	public GameObject pnl_answer;
 	public GameObject pref_answerText;
@@ -53,6 +55,10 @@ public class WordGameController : MonoBehaviour {
 	public GameObject btn_Start;
 	public GameObject pnl_TargetsTofind;
 	public GameObject pref_LetterToFind;
+
+	public Text txt_ResultWords;
+	public Text txt_ResultScore;
+	public Text txt_FoundWords;
 	#endregion
 
 	#region Data funcs
@@ -74,6 +80,7 @@ public class WordGameController : MonoBehaviour {
 
 	#region UI funcs
 	void _UpdateStartUI(){
+		ToggleTimerColor (true);
 		_ToggleIngameMenu (false);
 		ClearAnswersText ();
 		btn_Start.SetActive (false);
@@ -141,8 +148,51 @@ public class WordGameController : MonoBehaviour {
 		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_INGAME.ToString (), state);
 	}
 
+	void _ShowHint(){
+		if(foundAnswers.Count <= 0){
+			Debug.Log (answers.FirstOrDefault());
+		}
+	}
+
+	void _ShowWarningCountDown(){
+		ToggleTimerColor ();
+		AudioManager.Instance.PlayAudio(AudioKey.UNIQUE_KEY.WORDGAME_CORRECT);
+	}
+
+	void ToggleTimerColor(bool overrideRed = false){
+		if (isTimerRed || overrideRed) {
+			txt_timer.color = Color.white;
+			isTimerRed = false;
+		} else {
+			txt_timer.color = Color.red;
+			isTimerRed = true;
+		}
+	}
+
+	void _WakeUp(){
+		AudioManager.Instance.PlayAudio(AudioKey.UNIQUE_KEY.WORDGAME_CORRECT);
+	}
+
+	void ShowResult(){
+		txt_ResultWords.text = foundAnswers.Count + "/" + (answers.Count + foundAnswers.Count);
+		txt_ResultScore.text = currentScore.ToString();
+
+		if (foundAnswers.Count > 0) {
+			for (int i = 0; i < foundAnswers.Count; i++) {
+				if (i == 0) {
+					txt_FoundWords.text = foundAnswers [i];
+				} else {
+					txt_FoundWords.text = txt_FoundWords.text + ", " + foundAnswers [i];
+				}
+			}
+		} else {
+			txt_FoundWords.text = "";
+		}
+
+	}
+
 	public void _TEST(){
-		HandleWordFound (answers.LastOrDefault());
+		HandleWordFound (answers.FirstOrDefault());
 	}
 	#endregion
 
@@ -169,6 +219,9 @@ public class WordGameController : MonoBehaviour {
 		GetDataList ();
 		ArController.Instance.ToggleAR (true);
 		ArController.Instance.SetCenterMode (true);
+
+		timeToShowHint = gameTimeInSeconds - timeToShowHint;
+		fsm.FsmVariables.GetFsmInt ("timeToShowHint").Value = timeToShowHint;
 	}
 
 	void _InitGame(){
@@ -197,9 +250,11 @@ public class WordGameController : MonoBehaviour {
 	}
 
 	void _GameOver(){
-		if(PlayerDataController.Instance != null){
-			PlayerDataController.Instance.UpdatePlayerCredit(currentScore);
-		}
+//		if(PlayerDataController.Instance != null){
+//			PlayerDataController.Instance.UpdatePlayerCredit(currentScore);
+//		}
+
+		ShowResult ();
 	}
 
     void _AddPlayableTarget(string letter) {
@@ -230,7 +285,7 @@ public class WordGameController : MonoBehaviour {
     }
 
     void HandleWordFound(string wordFound) {
-		if ( CheckAnswer (wordFound) && answers.Count > 0){
+		if ( answers.Count > 0 && CheckAnswer (wordFound) ){
 			currentScore += GetWordScore (wordFound);
             answers.Remove (wordFound);
 			foundAnswers.Add (wordFound);
