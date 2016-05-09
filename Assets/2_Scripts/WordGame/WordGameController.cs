@@ -24,16 +24,6 @@ public class WordGameController : MonoBehaviour {
 			ArController.Instance.ToggleAR (false);
 		}
 	}
-
-	void Update(){
-		UpdateScoreValue ();
-	}
-
-	void Start(){
-		if (GUIController.Instance != null) {
-			Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_INGAME.ToString (), true);
-		}
-	}
 	#region Vars
 	//Core
 	private Dictionary<string, FSMTrackable> letterToImgTarget = new Dictionary<string, FSMTrackable>();
@@ -51,18 +41,14 @@ public class WordGameController : MonoBehaviour {
 
 	//Score
 	private int minWordLength;
-	private int totalScore;
-	private int winScore;
 	private int currentScore;
-	[Range(0.0f, 1.0f)]
-	public float winScorePercentage = 0.7f;
 	public int letterPoint = 5;
 	public int scoreStep = 1;
 
 	//GUI
 	float timeToShowCard = 0.5f;
-	public Text txt_answers;
-	public Slider sld_score;
+	public GameObject pnl_answer;
+	public GameObject pref_answerText;
 	public Text txt_timer;
 	public GameObject btn_Start;
 	public GameObject pnl_TargetsTofind;
@@ -88,7 +74,8 @@ public class WordGameController : MonoBehaviour {
 
 	#region UI funcs
 	void _UpdateStartUI(){
-		txt_answers.text = "";
+		_ToggleIngameMenu (false);
+		ClearAnswersText ();
 		btn_Start.SetActive (false);
 
 		//Clear letters in start UI
@@ -98,6 +85,12 @@ public class WordGameController : MonoBehaviour {
 		FillInLettersToFind();
 
 		StartCoroutine (ShowLettersToFind ());
+	}
+
+	void ClearAnswersText(){
+		foreach(Transform t in pnl_answer.transform){
+			Destroy (t.gameObject);
+		}
 	}
 
 	void ClearTargetsToFind(){
@@ -120,33 +113,23 @@ public class WordGameController : MonoBehaviour {
 	IEnumerator ShowLettersToFind(){
 		int id = 0;
 		for (int i = 0; i < pnl_TargetsTofind.transform.childCount;) {
-			Debug.Log (LeanTween.isTweening (id));
 			if(!LeanTween.isTweening(id)){
 				pnl_TargetsTofind.transform.GetChild(i).gameObject.SetActive (true);
 				id = LeanTween.rotateAroundLocal(pnl_TargetsTofind.transform.GetChild(i).gameObject, Vector3.up, 270f, timeToShowCard).setEase(LeanTweenType.easeOutBack).setOnComplete(() => {
-					Debug.Log(i + " " + Time.time);
 					i ++;
 				}).id;
 			}
 			yield return null;
 		}
+		btn_Start.SetActive (true);
 	}
 
 	void _UpdateWordFoundUI(){
 		AudioManager.Instance.PlayAudio(AudioKey.UNIQUE_KEY.WORDGAME_CORRECT);
 
-		txt_answers.text = "";
-		for(int i=0; i < foundAnswers.Count; i++){
-			if (i > 0) {
-				txt_answers.text = txt_answers.text + "\n" + foundAnswers [i];
-			} else {
-				txt_answers.text = txt_answers.text + foundAnswers [i];
-			}
-		}
-	}
-
-	void UpdateScoreValue(){
-		sld_score.value = GetCurrentScorePercentage ();
+		GameObject go = Instantiate (pref_answerText);
+		go.GetComponent<Text> ().text = foundAnswers.LastOrDefault ();
+		go.transform.SetParent (pnl_answer.transform, false);
 	}
 
 	void _UpdateTimerValue(){
@@ -154,8 +137,12 @@ public class WordGameController : MonoBehaviour {
 		txt_timer.text = Mathf.FloorToInt(time / 60).ToString("D2") + ":" + (time % 60).ToString ("D2");
 	}
 
-	void _ToggleMenuUI(bool state){
-		Messenger.Broadcast<bool> (EventManager.GameState.PAUSE.ToString (), state);
+	void _ToggleIngameMenu(bool state){
+		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_INGAME.ToString (), state);
+	}
+
+	public void _TEST(){
+		HandleWordFound (answers.LastOrDefault());
 	}
 	#endregion
 
@@ -192,10 +179,10 @@ public class WordGameController : MonoBehaviour {
 		RandomData ();
 		playableLetters = DataUltility.GetPlayableLetters (data);
 		answers = DataUltility.GetAnswersList (data);
+
 		ArController.Instance.SetArMaxStimTargets (playableLetters.Count);
 
 		FindMinWordLength ();
-		GetWinScore ();
 	}
 
 	void _ReadyAllTargets(){
@@ -210,15 +197,6 @@ public class WordGameController : MonoBehaviour {
 	}
 
 	void _GameOver(){
-		if (currentScore >= winScore) {
-			fsm.Fsm.Event ("win");
-		} else {
-			fsm.Fsm.Event ("lose");
-		}
-	}
-
-	void _Win(){
-		//add score
 		if(PlayerDataController.Instance != null){
 			PlayerDataController.Instance.UpdatePlayerCredit(currentScore);
 		}
@@ -248,12 +226,11 @@ public class WordGameController : MonoBehaviour {
         for (int i = 0; i < letterToPosition.Count; i++){
             word = word + letterToPosition.Keys.ElementAt(i);
         }
-		Debug.Log (word);
         return word;
     }
 
     void HandleWordFound(string wordFound) {
-        if ( CheckAnswer (wordFound) ){
+		if ( CheckAnswer (wordFound) && answers.Count > 0){
 			currentScore += GetWordScore (wordFound);
             answers.Remove (wordFound);
 			foundAnswers.Add (wordFound);
@@ -284,20 +261,8 @@ public class WordGameController : MonoBehaviour {
 		}
 	}
 
-	void GetWinScore(){
-		totalScore = 0;
-		for(int i = 0; i < answers.Count; i++){
-			totalScore = totalScore + GetWordScore(answers[i]);
-		}
-		winScore = (int)(totalScore * winScorePercentage);
-	}
-
 	int GetWordScore(string word){
 		return letterPoint * word.Length * ((word.Length - minWordLength) * scoreStep + 1);
-	}
-
-	float GetCurrentScorePercentage(){
-		return (float)currentScore / totalScore;
 	}
 	#endregion
 }
