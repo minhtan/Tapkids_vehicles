@@ -3,10 +3,12 @@ using System.Collections;
 using Vuforia;
 using System.Collections.Generic;
 using System.Linq;
+using Lean;
 
 public class ArController : UnitySingletonPersistent<ArController> {
 
 	#region Vars
+	bool isFocusing;
 	bool isVuforiaReady = false;
 	Camera camera;
 
@@ -24,7 +26,35 @@ public class ArController : UnitySingletonPersistent<ArController> {
 		VuforiaBehaviour.Instance.RegisterVuforiaStartedCallback (OnVuforiaStarted);
 		camera = GetComponentInChildren<Camera> ();
 	}
+
+	void Update(){
+		#if UNITY_ANDROID || UNITY_EDITOR
+		if(isFocusing){
+			CameraDevice.Instance.SetFocusMode(CameraDevice.FocusMode.FOCUS_MODE_CONTINUOUSAUTO);
+		}
+		#endif
+	}
+
+	void OnEnable(){
+		LeanTouch.OnFingerTap += OnFingerTap;
+		SceneController.OnEndLoading += OnEndLoading;
+	}
+
+	void OnDisable(){
+		LeanTouch.OnFingerTap -= OnFingerTap;
+		SceneController.OnEndLoading -= OnEndLoading;
+	}
 	#endregion
+
+	void OnFingerTap(LeanFinger fg){
+		if(VuforiaBehaviour.Instance.enabled == true){
+			isFocusing = !isFocusing;
+		}
+	}
+
+	public void OnEndLoading(){
+		isFocusing = false;
+	}
 
 	void OnVuforiaStarted(){
 		ArController.Instance.ToggleAR (false);

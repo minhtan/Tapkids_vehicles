@@ -111,7 +111,7 @@ public class MainMenuController : MonoBehaviour {
 		width = GetComponent<RectTransform>().sizeDelta.x;
 		height = GetComponent<RectTransform>().sizeDelta.y;
 
-		RenderTexture rt = new RenderTexture ((int)(width / 2), (int)height, 24);
+		RenderTexture rt = new RenderTexture ((int)(width), (int)height*2, 24);
 		carRenderCam.targetTexture = rt;
 		carRawImage.texture = rt;
 	}
