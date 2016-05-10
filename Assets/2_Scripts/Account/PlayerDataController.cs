@@ -64,6 +64,9 @@ public class PlayerDataController : UnitySingletonPersistent<PlayerDataControlle
 
 	public void UpdatePlayerCredit (int _point) {
 		mPlayer.credit += _point;
+
+		Messenger.Broadcast <int> (EventManager.GUI.UPDATE_CREDIT.ToString (), PlayerDataController.Instance.mPlayer.credit);
+
 		TapkidsData.players [currentPlayer].credit = mPlayer.credit;
 		TapkidsData.Save ();
 	}
