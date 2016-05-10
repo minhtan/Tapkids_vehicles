@@ -78,17 +78,16 @@ public class GaragaController : MonoBehaviour {
 					break;
 				}
 			}
-
-			carGameObject.transform.localPosition = Vector3.zero;
 			carGameObject.transform.SetParent (mTransform, false);
-			// update first car 
-			if (vehicles.Count == 1) {
+			// update player current car 
+			if (PlayerDataController.Instance.mPlayer.vehicleId == carGameObject.GetComponent <ArcadeCarController> ().vehicle.id) {
+				currentSelectedCar = vehicles.IndexOf (carGameObject);
+				carGameObject.transform.localPosition = Vector3.zero;
 				Messenger.Broadcast <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), carGameObject.GetComponent <ArcadeCarController> ().vehicle);
-			}
-			if (vehicles.Count > 1) {
+
+			} else {
 				carGameObject.transform.localPosition = new Vector3 (0f, 0f, -10f);
 				carGameObject.SetActive (false);
-
 			}
 		}));
 	}
