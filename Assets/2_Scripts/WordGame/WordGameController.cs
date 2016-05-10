@@ -28,7 +28,7 @@ public class WordGameController : MonoBehaviour {
 	//Core
 	private Dictionary<string, FSMTrackable> letterToImgTarget = new Dictionary<string, FSMTrackable>();
 	private Dictionary<string, Transform> letterToPosition = new Dictionary<string, Transform> ();
-	private List<string> playableLetters;
+	private List<string> playableLetters = new List<string>();
 	private List<string> answers;
 	private List<string> foundAnswers = new List<string>();
     private PlayMakerFSM fsm;
@@ -229,6 +229,7 @@ public class WordGameController : MonoBehaviour {
 		fsm.FsmVariables.GetFsmInt ("timer").Value = gameTimeInSeconds;
 		letterToPosition.Clear ();
 		foundAnswers.Clear ();
+		playableLetters.Clear ();
 		RandomData ();
 		playableLetters = DataUltility.GetPlayableLetters (data);
 		answers = DataUltility.GetAnswersList (data);
@@ -250,9 +251,9 @@ public class WordGameController : MonoBehaviour {
 	}
 
 	void _GameOver(){
-//		if(PlayerDataController.Instance != null){
-//			PlayerDataController.Instance.UpdatePlayerCredit(currentScore);
-//		}
+		if(PlayerDataController.Instance != null){
+			PlayerDataController.Instance.UpdatePlayerCredit(currentScore);
+		}
 
 		ShowResult ();
 	}
