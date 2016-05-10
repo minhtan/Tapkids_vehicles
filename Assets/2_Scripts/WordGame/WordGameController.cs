@@ -24,16 +24,6 @@ public class WordGameController : MonoBehaviour {
 			ArController.Instance.ToggleAR (false);
 		}
 	}
-
-	void Update(){
-		UpdateScoreValue ();
-	}
-
-	void Start(){
-		if (GUIController.Instance != null) {
-			Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_INGAME.ToString (), true);
-		}
-	}
 	#region Vars
 	//Core
 	private Dictionary<string, FSMTrackable> letterToImgTarget = new Dictionary<string, FSMTrackable>();
@@ -43,6 +33,7 @@ public class WordGameController : MonoBehaviour {
 	private List<string> foundAnswers = new List<string>();
     private PlayMakerFSM fsm;
     public int gameTimeInSeconds;
+	public int timeToShowHint;
 
 	//Data
 	private List<WordGameData> dataList;
@@ -51,28 +42,28 @@ public class WordGameController : MonoBehaviour {
 
 	//Score
 	private int minWordLength;
-	private int totalScore;
-	private int winScore;
 	private int currentScore;
-	[Range(0.0f, 1.0f)]
-	public float winScorePercentage = 0.7f;
 	public int letterPoint = 5;
 	public int scoreStep = 1;
 
 	//GUI
-	public Text txt_answers;
-	public Slider sld_score;
+	bool isTimerRed = false;
+	float timeToShowCard = 0.5f;
+	public GameObject pnl_answer;
+	public GameObject pref_answerText;
 	public Text txt_timer;
+	public GameObject btn_Start;
 	public GameObject pnl_TargetsTofind;
 	public GameObject pref_LetterToFind;
+
+	public Text txt_ResultWords;
+	public Text txt_ResultScore;
+	public Text txt_FoundWords;
 	#endregion
 
 	#region Data funcs
 	void GetDataList(){
 		dataList = DataUltility.ReadDataForWordGame ();
-		foreach(WordGameData d in dataList){
-			Debug.Log (d.letters + " " + d.wordlist.Length);
-		}
 	}
 
     void RandomData()
@@ -89,13 +80,24 @@ public class WordGameController : MonoBehaviour {
 
 	#region UI funcs
 	void _UpdateStartUI(){
-		txt_answers.text = "";
+		ToggleTimerColor (true);
+		_ToggleIngameMenu (false);
+		ClearAnswersText ();
+		btn_Start.SetActive (false);
 
 		//Clear letters in start UI
 		ClearTargetsToFind();
 
 		//Fill in letters to find
 		FillInLettersToFind();
+
+		StartCoroutine (ShowLettersToFind ());
+	}
+
+	void ClearAnswersText(){
+		foreach(Transform t in pnl_answer.transform){
+			Destroy (t.gameObject);
+		}
 	}
 
 	void ClearTargetsToFind(){
@@ -105,28 +107,36 @@ public class WordGameController : MonoBehaviour {
 	}
 
 	void FillInLettersToFind(){
+		playableLetters.Shuffle ();
 		for(int i = 0; i < playableLetters.Count; i++){
 			GameObject go = Instantiate (pref_LetterToFind);
 			go.GetComponentInChildren<UnityEngine.UI.Image> ().sprite = DataUltility.GetLetterImage (playableLetters [i]);
 			go.transform.SetParent (pnl_TargetsTofind.transform, false);
+			LeanTween.rotateY (go, 90f, 0f);
+			go.SetActive (false);
 		}
+	}
+
+	IEnumerator ShowLettersToFind(){
+		int id = 0;
+		for (int i = 0; i < pnl_TargetsTofind.transform.childCount;) {
+			if(!LeanTween.isTweening(id)){
+				pnl_TargetsTofind.transform.GetChild(i).gameObject.SetActive (true);
+				id = LeanTween.rotateAroundLocal(pnl_TargetsTofind.transform.GetChild(i).gameObject, Vector3.up, 270f, timeToShowCard).setEase(LeanTweenType.easeOutBack).setOnComplete(() => {
+					i ++;
+				}).id;
+			}
+			yield return null;
+		}
+		btn_Start.SetActive (true);
 	}
 
 	void _UpdateWordFoundUI(){
 		AudioManager.Instance.PlayAudio(AudioKey.UNIQUE_KEY.WORDGAME_CORRECT);
 
-		txt_answers.text = "";
-		for(int i=0; i < foundAnswers.Count; i++){
-			if (i > 0) {
-				txt_answers.text = txt_answers.text + "\n" + foundAnswers [i];
-			} else {
-				txt_answers.text = txt_answers.text + foundAnswers [i];
-			}
-		}
-	}
-
-	void UpdateScoreValue(){
-		sld_score.value = GetCurrentScorePercentage ();
+		GameObject go = Instantiate (pref_answerText);
+		go.GetComponent<Text> ().text = foundAnswers.LastOrDefault ();
+		go.transform.SetParent (pnl_answer.transform, false);
 	}
 
 	void _UpdateTimerValue(){
@@ -134,8 +144,55 @@ public class WordGameController : MonoBehaviour {
 		txt_timer.text = Mathf.FloorToInt(time / 60).ToString("D2") + ":" + (time % 60).ToString ("D2");
 	}
 
-	void _ToggleMenuUI(bool state){
-		Messenger.Broadcast<bool> (EventManager.GameState.PAUSE.ToString (), state);
+	void _ToggleIngameMenu(bool state){
+		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_INGAME.ToString (), state);
+	}
+
+	void _ShowHint(){
+		if(foundAnswers.Count <= 0){
+			Debug.Log (answers.FirstOrDefault());
+		}
+	}
+
+	void _ShowWarningCountDown(){
+		ToggleTimerColor ();
+		AudioManager.Instance.PlayAudio(AudioKey.UNIQUE_KEY.WORDGAME_CORRECT);
+	}
+
+	void ToggleTimerColor(bool overrideRed = false){
+		if (isTimerRed || overrideRed) {
+			txt_timer.color = Color.white;
+			isTimerRed = false;
+		} else {
+			txt_timer.color = Color.red;
+			isTimerRed = true;
+		}
+	}
+
+	void _WakeUp(){
+		AudioManager.Instance.PlayAudio(AudioKey.UNIQUE_KEY.WORDGAME_CORRECT);
+	}
+
+	void ShowResult(){
+		txt_ResultWords.text = foundAnswers.Count + "/" + (answers.Count + foundAnswers.Count);
+		txt_ResultScore.text = currentScore.ToString();
+
+		if (foundAnswers.Count > 0) {
+			for (int i = 0; i < foundAnswers.Count; i++) {
+				if (i == 0) {
+					txt_FoundWords.text = foundAnswers [i];
+				} else {
+					txt_FoundWords.text = txt_FoundWords.text + ", " + foundAnswers [i];
+				}
+			}
+		} else {
+			txt_FoundWords.text = "";
+		}
+
+	}
+
+	public void _TEST(){
+		HandleWordFound (answers.FirstOrDefault());
 	}
 	#endregion
 
@@ -162,6 +219,9 @@ public class WordGameController : MonoBehaviour {
 		GetDataList ();
 		ArController.Instance.ToggleAR (true);
 		ArController.Instance.SetCenterMode (true);
+
+		timeToShowHint = gameTimeInSeconds - timeToShowHint;
+		fsm.FsmVariables.GetFsmInt ("timeToShowHint").Value = timeToShowHint;
 	}
 
 	void _InitGame(){
@@ -172,10 +232,10 @@ public class WordGameController : MonoBehaviour {
 		RandomData ();
 		playableLetters = DataUltility.GetPlayableLetters (data);
 		answers = DataUltility.GetAnswersList (data);
+
 		ArController.Instance.SetArMaxStimTargets (playableLetters.Count);
 
 		FindMinWordLength ();
-		GetWinScore ();
 	}
 
 	void _ReadyAllTargets(){
@@ -190,18 +250,11 @@ public class WordGameController : MonoBehaviour {
 	}
 
 	void _GameOver(){
-		if (currentScore >= winScore) {
-			fsm.Fsm.Event ("win");
-		} else {
-			fsm.Fsm.Event ("lose");
-		}
-	}
+//		if(PlayerDataController.Instance != null){
+//			PlayerDataController.Instance.UpdatePlayerCredit(currentScore);
+//		}
 
-	void _Win(){
-		//add score
-		if(PlayerDataController.Instance != null){
-			PlayerDataController.Instance.UpdatePlayerCredit(currentScore);
-		}
+		ShowResult ();
 	}
 
     void _AddPlayableTarget(string letter) {
@@ -228,12 +281,11 @@ public class WordGameController : MonoBehaviour {
         for (int i = 0; i < letterToPosition.Count; i++){
             word = word + letterToPosition.Keys.ElementAt(i);
         }
-		Debug.Log (word);
         return word;
     }
 
     void HandleWordFound(string wordFound) {
-        if ( CheckAnswer (wordFound) ){
+		if ( answers.Count > 0 && CheckAnswer (wordFound) ){
 			currentScore += GetWordScore (wordFound);
             answers.Remove (wordFound);
 			foundAnswers.Add (wordFound);
@@ -264,20 +316,8 @@ public class WordGameController : MonoBehaviour {
 		}
 	}
 
-	void GetWinScore(){
-		totalScore = 0;
-		for(int i = 0; i < answers.Count; i++){
-			totalScore = totalScore + GetWordScore(answers[i]);
-		}
-		winScore = (int)(totalScore * winScorePercentage);
-	}
-
 	int GetWordScore(string word){
 		return letterPoint * word.Length * ((word.Length - minWordLength) * scoreStep + 1);
-	}
-
-	float GetCurrentScorePercentage(){
-		return (float)currentScore / totalScore;
 	}
 	#endregion
 }
