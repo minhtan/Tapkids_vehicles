@@ -23,7 +23,7 @@ public class UICollectedPanel : MonoBehaviour {
 		Messenger.RemoveListener <string> (EventManager.GUI.REMOVE_LETTER.ToString (), HandleRemoveLetter);
 	}
 
-	void Start () {
+	void Awake () {
 		mTransform = GetComponent <Transform> ();
 	}
 
