@@ -74,13 +74,28 @@ public class PlayerDataController : UnitySingletonPersistent<PlayerDataControlle
 		TapkidsData.Save ();
 	}
 
-	public void UpdateUnlockedVehicle (Vehicle _unlockedVehicle) {
-		mPlayer.unlockedVehicles.Add (_unlockedVehicle);
-		unlockedIds.Add (_unlockedVehicle.id);
-		Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), GameConstant.PurchaseSuccessful, 1f);
+	public void UnlockVehicle (Vehicle _unlockedVehicle) {
+		if (!mPlayer.unlockedVehicles.Contains (_unlockedVehicle)) 
+			mPlayer.unlockedVehicles.Add (_unlockedVehicle);
+		if (!unlockedIds.Contains (_unlockedVehicle.id)) 
+			unlockedIds.Add (_unlockedVehicle.id);
 
 		UpdatePlayerCredit (_unlockedVehicle.costPoint * -1);
+
+		Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), GameConstant.PurchaseSuccessful, 1f);
+
 		TapkidsData.players [currentPlayer].unlockedVehicles = mPlayer.unlockedVehicles;
+		TapkidsData.Save ();
+	}
+
+	public void UpdateVehicle (Vehicle _vehicle) {
+		for (int i = 0; i < mPlayer.unlockedVehicles.Count; i++) {
+			if (mPlayer.unlockedVehicles [i].id == _vehicle.id) {
+				mPlayer.unlockedVehicles [i].matId = _vehicle.matId;
+				break;
+			}
+		}
+		TapkidsData.players[currentPlayer].unlockedVehicles = mPlayer.unlockedVehicles;
 		TapkidsData.Save ();
 	}
 	#endregion public functions

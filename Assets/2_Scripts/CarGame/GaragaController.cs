@@ -67,6 +67,16 @@ public class GaragaController : MonoBehaviour {
 				}
 			}
 
+			for (int i = 0; i < PlayerDataController.Instance.mPlayer.unlockedVehicles.Count; i++) {
+				Debug.Log (PlayerDataController.Instance.mPlayer.unlockedVehicles [i].id);
+				if (carGameObject.GetComponent <ArcadeCarController> ().vehicle.id == PlayerDataController.Instance.mPlayer.unlockedVehicles [i].id) {
+					Renderer [] renderers = carGameObject.GetComponentsInChildren <Renderer> ();
+					for (int j = 0; j < renderers.Length; j++) {
+						renderers [i].material = carGameObject.GetComponent <ArcadeCarController> ().mats [PlayerDataController.Instance.mPlayer.unlockedVehicles [i].matId];
+					}
+					break;
+				}
+			}
 			carGameObject.transform.localPosition = Vector3.zero;
 			carGameObject.transform.SetParent (mTransform, false);
 			// update first car 
@@ -127,7 +137,7 @@ public class GaragaController : MonoBehaviour {
 
 	private void HandlePurchaseVehicle () {
 		if (PlayerDataController.Instance.mPlayer.credit >= vehicles[currentSelectedCar].GetComponent <ArcadeCarController> ().vehicle.costPoint) {
-			PlayerDataController.Instance.UpdateUnlockedVehicle (vehicles[currentSelectedCar].GetComponent <ArcadeCarController> ().vehicle);
+			PlayerDataController.Instance.UnlockVehicle (vehicles[currentSelectedCar].GetComponent <ArcadeCarController> ().vehicle);
 
 			Renderer[] renderers = vehicles[currentSelectedCar].GetComponentsInChildren <Renderer> ();
 			for (int j = 0; j < renderers.Length; j++) {
@@ -149,6 +159,8 @@ public class GaragaController : MonoBehaviour {
 		for (int i = 0; i < renderers.Length; i++) {
 			renderers[i].material = vehicles [currentSelectedCar].GetComponent <ArcadeCarController> ().mats[_matId];
 		}
+		vehicles [currentSelectedCar].GetComponent <ArcadeCarController> ().vehicle.matId = _matId;
+		PlayerDataController.Instance.UpdateVehicle (vehicles [currentSelectedCar].GetComponent <ArcadeCarController> ().vehicle);
 	}
 	#endregion private functions
 

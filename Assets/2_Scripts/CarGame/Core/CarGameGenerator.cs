@@ -133,6 +133,17 @@ public class CarGameGenerator : MonoBehaviour {
 		// TODO: fix player current vehicle 
 		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (GameConstant.assetBundleName, PlayerDataController.Instance.mPlayer.vehicleName, (bundle) => {
 			carGameObject = Instantiate (bundle, cartPoint.position + pointOffset, Quaternion.identity) as GameObject;
+
+			for (int i = 0; i < PlayerDataController.Instance.mPlayer.unlockedVehicles.Count; i++) {
+				if (carGameObject.GetComponent <ArcadeCarController> ().vehicle.id == PlayerDataController.Instance.mPlayer.unlockedVehicles [i].id) {
+					Renderer [] renderers = carGameObject.GetComponentsInChildren <Renderer> ();
+					for (int j = 0; j < renderers.Length; j++) {
+						renderers [i].material = carGameObject.GetComponent <ArcadeCarController> ().mats [PlayerDataController.Instance.mPlayer.unlockedVehicles [i].matId];
+					}
+					break;
+				}
+			}
+
 			carGameObject.transform.SetParent (mTransform, false);
 			carGameObject.SetActive (false);
 		}));
