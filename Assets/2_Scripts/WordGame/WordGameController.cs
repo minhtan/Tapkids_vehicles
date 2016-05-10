@@ -250,9 +250,9 @@ public class WordGameController : MonoBehaviour {
 	}
 
 	void _GameOver(){
-//		if(PlayerDataController.Instance != null){
-//			PlayerDataController.Instance.UpdatePlayerCredit(currentScore);
-//		}
+		if(PlayerDataController.Instance != null){
+			PlayerDataController.Instance.UpdatePlayerCredit(currentScore);
+		}
 
 		ShowResult ();
 	}
