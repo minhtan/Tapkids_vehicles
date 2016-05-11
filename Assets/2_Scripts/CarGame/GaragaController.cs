@@ -131,6 +131,12 @@ public class GaragaController : MonoBehaviour {
 		// setup selected car
 	}
 	private void HandleExitGarage () {
+		// check if current select car is not unlocked 
+		if (PlayerDataController.Instance.unlockedIds.Contains (vehicles [currentSelectedCar].GetComponent <ArcadeCarController> ().vehicle.id)) {
+
+		} else {
+
+		}
 		// get player current select car
 
 		// setup selected car

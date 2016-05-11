@@ -93,18 +93,21 @@ public class MainMenuController : MonoBehaviour {
 		CancelMenuTweens ();
 		menutweenIds[0] = LeanTween.moveX (menu, width / 2, menuTweenTime).setEase (LeanTweenType.easeOutQuart).id;
 		menutweenIds[1] = LeanTween.moveX (car, 0, menuTweenTime).setEase (LeanTweenType.easeOutQuart).id;
-		menutweenIds[2] = LeanTween.moveX (garage, 0, menuTweenTime).setEase (LeanTweenType.easeOutQuart).id;
-		isGarageOpen = true;
-		Messenger.Broadcast (EventManager.GUI.ENTER_GARAGE.ToString ());
+		menutweenIds[2] = LeanTween.moveX (garage, 0, menuTweenTime).setEase (LeanTweenType.easeOutQuart).setOnComplete ( () => {
+			isGarageOpen = true;
+			Messenger.Broadcast (EventManager.GUI.ENTER_GARAGE.ToString ());
+		}).id;
+
 	}
 
 	public void _BackToMenu(){
 		CancelMenuTweens ();
 		menutweenIds[0] = LeanTween.moveX (menu, 0, menuTweenTime).setEase (LeanTweenType.easeOutQuart).id;
 		menutweenIds[1] = LeanTween.moveX (car, -width / 2, menuTweenTime).setEase (LeanTweenType.easeOutQuart).id;
-		menutweenIds[2] = LeanTween.moveX (garage, -width / 2, menuTweenTime).setEase (LeanTweenType.easeOutQuart).id;
-		isGarageOpen = false;
-		Messenger.Broadcast (EventManager.GUI.EXIT_GARAGE.ToString ());
+		menutweenIds[2] = LeanTween.moveX (garage, -width / 2, menuTweenTime).setEase (LeanTweenType.easeOutQuart).setOnComplete ( () => {
+			isGarageOpen = false;
+			Messenger.Broadcast (EventManager.GUI.EXIT_GARAGE.ToString ());
+		}).id;
 	}
 
 	void CreateCarTexture(){
