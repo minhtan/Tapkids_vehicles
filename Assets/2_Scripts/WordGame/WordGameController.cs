@@ -55,6 +55,7 @@ public class WordGameController : MonoBehaviour {
 	public GameObject btn_Start;
 	public GameObject pnl_TargetsTofind;
 	public GameObject pref_LetterToFind;
+	public GameObject pnl_LetterToHint;
 
 	public Text txt_ResultWords;
 	public Text txt_ResultScore;
@@ -80,6 +81,7 @@ public class WordGameController : MonoBehaviour {
 
 	#region UI funcs
 	void _UpdateStartUI(){
+		HidePnlHint ();
 		ToggleTimerColor (true);
 		_ToggleIngameMenu (false);
 		ClearAnswersText ();
@@ -134,6 +136,8 @@ public class WordGameController : MonoBehaviour {
 	void _UpdateWordFoundUI(){
 		AudioManager.Instance.PlayAudio(AudioKey.UNIQUE_KEY.WORDGAME_CORRECT);
 
+		HidePnlHint ();
+
 		GameObject go = Instantiate (pref_answerText);
 		go.GetComponent<Text> ().text = foundAnswers.LastOrDefault ();
 		go.transform.SetParent (pnl_answer.transform, false);
@@ -150,7 +154,30 @@ public class WordGameController : MonoBehaviour {
 
 	void _ShowHint(){
 		if(foundAnswers.Count <= 0){
-			Debug.Log (answers.FirstOrDefault());
+			string hint = answers.FirstOrDefault ();
+			for(int i = 0; i < hint.Length; i++){
+				GameObject go = Instantiate (pref_LetterToFind);
+				go.GetComponentInChildren<UnityEngine.UI.Image> ().sprite = DataUltility.GetLetterImage (hint[i].ToString());
+				go.transform.SetParent (pnl_LetterToHint.transform, false);
+				LeanTween.alpha (go.GetComponent<RectTransform>(), 0f, 0f);
+			}
+		}
+		ShowPnlHint ();
+	}
+
+	void HidePnlHint(){
+		if( pnl_LetterToHint.transform.parent.gameObject.activeSelf ){
+			pnl_LetterToHint.transform.parent.gameObject.SetActive (false);
+			for (int i = 0; i < pnl_LetterToHint.transform.childCount; i++) {
+				Destroy (pnl_LetterToHint.transform.GetChild(i).gameObject);
+			}
+		}
+	}
+
+	void ShowPnlHint(){
+		pnl_LetterToHint.transform.parent.gameObject.SetActive (true);
+		for (int i = 0; i < pnl_LetterToHint.transform.childCount; i++) {
+			LeanTween.alpha (pnl_LetterToHint.transform.GetChild(i).gameObject.GetComponent<RectTransform> (), 1f, timeToShowCard);
 		}
 	}
 
