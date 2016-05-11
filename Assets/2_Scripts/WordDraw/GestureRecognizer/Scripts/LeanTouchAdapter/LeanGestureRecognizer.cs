@@ -75,7 +75,12 @@ public abstract class LeanGestureRecognizer : MonoBehaviour
 		GestureDrawing.OnStrokeEnd -= OnStrokeEnd;
 	}
 
-	private void OnStartGame()
+	private void OnStartGame ()
+	{
+		RegisterInputHandler ();
+	}
+
+	public void RegisterInputHandler ()
 	{
 		GestureDrawing.OnStrokeStart += OnStrokeStart;
 		GestureDrawing.OnStrokeDrag += OnStrokeDrag;
@@ -89,16 +94,14 @@ public abstract class LeanGestureRecognizer : MonoBehaviour
 		_pointList = new List<Point> ();
 	}
 
-	protected virtual void Start()
+	protected virtual void Start ()
 	{
 		LoadGesturesList ();
 	}
 
-	private void LoadGesturesList ()
+	public void LoadGesturesList ()
 	{
 		_gestureList.Clear ();
-
-		GestureIO.LoadPremadeGestureTemplates ("GestureTemplates", _gestureList);
 
 		LoadGestures ();
 
@@ -140,7 +143,7 @@ public abstract class LeanGestureRecognizer : MonoBehaviour
 			Debug.Log ("NULL");
 			return;
 		}
-		
+
 		if (IsReachMaxStroke || _delayThreshold == 0f) { // strokeId from 0
 			Recognizing (optimizedList);
 		} else { 
@@ -175,7 +178,12 @@ public abstract class LeanGestureRecognizer : MonoBehaviour
 		_strokeId++;
 	}
 
-	public void Recognizing (List<Gesture> gestureSet)
+	public void ManualRecognizing ()
+	{
+		Recognizing (_gestureList);
+	}
+		
+	private void Recognizing (List<Gesture> gestureSet)
 	{
 		if (_pointList == null || _pointList.Count == 0)
 			return;

@@ -77,7 +77,7 @@ public class GestureAutoDrawer : MonoBehaviour
 			}
 
 			List<List<Point>> strokeList = GestureUtils.GetStrokeListFromGesture (_currentGesture);
-			//StartCoroutine (DrawPointShuffleCor (strokeList, _duration));
+
 			StartCoroutine (DrawPointCor (strokeList, _duration));
 		} catch (ArgumentNullException e) {
 			Debug.Log (e.StackTrace);

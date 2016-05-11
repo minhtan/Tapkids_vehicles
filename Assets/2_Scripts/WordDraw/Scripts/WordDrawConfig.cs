@@ -65,6 +65,11 @@ namespace WordDraw
 
 		public static int LetterNumber{ get { return LetterEnumNames.Length; } }
 
+		/// <summary>
+		/// Gets the gesture result.
+		/// </summary>
+		/// <returns>The gesture result.</returns>
+		/// <param name="result">Result.</param>
 		public static Letters GetGestureResult (Result result)
 		{
 			string name = result.GestureClass[0] + "";
@@ -73,6 +78,11 @@ namespace WordDraw
 			return (index >= 0 && index <= 26) ? LetterEnum [index] : LetterEnum[LetterNumber - 1];
 		}
 
+		/// <summary>
+		/// Gets the name of the letter from.
+		/// </summary>
+		/// <returns>The letter from name.</returns>
+		/// <param name="letterName">Letter name.</param>
 		public static Letters GetLetterFromName(string letterName)
 		{
 			letterName = letterName.ToUpper ();
@@ -85,6 +95,12 @@ namespace WordDraw
 			return Letters.NULL;
 		}
 
+		/// <summary>
+		/// Compares the letter with result.
+		/// </summary>
+		/// <returns><c>true</c>, if letter with result was compared, <c>false</c> otherwise.</returns>
+		/// <param name="letterBut">Letter but.</param>
+		/// <param name="detectedResult">Detected result.</param>
 		public static bool CompareLetterWithResult(UILetterButton letterBut, Result detectedResult)
 		{
 			Letters resultLetter = GetGestureResult (detectedResult);
@@ -95,6 +111,12 @@ namespace WordDraw
 			return false;
 		}
 
+		/// <summary>
+		/// Gets the non duplicate.
+		/// </summary>
+		/// <returns>The non duplicate.</returns>
+		/// <param name="source">Source.</param>
+		/// <param name="des">DES.</param>
 		public static List<UILetter> GetNonDuplicate(List<UILetter> source, List<UILetter> des)
 		{
 			des.Clear ();

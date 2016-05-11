@@ -221,7 +221,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 184836}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.77, y: 1.92, z: 6.02}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 494708}
@@ -608,7 +608,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5248ffd71b704e1d90954e56bc87d4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vehicleName: 
+  vehicle:
+    id: 2
+    name: Car
+    desc: 
+    matId: 0
+    maxSpeed: 0
+    costPoint: 30
+  mats:
+  - {fileID: 2100000, guid: b2b9456b35e184ba2af0c2a90f2b56cd, type: 2}
+  - {fileID: 2100000, guid: 46b5925597d034ddfb51bd201302a29e, type: 2}
   wheelColliders:
   - {fileID: 14602260}
   - {fileID: 14680676}
@@ -746,7 +755,23 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: mats.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: vehicle.name
+      value: Car
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: vehicle.id
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: vehicle.costPoint
+      value: 30
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 184836}

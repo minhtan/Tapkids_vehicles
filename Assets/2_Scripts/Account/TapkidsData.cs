@@ -9,19 +9,28 @@ using System;
 public class Player {
 	public int id;
 	public string name;
-	public int currentCredit;
-	public Vehicle currentVehicle;
-//	public Vehicle[] unlockedVehicles;
+	public int credit;
+	public int vehicleId;
+	public string vehicleName;
 	public List <Vehicle> unlockedVehicles;
 
 	public Player () {
 	}
 
-	public Player (int _id, string _name, int _currentCredit, Vehicle _currentVehicle, List <Vehicle> _unlockedVehicles) {
+	public Player (int _id, int _currentCredit, int _currentVehicleId, string _currentVehicleName, List <Vehicle> _unlockedVehicles) {
+		this.id = _id;
+		this.credit = _currentCredit;
+		this.vehicleId = _currentVehicleId;
+		this.vehicleName = _currentVehicleName;
+		this.unlockedVehicles = _unlockedVehicles;
+	}
+
+	public Player (int _id, string _name, int _currentCredit, int _currentVehicleId, string _currentVehicleName, List <Vehicle> _unlockedVehicles) {
 		this.id = _id;
 		this.name = _name;
-		this.currentCredit = _currentCredit;
-		this.currentVehicle = _currentVehicle;
+		this.credit = _currentCredit;
+		this.vehicleId = _currentVehicleId;
+		this.vehicleName = _currentVehicleName;
 		this.unlockedVehicles = _unlockedVehicles;
 	}
 }
@@ -30,6 +39,8 @@ public class Player {
 public class Vehicle {
 	public int id;
 	public string name;
+	public string desc;
+	public int matId;
 	public int maxSpeed;
 	public int costPoint;
 	// TODO: ... customize color index
@@ -37,9 +48,14 @@ public class Vehicle {
 	public Vehicle () {
 	}
 
-	public Vehicle (int _id, string _name, int _speed, int _costPoint) {
+	public Vehicle (string _name) {
+		this.name = _name;
+	}
+
+	public Vehicle (int _id, string _name, string _desc, int _speed, int _costPoint) {
 		this.id = _id;
 		this.name = _name;
+		this.desc = _desc;
 		this.maxSpeed = _speed;
 		this.costPoint = _costPoint;
 	}
@@ -81,8 +97,6 @@ public static class TapkidsData {
 		return false;
 	}
 
-
-
 	public static bool RemoveAllPlayer () {
 		players.Clear ();
 		return true;
@@ -95,12 +109,16 @@ public static class TapkidsData {
 		file.Close();
 	}
 
-	public static void Load() {
+	public static bool Load() {
+		Debug.Log (Application.persistentDataPath + "/player.tapkids");
 		if(File.Exists(Application.persistentDataPath + "/player.tapkids")) {
 			BinaryFormatter bf = new BinaryFormatter();
 			FileStream file = File.Open(Application.persistentDataPath + "/player.tapkids", FileMode.Open);
 			players = (List<Player>)bf.Deserialize(file);
-			file.Close();
+			file.Close(); 
+			return true;
+		} else {
+			return false;
 		}
 	}
 	#endregion text file functions

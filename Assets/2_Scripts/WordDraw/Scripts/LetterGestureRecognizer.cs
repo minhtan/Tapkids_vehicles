@@ -28,6 +28,7 @@ public class LetterGestureRecognizer : LeanGestureRecognizer {
 	/// </summary>
 	protected override void LoadGestures ()
 	{
+		GestureIO.LoadPremadeGestureTemplates ("GestureTemplates", GestureList);
 		_gestureDict = new Dictionary<Letters, List<Gesture>> ();
 		_optimizedGestureList = new List<Gesture> ();
 	

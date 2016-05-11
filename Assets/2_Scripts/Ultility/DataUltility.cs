@@ -10,7 +10,7 @@ public class DataUltility
 	{
 		List<WordGameData> list = new List<WordGameData> ();
 
-		TextAsset[] textList = Resources.LoadAll<TextAsset> ("WordGame/");
+		TextAsset[] textList = Resources.LoadAll<TextAsset> ("WordGame/") as TextAsset[];
 		for (int i = 0; i < textList.Length; i++) {
 			list.Add (JsonUtility.FromJson<WordGameData> (textList [i].text));
 		}
@@ -33,6 +33,10 @@ public class DataUltility
 
 	public static Sprite GetLetterImage(string name){
 		return Resources.Load<Sprite> ("LettersImage/" + name);
+	}
+
+	public static Sprite GetGameImage(string name){
+		return Resources.Load<Sprite> ("GameImage/" + name);
 	}
 
 	public static List<string> GetPlayableLetters (WordGameData data)

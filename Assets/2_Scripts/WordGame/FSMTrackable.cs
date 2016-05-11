@@ -16,7 +16,6 @@ namespace Vuforia
 	ITrackableEventHandler
 	{
 		public string targetName;
-		public bool isLetter = false;
 
 		#region PRIVATE_MEMBER_VARIABLES
 
@@ -97,10 +96,6 @@ namespace Vuforia
 				go.transform.SetParent (transform, false);
 			
 				go_anim = go.GetComponentInChildren<Animator>();
-
-				if(isLetter){
-					Messenger.Broadcast<bool, string>(EventManager.AR.IMAGETRACKING.ToString(), true, targetName);
-				}
 			}));
 		}
 
@@ -110,10 +105,6 @@ namespace Vuforia
 				Resources.UnloadUnusedAssets();
 				go = null;
 				go_anim = null;
-
-				if(isLetter){
-					Messenger.Broadcast<bool, string>(EventManager.AR.IMAGETRACKING.ToString(), false, targetName);
-				}
 			}
 		}
 		#endregion // PRIVATE_METHODS

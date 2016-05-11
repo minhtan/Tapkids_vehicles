@@ -6,7 +6,9 @@ using System.Collections.Generic;
 public class ArcadeCarController : MonoBehaviour {
 
 	#region public members
-	public string vehicleName;
+	[SerializeField]
+	public Vehicle vehicle;
+	public Material [] mats;
 	#endregion
 
 	#region private members
@@ -20,37 +22,40 @@ public class ArcadeCarController : MonoBehaviour {
 
 	private float oldRotation;
 	private float steerAngle;
+	private bool isStart;
 
 	private Rigidbody mRigidbody;
 	private Transform mTransform;
+
 	#endregion private members
 
 	#region MONO
+	void Awake () {
+		mTransform = GetComponent <Transform> ();
+		mRigidbody = GetComponent <Rigidbody> ();
+		mRigidbody.centerOfMass = centerOfMass;
+//		isStart = true;
+	}
+
 	void OnEnable () {
-//		CarGameEventController.GameOver += OnGameOver;
+		Messenger.AddListener <bool> (EventManager.GameState.START.ToString (), HandleStartGame);
 		Messenger.AddListener <int> (EventManager.GameState.GAMEOVER.ToString (), HandleGameOver);
-//		CarGameEventController.ResetGame += OnResetGame;
-		Messenger.AddListener(EventManager.GameState.RESETGAME.ToString (), HandleResetGame);
+		Messenger.AddListener(EventManager.GameState.RESET.ToString (), HandleResetGame);
+
 	}
 
 	void OnDisable () {
-//		CarGameEventController.GameOver += OnGameOver;
+		Messenger.AddListener <bool> (EventManager.GameState.START.ToString (), HandleStartGame);
 		Messenger.RemoveListener <int> (EventManager.GameState.GAMEOVER.ToString (), HandleGameOver);
-//		CarGameEventController.ResetGame -= OnResetGame;
-		Messenger.RemoveListener (EventManager.GameState.RESETGAME.ToString (), HandleResetGame);
-	}
-
-	void Start () {
-		mRigidbody = GetComponent <Rigidbody> ();
-		mRigidbody.centerOfMass = centerOfMass;
-
-		mTransform = this.transform;
+		Messenger.RemoveListener (EventManager.GameState.RESET.ToString (), HandleResetGame);
 	}
 	#endregion MONO
 
 	#region public functions
 	// handle car movement
 	public void Move (float steer, float accel) {
+		if (!isStart) return;
+
 		for (int i = 0; i < 4; i++) {
 			Quaternion quaternion;
 			Vector3 position;
@@ -62,8 +67,9 @@ public class ArcadeCarController : MonoBehaviour {
 		}
 
 		// clamp input value
-		steer = Mathf.Clamp (steer, -1, 1);
-		steerAngle = steer * maximumSteerAngle;
+//		steer = Mathf.Clamp (steer, -1, 1);
+//		steerAngle = steer * maximumSteerAngle;
+		steerAngle = Mathf.Clamp (steer, maximumSteerAngle * -1, maximumSteerAngle);
 		wheelColliders[0].steerAngle = steerAngle;
 		wheelColliders[1].steerAngle = steerAngle;
 //		SteerHelper ();
@@ -117,7 +123,16 @@ public class ArcadeCarController : MonoBehaviour {
 	#endregion private functions
 
 	#region event subscribers
+	private void HandleStartGame (bool _state) {
+		if (_state) {
+			isStart = true;
+		} else {
+
+		}
+	}
+
 	private void HandleGameOver (int _starAmount) {
+		isStart = false;
 		for (int i = 0; i < 4; i++) 
 			wheelColliders[i].brakeTorque = brakeTorque;
 	}
@@ -126,6 +141,8 @@ public class ArcadeCarController : MonoBehaviour {
 		for (int i = 0; i < 4; i++) 
 			wheelColliders[i].brakeTorque = brakeTorque;
 	}
+
+
 	#endregion event subscribers
 
 }

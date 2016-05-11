@@ -15,7 +15,7 @@ public class PlayerPanel : MonoBehaviour {
 	void Start () {
 		mText = GetComponentInChildren <Text> ();
 		if(mText != null) {
-			mText.text = "Hi " + TapkidsData.GetPlayerById (PlayerDataController.Instance.mPlayer.id).name;
+//			mText.text = "Hi " + TapkidsData.GetPlayerById (PlayerDataController.Instance.mPlayer.id).name;
 		}
 	}
 	#endregion Mono

@@ -13,7 +13,7 @@ public class AssetController : UnitySingletonPersistent<AssetController> {
 
 	#region Mono
 	IEnumerator Start (){
-		Caching.CleanCache ();
+//		Caching.CleanCache ();
 		yield return StartCoroutine( Initialize() );
 	}
 	#endregion
@@ -43,10 +43,10 @@ public class AssetController : UnitySingletonPersistent<AssetController> {
 			yield return StartCoroutine (request);
 		}
 
-//		AssetBundleLoadAssetOperation rq = AssetBundleManager.LoadAssetAsync (bundleName, "a", typeof(GameObject));
-//		if(rq != null){
-//			yield return StartCoroutine (rq);
-//		}
+		AssetBundleLoadAssetOperation rq = AssetBundleManager.LoadAssetAsync (bundleName, "a", typeof(GameObject));
+		if(rq != null){
+			yield return StartCoroutine (rq);
+		}
 	}
 
 	public IEnumerator InstantiateGameObjectAsync (string assetBundleName, string assetName, Action<GameObject> callback)
@@ -58,6 +58,7 @@ public class AssetController : UnitySingletonPersistent<AssetController> {
 		AssetBundleLoadAssetOperation request = AssetBundleManager.LoadAssetAsync(assetBundleName, assetName, typeof(GameObject) );
 		if (request == null)
 			yield break;
+		
 		yield return StartCoroutine(request);
 
 		// Get the asset.
@@ -72,6 +73,10 @@ public class AssetController : UnitySingletonPersistent<AssetController> {
 		Debug.Log(assetName + (prefab == null ? " was not" : " was")+ " loaded successfully in " + elapsedTime + " seconds" );
 	}
 
+	// fdj: addition feature
+	public int GetTotalLoadedAssetBundle () {
+		return AssetBundleManager.m_LoadedAssetBundles.Count;
+	}
 	/* use as follow
 	 private IEnumerator mymethod ()
 		{

@@ -29,13 +29,13 @@ public class CarGameController2 : MonoBehaviour {
 	}
 
 	void OnEnable () {
-		Messenger.AddListener <bool, Transform> (EventManager.AR.MAPTRACKING.ToString(), HandleMapTracking);
+		Messenger.AddListener <bool, Transform> (EventManager.AR.MAP_TRACKING.ToString(), HandleMapTracking);
 
-		Messenger.AddListener <string> (EventManager.Vehicle.COLLECTLETTER.ToString (), HandleCollectLetter);
+		Messenger.AddListener <string> (EventManager.Vehicle.COLLECT_LETTER.ToString (), HandleCollectLetter);
 
 		Messenger.AddListener (EventManager.GUI.DROPBUTTON.ToString (), HandleDropLetter);
 
-		Messenger.AddListener (EventManager.Vehicle.GATHERLETTER.ToString (), HandleGatherLetter);
+		Messenger.AddListener (EventManager.Vehicle.GATHER_LETTER.ToString (), HandleGatherLetter);
 	}
 
 	void Start () {
@@ -47,8 +47,12 @@ public class CarGameController2 : MonoBehaviour {
 			ArController.Instance.SetArMaxStimTargets (1);
 		}
 
+		if (GUIController.Instance != null) {
+			Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_INGAME.ToString (), true);
+		}
+
 		_machine = new SKStateMachine <CarGameController2> (this, new CG2InitState ());
-		_machine.addState (new CG2MapState ());
+		_machine.addState (new CG2ARMapState ());
 		_machine.addState (new CG2StartState ());
 		_machine.addState (new CG2PlayState ());
 		_machine.addState (new CG2PauseState ());
@@ -72,13 +76,13 @@ public class CarGameController2 : MonoBehaviour {
 	}
 
 	void OnDisable () {
-		Messenger.RemoveListener <bool, Transform> (EventManager.AR.MAPTRACKING.ToString(), HandleMapTracking);
+		Messenger.RemoveListener <bool, Transform> (EventManager.AR.MAP_TRACKING.ToString(), HandleMapTracking);
 
-		Messenger.RemoveListener <string> (EventManager.Vehicle.COLLECTLETTER.ToString (), HandleCollectLetter);
+		Messenger.RemoveListener <string> (EventManager.Vehicle.COLLECT_LETTER.ToString (), HandleCollectLetter);
 
 		Messenger.RemoveListener (EventManager.GUI.DROPBUTTON.ToString (), HandleDropLetter);
 
-		Messenger.RemoveListener (EventManager.Vehicle.GATHERLETTER.ToString (), HandleGatherLetter);
+		Messenger.RemoveListener (EventManager.Vehicle.GATHER_LETTER.ToString (), HandleGatherLetter);
 	}
 
 	void OnDestroy () {
@@ -92,7 +96,7 @@ public class CarGameController2 : MonoBehaviour {
 		if (_machine == null) return;
 
 		if (_isFound) {	// FOUND MAP
-			if (_machine.currentState.GetType () == typeof (CG2MapState)) {
+			if (_machine.currentState.GetType () == typeof (CG2ARMapState)) {
 				_machine.changeState <CG2StartState> ();
 				mTransform.SetParent (_parent);
 			} else {
@@ -100,7 +104,7 @@ public class CarGameController2 : MonoBehaviour {
 			}
 		} else {		// LOST MAP
 			if(_machine.currentState.GetType () == typeof (CG2StartState)) {
-				_machine.changeState <CG2MapState> ();
+				_machine.changeState <CG2ARMapState> ();
 			} else {
 				// DO NOTHING
 			}

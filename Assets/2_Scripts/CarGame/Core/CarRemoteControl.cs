@@ -20,11 +20,11 @@ namespace UnityStandardAssets.CrossPlatformInput
 		void OnEnable()
 		{
 //			CarGameEventController.StartGame += OnStartGame;
-			Messenger.AddListener <bool> (EventManager.GameState.STARTGAME.ToString (), HandleStartGame);
+			Messenger.AddListener <bool> (EventManager.GameState.START.ToString (), HandleStartGame);
 //			CarGameEventController.PauseGame += OnPauseGame;
-			Messenger.AddListener <bool> (EventManager.GameState.PAUSEGAME.ToString (), HandlePauseGame);
+			Messenger.AddListener <bool> (EventManager.GameState.PAUSE.ToString (), HandlePauseGame);
 //			CarGameEventController.ResetGame += OnResetGame;
-			Messenger.AddListener (EventManager.GameState.RESETGAME.ToString (), HandleResetGame);
+			Messenger.AddListener (EventManager.GameState.RESET.ToString (), HandleResetGame);
 
 			CreateVirtualAxes();	
 		}
@@ -79,11 +79,11 @@ namespace UnityStandardAssets.CrossPlatformInput
 		void OnDisable()
 		{
 //			CarGameEventController.StartGame -= OnStartGame;
-			Messenger.RemoveListener <bool> (EventManager.GameState.STARTGAME.ToString (), HandleStartGame);
+			Messenger.RemoveListener <bool> (EventManager.GameState.START.ToString (), HandleStartGame);
 //			CarGameEventController.PauseGame -= OnPauseGame;
-			Messenger.RemoveListener <bool> (EventManager.GameState.PAUSEGAME.ToString (), HandlePauseGame);
+			Messenger.RemoveListener <bool> (EventManager.GameState.PAUSE.ToString (), HandlePauseGame);
 //			CarGameEventController.ResetGame -= OnResetGame;
-			Messenger.RemoveListener (EventManager.GameState.RESETGAME.ToString (), HandleResetGame);
+			Messenger.RemoveListener (EventManager.GameState.RESET.ToString (), HandleResetGame);
 
 			if (CrossPlatformInputManager.AxisExists (steerInputName))
 				CrossPlatformInputManager.UnRegisterVirtualAxis (steerInputName);

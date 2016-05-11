@@ -10,20 +10,20 @@ public class UICollectedPanel : MonoBehaviour {
 
 	private Transform mTransform;
 	void OnEnable () {
-		Messenger.AddListener <string> (EventManager.GameState.INITGAME.ToString (), HandleInitGame);
-		Messenger.AddListener <string> (EventManager.GUI.ADDLETTER.ToString (), HandleAddLetter);
-		Messenger.AddListener <string> (EventManager.GUI.REMOVELETTER.ToString (), HandleRemoveLetter);
+		Messenger.AddListener <string> (EventManager.GameState.INIT.ToString (), HandleInitGame);
+		Messenger.AddListener <string> (EventManager.Vehicle.COLLECT_LETTER.ToString (), HandleCollectLetter);
+		Messenger.AddListener <string> (EventManager.GUI.REMOVE_LETTER.ToString (), HandleRemoveLetter);
 
 		// TODO: handle drop text
 	}
 
 	void Disable () {
-		Messenger.RemoveListener <string> (EventManager.GameState.INITGAME.ToString (), HandleInitGame);
-		Messenger.RemoveListener <string> (EventManager.GUI.ADDLETTER.ToString (), HandleAddLetter);
-		Messenger.RemoveListener <string> (EventManager.GUI.REMOVELETTER.ToString (), HandleRemoveLetter);
+		Messenger.RemoveListener <string> (EventManager.GameState.INIT.ToString (), HandleInitGame);
+		Messenger.RemoveListener <string> (EventManager.Vehicle.COLLECT_LETTER.ToString (), HandleCollectLetter);
+		Messenger.RemoveListener <string> (EventManager.GUI.REMOVE_LETTER.ToString (), HandleRemoveLetter);
 	}
 
-	void Start () {
+	void Awake () {
 		mTransform = GetComponent <Transform> ();
 	}
 
@@ -46,7 +46,7 @@ public class UICollectedPanel : MonoBehaviour {
 		}
 	}
 
-	void HandleAddLetter (string _letter) {
+	void HandleCollectLetter (string _letter) {
 		for (int i = 0; i < collectedLetters.Count; i++) {
 			if (string.IsNullOrEmpty (collectedLetters [i].GetComponentInChildren <Text> ().text)) {
 				collectedLetters [i].GetComponentInChildren <Text> ().text = _letter;
