@@ -12,13 +12,18 @@ public class GaragaController : MonoBehaviour {
 	// 
 
 	#region public members
-	public int currentSelectedCar;
+	public int currentSelectedIndex;
 	#endregion public members
 
 	#region private members
 	private List<GameObject> vehicles;
 	private Transform mTransform;
 	private Shader lockedShader;
+
+	private int lastUnlockedIndex;
+
+	private float forwardPos = 20f;
+	private float backwardPos = -20f;
 	#endregion private members
 
 	#region Mono
@@ -81,10 +86,10 @@ public class GaragaController : MonoBehaviour {
 			carGameObject.transform.SetParent (mTransform, false);
 			// update player current car 
 			if (PlayerDataController.Instance.mPlayer.vehicleId == carGameObject.GetComponent <ArcadeCarController> ().vehicle.id) {
-				currentSelectedCar = vehicles.IndexOf (carGameObject);
+				currentSelectedIndex = vehicles.IndexOf (carGameObject);
 				carGameObject.transform.localPosition = Vector3.zero;
+				LeanTween.rotateAroundLocal (vehicles [currentSelectedIndex], Vector3.up, 360f, 10f).setLoopClamp();
 				Messenger.Broadcast <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), carGameObject.GetComponent <ArcadeCarController> ().vehicle);
-
 			} else {
 				carGameObject.transform.localPosition = new Vector3 (0f, 0f, -10f);
 				carGameObject.SetActive (false);
@@ -100,59 +105,84 @@ public class GaragaController : MonoBehaviour {
 
 	#region private functions
 	bool valid = true;
+	int HandleCurrentIndex (int index) {
+		if (index >= vehicles.Count) {
+			index = 0;
+		} else if (index < 0) {
+			index = vehicles.Count - 1;
+		} else {
+			// nothing
+		}
+		return index;
+
+	}
 	private void HandleSelectCar (int _index) {
 		// handle car modle
 		if (valid == false) return;
 
-		if (currentSelectedCar + _index >= 0 && currentSelectedCar + _index < vehicles.Count)
-		{
-			valid = false;
-//			vehicles [currentSelectedCar].SetActive (false);
-			LeanTween.moveLocalZ (vehicles [currentSelectedCar], 20.0f, 1f).setEase(LeanTweenType.easeInBack).setOnComplete ( () => {
-				vehicles [currentSelectedCar].transform.localPosition = new Vector3 (0f, 0f, -20f);
-				vehicles [currentSelectedCar].SetActive (false);
 
-				currentSelectedCar = Mathf.Clamp (currentSelectedCar + _index, 0, vehicles.Count- 1);
 
-				vehicles [currentSelectedCar].SetActive (true);
-				// update car 
-				Messenger.Broadcast <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), vehicles[currentSelectedCar].GetComponent <ArcadeCarController> ().vehicle);
+		//		if (currentSelectedIndex + _index >= 0 && currentSelectedIndex + _index < vehicles.Count)
+//		{
+		valid = false;
+		LeanTween.moveLocalZ (vehicles [currentSelectedIndex], forwardPos, 1f).setEase(LeanTweenType.linear).setOnComplete ( () => {
+			vehicles [currentSelectedIndex].transform.localPosition = new Vector3 (0f, 0f, backwardPos);
+			vehicles [currentSelectedIndex].SetActive (false);
 
-				LeanTween.moveLocalZ (vehicles [currentSelectedCar], 0f, 1f).setEase (LeanTweenType.easeOutBack).setOnComplete ( () => { 
-					valid = true;
-				});
+			currentSelectedIndex += _index;
+			currentSelectedIndex = HandleCurrentIndex (currentSelectedIndex);
+
+			if (PlayerDataController.Instance.unlockedIds.Contains (vehicles [currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle.id))
+				lastUnlockedIndex = currentSelectedIndex;
+
+
+
+			vehicles [currentSelectedIndex].SetActive (true);
+			// update car 
+			Messenger.Broadcast <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), vehicles[currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle);
+
+			LeanTween.moveLocalZ (vehicles [currentSelectedIndex], 0f, 1f).setEase (LeanTweenType.easeOutBack).setOnComplete ( () => { 
+				valid = true;
+				LeanTween.rotateAroundLocal (vehicles [currentSelectedIndex], Vector3.up, 360f, 10f).setLoopClamp();
 			});
-		}
+		});
+//		}
 	}
 
 	private void HandleEnterGarage () {
+		lastUnlockedIndex = currentSelectedIndex;
 		// get player current select car
 
 		// setup selected car
 	}
 	private void HandleExitGarage () {
 		// check if current select car is not unlocked 
-		if (PlayerDataController.Instance.unlockedIds.Contains (vehicles [currentSelectedCar].GetComponent <ArcadeCarController> ().vehicle.id)) {
+		if (!PlayerDataController.Instance.unlockedIds.Contains (vehicles [currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle.id)) {
+			LeanTween.moveLocalZ (vehicles [currentSelectedIndex], forwardPos, 1f).setEase(LeanTweenType.linear).setOnComplete ( () => {
+				vehicles [currentSelectedIndex].transform.localPosition = new Vector3 (0f, 0f, backwardPos);
+				vehicles [currentSelectedIndex].SetActive (false);
 
-		} else {
+				vehicles [lastUnlockedIndex].SetActive (true);
+				// update car 
+				Messenger.Broadcast <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), vehicles[lastUnlockedIndex].GetComponent <ArcadeCarController> ().vehicle);
 
+				LeanTween.moveLocalZ (vehicles [lastUnlockedIndex], 0f, 1f).setEase (LeanTweenType.easeOutBack);
+				currentSelectedIndex = lastUnlockedIndex;
+			});
 		}
-		// get player current select car
-
-		// setup selected car
 	}
 
 	private void HandlePurchaseVehicle () {
-		if (PlayerDataController.Instance.mPlayer.credit >= vehicles[currentSelectedCar].GetComponent <ArcadeCarController> ().vehicle.costPoint) {
-			PlayerDataController.Instance.UnlockVehicle (vehicles[currentSelectedCar].GetComponent <ArcadeCarController> ().vehicle);
+		if (PlayerDataController.Instance.mPlayer.credit >= vehicles[currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle.costPoint) {
+			PlayerDataController.Instance.UnlockVehicle (vehicles[currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle);
 
 			// apply standard shader to unlocked car
-			Renderer[] renderers = vehicles[currentSelectedCar].GetComponentsInChildren <Renderer> ();
+			Renderer[] renderers = vehicles[currentSelectedIndex].GetComponentsInChildren <Renderer> ();
 			for (int j = 0; j < renderers.Length; j++) {
 				renderers [j].material.shader = Shader.Find ("Standard");
 			}
 
-			Messenger.Broadcast <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), vehicles[currentSelectedCar].GetComponent <ArcadeCarController> ().vehicle);
+			Messenger.Broadcast <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), vehicles[currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle);
 		} else {
 			// notify player
 			Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), GameConstant.PurchaseUnsuccessful, 1f);
@@ -161,12 +191,12 @@ public class GaragaController : MonoBehaviour {
 
 	void HandleChangeMaterial (int _matId) {
 		// update player data
-		Renderer[] renderers = vehicles [currentSelectedCar].GetComponentsInChildren<Renderer> ();
+		Renderer[] renderers = vehicles [currentSelectedIndex].GetComponentsInChildren<Renderer> ();
 		for (int i = 0; i < renderers.Length; i++) {
-			renderers[i].material = vehicles [currentSelectedCar].GetComponent <ArcadeCarController> ().mats[_matId];
+			renderers[i].material = vehicles [currentSelectedIndex].GetComponent <ArcadeCarController> ().mats[_matId];
 		}
-		vehicles [currentSelectedCar].GetComponent <ArcadeCarController> ().vehicle.matId = _matId;
-		PlayerDataController.Instance.UpdateVehicle (vehicles [currentSelectedCar].GetComponent <ArcadeCarController> ().vehicle);
+		vehicles [currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle.matId = _matId;
+		PlayerDataController.Instance.UpdateVehicle (vehicles [currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle);
 	}
 	#endregion private functions
 
