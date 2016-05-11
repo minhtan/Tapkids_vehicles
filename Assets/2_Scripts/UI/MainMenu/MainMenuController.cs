@@ -310,7 +310,8 @@ public class MainMenuController : MonoBehaviour {
 	}
 
 	public void _OnPlayClick(){
-		SceneController.Instance.LoadingSceneAsync (sceneToLeanTransPhrase.Keys.ElementAt(currentIndex));
+		if (SceneController.Instance != null) 
+			SceneController.Instance.LoadingSceneAsync (sceneToLeanTransPhrase.Keys.ElementAt(currentIndex));
 	}
 	#endregion
 }

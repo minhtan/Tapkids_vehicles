@@ -1,9 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+public enum WHEELMODE {
+	MENU,
+	CONTROL
+}
 public class SteeringWheel : MonoBehaviour {
 
 	public bool updateEveryFrame = false;
+	public WHEELMODE wheelMode = WHEELMODE.MENU;
 	float initAngle;
 	float dragAngle;
 	float angleDiff;
@@ -18,9 +23,18 @@ public class SteeringWheel : MonoBehaviour {
 	bool isPressingOnWheel;
 
 	public void _OnWheelPress(bool state){
-		if(rectTran.localRotation == Quaternion.identity){
+		switch (wheelMode) {
+		case WHEELMODE.MENU:
+			if(rectTran.localRotation == Quaternion.identity){
+				isPressingOnWheel = state;
+			}
+			break;
+		case WHEELMODE.CONTROL:
+			LeanTween.cancelAll ();
 			isPressingOnWheel = state;
+			break;
 		}
+
 	}
 
 	void OnEnable () {
@@ -44,7 +58,7 @@ public class SteeringWheel : MonoBehaviour {
 		if(updateEveryFrame){
 			float angle = rectTran.localRotation.eulerAngles.z;
 			angle = angle > 180f ? (angle - 360) * -1 : angle * -1;
-			Messenger.Broadcast<float> (EventManager.GUI.MENU_WHEEL_FRAME_TURN.ToString (), angle);
+			Messenger.Broadcast<float> (EventManager.GUI.WHEEL_FRAME_TURN.ToString (), angle);
 		}
 	}
 	

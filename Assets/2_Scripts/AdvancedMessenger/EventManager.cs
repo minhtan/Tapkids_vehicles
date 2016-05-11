@@ -30,7 +30,7 @@ public class EventManager {
 		COUNTDOWN,
 		MENU_WHEEL_TURN,
 		MENU_WHEEL_RELEASE,
-		MENU_WHEEL_FRAME_TURN
+		WHEEL_FRAME_TURN
 	}
 
 	//

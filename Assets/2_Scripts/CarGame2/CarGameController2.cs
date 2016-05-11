@@ -47,6 +47,10 @@ public class CarGameController2 : MonoBehaviour {
 			ArController.Instance.SetArMaxStimTargets (1);
 		}
 
+		if (GUIController.Instance != null) {
+			Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_INGAME.ToString (), true);
+		}
+
 		_machine = new SKStateMachine <CarGameController2> (this, new CG2InitState ());
 		_machine.addState (new CG2ARMapState ());
 		_machine.addState (new CG2StartState ());

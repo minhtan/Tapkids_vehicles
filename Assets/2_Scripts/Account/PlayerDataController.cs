@@ -8,6 +8,7 @@ public class PlayerDataController : UnitySingletonPersistent<PlayerDataControlle
 
 	public Player mPlayer;
 	public List<int> unlockedIds = new List<int> ();
+	public GameObject firstVehicle;
 
 	private int currentPlayer = 0;
 	#region MONO
@@ -17,9 +18,9 @@ public class PlayerDataController : UnitySingletonPersistent<PlayerDataControlle
 			mPlayer = TapkidsData.GetPlayerById(currentPlayer);
 		} else {
 			// pre setup player vehicle
-			Vehicle firstVehicle = new Vehicle (2, "Car", "", 0, 10);
 			List <Vehicle> newCarList = new List<Vehicle> ();
-			newCarList.Add (firstVehicle);
+			if (firstVehicle != null)
+				newCarList.Add (firstVehicle.GetComponent <ArcadeCarController> ().vehicle);
 
 			mPlayer = new Player (0, 100, 2, "Car", newCarList); 
 
@@ -92,12 +93,16 @@ public class PlayerDataController : UnitySingletonPersistent<PlayerDataControlle
 	}
 
 	public void UpdateVehicle (Vehicle _vehicle) {
+//		if (mPlayer.unlockedVehicles.Contains (_vehicle)) {
 		for (int i = 0; i < mPlayer.unlockedVehicles.Count; i++) {
 			if (mPlayer.unlockedVehicles [i].id == _vehicle.id) {
 				mPlayer.unlockedVehicles [i].matId = _vehicle.matId;
 				break;
 			}
 		}
+//		} else {
+//			return;
+//		}
 		TapkidsData.players[currentPlayer].unlockedVehicles = mPlayer.unlockedVehicles;
 		TapkidsData.Save ();
 	}

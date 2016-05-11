@@ -31,7 +31,10 @@ public class ArcadeCarController : MonoBehaviour {
 
 	#region MONO
 	void Awake () {
-		mTransform = this.transform;
+		mTransform = GetComponent <Transform> ();
+		mRigidbody = GetComponent <Rigidbody> ();
+		mRigidbody.centerOfMass = centerOfMass;
+//		isStart = true;
 	}
 
 	void OnEnable () {
@@ -64,8 +67,9 @@ public class ArcadeCarController : MonoBehaviour {
 		}
 
 		// clamp input value
-		steer = Mathf.Clamp (steer, -1, 1);
-		steerAngle = steer * maximumSteerAngle;
+//		steer = Mathf.Clamp (steer, -1, 1);
+//		steerAngle = steer * maximumSteerAngle;
+		steerAngle = Mathf.Clamp (steer, maximumSteerAngle * -1, maximumSteerAngle);
 		wheelColliders[0].steerAngle = steerAngle;
 		wheelColliders[1].steerAngle = steerAngle;
 //		SteerHelper ();
@@ -121,8 +125,6 @@ public class ArcadeCarController : MonoBehaviour {
 	#region event subscribers
 	private void HandleStartGame (bool _state) {
 		if (_state) {
-			mRigidbody = GetComponent <Rigidbody> ();
-			mRigidbody.centerOfMass = centerOfMass;
 			isStart = true;
 		} else {
 
