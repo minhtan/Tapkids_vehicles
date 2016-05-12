@@ -16,12 +16,5 @@ public class GUIController : UnitySingletonPersistent<GUIController>
 	void Awake ()
 	{
 		base.Awake ();
-//		OpenDialog ("Mot loi vo cung nghiem trong da xay ra. De nghi nap tien de khac phuc!!!", new UIDialogButton ("Yes", UIDialogButton.Anchor.BOTTOM_CENTER, new Callback (delegate {
-//			Debug.Log ("Say Yes");
-//		})), new UIDialogButton ("Yes", UIDialogButton.Anchor.BOTTOM_LEFT, new Callback (delegate {
-//			Debug.Log ("Say Yes");
-//		})), new UIDialogButton ("Yes", UIDialogButton.Anchor.BOTTOM_RIGHT, new Callback (delegate {
-//			Debug.Log ("Say Yes");
-//		})));
 	}
 }

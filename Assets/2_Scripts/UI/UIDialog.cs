@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
+using System.Collections.Generic;
 
 public class UIDialog : MonoBehaviour
 {
@@ -14,6 +14,11 @@ public class UIDialog : MonoBehaviour
 
 	public void CreateButtons (UIDialogButton[] buttons)
 	{
+		for(int i = 1; i < transform.childCount; i++)
+		{
+			Destroy (transform.GetChild(i).gameObject);
+		}
+
 		for (int i = 0; i < buttons.Length; i++) {
 			RectTransform buttonTrans = Instantiate (_buttonTemplate).GetComponent<RectTransform> ();
 			buttonTrans.SetParent (transform, false);
