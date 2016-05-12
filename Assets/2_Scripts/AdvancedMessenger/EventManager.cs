@@ -16,7 +16,7 @@ public class EventManager {
 		//
 		UPDATE_CREDIT,
 		//
-		TOGGLE_INGAME,
+		TOGGLE_MENU_BTN,
 		TOGGLE_TUTORIAL,
 		//
 		TOGGLE_SOUND,

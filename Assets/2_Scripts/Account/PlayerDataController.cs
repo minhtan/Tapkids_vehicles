@@ -72,12 +72,6 @@ public class PlayerDataController : UnitySingletonPersistent<PlayerDataControlle
 		TapkidsData.Save ();
 	}
 
-	public void UpdatePlayerCurrentVehicle (int _newVehicle) {
-		mPlayer.vehicleId = _newVehicle;
-		TapkidsData.players [currentPlayer].vehicleId = mPlayer.vehicleId;
-		TapkidsData.Save ();
-	}
-
 	public void UnlockVehicle (Vehicle _unlockedVehicle) {
 		if (!mPlayer.unlockedVehicles.Contains (_unlockedVehicle)) 
 			mPlayer.unlockedVehicles.Add (_unlockedVehicle);

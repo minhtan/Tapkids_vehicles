@@ -8,6 +8,10 @@ public class MaterialToggle : MonoBehaviour {
 
 	private Toggle mToggle;
 
+	void OnEnable () {
+		Messenger.AddListener <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), HandleUpdateVehicle);
+	}
+
 	void Start () {
 		mToggle = GetComponent <Toggle> ();
 		if (mToggle != null) {
@@ -17,9 +21,13 @@ public class MaterialToggle : MonoBehaviour {
 			});
 		}
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+
+	void OnDisable () {
+		Messenger.RemoveListener <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), HandleUpdateVehicle);
+	}
+
+	void HandleUpdateVehicle (Vehicle _vehicle) {
+		if (_vehicle.matId == matId)
+			mToggle.isOn = true;
 	}
 }

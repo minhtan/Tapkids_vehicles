@@ -35,7 +35,7 @@ namespace WordDraw
 
 		void OnStartGame()
 		{
-			Messenger.Broadcast<bool> (EventManager.GUI.TOGGLE_INGAME.ToString(), true);
+			Messenger.Broadcast<bool> (EventManager.GUI.TOGGLE_MENU_BTN.ToString(), true);
 			StartCoroutine (GameCoroutine());
 		}
 

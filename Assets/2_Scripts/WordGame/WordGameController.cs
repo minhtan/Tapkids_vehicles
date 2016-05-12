@@ -149,7 +149,7 @@ public class WordGameController : MonoBehaviour {
 	}
 
 	void _ToggleIngameMenu(bool state){
-		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_INGAME.ToString (), state);
+		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_MENU_BTN.ToString (), state);
 	}
 
 	void _ShowHint(){
