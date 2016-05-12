@@ -8,11 +8,11 @@ public class UIPurchaseButton : MonoBehaviour {
 	private CanvasGroup mCanvasGroup;
 
 	void OnEnable () {
-		Messenger.AddListener <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), HandleUpdateVehicle);
+//		Messenger.AddListener <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), HandleUpdateVehicle);
 	}
 
 	void OnDisable () {
-		Messenger.RemoveListener <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), HandleUpdateVehicle);
+//		Messenger.RemoveListener <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), HandleUpdateVehicle);
 	}
 	void Start () {
 		mCanvasGroup = GetComponent <CanvasGroup> ();
@@ -20,7 +20,11 @@ public class UIPurchaseButton : MonoBehaviour {
 
 		if (mButton != null) {
 			mButton.onClick.AddListener (delegate {
-				Messenger.Broadcast (EventManager.GUI.PURCHASE_VEHICLE.ToString ());
+
+				//				Messenger.Broadcast (EventManager.GUI.PURCHASE_VEHICLE.ToString ());
+				GUIController.Instance.OpenDialog ("Purchase Confirm", new UIDialogButton ("Yes", UIDialogButton.Anchor.BOTTOM_LEFT, delegate {Debug.Log("Yes");}), 
+																		new UIDialogButton ("No", UIDialogButton.Anchor.BOTTOM_RIGHT, delegate {Debug.Log("No");})
+				);	
 			});
 		}
 	}

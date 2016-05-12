@@ -45,7 +45,7 @@ public class MainMenuController : MonoBehaviour {
 	#region mono
 	void Start(){
 		if (GUIController.Instance != null) {
-			Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_INGAME.ToString (), false);
+			Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_MENU_BTN.ToString (), false);
 		}
 		CreateCarTexture ();
 		InitPosition ();

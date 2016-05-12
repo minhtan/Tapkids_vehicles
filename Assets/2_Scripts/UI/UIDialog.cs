@@ -23,6 +23,4 @@ public class UIDialog : MonoBehaviour
 			buttons [i].SetButtonText (buttonTrans.GetChild (0).GetComponent<Text> ());
 		}
 	}
-
-	
 }

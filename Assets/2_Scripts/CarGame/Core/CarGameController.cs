@@ -48,7 +48,7 @@ public class CarGameController : MonoBehaviour {
 		}
 
 		if (GUIController.Instance != null) {
-			Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_INGAME.ToString (), true);
+			Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_MENU_BTN.ToString (), true);
 		}
 
 		// setup finite state machine
