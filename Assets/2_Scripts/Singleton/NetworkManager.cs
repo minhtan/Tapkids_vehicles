@@ -6,11 +6,14 @@ public class NetworkManager : UnitySingletonPersistent<NetworkManager>
 {
 	public string[] _senderIds;
 
-	void Awake()
+	void Awake ()
 	{
 		base.Awake ();
-		InitGCM ();	
-		GCM.Register (_senderIds);
+
+		if (Application.platform == RuntimePlatform.IPhonePlayer)
+			InitIosPush ();
+		else if (Application.platform == RuntimePlatform.Android)
+			InitGCM ();
 	}
 
 	public bool HasInternetAvailable ()
@@ -31,6 +34,7 @@ public class NetworkManager : UnitySingletonPersistent<NetworkManager>
 		// Set callbacks
 		GCM.SetErrorCallback ((string errorId) => {
 			GCM.ShowToast ("Error" + errorId);
+			Debug.Log (errorId);
 		});
 
 		GCM.SetMessageCallback ((Dictionary<string, object> table) => {
@@ -41,9 +45,11 @@ public class NetworkManager : UnitySingletonPersistent<NetworkManager>
 			}
 
 			GCM.ShowToast ("Message " + message);
+			Debug.Log (message);
 		});
 
 		GCM.SetRegisteredCallback ((string registrationId) => {
+			Debug.Log (registrationId);
 			GCM.ShowToast ("Registered " + registrationId);
 		});
 
@@ -54,5 +60,12 @@ public class NetworkManager : UnitySingletonPersistent<NetworkManager>
 		GCM.SetDeleteMessagesCallback ((int total) => {
 			GCM.ShowToast ("DeleteMessaged " + total);
 		});
+
+		GCM.Register (_senderIds);
+	}
+
+	private void InitIosPush ()
+	{
+		
 	}
 }
