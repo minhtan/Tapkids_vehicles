@@ -12,6 +12,7 @@ public class DataUltility
 
 		TextAsset[] textList = Resources.LoadAll<TextAsset> ("WordGame/") as TextAsset[];
 		for (int i = 0; i < textList.Length; i++) {
+			Debug.Log (textList[i].text);
 			list.Add (JsonUtility.FromJson<WordGameData> (textList [i].text));
 		}
 
