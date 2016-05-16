@@ -17,6 +17,7 @@ public class GUIController : UnitySingletonPersistent<GUIController>
 
 	public UIDialog OpenDialog (string message)
 	{
+		_dialog.gameObject.SetActive (true);
 		_dialog.RefreshDialog ();
 		_dialog.SetMessageText (message);
 		return _dialog;

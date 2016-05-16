@@ -409,7 +409,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e166c3b8713fa4734a72bcdaf98806e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _messageText: {fileID: 494227839}
   _buttonTemplate: {fileID: 132164, guid: f7c7f08cfe84b40a78f24b5aacf2282c, type: 2}
 --- !u!1 &168866206
 GameObject:
@@ -1150,8 +1149,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdd30209fa4014282ba9f06bfb48036e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _senderIds:
+  _senderGcmIds:
   - 225878052879
+  _getRequestTokenUrlIos: http:/example.com?token=
+  _refreshNotiIosDelay: 3
 --- !u!4 &480061702
 Transform:
   m_ObjectHideFlags: 0
@@ -1567,7 +1568,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   txt: {fileID: 1996656502}
   pnlCheckCode: {fileID: 1164503779}
-  test: 1
+  test: 0
 --- !u!114 &653435928
 MonoBehaviour:
   m_ObjectHideFlags: 0

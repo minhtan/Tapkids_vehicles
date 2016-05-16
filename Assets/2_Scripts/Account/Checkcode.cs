@@ -28,7 +28,6 @@ public class Checkcode : MonoBehaviour {
 
 		StartCoroutine(WebServiceUltility.CheckKey(WebServiceUltility.CHECK_KEY_URL, txt.text, "", (returnData) => {
 			if(returnData != null){
-				Debug.Log(returnData.message);
 				if(returnData.success){
 					//Succes
 					OnCodeValid();
@@ -36,41 +35,32 @@ public class Checkcode : MonoBehaviour {
 					//Fail
 					if(returnData.status_code == 409){
 						//Key ard in use
-						GUIController.Instance.OpenDialog(returnData.message, 
-							new UIDialogButton("No", UIDialogButton.Anchor.BOTTOM_LEFT, () => {}), 
-							new UIDialogButton("Yes", UIDialogButton.Anchor.BOTTOM_RIGHT, () => {
+						GUIController.Instance.OpenDialog(returnData.message)
+							.AddButton("No", UIDialogButton.Anchor.BOTTOM_LEFT, () => {})
+							.AddButton("Yes", UIDialogButton.Anchor.BOTTOM_RIGHT, () => {
 								StartCoroutine(WebServiceUltility.CheckKey(WebServiceUltility.OVERRIDE_KEY_URL, txt.text, "", (returnOverRideKeyData) => {
-									if(returnOverRideKeyData != null){
-										if(returnOverRideKeyData.success){
-											OnCodeValid();
-										}else{
-											GUIController.Instance.OpenDialog(returnOverRideKeyData.message, 
-												new UIDialogButton("Ok", UIDialogButton.Anchor.BOTTOM_CENTER, () => {})
-											);
-										}
+								if(returnOverRideKeyData != null){
+									if(returnOverRideKeyData.success){
+										OnCodeValid();
 									}else{
-										GUIController.Instance.OpenDialog("Fail to connect", 
-											new UIDialogButton("Ok", UIDialogButton.Anchor.BOTTOM_CENTER, () => {})
-										);
+										GUIController.Instance.OpenDialog(returnOverRideKeyData.message).AddButton("Ok", UIDialogButton.Anchor.BOTTOM_CENTER, () => {});
 									}
-								}));
-							})
-						);
+								}else{
+										GUIController.Instance.OpenDialog("Fail to connect").AddButton("Ok", UIDialogButton.Anchor.BOTTOM_CENTER, () => {});
+								}
+							}));
+						});
 							
 					}
 					else{
 						//Key invalid
 
-						GUIController.Instance.OpenDialog(returnData.message, 
-							new UIDialogButton("Ok", UIDialogButton.Anchor.BOTTOM_CENTER, () => {})
-						);
+						GUIController.Instance.OpenDialog(returnData.message).AddButton("Ok", UIDialogButton.Anchor.BOTTOM_CENTER, () => {});
 					}
 				}
 			}else{
 				//Fail to connect
-				GUIController.Instance.OpenDialog("Fail to connect", 
-					new UIDialogButton("Ok", UIDialogButton.Anchor.BOTTOM_CENTER, () => {})
-				);
+				GUIController.Instance.OpenDialog("Fail to connect").AddButton("Ok", UIDialogButton.Anchor.BOTTOM_CENTER, () => {});
 			}
 		}));
 	}
