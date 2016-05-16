@@ -22,4 +22,11 @@ public static class GameConstant  {
 	public const string PurchaseSuccessful = "Your Purchase was successful";
 	public const string PurchaseUnsuccessful = "Your Purchase was NOT successful";
 
+	public const int ISLAND_ID = 2;
+	public const string UNLOCKED = "unlock";
+	public enum unlockStatus{
+		VALID,
+		INVALID
+	}
+
 }
