@@ -8,11 +8,11 @@ public class UIPurchaseButton : MonoBehaviour {
 	private CanvasGroup mCanvasGroup;
 
 	void OnEnable () {
-//		Messenger.AddListener <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), HandleUpdateVehicle);
+		Messenger.AddListener <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), HandleUpdateVehicle);
 	}
 
 	void OnDisable () {
-//		Messenger.RemoveListener <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), HandleUpdateVehicle);
+		Messenger.RemoveListener <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), HandleUpdateVehicle);
 	}
 	void Start () {
 		mCanvasGroup = GetComponent <CanvasGroup> ();
