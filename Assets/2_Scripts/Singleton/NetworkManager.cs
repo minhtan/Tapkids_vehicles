@@ -1,10 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Events;
+using NotificationServices = UnityEngine.iOS.NotificationServices;
+using NotificationType = UnityEngine.iOS.NotificationType;
 
 public class NetworkManager : UnitySingletonPersistent<NetworkManager>
 {
-	public string[] _senderIds;
+	public string[] _senderGcmIds;
+	public string _getRequestTokenUrlIos = "http:/example.com?token=";
+	public float _refreshNotiIosDelay = 3f;
 
 	void Awake ()
 	{
@@ -20,7 +25,7 @@ public class NetworkManager : UnitySingletonPersistent<NetworkManager>
 	{
 		if (Application.internetReachability == NetworkReachability.ReachableViaCarrierDataNetwork ||
 		    Application.internetReachability == NetworkReachability.ReachableViaLocalAreaNetwork) {
-			return true;
+			return true;	
 		}
 
 		return false;
@@ -61,11 +66,50 @@ public class NetworkManager : UnitySingletonPersistent<NetworkManager>
 			GCM.ShowToast ("DeleteMessaged " + total);
 		});
 
-		GCM.Register (_senderIds);
+		GCM.Register (_senderGcmIds);
 	}
 
 	private void InitIosPush ()
 	{
-		
+		NotificationServices.RegisterForNotifications (NotificationType.Alert | NotificationType.Badge | NotificationType.Sound);
+		StartCoroutine (IosRegisterPushCor ());
+		StartCoroutine (IosPushReceiver());
+	}
+
+	private IEnumerator IosRegisterPushCor ()
+	{
+		bool isTokenSent = false;
+		while (true) {
+			byte[] token = NotificationServices.deviceToken;
+
+			if (token != null) {
+				string hexToken = "%" + System.BitConverter.ToString (token).Replace ('-', '%');
+				new WWW (_getRequestTokenUrlIos + hexToken);
+			}
+
+			if (isTokenSent)
+				yield break;
+			
+			yield return null;
+		}
+	}
+
+	private int _messageCount = 0;
+	public static UnityAction<UnityEngine.iOS.RemoteNotification> OnIosNotificationReceived;
+
+	private IEnumerator IosPushReceiver ()
+	{
+		WaitForSeconds wait = new WaitForSeconds (_refreshNotiIosDelay);
+		while (true) {
+
+			if (NotificationServices.remoteNotificationCount != _messageCount) {
+				_messageCount = NotificationServices.remoteNotificationCount;
+				UnityEngine.iOS.RemoteNotification remoteNoti = NotificationServices.GetRemoteNotification (_messageCount - 1);
+
+				if (OnIosNotificationReceived != null)
+					OnIosNotificationReceived (remoteNoti);
+			}
+			yield return wait;
+		}
 	}
 }
