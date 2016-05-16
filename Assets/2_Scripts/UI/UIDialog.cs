@@ -9,34 +9,35 @@ public class UIDialog : MonoBehaviour
 
 	private Text _messageText;
 
-	void Awake ()
+	void Awake 	()
 	{
 		_messageText = transform.GetChild (0).GetComponent<Text>();
 	}
 		
-	public UIDialog AddButton (string text, UIDialogButton.Anchor anchor, Callback callback)
+	public UIDialog AddButton (string text, UIDialogButton.Anchor anchor, Callback callback = null)
 	{
 		CreateButton (new UIDialogButton (text, anchor, callback));
 		return this;
 	}
 
-	public UIDialog AddButton (string text, UIDialogButton.Anchor anchor, UIDialogButton.Padding padding, Callback callback)
+	public UIDialog AddButton (string text, UIDialogButton.Anchor anchor, UIDialogButton.Padding padding, Callback callback = null)
 	{
 		CreateButton (new UIDialogButton (text, anchor, padding, callback));
 		return this;
 	}
 
-
-	public void SetMessageText (string text)
-	{
-		_messageText.text = text;
-	}
-
-	public void CreateButtons (UIDialogButton[] buttons)
+	public UIDialog AddButton (UIDialogButton[] buttons)
 	{
 		for (int i = 0; i < buttons.Length; i++) {
 			CreateButton (buttons [i]);
 		}
+
+		return this;
+	}
+
+	public void SetMessageText (string text)
+	{
+		_messageText.text = text;
 	}
 
 	private void CreateButton (UIDialogButton dialogBut)

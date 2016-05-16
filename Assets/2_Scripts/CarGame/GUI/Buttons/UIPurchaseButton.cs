@@ -22,9 +22,10 @@ public class UIPurchaseButton : MonoBehaviour {
 			mButton.onClick.AddListener (delegate {
 
 				//				Messenger.Broadcast (EventManager.GUI.PURCHASE_VEHICLE.ToString ());
-				GUIController.Instance.OpenDialog ("Purchase Confirm", new UIDialogButton ("Yes", UIDialogButton.Anchor.BOTTOM_LEFT, delegate {Debug.Log("Yes");}), 
-																		new UIDialogButton ("No", UIDialogButton.Anchor.BOTTOM_RIGHT, delegate {Debug.Log("No");})
-				);	
+
+				GUIController.Instance.OpenDialog("Purchase Confirm")
+					.AddButton("Yes", UIDialogButton.Anchor.BOTTOM_LEFT, delegate {Debug.Log("Yes");})
+					.AddButton("No", UIDialogButton.Anchor.BOTTOM_RIGHT, delegate {Debug.Log("No");});
 			});
 		}
 	}
