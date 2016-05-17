@@ -34,14 +34,13 @@ public class UIDialogButton
 		}
 	}
 
-	public UIDialogButton (string buttonText, Anchor anchor, Callback callback)
+	public UIDialogButton (string buttonText, Anchor anchor, Callback callback = null)
 	{
 		_buttonText = buttonText;
-		_callback = callback;
 		_anchor = anchor;
 	}
 
-	public UIDialogButton (string buttonText, Anchor anchor, Padding padding, Callback callback) : this (buttonText, anchor, callback)
+	public UIDialogButton (string buttonText, Anchor anchor, Padding padding, Callback callback) : this (buttonText, anchor, callback = null)
 	{
 		_padding = padding;
 	}
@@ -66,9 +65,11 @@ public class UIDialogButton
 
 	public void SetOnClickListener (Button button)
 	{	
-		button.onClick.AddListener (() => {
-			_callback.Invoke ();
-		});
+		if (_callback != null)
+			button.onClick.AddListener (() => {
+				_callback.Invoke ();
+			});
+		
 		button.onClick.AddListener (() => {
 			button.gameObject.transform.parent.gameObject.SetActive (false);
 		});
