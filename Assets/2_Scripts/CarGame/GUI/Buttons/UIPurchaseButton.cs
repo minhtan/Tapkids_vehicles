@@ -20,10 +20,18 @@ public class UIPurchaseButton : MonoBehaviour {
 
 		if (mButton != null) {
 			mButton.onClick.AddListener (delegate {
-
-				//				Messenger.Broadcast (EventManager.GUI.PURCHASE_VEHICLE.ToString ());
-				GUIController.Instance.OpenDialog ("Purchase Confirm", new UIDialogButton ("Yes", UIDialogButton.Anchor.BOTTOM_LEFT, delegate {Debug.Log("Yes");}), 
-																		new UIDialogButton ("No", UIDialogButton.Anchor.BOTTOM_RIGHT, delegate {Debug.Log("No");})
+				GUIController.Instance.OpenDialog ("Purchase Confirm", 
+					new UIDialogButton ("Yes", 
+						UIDialogButton.Anchor.BOTTOM_LEFT, 
+						delegate { 
+							Debug.Log("Yes");
+							Messenger.Broadcast (EventManager.GUI.PURCHASE_VEHICLE.ToString ());
+						}), 
+					new UIDialogButton ("No", 
+						UIDialogButton.Anchor.BOTTOM_RIGHT, 
+						delegate { 
+							Debug.Log("No");
+						})
 				);	
 			});
 		}
