@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
+
 public class UIPurchaseButton : MonoBehaviour {
 
 	private Button mButton;
@@ -20,19 +21,19 @@ public class UIPurchaseButton : MonoBehaviour {
 
 		if (mButton != null) {
 			mButton.onClick.AddListener (delegate {
-				GUIController.Instance.OpenDialog ("Purchase Confirm", 
-					new UIDialogButton ("Yes", 
-						UIDialogButton.Anchor.BOTTOM_LEFT, 
+				GUIController.Instance.OpenDialog ("Purchase Confirm")
+					.AddButton ("Yes", UIDialogButton.Anchor.BOTTOM_LEFT, 
 						delegate { 
 							Debug.Log("Yes");
 							Messenger.Broadcast (EventManager.GUI.PURCHASE_VEHICLE.ToString ());
-						}), 
-					new UIDialogButton ("No", 
-						UIDialogButton.Anchor.BOTTOM_RIGHT, 
+						}
+					).
+					AddButton ("No", 
+						UIDialogButton.Anchor.BOTTOM_LEFT, 
 						delegate { 
 							Debug.Log("No");
-						})
-				);	
+						}
+					);
 			});
 		}
 	}
