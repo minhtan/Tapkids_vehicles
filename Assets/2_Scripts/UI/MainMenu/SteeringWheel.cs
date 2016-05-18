@@ -13,9 +13,6 @@ public class SteeringWheel : MonoBehaviour {
 	float dragAngle;
 	float angleDiff;
 	public static float angleThreshold = 90f;
-	public float AngleThreshold {
-		get {return angleThreshold;}
-	}
 
 	Vector2 rectWordPos;
 	RectTransform rectTran;
