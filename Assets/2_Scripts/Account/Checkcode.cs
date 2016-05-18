@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Text.RegularExpressions;
+using Lean;
 
 public class Checkcode : MonoBehaviour {
 	public Text txt;
@@ -26,6 +28,14 @@ public class Checkcode : MonoBehaviour {
 			return;
 		}
 
+		if (!CheckRegex (txt.text)) {
+			GUIController.Instance.OpenDialog (LeanLocalization.GetTranslation("InvalidKey").Text).AddButton (
+				LeanLocalization.GetTranslation("Ok").Text, 
+				UIDialogButton.Anchor.BOTTOM_CENTER, 
+				() => {});
+			return;
+		}
+
 		StartCoroutine(WebServiceUltility.CheckKey(WebServiceUltility.CHECK_KEY_URL, txt.text, "", (returnData) => {
 			if(returnData != null){
 				if(returnData.success){
@@ -36,17 +46,30 @@ public class Checkcode : MonoBehaviour {
 					if(returnData.status_code == 409){
 						//Key ard in use
 						GUIController.Instance.OpenDialog(returnData.message)
-							.AddButton("No", UIDialogButton.Anchor.BOTTOM_LEFT, () => {})
-							.AddButton("Yes", UIDialogButton.Anchor.BOTTOM_RIGHT, () => {
-								StartCoroutine(WebServiceUltility.CheckKey(WebServiceUltility.OVERRIDE_KEY_URL, txt.text, "", (returnOverRideKeyData) => {
-								if(returnOverRideKeyData != null){
-									if(returnOverRideKeyData.success){
-										OnCodeValid();
+							.AddButton(
+								LeanLocalization.GetTranslation("No").Text, 
+								UIDialogButton.Anchor.BOTTOM_LEFT, 
+								() => {}
+							)
+							.AddButton(
+								LeanLocalization.GetTranslation("Yes").Text, 
+								UIDialogButton.Anchor.BOTTOM_RIGHT, 
+								() => {
+									StartCoroutine(WebServiceUltility.CheckKey(WebServiceUltility.OVERRIDE_KEY_URL, txt.text, "", (returnOverRideKeyData) => {
+									if(returnOverRideKeyData != null){
+										if(returnOverRideKeyData.success){
+											OnCodeValid();
+										}else{
+											GUIController.Instance.OpenDialog(returnOverRideKeyData.message).AddButton(
+													LeanLocalization.GetTranslation("Ok").Text, 
+													UIDialogButton.Anchor.BOTTOM_CENTER, 
+													() => {});
+										}
 									}else{
-										GUIController.Instance.OpenDialog(returnOverRideKeyData.message).AddButton("Ok", UIDialogButton.Anchor.BOTTOM_CENTER, () => {});
-									}
-								}else{
-										GUIController.Instance.OpenDialog("Fail to connect").AddButton("Ok", UIDialogButton.Anchor.BOTTOM_CENTER, () => {});
+											GUIController.Instance.OpenDialog("Fail to connect").AddButton(
+												LeanLocalization.GetTranslation("Ok").Text, 
+												UIDialogButton.Anchor.BOTTOM_CENTER, 
+												() => {});
 								}
 							}));
 						});
@@ -54,15 +77,34 @@ public class Checkcode : MonoBehaviour {
 					}
 					else{
 						//Key invalid
-
-						GUIController.Instance.OpenDialog(returnData.message).AddButton("Ok", UIDialogButton.Anchor.BOTTOM_CENTER, () => {});
+						GUIController.Instance.OpenDialog(returnData.message).AddButton(
+							LeanLocalization.GetTranslation("Ok").Text,  
+							UIDialogButton.Anchor.BOTTOM_CENTER, 
+							() => {});
 					}
 				}
 			}else{
 				//Fail to connect
-				GUIController.Instance.OpenDialog("Fail to connect").AddButton("Ok", UIDialogButton.Anchor.BOTTOM_CENTER, () => {});
+				GUIController.Instance.OpenDialog(LeanLocalization.GetTranslation("FailedToConnect").Text).AddButton(
+					LeanLocalization.GetTranslation("Ok").Text, 
+					UIDialogButton.Anchor.BOTTOM_CENTER, 
+					() => {});
 			}
 		}));
+	}
+
+	bool CheckRegex(string keyInput){
+		if(keyInput.Length < 3){
+			return false;
+		}
+
+		Regex regex = new Regex("\\W+");
+		Match match = regex.Match(keyInput);
+		if (match.Success) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 }
