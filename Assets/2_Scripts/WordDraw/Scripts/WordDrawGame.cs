@@ -35,7 +35,7 @@ namespace WordDraw
 
 		void OnStartGame()
 		{
-			AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.WORDGAME_CORRECT);
+			AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.CORRECT_WORD);
 			Messenger.Broadcast<bool> (EventManager.GUI.TOGGLE_MENU_BTN.ToString(), true);
 			StartCoroutine (GameCoroutine());
 		}
