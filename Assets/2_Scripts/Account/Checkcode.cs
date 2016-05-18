@@ -10,6 +10,7 @@ public class Checkcode : MonoBehaviour {
 	public bool test;
 
 	void OnEnable(){
+//		PlayerPrefs.DeleteKey (GameConstant.UNLOCKED);
 		if (!PlayerPrefs.HasKey (GameConstant.UNLOCKED) || PlayerPrefs.GetInt (GameConstant.UNLOCKED) != (int)GameConstant.unlockStatus.VALID) {
 			pnlCheckCode.SetActive (true);
 		} else {
@@ -40,6 +41,7 @@ public class Checkcode : MonoBehaviour {
 			if(returnData != null){
 				if(returnData.success){
 					//Succes
+					Debug.Log("success");
 					OnCodeValid();
 				}else{
 					//Fail
