@@ -20,18 +20,9 @@ public class UIDialog : MonoBehaviour
 		return this;
 	}
 
-	public UIDialog AddButton (string text, UIDialogButton.Anchor anchor, UIDialogButton.Padding padding, Callback callback = null)
+	public UIDialog AddButton (string text, UIDialogButton.Anchor anchor, float paddingX, float paddingY, Callback callback = null)
 	{
-		CreateButton (new UIDialogButton (text, anchor, padding, callback));
-		return this;
-	}
-
-	public UIDialog AddButton (UIDialogButton[] buttons)
-	{
-		for (int i = 0; i < buttons.Length; i++) {
-			CreateButton (buttons [i]);
-		}
-
+		CreateButton (new UIDialogButton (text, anchor, paddingX, paddingY, callback));
 		return this;
 	}
 
