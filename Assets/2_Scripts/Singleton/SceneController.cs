@@ -50,7 +50,7 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 		if (!NetworkManager.Instance.HasInternetAvailable ()) {
 			GUIController.Instance.OpenDialog ("Internet connection problem!")
 				.AddButton ("Retry", UIDialogButton.Anchor.BOTTOM_LEFT, delegate { 
-				LoadingSceneAsync (id, delay);
+					ReloadCurrentScene();
 			})
 				.AddButton ("Quit", UIDialogButton.Anchor.BOTTOM_RIGHT, delegate {
 				Application.Quit ();

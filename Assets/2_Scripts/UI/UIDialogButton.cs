@@ -38,6 +38,7 @@ public class UIDialogButton
 	{
 		_buttonText = buttonText;
 		_anchor = anchor;
+		_callback = callback;
 	}
 
 	public UIDialogButton (string buttonText, Anchor anchor, float paddingX, float paddingY, Callback callback) : this (buttonText, anchor, callback = null)
