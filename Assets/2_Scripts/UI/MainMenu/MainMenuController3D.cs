@@ -19,6 +19,7 @@ public class MainMenuController3D : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_MENU_BTN.ToString (), false);
 		SetFieldOfView ();
 		menuPos = transform.localRotation.eulerAngles;
 	}
