@@ -33,7 +33,7 @@ public class GaragaController : MonoBehaviour {
 	void OnEnable () {
 		Messenger.AddListener <int> (EventManager.GUI.SELECT_VEHICLE.ToString (), HandleSelectCar);
 //		Messenger.AddListener (EventManager.GUI.ENTER_GARAGE.ToString (), HandleEnterGarage);
-		Messenger.AddListener (EventManager.GUI.EXIT_GARAGE.ToString (), HandleExitGarage);
+		Messenger.AddListener (EventManager.GUI.TO_MENU.ToString (), HandleExitGarage);
 		Messenger.AddListener (EventManager.GUI.PURCHASE_VEHICLE.ToString (), HandlePurchaseVehicle);
 		Messenger.AddListener <int> (EventManager.GUI.CHANGE_MATERIAL.ToString (), HandleChangeMaterial);
 	}
@@ -41,7 +41,7 @@ public class GaragaController : MonoBehaviour {
 	void OnDisable () {
 		Messenger.RemoveListener <int> (EventManager.GUI.SELECT_VEHICLE.ToString (), HandleSelectCar);
 //		Messenger.RemoveListener (EventManager.GUI.ENTER_GARAGE.ToString (), HandleEnterGarage);
-		Messenger.RemoveListener (EventManager.GUI.EXIT_GARAGE.ToString (), HandleExitGarage);
+		Messenger.RemoveListener (EventManager.GUI.TO_MENU.ToString (), HandleExitGarage);
 		Messenger.RemoveListener (EventManager.GUI.PURCHASE_VEHICLE.ToString (), HandlePurchaseVehicle);
 		Messenger.RemoveListener <int> (EventManager.GUI.CHANGE_MATERIAL.ToString (), HandleChangeMaterial);
 	}

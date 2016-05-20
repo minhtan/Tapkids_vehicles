@@ -2,11 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Events;
+#if UNITY_IOS
 using NotificationServices = UnityEngine.iOS.NotificationServices;
 using NotificationType = UnityEngine.iOS.NotificationType;
+#endif
 
 public class NetworkManager : UnitySingletonPersistent<NetworkManager>
 {
+	
 	public string[] _senderGcmIds;
 	public string _getRequestTokenUrlIos = "http:/example.com?token=";
 	public float _refreshNotiIosDelay = 3f;
@@ -15,10 +18,13 @@ public class NetworkManager : UnitySingletonPersistent<NetworkManager>
 	{
 		base.Awake ();
 
-		if (Application.platform == RuntimePlatform.IPhonePlayer)
+		if (Application.platform == RuntimePlatform.IPhonePlayer) {
+			#if UNITY_IOS
 			InitIosPush ();
-		else if (Application.platform == RuntimePlatform.Android)
+			#endif
+		} else if (Application.platform == RuntimePlatform.Android) {
 			InitGCM ();
+		}
 	}
 
 	public bool HasInternetAvailable ()
@@ -69,6 +75,7 @@ public class NetworkManager : UnitySingletonPersistent<NetworkManager>
 		GCM.Register (_senderGcmIds);
 	}
 
+	#if UNITY_IOS
 	private void InitIosPush ()
 	{
 		NotificationServices.RegisterForNotifications (NotificationType.Alert | NotificationType.Badge | NotificationType.Sound);
@@ -92,6 +99,7 @@ public class NetworkManager : UnitySingletonPersistent<NetworkManager>
 			
 			yield return null;
 		}
+
 	}
 
 	private int _messageCount = 0;
@@ -99,6 +107,7 @@ public class NetworkManager : UnitySingletonPersistent<NetworkManager>
 
 	private IEnumerator IosPushReceiver ()
 	{
+		
 		WaitForSeconds wait = new WaitForSeconds (_refreshNotiIosDelay);
 		while (true) {
 
@@ -112,4 +121,5 @@ public class NetworkManager : UnitySingletonPersistent<NetworkManager>
 			yield return wait;
 		}
 	}
+	#endif
 }
