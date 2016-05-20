@@ -38,11 +38,12 @@ public class UIDialogButton
 	{
 		_buttonText = buttonText;
 		_anchor = anchor;
+		_callback = callback;
 	}
 
-	public UIDialogButton (string buttonText, Anchor anchor, Padding padding, Callback callback) : this (buttonText, anchor, callback = null)
+	public UIDialogButton (string buttonText, Anchor anchor, float paddingX, float paddingY, Callback callback) : this (buttonText, anchor, callback = null)
 	{
-		_padding = padding;
+		_padding = new Padding(paddingX, paddingY);
 	}
 
 	public void SetPadding (RectTransform rectTrans)
@@ -75,7 +76,7 @@ public class UIDialogButton
 		});
 	}
 
-	public class Padding
+	private class Padding
 	{
 		public float Vertical;
 		public float Horizontal;
