@@ -5,22 +5,15 @@ using System.Collections.Generic;
 
 public class Test : MonoBehaviour {
 
-	bool isConfirmed;
-
-	void OnEnable () {
-
-	}
-
+	public Transform[] points;
+	private Vector3[] tempVectors;
 	void Start () {
-
-	}
-
-	void OnDisable () {
-
-	}
-
-	public void ActionExample (Action _onComplete) {
-		_onComplete ();
+		tempVectors = new Vector3 [points.Length]; 
+		for (int i = 0; i < points.Length; i++) {
+			tempVectors [i] = points[i].localPosition;
+		}
+		LeanTween.moveSpline (this.gameObject, tempVectors, .5f);//.setEase(LeanTweenType.easeInBack);
+//		LeanTween.
 	}
 
 

@@ -13,6 +13,14 @@ public class GaragaController : MonoBehaviour {
 
 	#region public members
 	public int currentSelectedIndex;
+	public Transform disk;
+
+	public Transform initPos;
+	public Transform nextPos;
+	public Transform prevPos;
+	public Transform diskPos;
+	public Transform disk2Pos;
+	public BezierSpline spline;
 	#endregion public members
 
 	#region private members
@@ -57,11 +65,13 @@ public class GaragaController : MonoBehaviour {
 		for (int i = 0; i < GameConstant.fourWheels.Count; i++) {
 			StartCoroutine (SetupCar (GameConstant.fourWheels[i]));
 		}
+
+
 	}
 	private IEnumerator SetupCar (string vehicleName) {
 		yield return new WaitForSeconds (1f);
 		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (GameConstant.assetBundleName, vehicleName, (bundle) => {
-			GameObject carGameObject = Instantiate (bundle) as GameObject;
+			GameObject carGameObject = Instantiate (bundle, initPos.position, Quaternion.identity) as GameObject;
 			vehicles.Add (carGameObject);
 			carGameObject.GetComponent <Rigidbody> ().isKinematic = true;
 
@@ -89,17 +99,29 @@ public class GaragaController : MonoBehaviour {
 			if (PlayerDataController.Instance.mPlayer.vehicleId == carGameObject.GetComponent <ArcadeCarController> ().vehicle.id) {
 				currentSelectedIndex = vehicles.IndexOf (carGameObject);
 				lastUnlockedIndex = currentSelectedIndex;
-				carGameObject.transform.localPosition = Vector3.zero;
+
+				vehicles [currentSelectedIndex - 1].transform.position = prevPos.position;
+				vehicles [currentSelectedIndex - 1].transform.rotation = prevPos.rotation;
+
+				carGameObject.transform.localPosition = disk2Pos.position;
 				LeanTween.rotateAroundLocal (carGameObject, Vector3.up, 360f, 10f).setLoopClamp();
 
 				Debug.Log (carGameObject.GetComponent <ArcadeCarController> ().vehicle.matId);
 
 				Messenger.Broadcast <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), carGameObject.GetComponent <ArcadeCarController> ().vehicle);
+			} else if (currentSelectedIndex != 0) {
+				vehicles [currentSelectedIndex + 1].transform.position = nextPos.position;
+				vehicles [currentSelectedIndex + 1].transform.rotation = nextPos.rotation;
 			} else {
-				carGameObject.transform.localPosition = new Vector3 (0f, 0f, -10f);
 				carGameObject.SetActive (false);
 			}
+
+
 		}));
+	}
+
+	void SetCarPosition () {
+
 	}
 
 	#endregion Mono
