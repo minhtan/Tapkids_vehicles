@@ -34,16 +34,16 @@ public class UIDialogButton
 		}
 	}
 
-	public UIDialogButton (string buttonText, Anchor anchor, Callback callback)
+	public UIDialogButton (string buttonText, Anchor anchor, Callback callback = null)
 	{
 		_buttonText = buttonText;
-		_callback = callback;
 		_anchor = anchor;
+		_callback = callback;
 	}
 
-	public UIDialogButton (string buttonText, Anchor anchor, Padding padding, Callback callback) : this (buttonText, anchor, callback)
+	public UIDialogButton (string buttonText, Anchor anchor, float paddingX, float paddingY, Callback callback) : this (buttonText, anchor, callback = null)
 	{
-		_padding = padding;
+		_padding = new Padding(paddingX, paddingY);
 	}
 
 	public void SetPadding (RectTransform rectTrans)
@@ -66,15 +66,17 @@ public class UIDialogButton
 
 	public void SetOnClickListener (Button button)
 	{	
-		button.onClick.AddListener (() => {
-			_callback.Invoke ();
-		});
+		if (_callback != null)
+			button.onClick.AddListener (() => {
+				_callback.Invoke ();
+			});
+		
 		button.onClick.AddListener (() => {
 			button.gameObject.transform.parent.gameObject.SetActive (false);
 		});
 	}
 
-	public class Padding
+	private class Padding
 	{
 		public float Vertical;
 		public float Horizontal;

@@ -95,7 +95,7 @@ public class MainMenuController : MonoBehaviour {
 		menutweenIds[1] = LeanTween.moveX (car, 0, menuTweenTime).setEase (LeanTweenType.easeOutQuart).id;
 		menutweenIds[2] = LeanTween.moveX (garage, 0, menuTweenTime).setEase (LeanTweenType.easeOutQuart).setOnComplete ( () => {
 			isGarageOpen = true;
-			Messenger.Broadcast (EventManager.GUI.ENTER_GARAGE.ToString ());
+			Messenger.Broadcast (EventManager.GUI.TO_GARAGE.ToString ());
 		}).id;
 
 	}
@@ -106,7 +106,7 @@ public class MainMenuController : MonoBehaviour {
 		menutweenIds[1] = LeanTween.moveX (car, -width / 2, menuTweenTime).setEase (LeanTweenType.easeOutQuart).id;
 		menutweenIds[2] = LeanTween.moveX (garage, -width / 2, menuTweenTime).setEase (LeanTweenType.easeOutQuart).setOnComplete ( () => {
 			isGarageOpen = false;
-			Messenger.Broadcast (EventManager.GUI.EXIT_GARAGE.ToString ());
+			Messenger.Broadcast (EventManager.GUI.TO_MENU.ToString ());
 		}).id;
 	}
 

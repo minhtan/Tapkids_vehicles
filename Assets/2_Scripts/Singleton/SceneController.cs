@@ -37,7 +37,6 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 	public override void Awake ()
 	{
 		base.Awake ();
-		InitSceneGroup ();
 	}
 
 	public void ReloadCurrentScene ()
@@ -47,8 +46,15 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 
 	public void LoadingSceneAsync (SceneID id, float delay = 0f)
 	{
-		if (!NetworkManager.Instance.HasInternetAvailable()) {
-			_text.text = "Please check your internet connection";
+		if (id == SceneID.MENU)
+		if (!NetworkManager.Instance.HasInternetAvailable ()) {
+			GUIController.Instance.OpenDialog ("Internet connection problem!")
+				.AddButton ("Retry", UIDialogButton.Anchor.BOTTOM_LEFT, delegate { 
+					ReloadCurrentScene();
+			})
+				.AddButton ("Quit", UIDialogButton.Anchor.BOTTOM_RIGHT, delegate {
+				Application.Quit ();
+			});
 			return;
 		}
 
@@ -92,57 +98,4 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 			yield return null;
 		}
 	}
-
-	#region PRIVATE METHOD
-
-	private void InitSceneGroup ()
-	{
-		/*string scenePath = "1_Scenes/";
-
-		TextAsset[] sceneArray = Resources.LoadAll<TextAsset>(scenePath);
-		Debug.Log (sceneArray.Length);
-
-		for(int i = 0; i < sceneArray.Length; i++)
-		{
-			Debug.Log (sceneArray[i].name);
-		}
-
-		string[] sceneFiles = new string[sceneArray.Length];
-			
-		string[] sceneFileNames = new string[sceneFiles.Length];
-		string[] separator = { "." };
-
-		for(int i = 0; i < sceneFileNames.Length; i++)
-		{
-			sceneFileNames[i] = Path.GetFileName (sceneFiles[i]).Split(separator, 0)[0];
-		}
-
-		for(int i = 0; i < sceneArray.Length; i++)
-		{
-			sceneFileNames [i] = sceneArray [i].name;
-			Debug.Log (sceneFileNames[i]);
-		}
-
-		_sceneDict = new Dictionary<SceneID, string> ();
-
-		string[] sceneEnumNames = Enum.GetNames (typeof(SceneID));
-		Array sceneids = Enum.GetValues (typeof(SceneID));
-
-		int length = sceneFiles.Length;
-		string tmpSceneName = null;
-
-		for (int i = 0; i < length; i++) {
-			tmpSceneName = sceneFileNames [i];
-		
-			for (int k = 0; k < sceneEnumNames.Length; k++) {
-
-				if (tmpSceneName.ToUpper ().Contains (sceneEnumNames [k])) {
-					_sceneDict.Add ((SceneID)sceneids.GetValue (k), tmpSceneName);
-					break;
-				}
-			}
-		}*/
-	}
-
-	#endregion
 }

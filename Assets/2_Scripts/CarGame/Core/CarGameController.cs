@@ -126,14 +126,15 @@ public class CarGameController : MonoBehaviour {
 	private void HandleCollectLetter (string _letter) {
 //		Messenger.Broadcast <string> (EventManager.GUI.ADD_LETTER.ToString (), _letter);
 		collectedLetters = string.Concat (collectedLetters, _letter);
+		AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.CARGAME_COLLECT_LETTER);
 	}
 
 	private void HandleDropLetter () {
 		if (collectedLetters.Length > 0) {
 			string letter = collectedLetters[collectedLetters.Length - 1].ToString ();
 			Messenger.Broadcast <string> (EventManager.GUI.REMOVE_LETTER.ToString (), letter);
-
 			collectedLetters = collectedLetters.Substring (0, collectedLetters.Length - 1);
+			AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.CARGAME_DROP_LETTER);
 		}
 	}
 
@@ -142,8 +143,10 @@ public class CarGameController : MonoBehaviour {
 			if (GameConstant.vehicles.Contains (collectedLetters)) {
 				_machine.changeState <CGGameOverState> ();
 				Messenger.Broadcast <int> (EventManager.GameState.GAMEOVER.ToString (), 0);
+				AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.CORRECT_WORD);
 			} else {
 				Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), GameConstant.WrongMessage, 1f);
+				AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.INCORRECT_WORD);
 			}
 		}
 	}

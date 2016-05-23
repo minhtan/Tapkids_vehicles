@@ -134,7 +134,7 @@ public class WordGameController : MonoBehaviour {
 	}
 
 	void _UpdateWordFoundUI(){
-		AudioManager.Instance.PlayAudio(AudioKey.UNIQUE_KEY.WORDGAME_CORRECT);
+		AudioManager.Instance.PlayAudio(AudioKey.UNIQUE_KEY.CORRECT_WORD);
 
 		HidePnlHint ();
 
@@ -183,7 +183,7 @@ public class WordGameController : MonoBehaviour {
 
 	void _ShowWarningCountDown(){
 		ToggleTimerColor ();
-		AudioManager.Instance.PlayAudio(AudioKey.UNIQUE_KEY.WORDGAME_CORRECT);
+		AudioManager.Instance.PlayAudio(AudioKey.UNIQUE_KEY.CORRECT_WORD);
 	}
 
 	void ToggleTimerColor(bool overrideRed = false){
@@ -197,7 +197,7 @@ public class WordGameController : MonoBehaviour {
 	}
 
 	void _WakeUp(){
-		AudioManager.Instance.PlayAudio(AudioKey.UNIQUE_KEY.WORDGAME_CORRECT);
+		AudioManager.Instance.PlayAudio(AudioKey.UNIQUE_KEY.CORRECT_WORD);
 	}
 
 	void ShowResult(){
