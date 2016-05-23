@@ -21,7 +21,9 @@ public class BtnSelectGame : MonoBehaviour {
 	void OnBtnTap(GameObject go){
 		if(menu.IsInMenu){
 			if(go.GetInstanceID() == gameObject.GetInstanceID()){
-				SceneController.Instance.LoadingSceneAsync (sceneToLoad);
+				LeanTween.rotateAroundLocal (gameObject, Vector3.forward, 720f, 0.5f).setEase (LeanTweenType.easeOutBack).setOnComplete (() => {
+					SceneController.Instance.LoadingSceneAsync (sceneToLoad);				
+				});
 			}
 		}
 	}
