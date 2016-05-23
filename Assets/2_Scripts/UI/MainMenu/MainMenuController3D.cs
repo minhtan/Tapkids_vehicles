@@ -14,7 +14,7 @@ public class MainMenuController3D : MonoBehaviour {
 
 	Vector3 menuPos;
 	public Vector3 garagePos;
-	float menuTweenTime = 0.3f;
+	float menuTweenTime = 0.2f;
 	float drag;
 
 	// Use this for initialization
