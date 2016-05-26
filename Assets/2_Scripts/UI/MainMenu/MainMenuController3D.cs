@@ -89,7 +89,7 @@ public class MainMenuController3D : MonoBehaviour {
 		Ray ray = fg.GetRay ();
 
 		if (Physics.Raycast (ray, out hitInfo)) {
-			Messenger.Broadcast<GameObject> (EventManager.GUI.MENU_BTN_TAP.ToString (), hitInfo.collider.gameObject);
+			Messenger.Broadcast<int> (EventManager.GUI.MENU_BTN_TAP.ToString (), hitInfo.collider.gameObject.GetInstanceID ());
 		}
 	}
 
@@ -110,16 +110,16 @@ public class MainMenuController3D : MonoBehaviour {
 	void ToMenu(bool ovrd = false){
 		if (!isInMenu || ovrd) {
 			LeanTween.rotateLocal (gameObject, menuPos, menuTweenTime);
-			isInMenu = true;
 			Messenger.Broadcast (EventManager.GUI.TO_MENU.ToString());
+			isInMenu = true;
 		}
 	}
 
 	void ToGarage(bool ovrd = false){
 		if (isInMenu || ovrd) {
 			LeanTween.rotateLocal (gameObject, garagePos, menuTweenTime);
-			isInMenu = false;
 			Messenger.Broadcast (EventManager.GUI.TO_GARAGE.ToString());
+			isInMenu = false;
 		}
 	}
 }

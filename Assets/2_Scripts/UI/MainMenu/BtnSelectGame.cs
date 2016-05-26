@@ -11,16 +11,16 @@ public class BtnSelectGame : MonoBehaviour {
 	}
 
 	void OnEnable(){
-		Messenger.AddListener<GameObject> (EventManager.GUI.MENU_BTN_TAP.ToString(), OnBtnTap);
+		Messenger.AddListener<int> (EventManager.GUI.MENU_BTN_TAP.ToString(), OnBtnTap);
 	}
 
 	void OnDisable(){
-		Messenger.RemoveListener<GameObject> (EventManager.GUI.MENU_BTN_TAP.ToString(), OnBtnTap);
+		Messenger.RemoveListener<int> (EventManager.GUI.MENU_BTN_TAP.ToString(), OnBtnTap);
 	}
 
-	void OnBtnTap(GameObject go){
+	void OnBtnTap(int _id){
 		if(menu.IsInMenu){
-			if(go.GetInstanceID() == gameObject.GetInstanceID()){
+			if(_id == gameObject.GetInstanceID()){
 				LeanTween.rotateAroundLocal (gameObject, Vector3.forward, 720f, 0.5f).setEase (LeanTweenType.easeOutBack).setOnComplete (() => {
 					SceneController.Instance.LoadingSceneAsync (sceneToLoad);				
 				});

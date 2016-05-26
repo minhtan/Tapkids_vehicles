@@ -21,6 +21,7 @@ public class IntroAnimController : MonoBehaviour {
 	{
 		SetActiveGO (_enableGO, true);
 		SetActiveGO (_disableGO, false);
+		AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.BACKGROUD);
 	}
 		
 	public void OnAnimationEnd()

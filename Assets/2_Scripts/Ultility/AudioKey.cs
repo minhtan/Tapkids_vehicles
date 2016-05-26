@@ -4,6 +4,8 @@ using System.Collections;
 public class AudioKey {
     private static AudioKey instance = new AudioKey();
     public enum UNIQUE_KEY {
+		BACKGROUD,
+
 		// all game
 		CORRECT_WORD,
 		INCORRECT_WORD,
@@ -13,7 +15,11 @@ public class AudioKey {
 		CARGAME_DROP_LETTER,
 
 		// gui
-		BUTTON_CLICK
+		BUTTON_CLICK,
+		COUNTDOWN,
+		TIMEOUT,
+		GAME_WIN,
+		GAME_LOSE
 
     };
 
