@@ -183,7 +183,10 @@ public class WordGameController : MonoBehaviour {
 
 	void _ShowWarningCountDown(){
 		ToggleTimerColor ();
-		AudioManager.Instance.PlayAudio(AudioKey.UNIQUE_KEY.CORRECT_WORD);
+
+//		if(fsm.FsmVariables.GetFsmInt("timer").Value % 2 == 0){
+			AudioManager.Instance.PlayAudio(AudioKey.UNIQUE_KEY.COUNTDOWN);
+//		}
 	}
 
 	void ToggleTimerColor(bool overrideRed = false){
@@ -197,7 +200,7 @@ public class WordGameController : MonoBehaviour {
 	}
 
 	void _WakeUp(){
-		AudioManager.Instance.PlayAudio(AudioKey.UNIQUE_KEY.CORRECT_WORD);
+//		AudioManager.Instance.PlayAudio(AudioKey.UNIQUE_KEY.CORRECT_WORD);
 	}
 
 	void ShowResult(){
@@ -216,6 +219,14 @@ public class WordGameController : MonoBehaviour {
 			txt_FoundWords.text = "";
 		}
 
+	}
+
+	public void _Win(){
+		AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.GAME_WIN);
+	}
+
+	public void _Timeout(){
+		AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.TIMEOUT);
 	}
 
 	public void _TEST(){
