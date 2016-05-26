@@ -21,6 +21,7 @@ public class ArcadeCarController : MonoBehaviour {
 		public CarColor color;
 	}
 	public CarMat[] carMats;
+	public float garageScale;
 
 	#region public members
 	[SerializeField]
