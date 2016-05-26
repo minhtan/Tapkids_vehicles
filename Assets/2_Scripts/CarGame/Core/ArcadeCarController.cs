@@ -2,13 +2,31 @@
 using System.Collections;
 using System.Collections.Generic;
 
+public enum CarColor {
+	orange,
+	gray,
+	yellow,
+	blue,
+	red,
+	pink,
+	purple,
+	green,
+	bluesky
+}
 
 public class ArcadeCarController : MonoBehaviour {
+	[System.Serializable]
+	public struct CarMat {
+		public Material mat;
+		public CarColor color;
+	}
+	public CarMat[] carMats;
 
 	#region public members
 	[SerializeField]
 	public Vehicle vehicle;
-	public Material [] mats;
+//	public Material [] _carMats;
+
 	#endregion
 
 	#region private members
