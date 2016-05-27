@@ -43,6 +43,15 @@ public class Vehicle {
 	public int matId;
 	public int maxSpeed;
 	public int costPoint;
+
+	[System.Serializable]
+	public struct CarMat {
+		public Material mat;
+		public CarColor color;
+	}
+
+	[SerializeField] public CarMat[] carMats;
+	public float garageScale;
 	// TODO: ... customize color index
 
 	public Vehicle () {
@@ -114,7 +123,7 @@ public static class TapkidsData {
 		if(File.Exists(Application.persistentDataPath + "/player.tapkids")) {
 			BinaryFormatter bf = new BinaryFormatter();
 			FileStream file = File.Open(Application.persistentDataPath + "/player.tapkids", FileMode.Open);
-			players = (List<Player>)bf.Deserialize(file);
+			players = (List<Player>) bf.Deserialize(file);
 			file.Close(); 
 			return true;
 		} else {

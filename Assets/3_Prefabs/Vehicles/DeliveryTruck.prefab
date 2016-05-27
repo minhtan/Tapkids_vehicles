@@ -621,6 +621,12 @@ MonoBehaviour:
     matId: 0
     maxSpeed: 0
     costPoint: 40
+    carMats:
+    - mat: {fileID: 2100000, guid: a4ca887bcacb542ccae38fafeed41251, type: 2}
+      color: 1
+    - mat: {fileID: 2100000, guid: 4ae13d21abec94abf8c55a70d9192e44, type: 2}
+      color: 2
+    garageScale: 2
   wheelColliders:
   - {fileID: 14645600}
   - {fileID: 14656942}
@@ -764,6 +770,10 @@ Prefab:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 0}
+      propertyPath: vehicle.carMats.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
       propertyPath: vehicle.name
       value: DeliveryTruck
       objectReference: {fileID: 0}
@@ -786,6 +796,26 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_LocalPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: vehicle.garageScale
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: vehicle.carMats.Array.data[0].mat
+      value: 
+      objectReference: {fileID: 2100000, guid: a4ca887bcacb542ccae38fafeed41251, type: 2}
+    - target: {fileID: 0}
+      propertyPath: vehicle.carMats.Array.data[1].mat
+      value: 
+      objectReference: {fileID: 2100000, guid: 4ae13d21abec94abf8c55a70d9192e44, type: 2}
+    - target: {fileID: 0}
+      propertyPath: vehicle.carMats.Array.data[1].color
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: vehicle.carMats.Array.data[0].color
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

@@ -7795,6 +7795,51 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1291903030}
+--- !u!1 &1298370989 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100278, guid: 8c125da3b2a9142828a7f72e45cdaf37, type: 3}
+  m_PrefabInternal: {fileID: 1202844545}
+--- !u!114 &1298370990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1298370989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e4e5e82affb548c09ffca8414a6bd5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lightMats:
+  - matOn: {fileID: 2100000, guid: 5f3af8c6e5fce405994518f24ca71073, type: 2}
+    matOff: {fileID: 2100000, guid: e16a4c5e59f4f41b4a50fbfbdbad399f, type: 2}
+    color: 0
+  - matOn: {fileID: 2100000, guid: 0fd0771fb8c12404ab4c02168dcd661b, type: 2}
+    matOff: {fileID: 2100000, guid: 41765b493552d4048b2c0d621e14212f, type: 2}
+    color: 1
+  - matOn: {fileID: 2100000, guid: 45edb90ac193442549bdc7d909bba0ca, type: 2}
+    matOff: {fileID: 2100000, guid: 8a29ba658f4fd40699ca990cf9254d66, type: 2}
+    color: 2
+  - matOn: {fileID: 2100000, guid: a2a0397243ab44725b34125e71e37164, type: 2}
+    matOff: {fileID: 2100000, guid: a356d98141be44c11a6cb016ea96de03, type: 2}
+    color: 3
+  - matOn: {fileID: 2100000, guid: dfd1b9f6655144776abe733474eac06f, type: 2}
+    matOff: {fileID: 2100000, guid: efe564536ad9c4d389a9c3d5c111111f, type: 2}
+    color: 4
+  - matOn: {fileID: 2100000, guid: 2360221716e0545b68b2074561c5d5a0, type: 2}
+    matOff: {fileID: 2100000, guid: 5ffe19f43a18449bc8653a6081dbd268, type: 2}
+    color: 5
+  - matOn: {fileID: 2100000, guid: 8092a666e6be34adda59173e2154e4b5, type: 2}
+    matOff: {fileID: 2100000, guid: 12f570e221e504455bc9c4c66b111ec3, type: 2}
+    color: 6
+  - matOn: {fileID: 2100000, guid: 1aeddc9abe8f74d9191f17d5e70992c8, type: 2}
+    matOff: {fileID: 2100000, guid: 3495b1a028bc945028426f5575a8b7e5, type: 2}
+    color: 7
+  - matOn: {fileID: 2100000, guid: 6f8f194cdf14648a8ba22b846bd08180, type: 2}
+    matOff: {fileID: 2100000, guid: 95c9f31405a99469c81dfbaffa719bf9, type: 2}
+    color: 8
+  light1: {fileID: 2036858881}
+  light2: {fileID: 1827473338}
 --- !u!1 &1300845511
 GameObject:
   m_ObjectHideFlags: 0
@@ -12748,6 +12793,42 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1793988274}
+--- !u!1 &1827473333 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100272, guid: 8c125da3b2a9142828a7f72e45cdaf37, type: 3}
+  m_PrefabInternal: {fileID: 1202844545}
+--- !u!114 &1827473335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1827473333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 398efb6481eb34885815e374aad3f3c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lightMats: []
+  buttonId: 1
+  mButton: {fileID: 0}
+  menu: {fileID: 0}
+--- !u!65 &1827473337
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1827473333}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.06589583, y: 0.065490946, z: 0.053193275}
+  m_Center: {x: -0.00000081022694, y: 0.000020066276, z: 0.0063518016}
+--- !u!23 &1827473338 stripped
+MeshRenderer:
+  m_PrefabParentObject: {fileID: 2300266, guid: 8c125da3b2a9142828a7f72e45cdaf37,
+    type: 3}
+  m_PrefabInternal: {fileID: 1202844545}
 --- !u!1 &1834163133
 GameObject:
   m_ObjectHideFlags: 0
@@ -13643,6 +13724,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 397578056}
   m_RootOrder: 2
+--- !u!1 &2036858876 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100270, guid: 8c125da3b2a9142828a7f72e45cdaf37, type: 3}
+  m_PrefabInternal: {fileID: 1202844545}
+--- !u!65 &2036858880
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2036858876}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.06589584, y: 0.065490946, z: 0.053193275}
+  m_Center: {x: -0.000000810227, y: 0.000020036474, z: 0.00635204}
+--- !u!23 &2036858881 stripped
+MeshRenderer:
+  m_PrefabParentObject: {fileID: 2300264, guid: 8c125da3b2a9142828a7f72e45cdaf37,
+    type: 3}
+  m_PrefabInternal: {fileID: 1202844545}
 --- !u!1 &2046955541
 GameObject:
   m_ObjectHideFlags: 0

@@ -43,7 +43,7 @@ public class PlayerDataController : UnitySingletonPersistent<PlayerDataControlle
 	}
 
 	void OnDisable () {
-		Messenger.RemoveListener <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), HandleSelectVehicle);
+//		Messenger.RemoveListener <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), HandleSelectVehicle);
 //		Messenger.RemoveListener (EventManager.GUI.PURCHASEVEHICLE.ToString (), HandlePurchaseVehicle);
 	}
 	#endregion MONO

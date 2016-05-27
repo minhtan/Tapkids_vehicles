@@ -621,6 +621,12 @@ MonoBehaviour:
     matId: 0
     maxSpeed: 0
     costPoint: 50
+    carMats:
+    - mat: {fileID: 2100000, guid: 3e211a97a8f2b4818b5f723b6cb3082d, type: 2}
+      color: 7
+    - mat: {fileID: 2100000, guid: 4ae13d21abec94abf8c55a70d9192e44, type: 2}
+      color: 0
+    garageScale: 1.45
   wheelColliders:
   - {fileID: 14696208}
   - {fileID: 14681258}
@@ -764,6 +770,10 @@ Prefab:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 0}
+      propertyPath: vehicle.carMats.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
       propertyPath: vehicle.name
       value: GabageTruck
       objectReference: {fileID: 0}
@@ -775,6 +785,22 @@ Prefab:
       propertyPath: vehicle.costPoint
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: vehicle.garageScale
+      value: 1.45
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: vehicle.carMats.Array.data[0].color
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: vehicle.carMats.Array.data[0].mat
+      value: 
+      objectReference: {fileID: 2100000, guid: 3e211a97a8f2b4818b5f723b6cb3082d, type: 2}
+    - target: {fileID: 0}
+      propertyPath: vehicle.carMats.Array.data[1].mat
+      value: 
+      objectReference: {fileID: 2100000, guid: 4ae13d21abec94abf8c55a70d9192e44, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 130188}

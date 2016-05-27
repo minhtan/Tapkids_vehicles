@@ -610,6 +610,12 @@ MonoBehaviour:
     matId: 0
     maxSpeed: 0
     costPoint: 50
+    carMats:
+    - mat: {fileID: 2100000, guid: 098794d6032bc4eb68b42d64d8c346c4, type: 2}
+      color: 6
+    - mat: {fileID: 2100000, guid: e526c3e03a53140c7b8d42593d2191d1, type: 2}
+      color: 4
+    garageScale: 1.55
   wheelColliders:
   - {fileID: 14691904}
   - {fileID: 14664376}
@@ -764,6 +770,10 @@ Prefab:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 0}
+      propertyPath: vehicle.carMats.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
       propertyPath: vehicle.name
       value: Limousine
       objectReference: {fileID: 0}
@@ -775,6 +785,26 @@ Prefab:
       propertyPath: vehicle.costPoint
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: vehicle.garageScale
+      value: 1.55
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: vehicle.carMats.Array.data[0].color
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: vehicle.carMats.Array.data[1].color
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: vehicle.carMats.Array.data[0].mat
+      value: 
+      objectReference: {fileID: 2100000, guid: 098794d6032bc4eb68b42d64d8c346c4, type: 2}
+    - target: {fileID: 0}
+      propertyPath: vehicle.carMats.Array.data[1].mat
+      value: 
+      objectReference: {fileID: 2100000, guid: e526c3e03a53140c7b8d42593d2191d1, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 175580}
