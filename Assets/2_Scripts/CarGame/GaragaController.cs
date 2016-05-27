@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+using System;
+using System.Linq;
 public class GaragaController : MonoBehaviour {
 
 	// TODO: 
@@ -24,7 +25,7 @@ public class GaragaController : MonoBehaviour {
 	#endregion public members
 
 	#region private members
-	private List<GameObject> vehicles;
+	public List<GameObject> vehicles;
 	private Transform mTransform;
 
 	private int lastUnlockedIndex;
@@ -41,16 +42,16 @@ public class GaragaController : MonoBehaviour {
 	}
 	void OnEnable () {
 		Messenger.AddListener <int> (EventManager.GUI.SELECT_VEHICLE.ToString (), HandleSelectVehicle);
-//		Messenger.AddListener (EventManager.GUI.ENTER_GARAGE.ToString (), HandleEnterGarage);
 		Messenger.AddListener (EventManager.GUI.TO_MENU.ToString (), HandleExitGarage);
+//		Messenger.AddListener (EventManager.GUI.TO_GARAGE.ToString (), HandleEnterGarage);
 		Messenger.AddListener (EventManager.GUI.PURCHASE_VEHICLE.ToString (), HandlePurchaseVehicle);
 		Messenger.AddListener <int> (EventManager.GUI.CHANGE_MATERIAL.ToString (), HandleChangeMaterial);
 	}
 
 	void OnDisable () {
 		Messenger.RemoveListener <int> (EventManager.GUI.SELECT_VEHICLE.ToString (), HandleSelectVehicle);
-//		Messenger.RemoveListener (EventManager.GUI.ENTER_GARAGE.ToString (), HandleEnterGarage);
 		Messenger.RemoveListener (EventManager.GUI.TO_MENU.ToString (), HandleExitGarage);
+//		Messenger.AddListener (EventManager.GUI.TO_GARAGE.ToString (), HandleEnterGarage);
 		Messenger.RemoveListener (EventManager.GUI.PURCHASE_VEHICLE.ToString (), HandlePurchaseVehicle);
 		Messenger.RemoveListener <int> (EventManager.GUI.CHANGE_MATERIAL.ToString (), HandleChangeMaterial);
 	}
@@ -63,14 +64,15 @@ public class GaragaController : MonoBehaviour {
 
 		// then setup garage
 		for (int i = 0; i < GameConstant.fourWheels.Count; i++) {
-			StartCoroutine (SetupCar (GameConstant.fourWheels[i]));
+			StartCoroutine (SetupCar (GameConstant.fourWheels[i], () => {
+				vehicles = vehicles.OrderBy (x => x.GetComponent <ArcadeCarController> ().vehicle.id).ToList();
+			}));
 		}
-
-
 	}
-	private IEnumerator SetupCar (string vehicleName) {
+
+	private IEnumerator SetupCar (string _vehicleName, System.Action _callback) {
 		yield return new WaitForSeconds (1f);
-		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (GameConstant.assetBundleName, vehicleName, (bundle) => {
+		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (GameConstant.assetBundleName, _vehicleName, (bundle) => {
 			GameObject carGameObject = Instantiate (bundle, initPos.position, Quaternion.identity) as GameObject;
 			vehicles.Add (carGameObject);
 			carGameObject.GetComponent <Rigidbody> ().isKinematic = true;
@@ -98,24 +100,29 @@ public class GaragaController : MonoBehaviour {
 			// update player current car 
 			if (PlayerDataController.Instance.mPlayer.vehicleId == carGameObject.GetComponent <ArcadeCarController> ().vehicle.id) {
 				carGameObject.SetActive (true);
-				currentSelectedIndex = vehicles.IndexOf (carGameObject);
+				currentSelectedIndex = HandleCurrentIndex (vehicles.IndexOf (carGameObject) , 0);
 				lastUnlockedIndex = currentSelectedIndex;
 
-				vehicles [currentSelectedIndex - 1].transform.position = prevPos.position;
-				vehicles [currentSelectedIndex - 1].transform.rotation = prevPos.rotation;
-				vehicles [currentSelectedIndex - 1].SetActive (true);
+				vehicles [HandleCurrentIndex (currentSelectedIndex, -1)].transform.position = prevPos.position;
+				vehicles [HandleCurrentIndex (currentSelectedIndex, -1)].transform.rotation = prevPos.rotation;
+				vehicles [HandleCurrentIndex (currentSelectedIndex, -1)].SetActive (true);
 
 				carGameObject.transform.localPosition = diskUp.position;
-//				curVehicleRotateId = LeanTween.rotateAroundLocal (carGameObject, Vector3.up, 360f, 10f).setLoopClamp().id;
+
+				carGameObject.transform.localScale = new Vector3 (carGameObject.GetComponent <ArcadeCarController> ().garageScale,carGameObject.GetComponent <ArcadeCarController> ().garageScale,carGameObject.GetComponent <ArcadeCarController> ().garageScale);
+				curVehicleRotateId = LeanTween.rotateAroundLocal (carGameObject, Vector3.up, 360f, 10f).setLoopClamp().id;
 
 				Debug.Log (carGameObject.GetComponent <ArcadeCarController> ().vehicle.matId);
 
 				Messenger.Broadcast <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), carGameObject.GetComponent <ArcadeCarController> ().vehicle);
 			} else if (currentSelectedIndex != 0) {
-				vehicles [currentSelectedIndex + 1].transform.position = nextPos.position;
-				vehicles [currentSelectedIndex + 1].transform.rotation = nextPos.rotation;
-				vehicles [currentSelectedIndex + 1].SetActive (true);
+				vehicles [HandleCurrentIndex (currentSelectedIndex, 1)].transform.position = nextPos.position;
+				vehicles [HandleCurrentIndex (currentSelectedIndex, 1)].transform.rotation = nextPos.rotation;
+				vehicles [HandleCurrentIndex (currentSelectedIndex, 1)].SetActive (true);
 			} 
+			if (_vehicleName == GameConstant.fourWheels [GameConstant.fourWheels.Count - 1]) {
+				_callback ();
+			}
 		}));
 	}
 
@@ -130,14 +137,19 @@ public class GaragaController : MonoBehaviour {
 
 
 	#region private functions
-	int HandleCurrentIndex (int index) {
-		if (index >= vehicles.Count) {
-			index = 0;
-		} else if (index < 0) {
-			index = vehicles.Count - 1;
+	int HandleCurrentIndex (int index, int increment) {
+		int offset = 0;
+		if ((index + increment) >= vehicles.Count) {
+			offset = (index + increment) - vehicles.Count;
+			index = 0;	
+		} else if ((index + increment) < 0) {
+			offset = index + increment;
+			index = vehicles.Count;
 		} else {
 			// nothing
+			offset = increment;
 		}
+		index += offset;
 		return index;
 
 	}
@@ -157,94 +169,83 @@ public class GaragaController : MonoBehaviour {
 	}
 
 	void NextOne () {
-		LeanTween.cancelAll (); 
-
-		LeanTween.scale (vehicles [currentSelectedIndex], Vector3.zero, .5f).setEase (LeanTweenType.easeInCirc);
-		LeanTween.move (vehicles [currentSelectedIndex], diskDown.position, .5f).setEase (LeanTweenType.easeInCirc).setOnComplete (NextTwo);
-		LeanTween.move (disk.gameObject, diskDown.position, .5f).setEase (LeanTweenType.easeInCirc);
-		StartCoroutine (MoveVehicle (vehicles [currentSelectedIndex - 1].transform, spline4, 3f, delegate {
-			vehicles [currentSelectedIndex - 1].SetActive (false);
+		vehicles [HandleCurrentIndex (currentSelectedIndex, 2)].SetActive (true);
+		StartCoroutine (MoveVehicle (vehicles [HandleCurrentIndex (currentSelectedIndex, 2)].transform, spline1, 1f, () => {
 		}));
 
-//		HandleEvalator (vehicles [currentSelectedIndex], false);
-//		HandleSpline4 (vehicles [currentSelectedIndex -1], null);
-//		HandleEvalator (vehicles [currentSelectedIndex], false);
-//		HandleSpline4 (vehicles [currentSelectedIndex -1], null);
+		LeanTween.scale (vehicles [HandleCurrentIndex (currentSelectedIndex, 1)], Vector3.zero, 1f).setEase (LeanTweenType.easeInQuint);
+		StartCoroutine (MoveVehicle (vehicles [HandleCurrentIndex (currentSelectedIndex, 1)].transform, spline2, 1f, null));
 
+		HandleElevator (vehicles [currentSelectedIndex], false, null);
+
+		StartCoroutine (MoveVehicle (vehicles [HandleCurrentIndex (currentSelectedIndex, -1)].transform, spline4, 1f, () => { 
+			vehicles [HandleCurrentIndex (currentSelectedIndex, -1)].SetActive (false);
+			NextTwo(); 
+		}));
 	}
+
 	void NextTwo () {
-		// next vehicle
-		LeanTween.scale (vehicles [currentSelectedIndex + 1], Vector3.zero, 1f).setEase (LeanTweenType.easeInQuint);
-		StartCoroutine (MoveVehicle (vehicles [currentSelectedIndex + 1].transform, spline2, 1f, () => { }));
-//		HandleSpline2 (vehicles [currentSelectedIndex + 1], null);
-		// current vehicle
 		LeanTween.scale (vehicles [currentSelectedIndex], Vector3.one, 1f).setEase (LeanTweenType.easeOutQuint);
-		StartCoroutine (MoveVehicle (vehicles [currentSelectedIndex].transform, spline3, 1f, NextThree));
-//		HandleSpline3 (vehicles [currentSelectedIndex], null);
-	}
-	void NextThree () {
-		LeanTween.scale (vehicles [currentSelectedIndex + 1], Vector3.one, .5f).setEase (LeanTweenType.easeInQuint);
-		LeanTween.move (vehicles [currentSelectedIndex + 1], diskUp.position, .5f).setEase (LeanTweenType.easeOutCirc);
-		LeanTween.move (disk.gameObject, diskUp.position, .5f).setEase (LeanTweenType.easeOutCirc);
-//		HandleEvalator (vehicles [currentSelectedIndex + 1], true);
+		StartCoroutine (MoveVehicle (vehicles [currentSelectedIndex].transform, spline3, 1f, () => {
+		}));
 
-		vehicles [currentSelectedIndex + 2].SetActive (true);
-		StartCoroutine (MoveVehicle (vehicles [currentSelectedIndex + 2].transform, spline1, 2f, () => { 
+		HandleElevator (vehicles [HandleCurrentIndex (currentSelectedIndex, 1)], true, () => {
+			
 			currentSelectedIndex += 1;
-			currentSelectedIndex = HandleCurrentIndex (currentSelectedIndex);
+			currentSelectedIndex = HandleCurrentIndex (currentSelectedIndex, 0);
 			if (PlayerDataController.Instance.unlockedIds.Contains (vehicles [currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle.id))
 				lastUnlockedIndex = currentSelectedIndex;
 			valid = true;
-		}));
+
+			curVehicleRotateId = LeanTween.rotateAroundLocal (vehicles [currentSelectedIndex], Vector3.up, 360f, 10f).setLoopClamp().id;
+		});
 	}
 
 	void PrevOne () {
-		vehicles [currentSelectedIndex - 2].SetActive (true);
-		StartCoroutine (MoveVehicle (vehicles [currentSelectedIndex - 2].transform, spline4, 3f, null, false));
+		vehicles [HandleCurrentIndex (currentSelectedIndex, -2)].SetActive (true);
+		StartCoroutine (MoveVehicle (vehicles [HandleCurrentIndex (currentSelectedIndex, -2)].transform, spline4, 1f,  () => { 
+			PrevTwo(); 
+		}, false));
 
-		LeanTween.scale (vehicles [currentSelectedIndex - 1], Vector3.zero, 1f).setEase (LeanTweenType.easeOutQuint);
-		StartCoroutine (MoveVehicle (vehicles [currentSelectedIndex - 1].transform, spline3, 2f, null, false));
+		LeanTween.scale (vehicles [HandleCurrentIndex (currentSelectedIndex, -1)], Vector3.zero, 1f).setEase (LeanTweenType.easeInQuint);
+		StartCoroutine (MoveVehicle (vehicles [HandleCurrentIndex (currentSelectedIndex, -1)].transform, spline3, 1f, () => {
+		}, false));
+		HandleElevator (vehicles [currentSelectedIndex], false, null);
 
-		LeanTween.scale (vehicles [currentSelectedIndex], Vector3.zero, 1f).setEase (LeanTweenType.easeOutQuint);
-		LeanTween.move (vehicles [currentSelectedIndex], diskDown.position, .5f).setEase (LeanTweenType.easeInCirc).setOnComplete (PrevTwo);
-
-		LeanTween.move (disk.gameObject, diskDown.position, .5f).setEase (LeanTweenType.easeInCirc);
+		StartCoroutine (MoveVehicle (vehicles [HandleCurrentIndex (currentSelectedIndex, 1)].transform, spline1, 1f, () => {
+			vehicles [HandleCurrentIndex (currentSelectedIndex, 1)].SetActive (false);
+		}, false));
 	}
 
 	void PrevTwo () {
-		StartCoroutine (MoveVehicle (vehicles [currentSelectedIndex + 1].transform, spline1, 2f, () => {
-			vehicles [currentSelectedIndex + 1].SetActive (false);
+		LeanTween.scale (vehicles [currentSelectedIndex], Vector3.one, 1f);
+		StartCoroutine (MoveVehicle (vehicles [currentSelectedIndex].transform, spline2, 1f, () => {
 		}, false));
 
-		LeanTween.scale (vehicles [currentSelectedIndex], Vector3.one, 1f).setEase (LeanTweenType.easeOutQuint);
-		StartCoroutine (MoveVehicle (vehicles [currentSelectedIndex].transform, spline2, 1f, PrevThree, false));
-	}
-
-	void PrevThree () {
-		LeanTween.scale (vehicles [currentSelectedIndex - 1], Vector3.one, .5f).setEase (LeanTweenType.easeInQuint);
-		LeanTween.move (vehicles [currentSelectedIndex - 1], diskUp.position, .5f).setEase (LeanTweenType.easeOutCirc);
-		LeanTween.move (disk.gameObject, diskUp.position, .5f).setEase (LeanTweenType.easeOutCirc).setOnComplete (() => {
+		HandleElevator (vehicles [HandleCurrentIndex (currentSelectedIndex, -1)], true, () => {
 			currentSelectedIndex -= 1;
-			currentSelectedIndex = HandleCurrentIndex (currentSelectedIndex);
+			currentSelectedIndex = HandleCurrentIndex (currentSelectedIndex, 0);
 			if (PlayerDataController.Instance.unlockedIds.Contains (vehicles [currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle.id))
 				lastUnlockedIndex = currentSelectedIndex;
 			valid = true;
+			curVehicleRotateId = LeanTween.rotateAroundLocal (vehicles [currentSelectedIndex], Vector3.up, 360f, 10f).setLoopClamp().id;
 		});
 	}
+
 	// move vehicle
 	IEnumerator MoveVehicle (Transform _trans, BezierSpline _spline, float _duration, System.Action _callback, bool _isGoingForward = true) {
 		float progress = _isGoingForward ? 0 : 1;
-			
+		float _duration_ = 1f;
 		while (true) {
 			if (_isGoingForward) {
-				progress += Time.deltaTime / _duration;
+				progress += Time.deltaTime / _duration_;
 				if (progress > 1f) {
 					if (_callback != null)
 						_callback ();
 					yield break;
 				}
 			}else{
-				progress -= Time.deltaTime / _duration;
+				progress -= Time.deltaTime / _duration_;
 				if (progress < 0f) {
 					if (_callback != null)
 						_callback ();
@@ -259,9 +260,7 @@ public class GaragaController : MonoBehaviour {
 		}
 	}
 
-//	private void HandleEnterGarage () {
-//		lastUnlockedIndex = currentSelectedIndex;
-//	}
+
 	MainMenuController3D menu;
 	private void HandleExitGarage () {
 		if (menu == null){
@@ -272,71 +271,84 @@ public class GaragaController : MonoBehaviour {
 		Debug.Log ("exit"+menu.IsInMenu);
 		// check if current select car is not unlocked 
 		if (!PlayerDataController.Instance.unlockedIds.Contains (vehicles [currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle.id)) {
-			// phase 1: clear vehicles
-			StartCoroutine (MoveVehicle (vehicles [currentSelectedIndex - 1].transform, spline4, 3f, () => {
-				vehicles [currentSelectedIndex - 1].SetActive (false);
-			}));
-
-			LeanTween.move (vehicles [currentSelectedIndex], diskDown.position, .5f).setEase (LeanTweenType.easeInCirc).setOnComplete (() => {
-				StartCoroutine (MoveVehicle (vehicles [currentSelectedIndex].transform, spline3, 1f, () => {
-					StartCoroutine (MoveVehicle (vehicles [currentSelectedIndex].transform, spline4, 3f,  () => {
-						vehicles [currentSelectedIndex].SetActive (false);
-					}));
-				}));
-			});
-			LeanTween.move (disk.gameObject, diskDown.position, .5f).setEase (LeanTweenType.easeInCirc);
-			LeanTween.scale (vehicles [currentSelectedIndex + 1], Vector3.zero, 1f).setEase (LeanTweenType.easeInCirc);
-
-			LeanTween.scale (vehicles [currentSelectedIndex + 1], Vector3.zero, 1f);
-			StartCoroutine (MoveVehicle (vehicles [currentSelectedIndex + 1].transform, spline2, 1f, () => {
-				LeanTween.scale (vehicles [currentSelectedIndex + 1], Vector3.one, 1f).setEase (LeanTweenType.easeOutQuint);
-				StartCoroutine (MoveVehicle (vehicles [currentSelectedIndex + 1].transform, spline3, 1f, () => {
-					StartCoroutine (MoveVehicle (vehicles [currentSelectedIndex + 1].transform, spline4, 3f, () => {
-						vehicles [currentSelectedIndex + 1].SetActive (false);
-						ReSetupVehicles ();
-					}));
-				}));
-			}));
-			// TODO phase 2: re-setup vehicle
-
+			ClearVehicle ();
 		}
 	}
 
-	private void ReSetupVehicles () {
+	void ClearVehicle () {
+		LeanTween.move (vehicles [currentSelectedIndex], diskDown.position, .5f).setEase (LeanTweenType.easeInCirc).setOnComplete (() => {
+			StartCoroutine (MoveVehicle (vehicles [currentSelectedIndex].transform, spline3, 1f, () => {
+				StartCoroutine (MoveVehicle (vehicles [currentSelectedIndex].transform, spline4, 3f,  () => {
+					vehicles [currentSelectedIndex].SetActive (false);
+				}));
+			}));
+
+			StartCoroutine (MoveVehicle (vehicles [HandleCurrentIndex (currentSelectedIndex, -1)].transform, spline4, 3f, () => {
+				vehicles [HandleCurrentIndex (currentSelectedIndex, -1)].SetActive (false);
+			}));
+
+			LeanTween.scale (vehicles [HandleCurrentIndex (currentSelectedIndex, 1)], Vector3.zero, 1f);
+			StartCoroutine (MoveVehicle (vehicles [HandleCurrentIndex (currentSelectedIndex, 1)].transform, spline2, 1f, () => {
+				LeanTween.scale (vehicles [HandleCurrentIndex (currentSelectedIndex, 1)], Vector3.one, 1f).setEase (LeanTweenType.easeOutQuint);
+				StartCoroutine (MoveVehicle (vehicles [HandleCurrentIndex (currentSelectedIndex, 1)].transform, spline3, 1f, () => {
+					StartCoroutine (MoveVehicle (vehicles [HandleCurrentIndex (currentSelectedIndex, 1)].transform, spline4, 3f, () => {
+						vehicles [HandleCurrentIndex (currentSelectedIndex, 1)].SetActive (false);
+						StartCoroutine (ReSetupVehicles ());
+					}));
+				}));
+			}));
+		});
+		LeanTween.move (disk.gameObject, diskDown.position, .5f).setEase (LeanTweenType.easeInCirc);
+		LeanTween.scale (vehicles [HandleCurrentIndex (currentSelectedIndex, 1)], Vector3.zero, 1f).setEase (LeanTweenType.easeInCirc);
+	}
+
+	IEnumerator ReSetupVehicles () {
 		vehicles [lastUnlockedIndex - 1].SetActive (true);
-		StartCoroutine (MoveVehicle (vehicles [lastUnlockedIndex - 1].transform, spline1, 2f, () => {
+		StartCoroutine (MoveVehicle (vehicles [lastUnlockedIndex - 1].transform, spline1, 1f, () => {
 			LeanTween.scale (vehicles [lastUnlockedIndex - 1], Vector3.zero, 1f).setEase (LeanTweenType.easeInQuint);
 			StartCoroutine (MoveVehicle (vehicles [lastUnlockedIndex - 1].transform, spline2, 1f, () => {
 				LeanTween.scale (vehicles [lastUnlockedIndex - 1], Vector3.one, 1f).setEase (LeanTweenType.easeOutQuint);
 				StartCoroutine (MoveVehicle (vehicles [lastUnlockedIndex - 1].transform, spline3, 1f, null));
 			}));
+		}));
 
-			vehicles [lastUnlockedIndex].SetActive (true);
-			StartCoroutine (MoveVehicle (vehicles [lastUnlockedIndex].transform, spline1, 2f, () => {
-				LeanTween.scale (vehicles [lastUnlockedIndex], Vector3.zero, 1f).setEase (LeanTweenType.easeInQuint);
-				StartCoroutine (MoveVehicle (vehicles [lastUnlockedIndex].transform, spline2, 1f, () => {
-					LeanTween.move (disk.gameObject, diskUp.position, .5f).setEase (LeanTweenType.easeInCirc);
+		yield return new WaitForSeconds (.5f);
+		vehicles [lastUnlockedIndex].SetActive (true);
+		StartCoroutine (MoveVehicle (vehicles [lastUnlockedIndex].transform, spline1, 1f, () => {
+			LeanTween.scale (vehicles [lastUnlockedIndex], Vector3.zero, 1f).setEase (LeanTweenType.easeInQuint);
+			StartCoroutine (MoveVehicle (vehicles [lastUnlockedIndex].transform, spline2, 1f, () => {
+				LeanTween.move (disk.gameObject, diskUp.position, .5f).setEase (LeanTweenType.easeInCirc);
 
-					LeanTween.scale (vehicles [lastUnlockedIndex], Vector3.one, .5f).setEase (LeanTweenType.easeInCirc);
-					LeanTween.move (vehicles [lastUnlockedIndex], diskUp.position, .5f).setEase (LeanTweenType.easeInCirc);
-
-					vehicles [lastUnlockedIndex + 1].SetActive (true);
-					StartCoroutine (MoveVehicle (vehicles [lastUnlockedIndex + 1].transform, spline1, 2f, () => {
-						currentSelectedIndex = lastUnlockedIndex;
-					}));
-				}));
+				LeanTween.scale (vehicles [lastUnlockedIndex], Vector3.one, .5f).setEase (LeanTweenType.easeInCirc);
+				LeanTween.move (vehicles [lastUnlockedIndex], diskUp.position, .5f).setEase (LeanTweenType.easeInCirc);
 
 
 			}));
 		}));
-	}
-	// TODO: refactor spline codes
 
-	void HandleEvalator (GameObject _go, bool _isGoingUp) {
-		LeanTween.scale (_go, _isGoingUp ? Vector3.one : Vector3.zero, .5f).setEase (LeanTweenType.easeInCirc);
-		LeanTween.move (_go, _isGoingUp ? diskUp.position : diskDown.position, .5f).setEase (LeanTweenType.easeInCirc);	
-		LeanTween.move (disk.gameObject, _isGoingUp ? diskUp.position : diskDown.position, .5f).setEase (LeanTweenType.easeInCirc);
+		yield return new WaitForSeconds (.5f);
+		vehicles [lastUnlockedIndex + 1].SetActive (true);
+		StartCoroutine (MoveVehicle (vehicles [lastUnlockedIndex + 1].transform, spline1, 1f, () => {
+			currentSelectedIndex = lastUnlockedIndex;
+		}));
 	}
+
+	void HandleElevator (GameObject _go, bool _isGoingUp, System.Action _callback) {
+		float scaleFacetor = _go.GetComponent <ArcadeCarController> ().garageScale;
+		if (_isGoingUp) {
+			LeanTween.scale (_go, new Vector3 (scaleFacetor, scaleFacetor, scaleFacetor), .5f).setEase (LeanTweenType.easeOutQuint);
+			LeanTween.move (_go, diskUp.position, .5f).setEase (LeanTweenType.easeOutQuint);	
+			LeanTween.move (disk.gameObject, diskUp.position , .5f).setEase (LeanTweenType.easeOutQuint).setOnComplete (_callback);
+		} else {
+			LeanTween.scale (_go, Vector3.zero, .5f).setEase (LeanTweenType.easeInQuint).setOnComplete ( () => {
+				LeanTween.cancel (curVehicleRotateId);
+			});
+			LeanTween.move (_go, diskDown.position, .5f).setEase (LeanTweenType.easeInQuint);	
+			LeanTween.move (disk.gameObject, diskDown.position, .5f).setEase (LeanTweenType.easeInQuint).setOnComplete (_callback);
+		}
+	}
+
+	// TODO: refactor spline codes
 
 	void HandleSpline1 (GameObject _go, System.Action _calback, bool _isGoingForward = true) {
 		if (_isGoingForward) {
