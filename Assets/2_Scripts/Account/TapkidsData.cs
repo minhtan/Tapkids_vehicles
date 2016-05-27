@@ -49,8 +49,8 @@ public class Vehicle {
 		public Material mat;
 		public CarColor color;
 	}
-
-	[SerializeField] public CarMat[] carMats;
+	[System.NonSerialized]
+	public CarMat[] carMats;
 	public float garageScale;
 	// TODO: ... customize color index
 

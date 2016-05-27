@@ -608,12 +608,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5248ffd71b704e1d90954e56bc87d4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  carMats:
-  - mat: {fileID: 2100000, guid: b2b9456b35e184ba2af0c2a90f2b56cd, type: 2}
-    color: 0
-  - mat: {fileID: 2100000, guid: 46b5925597d034ddfb51bd201302a29e, type: 2}
-    color: 4
-  garageScale: 2.6
   vehicle:
     id: 2
     name: Car
@@ -623,7 +617,7 @@ MonoBehaviour:
     costPoint: 30
     carMats:
     - mat: {fileID: 2100000, guid: b2b9456b35e184ba2af0c2a90f2b56cd, type: 2}
-      color: 0
+      color: 2
     - mat: {fileID: 2100000, guid: 46b5925597d034ddfb51bd201302a29e, type: 2}
       color: 4
     garageScale: 2.6
@@ -801,6 +795,10 @@ Prefab:
       propertyPath: vehicle.carMats.Array.data[1].mat
       value: 
       objectReference: {fileID: 2100000, guid: 46b5925597d034ddfb51bd201302a29e, type: 2}
+    - target: {fileID: 0}
+      propertyPath: vehicle.carMats.Array.data[0].color
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 184836}
