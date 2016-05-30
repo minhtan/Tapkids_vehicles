@@ -5,6 +5,7 @@ using Lean;
 
 public class MainMenuController3D : MonoBehaviour {
 
+	bool isLocked = false;
 	bool isInMenu = true;
 	public bool IsInMenu {
 		get {
@@ -43,27 +44,43 @@ public class MainMenuController3D : MonoBehaviour {
 	
 	void OnEnable(){
 		LeanTouch.OnFingerSwipe += OnFingerSwipe;
-		LeanTouch.OnFingerTap += OnTap;
 		LeanTouch.OnFingerDown += OnFingerDown;
+		LeanTouch.OnFingerTap += OnTap;
 		LeanTouch.OnFingerDrag += OnDrag;
 		LeanTouch.OnFingerUp += OnFingerUp;
 	}
 
 	void OnDisable(){
 		LeanTouch.OnFingerSwipe -= OnFingerSwipe;
-		LeanTouch.OnFingerTap -= OnTap;
 		LeanTouch.OnFingerDown -= OnFingerDown;
+		LeanTouch.OnFingerTap -= OnTap;
 		LeanTouch.OnFingerDrag -= OnDrag;
 		LeanTouch.OnFingerUp -= OnFingerUp;
 	}
 
 	void OnFingerDown(LeanFinger fg){
+		isLocked = LeanTouch.GuiInUse;
+
 		drag = 0;
 	}
 
 	void OnDrag(LeanFinger fg){
+		if(isLocked){
+			return;
+		}
 		drag += fg.DeltaScreenPosition.x;
 		LeanTween.rotateAroundLocal (gameObject, Vector3.up, fg.DeltaScreenPosition.x * 0.03f, 0);
+	}
+
+	void OnTap(LeanFinger fg){
+		if(!isLocked){
+			RaycastHit hitInfo;
+			Ray ray = fg.GetRay ();
+
+			if (Physics.Raycast (ray, out hitInfo)) {
+				Messenger.Broadcast<int> (EventManager.GUI.MENU_BTN_TAP.ToString (), hitInfo.collider.gameObject.GetInstanceID ());
+			}
+		}
 	}
 
 	void OnFingerUp(LeanFinger fg){
@@ -84,16 +101,11 @@ public class MainMenuController3D : MonoBehaviour {
 		}
 	}
 
-	void OnTap(LeanFinger fg){
-		RaycastHit hitInfo;
-		Ray ray = fg.GetRay ();
-
-		if (Physics.Raycast (ray, out hitInfo) && !LeanTouch.GuiInUse) {
-			Messenger.Broadcast<int> (EventManager.GUI.MENU_BTN_TAP.ToString (), hitInfo.collider.gameObject.GetInstanceID ());
-		}
-	}
-
 	void OnFingerSwipe(LeanFinger finger){
+		if(isLocked){
+			return;
+		}
+
 		var swipe = finger.SwipeDelta;
 
 		//swipe left
