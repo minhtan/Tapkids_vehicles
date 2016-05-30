@@ -134,15 +134,27 @@ public class CarGameGenerator : MonoBehaviour {
 		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (GameConstant.assetBundleName, PlayerDataController.Instance.mPlayer.vehicleName, (bundle) => {
 			carGameObject = Instantiate (bundle, cartPoint.position + pointOffset, Quaternion.identity) as GameObject;
 
-			for (int i = 0; i < PlayerDataController.Instance.mPlayer.unlockedVehicles.Count; i++) {
-				if (carGameObject.GetComponent <ArcadeCarController> ().vehicle.id == PlayerDataController.Instance.mPlayer.unlockedVehicles [i].id) {
+//			for (int i = 0; i < PlayerDataController.Instance.mPlayer.unlockedVehicles.Count; i++) {
+//				if (carGameObject.GetComponent <ArcadeCarController> ().vehicle.id == PlayerDataController.Instance.mPlayer.unlockedVehicles [i].id) {
+//					Renderer [] renderers = carGameObject.GetComponentsInChildren <Renderer> ();
+//					for (int j = 0; j < renderers.Length; j++) {
+//						renderers [j].material = carGameObject.GetComponent <ArcadeCarController> ().vehicle.carMats [PlayerDataController.Instance.mPlayer.unlockedVehicles [i].matId].mat;
+//					}
+//					break;
+//				}
+//			}
+
+			int carId = carGameObject.GetComponent <ArcadeCarController> ().vehicle.id;
+			int matId;
+			if (PlayerDataController.Instance.mPlayer.unlockedVehicles.ContainsKey (carId)) {
+				if (PlayerDataController.Instance.mPlayer.unlockedVehicles.TryGetValue (carId, out matId)) {
 					Renderer [] renderers = carGameObject.GetComponentsInChildren <Renderer> ();
 					for (int j = 0; j < renderers.Length; j++) {
-						renderers [j].material = carGameObject.GetComponent <ArcadeCarController> ().carMats [PlayerDataController.Instance.mPlayer.unlockedVehicles [i].matId].mat;
+						renderers [j].material = carGameObject.GetComponent <ArcadeCarController> ().vehicle.carMats [matId].mat;
 					}
-					break;
 				}
 			}
+
 
 			carGameObject.transform.SetParent (mTransform, false);
 			carGameObject.SetActive (false);

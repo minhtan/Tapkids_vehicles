@@ -12,12 +12,13 @@ public class Player {
 	public int credit;
 	public int vehicleId;
 	public string vehicleName;
-	public List <Vehicle> unlockedVehicles;
+//	public List <int> unlockedVehicles;
+	public Dictionary <int, int> unlockedVehicles;
 
 	public Player () {
 	}
 
-	public Player (int _id, int _currentCredit, int _currentVehicleId, string _currentVehicleName, List <Vehicle> _unlockedVehicles) {
+	public Player (int _id, int _currentCredit, int _currentVehicleId, string _currentVehicleName, Dictionary <int, int> _unlockedVehicles) {
 		this.id = _id;
 		this.credit = _currentCredit;
 		this.vehicleId = _currentVehicleId;
@@ -25,7 +26,7 @@ public class Player {
 		this.unlockedVehicles = _unlockedVehicles;
 	}
 
-	public Player (int _id, string _name, int _currentCredit, int _currentVehicleId, string _currentVehicleName, List <Vehicle> _unlockedVehicles) {
+	public Player (int _id, string _name, int _currentCredit, int _currentVehicleId, string _currentVehicleName, Dictionary <int, int> _unlockedVehicles) {
 		this.id = _id;
 		this.name = _name;
 		this.credit = _currentCredit;
@@ -43,7 +44,15 @@ public class Vehicle {
 	public int matId;
 	public int maxSpeed;
 	public int costPoint;
-	// TODO: ... customize color index
+
+	[System.Serializable]
+	public struct CarMat {
+		public Material mat;
+		public CarColor color;
+	}
+
+	public CarMat[] carMats;
+	public float garageScale;
 
 	public Vehicle () {
 	}
@@ -114,7 +123,7 @@ public static class TapkidsData {
 		if(File.Exists(Application.persistentDataPath + "/player.tapkids")) {
 			BinaryFormatter bf = new BinaryFormatter();
 			FileStream file = File.Open(Application.persistentDataPath + "/player.tapkids", FileMode.Open);
-			players = (List<Player>)bf.Deserialize(file);
+			players = (List<Player>) bf.Deserialize(file);
 			file.Close(); 
 			return true;
 		} else {
