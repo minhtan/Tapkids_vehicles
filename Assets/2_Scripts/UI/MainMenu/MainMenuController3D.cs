@@ -88,7 +88,7 @@ public class MainMenuController3D : MonoBehaviour {
 		RaycastHit hitInfo;
 		Ray ray = fg.GetRay ();
 
-		if (Physics.Raycast (ray, out hitInfo)) {
+		if (Physics.Raycast (ray, out hitInfo) && !LeanTouch.GuiInUse) {
 			Messenger.Broadcast<int> (EventManager.GUI.MENU_BTN_TAP.ToString (), hitInfo.collider.gameObject.GetInstanceID ());
 		}
 	}

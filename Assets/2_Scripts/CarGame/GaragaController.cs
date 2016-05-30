@@ -14,7 +14,7 @@ public class GaragaController : MonoBehaviour {
 
 	#region public members
 	public Material lockedMaterial;
-	public int currentSelectedIndex;
+	private int currentSelectedIndex;
 	public Transform disk;
 
 	public Transform initPos;
@@ -22,6 +22,8 @@ public class GaragaController : MonoBehaviour {
 	public Transform prevPos;
 	public Transform diskDown;
 	public Transform diskUp;
+
+	public GameObject locker;
 	#endregion public members
 
 	#region private members
@@ -86,14 +88,25 @@ public class GaragaController : MonoBehaviour {
 			} 
 
 			// apply material matching with player data
-			for (int i = 0; i < PlayerDataController.Instance.mPlayer.unlockedVehicles.Count; i++) {
-				if (carGameObject.GetComponent <ArcadeCarController> ().vehicle.id == PlayerDataController.Instance.mPlayer.unlockedVehicles [i].id ) {
-					carGameObject.GetComponent <ArcadeCarController> ().vehicle.matId = PlayerDataController.Instance.mPlayer.unlockedVehicles [i].matId;
+//			for (int i = 0; i < PlayerDataController.Instance.mPlayer.unlockedVehicles.Count; i++) {
+//				if (carGameObject.GetComponent <ArcadeCarController> ().vehicle.id == PlayerDataController.Instance.mPlayer.unlockedVehicles [i].id ) {
+//					carGameObject.GetComponent <ArcadeCarController> ().vehicle.matId = PlayerDataController.Instance.mPlayer.unlockedVehicles [i].matId;
+//					Renderer [] renderers = carGameObject.GetComponentsInChildren <Renderer> ();
+//					for (int j = 0; j < renderers.Length; j++) {
+//						renderers [j].material = carGameObject.GetComponent <ArcadeCarController> ().vehicle.carMats [PlayerDataController.Instance.mPlayer.unlockedVehicles [i].matId].mat;
+//					}
+//					break;
+//				}
+//			}
+			int carId = carGameObject.GetComponent <ArcadeCarController> ().vehicle.id;
+			if (PlayerDataController.Instance.mPlayer.unlockedVehicles.ContainsKey (carId)) {
+				int _matID;
+				if (PlayerDataController.Instance.mPlayer.unlockedVehicles.TryGetValue (carId, out _matID)) {
+					carGameObject.GetComponent <ArcadeCarController> ().vehicle.matId = _matID;
 					Renderer [] renderers = carGameObject.GetComponentsInChildren <Renderer> ();
 					for (int j = 0; j < renderers.Length; j++) {
-						renderers [j].material = carGameObject.GetComponent <ArcadeCarController> ().vehicle.carMats [PlayerDataController.Instance.mPlayer.unlockedVehicles [i].matId].mat;
+						renderers [j].material = carGameObject.GetComponent <ArcadeCarController> ().vehicle.carMats [_matID].mat;
 					}
-					break;
 				}
 			}
 			carGameObject.transform.SetParent (mTransform, false);
@@ -270,10 +283,11 @@ public class GaragaController : MonoBehaviour {
 			menu = FindObjectOfType <MainMenuController3D> ();
 		}
 		if (menu.IsInMenu) return;
-
+	
 		// check if current select car is not unlocked 
 		if (!PlayerDataController.Instance.unlockedIds.Contains (vehicles [currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle.id)) {
 			ClearVehicle ();
+			locker.SetActive (false);
 		}
 	}
 
@@ -332,6 +346,13 @@ public class GaragaController : MonoBehaviour {
 
 	void HandleElevator (GameObject _go, bool _isGoingUp, System.Action _callback) {
 		float scaleFacetor = _go.GetComponent <ArcadeCarController> ().vehicle.garageScale;
+
+		if (!PlayerDataController.Instance.mPlayer.unlockedVehicles.ContainsKey (_go.GetComponent<ArcadeCarController> ().vehicle.id)) {
+			locker.SetActive (true);
+		} else {
+			locker.SetActive (false);
+		}
+
 		if (_isGoingUp) {
 			LeanTween.scale (_go, new Vector3 (scaleFacetor, scaleFacetor, scaleFacetor), .5f).setEase (LeanTweenType.easeOutQuint);
 			LeanTween.move (_go, diskUp.position, .5f).setEase (LeanTweenType.easeOutQuint);	
@@ -386,25 +407,29 @@ public class GaragaController : MonoBehaviour {
 	}
 
 
-	private void HandlePurchaseVehicle () {
+	 private void HandlePurchaseVehicle () {
+		// check cost
 		if (PlayerDataController.Instance.mPlayer.credit >= vehicles[currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle.costPoint) {
 			PlayerDataController.Instance.UnlockVehicle (vehicles[currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle);
-
-			// apply standard shader to unlocked car
-			Renderer[] renderers = vehicles[currentSelectedIndex].GetComponentsInChildren <Renderer> ();
-			for (int j = 0; j < renderers.Length; j++) {
-				renderers [j].material.shader = Shader.Find ("Standard");
+			// apply material car
+			int _matID;
+			if (PlayerDataController.Instance.mPlayer.unlockedVehicles.TryGetValue (vehicles[currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle.id, out _matID)) {
+				Renderer[] renderers = vehicles[currentSelectedIndex].GetComponentsInChildren <Renderer> ();
+				for (int j = 0; j < renderers.Length; j++) {
+					renderers [j].material =  vehicles[currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle.carMats [_matID].mat;
+				}
 			}
-
+			locker.SetActive (false);
 			Messenger.Broadcast <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), vehicles[currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle);
 		} else {
-			// notify player
-			Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), GameConstant.PurchaseUnsuccessful, 1f);
+//			GUIController.Instance.OpenDialog ("Deo du tien!!!")
+//				.AddButton ("Ok", UIDialogButton.Anchor.BOTTOM_CENTER);
 		}
 	}
 
 	void HandleChangeMaterial (int _matId) {
 		// update player data
+
 		Renderer[] renderers = vehicles [currentSelectedIndex].GetComponentsInChildren<Renderer> ();
 		for (int i = 0; i < renderers.Length; i++) {
 			renderers[i].material = vehicles [currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle.carMats[_matId].mat;
@@ -412,6 +437,7 @@ public class GaragaController : MonoBehaviour {
 		vehicles [currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle.matId = _matId;
 
 		PlayerDataController.Instance.UpdateVehicle (vehicles [currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle);
+		Messenger.Broadcast <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), vehicles [currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle);
 	}
 	#endregion private functions
 

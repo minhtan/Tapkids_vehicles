@@ -18,18 +18,22 @@ public class PlayerDataController : UnitySingletonPersistent<PlayerDataControlle
 			mPlayer = TapkidsData.GetPlayerById(currentPlayer);
 		} else {
 			// pre setup player vehicle
-			List <Vehicle> newCarList = new List<Vehicle> ();
+//			List <int> newCarList = new List<int> ();
+			Dictionary <int, int> newCarList = new Dictionary<int, int> ();
 			if (firstVehicle != null)
-				newCarList.Add (firstVehicle.GetComponent <ArcadeCarController> ().vehicle);
+				newCarList.Add (firstVehicle.GetComponent <ArcadeCarController> ().vehicle.id, 0);
 
-			mPlayer = new Player (0, 100, 2, "Car", newCarList); 
+			mPlayer = new Player (0, 20000, 2, "Car", newCarList); 
 
 			TapkidsData.AddPlayer (mPlayer);
 			TapkidsData.Save ();
 		}
 
-		for (int i = 0; i < mPlayer.unlockedVehicles.Count; i++) {
-			unlockedIds.Add (mPlayer.unlockedVehicles[i].id);
+//		for (int i = 0; i < mPlayer.unlockedVehicles.Count; i++) {
+//			unlockedIds.Add (mPlayer.unlockedVehicles.);
+//		}
+		foreach (KeyValuePair <int, int> d in mPlayer.unlockedVehicles) {
+			unlockedIds.Add (d.Key);
 		}
 	}
 
@@ -73,8 +77,8 @@ public class PlayerDataController : UnitySingletonPersistent<PlayerDataControlle
 	}
 
 	public void UnlockVehicle (Vehicle _unlockedVehicle) {
-		if (!mPlayer.unlockedVehicles.Contains (_unlockedVehicle)) 
-			mPlayer.unlockedVehicles.Add (_unlockedVehicle);
+		if (!mPlayer.unlockedVehicles.ContainsKey (_unlockedVehicle.id)) 
+			mPlayer.unlockedVehicles.Add (_unlockedVehicle.id, 0);
 		if (!unlockedIds.Contains (_unlockedVehicle.id)) 
 			unlockedIds.Add (_unlockedVehicle.id);
 
@@ -87,16 +91,15 @@ public class PlayerDataController : UnitySingletonPersistent<PlayerDataControlle
 	}
 
 	public void UpdateVehicle (Vehicle _vehicle) {
-//		if (mPlayer.unlockedVehicles.Contains (_vehicle)) {
-		for (int i = 0; i < mPlayer.unlockedVehicles.Count; i++) {
-			if (mPlayer.unlockedVehicles [i].id == _vehicle.id) {
-				mPlayer.unlockedVehicles [i].matId = _vehicle.matId;
-				break;
-			}
-		}
-//		} else {
-//			return;
+//		for (int i = 0; i < mPlayer.unlockedVehicles.Count; i++) {
+//			if (mPlayer.unlockedVehicles [i] == _vehicle.id) {
+//				mPlayer.unlockedVehicles [i].matId = _vehicle.matId;
+//				break;
+//			}
 //		}
+		if (mPlayer.unlockedVehicles.ContainsKey (_vehicle.id)) 
+//			mPlayer.unlockedVehicles.TryGetValue (_vehicle.id, out _vehicle.matId);
+			mPlayer.unlockedVehicles[_vehicle.id] = _vehicle.matId;
 		TapkidsData.players[currentPlayer].unlockedVehicles = mPlayer.unlockedVehicles;
 		TapkidsData.Save ();
 	}
