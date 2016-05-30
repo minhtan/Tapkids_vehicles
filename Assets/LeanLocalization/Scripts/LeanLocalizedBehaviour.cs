@@ -7,6 +7,7 @@ namespace Lean
 	{
 		// The name of the phrase we want to use
 		[LeanPhraseName]
+		[Header("defined in 7_Localization folder")]
 		public string PhraseName;
 		
 		// This gets called every time the translation needs updating
