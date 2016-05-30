@@ -15,14 +15,6 @@ public enum CarColor {
 }
 
 public class ArcadeCarController : MonoBehaviour {
-	[System.Serializable]
-	public struct CarMat {
-		public Material mat;
-		public CarColor color;
-	}
-	public CarMat[] carMats;
-	public float garageScale;
-
 	#region public members
 	[SerializeField]
 	public Vehicle vehicle;

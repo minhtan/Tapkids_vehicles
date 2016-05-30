@@ -610,6 +610,12 @@ MonoBehaviour:
     matId: 0
     maxSpeed: 0
     costPoint: 20
+    carMats:
+    - mat: {fileID: 2100000, guid: 866180584a1f2ee47ab1cb58160ac9fa, type: 2}
+      color: 0
+    - mat: {fileID: 2100000, guid: 221f970d19eb7456c91fae5318ce96e4, type: 2}
+      color: 4
+    garageScale: 1.4
   wheelColliders:
   - {fileID: 14677660}
   - {fileID: 14697498}
@@ -764,6 +770,10 @@ Prefab:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 0}
+      propertyPath: vehicle.carMats.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
       propertyPath: vehicle.name
       value: Bus
       objectReference: {fileID: 0}
@@ -787,6 +797,22 @@ Prefab:
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: vehicle.garageScale
+      value: 1.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: vehicle.carMats.Array.data[1].color
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: vehicle.carMats.Array.data[0].mat
+      value: 
+      objectReference: {fileID: 2100000, guid: 866180584a1f2ee47ab1cb58160ac9fa, type: 2}
+    - target: {fileID: 0}
+      propertyPath: vehicle.carMats.Array.data[1].mat
+      value: 
+      objectReference: {fileID: 2100000, guid: 221f970d19eb7456c91fae5318ce96e4, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 140314}

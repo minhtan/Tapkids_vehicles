@@ -138,7 +138,7 @@ public class CarGameGenerator : MonoBehaviour {
 				if (carGameObject.GetComponent <ArcadeCarController> ().vehicle.id == PlayerDataController.Instance.mPlayer.unlockedVehicles [i].id) {
 					Renderer [] renderers = carGameObject.GetComponentsInChildren <Renderer> ();
 					for (int j = 0; j < renderers.Length; j++) {
-						renderers [j].material = carGameObject.GetComponent <ArcadeCarController> ().carMats [PlayerDataController.Instance.mPlayer.unlockedVehicles [i].matId].mat;
+						renderers [j].material = carGameObject.GetComponent <ArcadeCarController> ().vehicle.carMats [PlayerDataController.Instance.mPlayer.unlockedVehicles [i].matId].mat;
 					}
 					break;
 				}
