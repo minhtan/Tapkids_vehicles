@@ -22,6 +22,7 @@ public class UISelectMaterialButton : MonoBehaviour {
 			if (gameObject.GetInstanceID () == _id) {
 				if (!isOn) {
 					Messenger.Broadcast <int> (EventManager.GUI.CHANGE_MATERIAL.ToString (), matId);
+					AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.BUTTON_CLICK);
 					isOn = true;
 				}
 			}

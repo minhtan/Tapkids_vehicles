@@ -11,6 +11,7 @@ public class UINextButton : MonoBehaviour {
 		if (mButton != null) {
 			mButton.onClick.AddListener (delegate {
 				Messenger.Broadcast (EventManager.GUI.NEXT.ToString ());	
+				AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.BUTTON_CLICK);
 			});
 		}
 	}

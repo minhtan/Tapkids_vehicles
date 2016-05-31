@@ -18,6 +18,7 @@ public class UITutorialButton : MonoBehaviour {
 			pauseButton.onClick.AddListener (delegate {
 //				CarGameEventController.OnToggleTutorialPanel (true);
 				Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_TUTORIAL.ToString (), true);
+				AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.BUTTON_CLICK);
 			});
 		}
 	}

@@ -29,14 +29,14 @@ public class ImageTrackableEventHandler : MonoBehaviour, ITrackableEventHandler 
 	{
 		// send letter to game controller
 		//		CarGameEventController.OnLetterTracking(true, letter);
-		Messenger.Broadcast <bool, string> (EventManager.AR.VEHICLE_TRACKING.ToString(), true, letter);
+		Messenger.Broadcast <bool, string> (EventManager.AR.VEHICLE_IMAGE_TRACKING.ToString(), true, letter);
 	}
 
 	void OnTrackingLost () 
 	{
 		// send lost event to game controller
 		//		CarGameEventController.OnLetterTracking(false, letter);
-		Messenger.Broadcast <bool, string> (EventManager.AR.VEHICLE_TRACKING.ToString(), false, letter);
+		Messenger.Broadcast <bool, string> (EventManager.AR.VEHICLE_IMAGE_TRACKING.ToString(), false, letter);
 	}
 	#endregion
 

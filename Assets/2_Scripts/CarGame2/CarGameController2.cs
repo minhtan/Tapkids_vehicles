@@ -29,7 +29,7 @@ public class CarGameController2 : MonoBehaviour {
 	}
 
 	void OnEnable () {
-		Messenger.AddListener <bool, Transform> (EventManager.AR.MAP_TRACKING.ToString(), HandleMapTracking);
+		Messenger.AddListener <bool, Transform> (EventManager.AR.MAP_IMAGE_TRACKING.ToString(), HandleMapTracking);
 
 		Messenger.AddListener <string> (EventManager.Vehicle.COLLECT_LETTER.ToString (), HandleCollectLetter);
 
@@ -76,7 +76,7 @@ public class CarGameController2 : MonoBehaviour {
 	}
 
 	void OnDisable () {
-		Messenger.RemoveListener <bool, Transform> (EventManager.AR.MAP_TRACKING.ToString(), HandleMapTracking);
+		Messenger.RemoveListener <bool, Transform> (EventManager.AR.MAP_IMAGE_TRACKING.ToString(), HandleMapTracking);
 
 		Messenger.RemoveListener <string> (EventManager.Vehicle.COLLECT_LETTER.ToString (), HandleCollectLetter);
 

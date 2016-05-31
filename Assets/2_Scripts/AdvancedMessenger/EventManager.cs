@@ -36,9 +36,9 @@ public class EventManager {
 
 	//
 	public enum AR {
-		LETTER_TRACKING,
-		VEHICLE_TRACKING,
-		MAP_TRACKING
+		LETTER_IMAGE_TRACKING,
+		VEHICLE_IMAGE_TRACKING,
+		MAP_IMAGE_TRACKING
 	}
 
 	public enum GameState {

@@ -14,7 +14,7 @@ public class CarGameController : MonoBehaviour {
 	[HideInInspector]
 	public string collectedLetters;
 	[HideInInspector]
-	public string letters;					// founded image target
+	public string givenLetters;					// founded image target
 
 	private SKStateMachine <CarGameController> _machine;
 	[HideInInspector]
@@ -30,16 +30,15 @@ public class CarGameController : MonoBehaviour {
 	}
 
 	void OnEnable () {
-		Messenger.AddListener <bool, string> (EventManager.AR.VEHICLE_TRACKING.ToString(), HandleARCardTracking);
+		Messenger.AddListener <bool, string> (EventManager.AR.VEHICLE_IMAGE_TRACKING.ToString(), HandleARCardTracking);
 
-		Messenger.AddListener <bool, Transform> (EventManager.AR.MAP_TRACKING.ToString(), HandleARMapTracking);
+		Messenger.AddListener <bool, Transform> (EventManager.AR.MAP_IMAGE_TRACKING.ToString(), HandleARMapTracking);
 
 		Messenger.AddListener <string> (EventManager.Vehicle.COLLECT_LETTER.ToString (), HandleCollectLetter);
 
 		Messenger.AddListener (EventManager.GUI.DROPBUTTON.ToString (), HandleDropLetter);
-
-		Messenger.AddListener (EventManager.Vehicle.GATHER_LETTER.ToString (), HandleGatherLetter);
 	}
+
 	void Start () {
 		if (ArController.Instance != null) {
 			ArController.Instance.ToggleAR (true);
@@ -60,8 +59,6 @@ public class CarGameController : MonoBehaviour {
 		_machine.addState (new CGPauseState ());
 		_machine.addState (new CGGameOverState ());
 		_machine.addState (new CGResetState ());
-
-
 	}
 
 	void Update () {
@@ -69,15 +66,13 @@ public class CarGameController : MonoBehaviour {
 	}
 
 	void OnDisable () {
-		Messenger.RemoveListener <bool, string> (EventManager.AR.VEHICLE_TRACKING.ToString(), HandleARCardTracking);
+		Messenger.RemoveListener <bool, string> (EventManager.AR.VEHICLE_IMAGE_TRACKING.ToString(), HandleARCardTracking);
 
-		Messenger.RemoveListener <bool, Transform> (EventManager.AR.MAP_TRACKING.ToString(), HandleARMapTracking);
+		Messenger.RemoveListener <bool, Transform> (EventManager.AR.MAP_IMAGE_TRACKING.ToString(), HandleARMapTracking);
 
 		Messenger.RemoveListener <string> (EventManager.Vehicle.COLLECT_LETTER.ToString (), HandleCollectLetter);
 
 		Messenger.RemoveListener (EventManager.GUI.DROPBUTTON.ToString (), HandleDropLetter);
-
-		Messenger.RemoveListener (EventManager.Vehicle.GATHER_LETTER.ToString (), HandleGatherLetter);
 	}
 
 	void OnDestroy () {
@@ -91,13 +86,12 @@ public class CarGameController : MonoBehaviour {
 
 	#region private functions
 	// handle ar events
-	private void HandleARCardTracking (bool _isFound, string _letters) {
+	private void HandleARCardTracking (bool _isFound, string _givenLetters) {
 		if (_isFound) {	// FOUND LETTER
-			letters = _letters;
+			givenLetters = _givenLetters;
 			_machine.changeState <CGInitState> ();
-//			Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), letters, 1f);
-			Messenger.Broadcast <string> (EventManager.GUI.SHOWSUGGESTION.ToString (), _letters);
-
+			AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.SCAN_LETTER);
+			Messenger.Broadcast <string> (EventManager.GUI.SHOWSUGGESTION.ToString (), _givenLetters);
 		} else {		// LOST LETTER
 			// DO NOTHING
 		}
@@ -107,7 +101,9 @@ public class CarGameController : MonoBehaviour {
 		if (_machine == null) return;
 
 		if (_isFound) {	// FOUND MAP
-			if (letters.Length > 0) {	// check given letters
+			AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.SCAN_MAP);
+
+			if (givenLetters.Length > 0) {	// check given letters
 				if (_machine.currentState.GetType () == typeof (CGARMapState)) 
 				{	
 					_machine.changeState <CGStartState> ();
@@ -124,9 +120,18 @@ public class CarGameController : MonoBehaviour {
 
 	// handle car events
 	private void HandleCollectLetter (string _letter) {
-//		Messenger.Broadcast <string> (EventManager.GUI.ADD_LETTER.ToString (), _letter);
 		collectedLetters = string.Concat (collectedLetters, _letter);
 		AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.CARGAME_COLLECT_LETTER);
+
+		// handle trigger gameover
+		if (givenLetters.Length == collectedLetters.Length && givenLetters.Equals (collectedLetters)) {
+			_machine.changeState <CGGameOverState> ();
+			Messenger.Broadcast <int> (EventManager.GameState.GAMEOVER.ToString (), 0);
+			AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.CORRECT_WORD);
+		} else if (givenLetters.Length == collectedLetters.Length && !givenLetters.Equals (collectedLetters)) {
+			Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), GameConstant.WrongMessage, 1f);
+			AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.INCORRECT_WORD);
+		}
 	}
 
 	private void HandleDropLetter () {
@@ -138,19 +143,18 @@ public class CarGameController : MonoBehaviour {
 		}
 	}
 
-	private void HandleGatherLetter () {
-		if (collectedLetters.Length > 0) {
-			if (GameConstant.vehicles.Contains (collectedLetters)) {
-				_machine.changeState <CGGameOverState> ();
-				Messenger.Broadcast <int> (EventManager.GameState.GAMEOVER.ToString (), 0);
-				AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.CORRECT_WORD);
-			} else {
-				Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), GameConstant.WrongMessage, 1f);
-				AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.INCORRECT_WORD);
-			}
-		}
-	}
-
+//	private void HandleGatherLetter () {
+//		if (collectedLetters.Length > 0) {
+//			if (GameConstant.vehicles.Contains (collectedLetters)) {
+//				_machine.changeState <CGGameOverState> ();
+//				Messenger.Broadcast <int> (EventManager.GameState.GAMEOVER.ToString (), 0);
+//				AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.CORRECT_WORD);
+//			} else {
+//				Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), GameConstant.WrongMessage, 1f);
+//				AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.INCORRECT_WORD);
+//			}
+//		}
+//	}
 	#endregion private functions
 
 

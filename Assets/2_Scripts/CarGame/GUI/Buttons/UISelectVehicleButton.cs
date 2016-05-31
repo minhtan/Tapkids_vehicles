@@ -33,6 +33,7 @@ public class UISelectVehicleButton : MonoBehaviour {
 	void HandleButtonTap (int _id) {
 		if (_id == gameObject.GetInstanceID () && !menu.IsInMenu) {
 			Messenger.Broadcast <int> (EventManager.GUI.SELECT_VEHICLE.ToString (), index);
+			AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.BUTTON_CLICK);
 		}
 	}
 	#endregion private functions

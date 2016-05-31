@@ -26,12 +26,12 @@ public class MapTrackableEventHandler : MonoBehaviour, ITrackableEventHandler {
 
 	void OnTrackingFound () 
 	{
-		Messenger.Broadcast <bool, Transform> (EventManager.AR.MAP_TRACKING.ToString(), true, mTransform);
+		Messenger.Broadcast <bool, Transform> (EventManager.AR.MAP_IMAGE_TRACKING.ToString(), true, mTransform);
 	}
 
 	void OnTrackingLost () 
 	{
-		Messenger.Broadcast <bool, Transform> (EventManager.AR.MAP_TRACKING.ToString(), false, mTransform);
+		Messenger.Broadcast <bool, Transform> (EventManager.AR.MAP_IMAGE_TRACKING.ToString(), false, mTransform);
 	}
 	#endregion
 
