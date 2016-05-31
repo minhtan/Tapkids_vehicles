@@ -1266,7 +1266,7 @@ MonoBehaviour:
         - 
         - 
         actionEnabled: 01010101010101
-        actionIsOpen: 01010000000000
+        actionIsOpen: 01010100000000
         actionStartIndex: 0000000003000000060000000a00000010000000160000001c000000
         actionHashCodes: 603dd905603dd90591d45a0009faa10209faa10209faa10209faa102
         unityObjectParams: []
@@ -2037,7 +2037,7 @@ MonoBehaviour:
           name: FINISHED
           isSystemEvent: 1
           isGlobal: 0
-        toState: Playing
+        toState: CheckTimer
         linkStyle: 0
         linkConstraint: 0
         colorIndex: 0
@@ -2045,13 +2045,15 @@ MonoBehaviour:
         actionNames:
         - HutongGames.PlayMaker.Actions.SendMessage
         - HutongGames.PlayMaker.Actions.SetIntValue
+        - HutongGames.PlayMaker.Actions.Wait
         customNames:
         - 
         - 
-        actionEnabled: 0101
-        actionIsOpen: 0101
-        actionStartIndex: 0000000004000000
-        actionHashCodes: 91d45a00603dd905
+        - 
+        actionEnabled: 010101
+        actionIsOpen: 010101
+        actionStartIndex: 000000000400000007000000
+        actionHashCodes: 91d45a00603dd90548c01101
         unityObjectParams: []
         fsmGameObjectParams: []
         fsmOwnerDefaultParams:
@@ -2197,7 +2199,13 @@ MonoBehaviour:
         fsmVarParams: []
         fsmArrayParams: []
         fsmEnumParams: []
-        fsmFloatParams: []
+        fsmFloatParams:
+        - useVariable: 0
+          name: 
+          tooltip: 
+          showInInspector: 0
+          networkSync: 0
+          value: 1
         fsmIntParams:
         - useVariable: 1
           name: timeSinceLastWordFound
@@ -2217,13 +2225,14 @@ MonoBehaviour:
         fsmColorParams: []
         fsmRectParams: []
         fsmQuaternionParams: []
-        stringParams: []
-        byteData: 000000000100000000
+        stringParams:
+        - FINISHED
+        byteData: 00000000010000000000
         arrayParamSizes: 
         arrayParamTypes: []
         customTypeSizes: 
         customTypeNames: []
-        paramDataType: 14000000070000000700000015000000100000001000000001000000
+        paramDataType: 140000000700000007000000150000001000000010000000010000000f0000001700000001000000
         paramName:
         - gameObject
         - delivery
@@ -2232,8 +2241,11 @@ MonoBehaviour:
         - intVariable
         - intValue
         - everyFrame
-        paramDataPos: 00000000000000000400000000000000000000000100000008000000
-        paramByteDataSize: 00000000040000000400000000000000000000000000000001000000
+        - time
+        - finishEvent
+        - realTime
+        paramDataPos: 00000000000000000400000000000000000000000100000008000000000000000000000009000000
+        paramByteDataSize: 00000000040000000400000000000000000000000000000001000000000000000000000001000000
     - name: PreInit
       description: 
       colorIndex: 0
