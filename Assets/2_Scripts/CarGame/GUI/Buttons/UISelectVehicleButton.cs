@@ -17,9 +17,9 @@ public class UISelectVehicleButton : MonoBehaviour {
 
 	#region Mono
 	void OnEnable () {
-		Messenger.AddListener <int> (EventManager.GUI.MENU_BTN_TAP.ToString (), HandleButtonTap);
 		Messenger.AddListener <int> (EventManager.GUI.MENU_BTN_DOWN.ToString (), HandleBtnDown);
-		Messenger.AddListener (EventManager.GUI.MENU_BTN_UP.ToString (), HandleBtnUp);
+		Messenger.AddListener <int> (EventManager.GUI.MENU_BTN_UP.ToString (), HandleBtnUp);
+		Messenger.AddListener <int> (EventManager.GUI.MENU_BTN_HOLD.ToString (), HandleBtnHold);
 	}
 
 	void Start () {
@@ -27,7 +27,9 @@ public class UISelectVehicleButton : MonoBehaviour {
 		initY = transform.localPosition.y;
 	}
 	void OnDisable () {
-		Messenger.RemoveListener <int> (EventManager.GUI.MENU_BTN_TAP.ToString (), HandleButtonTap);
+		Messenger.RemoveListener <int> (EventManager.GUI.MENU_BTN_DOWN.ToString (), HandleBtnDown);
+		Messenger.RemoveListener <int> (EventManager.GUI.MENU_BTN_UP.ToString (), HandleBtnUp);
+		Messenger.RemoveListener <int> (EventManager.GUI.MENU_BTN_HOLD.ToString (), HandleBtnHold);
 	}
 	#endregion Mono
 
@@ -42,16 +44,25 @@ public class UISelectVehicleButton : MonoBehaviour {
 		}
 	}
 
-	void HandleBtnUp(){
+	void HandleBtnUp(int _id){
 		if (isPressed) {
 			LeanTween.moveLocalY (gameObject, initY, 0.1f);
+
+			if (_id == gameObject.GetInstanceID () && !menu.IsInMenu) {
+				Messenger.Broadcast <int> (EventManager.GUI.SELECT_VEHICLE.ToString (), index);
+			}
+
 			isPressed = false;
 		}
 	}
 
-	void HandleButtonTap (int _id) {
-		if (_id == gameObject.GetInstanceID () && !menu.IsInMenu) {
-			Messenger.Broadcast <int> (EventManager.GUI.SELECT_VEHICLE.ToString (), index);
+	void HandleBtnHold(int _id){
+		if (isPressed) {
+			if (_id == gameObject.GetInstanceID () && !menu.IsInMenu) {
+				LeanTween.moveLocalY (gameObject, -2*initY, 0.1f);
+			} else {
+				LeanTween.moveLocalY (gameObject, initY, 0.1f);
+			}
 		}
 	}
 	#endregion private functions
