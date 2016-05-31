@@ -144,6 +144,11 @@ public class AudioManager : UnitySingletonPersistent<AudioManager>
 		return clipInfo.audioSource;
 	}
 
+	public void PlayTemp(AudioClip clip, CLIPTYPE type = CLIPTYPE.TEMPORARY){
+		_tempSource.Stop ();
+		_tempSource.clip = clip;
+		_tempSource.Play ();
+	}
 
 	public AudioSource PlayOneCustomSource (CLIPTYPE type, AudioKey.UNIQUE_KEY key, AudioSource customSource)
 	{

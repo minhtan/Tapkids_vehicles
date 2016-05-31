@@ -16,6 +16,7 @@ namespace Vuforia
 	ITrackableEventHandler
 	{
 		public string targetName;
+		public AudioClip clip;
 		public bool isLetter = false;
 
 		#region PRIVATE_MEMBER_VARIABLES
@@ -97,7 +98,9 @@ namespace Vuforia
 				if(go.GetComponent<Rigidbody>() != null){
 					go.GetComponent<Rigidbody>().isKinematic = true;
 				}
-
+				if(clip != null){
+					AudioManager.Instance.PlayTemp(clip);
+				}
 				go_anim = go.GetComponentInChildren<Animator>();
 
 				if(isLetter){
