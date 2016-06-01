@@ -31,7 +31,10 @@ public class EventManager {
 		MENU_WHEEL_TURN,
 		MENU_WHEEL_RELEASE,
 		WHEEL_FRAME_TURN,
-		MENU_BTN_TAP
+		MENU_BTN_TAP,
+		MENU_BTN_DOWN,
+		MENU_BTN_UP,
+		MENU_BTN_HOLD
 	}
 
 	//

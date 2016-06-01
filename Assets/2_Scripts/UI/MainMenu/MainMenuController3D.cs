@@ -5,7 +5,8 @@ using Lean;
 
 public class MainMenuController3D : MonoBehaviour {
 
-	bool isLocked = false;
+	bool isTweenLocked = false;
+	bool isUILocked = false;
 	bool isInMenu = true;
 	public bool IsInMenu {
 		get {
@@ -13,16 +14,37 @@ public class MainMenuController3D : MonoBehaviour {
 		}
 	}
 
-	Vector3 menuPos;
 	public Vector3 garagePos;
+	Vector3 menuPos;
 	float menuTweenTime = 0.2f;
 	float drag;
+
+	public Transform menuBtns;
+	public Transform garageBtns;
+	float totalD;
 
 	// Use this for initialization
 	void Start () {
 		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_MENU_BTN.ToString (), false);
 		SetFieldOfView ();
 		menuPos = transform.localRotation.eulerAngles;
+		totalD = garagePos.y - menuPos.y;
+	}
+
+	void Update(){
+		ResizingBtns ();
+	}
+
+	void ResizingBtns(){
+		float currentD = garagePos.y - transform.localRotation.eulerAngles.y;
+		float menuBtnScale = Mathf.Clamp01( currentD / totalD );
+
+		menuBtns.localScale = menuBtnScale.ToVector3 ();
+		garageBtns.localScale = (1f - menuBtnScale).ToVector3 ();
+	}
+
+	public void SetTweenLock(bool state){
+		isTweenLocked = state;
 	}
 
 	void SetFieldOfView(){
@@ -59,37 +81,64 @@ public class MainMenuController3D : MonoBehaviour {
 	}
 
 	void OnFingerDown(LeanFinger fg){
-		isLocked = LeanTouch.GuiInUse;
+		isUILocked = LeanTouch.GuiInUse;
+		if(isUILocked){
+			return;
+		}
+
+		RaycastHit hitInfo;
+		Ray ray = fg.GetRay ();
+
+		if (Physics.Raycast (ray, out hitInfo)) {
+			Messenger.Broadcast<int> (EventManager.GUI.MENU_BTN_DOWN.ToString (), hitInfo.collider.gameObject.GetInstanceID ());
+		}
 
 		drag = 0;
 	}
 
-	void OnDrag(LeanFinger fg){
-		if(isLocked){
-			return;
-		}
-		drag += fg.DeltaScreenPosition.x;
-		LeanTween.rotateAroundLocal (gameObject, Vector3.up, fg.DeltaScreenPosition.x * 0.03f, 0);
-	}
-
-	void OnTap(LeanFinger fg){
-		if(!isLocked){
-			RaycastHit hitInfo;
-			Ray ray = fg.GetRay ();
-
-			if (Physics.Raycast (ray, out hitInfo)) {
-				Messenger.Broadcast<int> (EventManager.GUI.MENU_BTN_TAP.ToString (), hitInfo.collider.gameObject.GetInstanceID ());
-			}
-		}
-	}
-
 	void OnFingerUp(LeanFinger fg){
+		RaycastHit hitInfo;
+		Ray ray = fg.GetRay ();
+
+		if (Physics.Raycast (ray, out hitInfo)) {
+			Messenger.Broadcast<int> (EventManager.GUI.MENU_BTN_UP.ToString (), hitInfo.collider.gameObject.GetInstanceID ());
+		}
+
 		if(drag <= -Screen.width/2){
 			ToMenu (true);
 		}else if(drag >= Screen.width/2){
 			ToGarage (true);
 		}else{
 			SnapBack();
+		}
+	}
+
+	void OnDrag(LeanFinger fg){
+		RaycastHit hitInfo;
+		Ray ray = fg.GetRay ();
+
+		if (Physics.Raycast (ray, out hitInfo)) {
+			Messenger.Broadcast<int> (EventManager.GUI.MENU_BTN_HOLD.ToString (), hitInfo.collider.gameObject.GetInstanceID ());
+		} else {
+			Messenger.Broadcast<int> (EventManager.GUI.MENU_BTN_HOLD.ToString (), 0);
+		}
+
+		if(isUILocked || isTweenLocked){
+			return;
+		}
+
+		drag += fg.DeltaScreenPosition.x;
+		LeanTween.rotateAroundLocal (gameObject, Vector3.up, fg.DeltaScreenPosition.x * 0.03f, 0);
+	}
+
+	void OnTap(LeanFinger fg){
+		if(!isUILocked){
+			RaycastHit hitInfo;
+			Ray ray = fg.GetRay ();
+
+			if (Physics.Raycast (ray, out hitInfo)) {
+				Messenger.Broadcast<int> (EventManager.GUI.MENU_BTN_TAP.ToString (), hitInfo.collider.gameObject.GetInstanceID ());
+			}
 		}
 	}
 
@@ -102,7 +151,7 @@ public class MainMenuController3D : MonoBehaviour {
 	}
 
 	void OnFingerSwipe(LeanFinger finger){
-		if(isLocked){
+		if(isUILocked || isTweenLocked){
 			return;
 		}
 
