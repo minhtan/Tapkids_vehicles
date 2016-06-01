@@ -7,11 +7,11 @@ public class UIFocusPanel : MonoBehaviour {
 	private CanvasGroup mCanvasGroup;
 
 	void OnEnable () {
-		Messenger.AddListener <bool, Transform> (EventManager.AR.MAP_TRACKING.ToString (), HandleMapTracking);
+		Messenger.AddListener <bool, Transform> (EventManager.AR.MAP_IMAGE_TRACKING.ToString (), HandleMapTracking);
 	}
 
 	void OnDisable () {
-		Messenger.RemoveListener  <bool, Transform> (EventManager.AR.MAP_TRACKING.ToString (), HandleMapTracking);
+		Messenger.RemoveListener  <bool, Transform> (EventManager.AR.MAP_IMAGE_TRACKING.ToString (), HandleMapTracking);
 	}
 	void Awake () {
 		mCanvasGroup = GetComponent <CanvasGroup> ();

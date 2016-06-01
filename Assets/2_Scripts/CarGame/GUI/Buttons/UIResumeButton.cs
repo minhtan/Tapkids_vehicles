@@ -16,9 +16,8 @@ public class UIResumeButton : MonoBehaviour {
 		mButton = GetComponent <Button> ();
 		if (mButton != null) {
 			mButton.onClick.AddListener (delegate {
-//				CarGameEventController.OnPauseGame (false);	
-//				CarGameEventController.OnTogglePanel ("ingame");	
 				Messenger.Broadcast<bool> (EventManager.GameState.PAUSE.ToString(), false);
+				AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.BUTTON_CLICK);
 			});
 		}
 	}

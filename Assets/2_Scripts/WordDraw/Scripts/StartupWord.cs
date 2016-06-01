@@ -45,8 +45,8 @@ public class StartupWord : MonoBehaviour
 		GestureAutoDrawer.OnDrawGestureDone += OnDrawGestureDone;
 		StartupRecognizer.OnGestureDetected += OnGestureDetected;
 		StartupRecognizer.OnGestureReset += OnGestureReset;
-		Messenger.AddListener <bool, string> (EventManager.AR.LETTER_TRACKING.ToString (), OnLetterFound);
-		Messenger.AddListener <bool, string> (EventManager.AR.VEHICLE_TRACKING.ToString (), OnVehicleFound);
+		Messenger.AddListener <bool, string> (EventManager.AR.LETTER_IMAGE_TRACKING.ToString (), OnLetterFound);
+		Messenger.AddListener <bool, string> (EventManager.AR.VEHICLE_IMAGE_TRACKING.ToString (), OnVehicleFound);
 		_recognizer.RegisterInputHandler ();
 	}
 
@@ -55,8 +55,8 @@ public class StartupWord : MonoBehaviour
 		GestureAutoDrawer.OnDrawGestureDone -= OnDrawGestureDone;
 		StartupRecognizer.OnGestureDetected -= OnGestureDetected;
 		StartupRecognizer.OnGestureReset -= OnGestureReset;
-		Messenger.RemoveListener <bool, string> (EventManager.AR.LETTER_TRACKING.ToString (), OnLetterFound);
-		Messenger.RemoveListener <bool, string> (EventManager.AR.VEHICLE_TRACKING.ToString (), OnVehicleFound);
+		Messenger.RemoveListener <bool, string> (EventManager.AR.LETTER_IMAGE_TRACKING.ToString (), OnLetterFound);
+		Messenger.RemoveListener <bool, string> (EventManager.AR.VEHICLE_IMAGE_TRACKING.ToString (), OnVehicleFound);
 	}
 
 

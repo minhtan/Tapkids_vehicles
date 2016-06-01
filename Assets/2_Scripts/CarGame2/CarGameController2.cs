@@ -17,10 +17,17 @@ public class CarGameController2 : MonoBehaviour {
 	[HideInInspector]
 	public string collectedLetters;
 	[HideInInspector]
-	public string letters;
+	public char envLetter;
+	[HideInInspector]
+	public List<WordGameData> wordGameDatas;
 	[HideInInspector]
 	public WordGameData wordGameData;
+	[HideInInspector]
+	public List<string> playableLetters = new List<string>();
+	[HideInInspector]
+	public List<string> answers;
 
+	private int lastRandomIndex = -1;
 	#endregion private members
 
 	#region MONO
@@ -29,7 +36,7 @@ public class CarGameController2 : MonoBehaviour {
 	}
 
 	void OnEnable () {
-		Messenger.AddListener <bool, Transform> (EventManager.AR.MAP_TRACKING.ToString(), HandleMapTracking);
+		Messenger.AddListener <bool, Transform> (EventManager.AR.MAP_IMAGE_TRACKING.ToString(), HandleMapTracking);
 
 		Messenger.AddListener <string> (EventManager.Vehicle.COLLECT_LETTER.ToString (), HandleCollectLetter);
 
@@ -39,8 +46,6 @@ public class CarGameController2 : MonoBehaviour {
 	}
 
 	void Start () {
-		RandomWord();
-
 		if (ArController.Instance != null) {
 			ArController.Instance.ToggleAR (true);
 			ArController.Instance.SetCenterMode (false);
@@ -60,23 +65,34 @@ public class CarGameController2 : MonoBehaviour {
 		_machine.addState (new CG2ResetState ());
 	}
 
-	public void RandomWord()
+	public WordGameData RandomData()
 	{
-		wordGameData = DataUltility.ReadDataForCarGame ();
+		if (wordGameDatas.Count < 0) return null; 
+
 		UnityEngine.Random.seed = Environment.TickCount;
-		letters = wordGameData.wordlist [UnityEngine.Random.Range (0, wordGameData.wordlist.Length)];
+		int rd;
+		do {
+			rd = Mathf.RoundToInt (UnityEngine.Random.Range (0, wordGameDatas.Count));
+		} while (rd == lastRandomIndex);
+		lastRandomIndex = rd;
+		return wordGameDatas[rd];
+	}
+
+	public char RandomLetter () {
+		System.Random _random = new System.Random();
+		// This method returns a random lowercase letter.
+		// ... Between 'a' and 'z' inclusize.
+		int num = _random.Next(0, 26); // Zero to 25
+		char ch = (char) ('a' + num);
+		return ch;
 	}
 
 	void Update () {
 		_machine.update (Time.deltaTime);
-
-//		if (Input.GetKeyDown (KeyCode.Space)) {
-//			RandomData ();
-//		}
 	}
 
 	void OnDisable () {
-		Messenger.RemoveListener <bool, Transform> (EventManager.AR.MAP_TRACKING.ToString(), HandleMapTracking);
+		Messenger.RemoveListener <bool, Transform> (EventManager.AR.MAP_IMAGE_TRACKING.ToString(), HandleMapTracking);
 
 		Messenger.RemoveListener <string> (EventManager.Vehicle.COLLECT_LETTER.ToString (), HandleCollectLetter);
 
@@ -96,6 +112,22 @@ public class CarGameController2 : MonoBehaviour {
 		if (_machine == null) return;
 
 		if (_isFound) {	// FOUND MAP
+			
+			Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
+			Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
+
+			// Enable rendering:
+			foreach (Renderer component in rendererComponents)
+			{
+				component.enabled = true;
+			}
+
+			// Enable colliders:
+			foreach (Collider component in colliderComponents)
+			{
+				component.enabled = true;
+			}
+
 			if (_machine.currentState.GetType () == typeof (CG2ARMapState)) {
 				_machine.changeState <CG2StartState> ();
 				mTransform.SetParent (_parent);
@@ -103,6 +135,22 @@ public class CarGameController2 : MonoBehaviour {
 				// DO NOTHING
 			}
 		} else {		// LOST MAP
+			
+			Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
+			Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
+
+			// Disable rendering:
+			foreach (Renderer component in rendererComponents)
+			{
+				component.enabled = false;
+			}
+
+			// Disable colliders:
+			foreach (Collider component in colliderComponents)
+			{
+				component.enabled = false;
+			}
+
 			if(_machine.currentState.GetType () == typeof (CG2StartState)) {
 				_machine.changeState <CG2ARMapState> ();
 			} else {

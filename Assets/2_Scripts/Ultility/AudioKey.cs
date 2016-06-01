@@ -19,12 +19,15 @@ public class AudioKey {
 		COUNTDOWN,
 		TIMEOUT,
 		GAME_WIN,
-		GAME_LOSE
+		GAME_LOSE,
 
+
+		// AR
+		SCAN_LETTER,
+		SCAN_MAP
     };
 
-
-    private AudioKey() {
+	private AudioKey() {
 
     }
 }

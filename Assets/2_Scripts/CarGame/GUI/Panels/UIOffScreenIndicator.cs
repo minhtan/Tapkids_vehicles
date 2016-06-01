@@ -35,14 +35,12 @@ public class UIOffScreenIndicator : MonoBehaviour {
 
 	#region MONO
 	void OnEnable () {
-//		CarGameEventController.InitGame += OnInitGame;
-		Messenger.AddListener <string> (EventManager.GameState.INIT.ToString (), HandleInitGame);
+		Messenger.AddListener <string, string> (EventManager.GameState.INIT.ToString (), HandleInitGame);
 		Messenger.AddListener <bool> (EventManager.GameState.START.ToString (), HandleStartGame);
 	}
 
 	void OnDisable () {
-//		CarGameEventController.InitGame -= OnInitGame;
-		Messenger.RemoveListener <string> (EventManager.GameState.INIT.ToString (), HandleInitGame);
+		Messenger.RemoveListener <string, string> (EventManager.GameState.INIT.ToString (), HandleInitGame);
 		Messenger.RemoveListener <bool>  (EventManager.GameState.START.ToString (), HandleStartGame);
 	}
 
@@ -60,8 +58,8 @@ public class UIOffScreenIndicator : MonoBehaviour {
 	#endregion MONO
 
 	#region private functions
-	void HandleInitGame (string _word) {
-		if(_word.Length <= 0) return;
+	void HandleInitGame (string envLetter, string _letters) {
+		if(_letters.Length <= 0) return;
 
 		// pre setup car indicator
 		offScreenCar = Instantiate (carIndicator) as RectTransform;
@@ -69,10 +67,10 @@ public class UIOffScreenIndicator : MonoBehaviour {
 		offScreenCar.gameObject.SetActive (false);
 
 		//TODO: pre setup letter's indicators
-		offScreenLetters = new RectTransform[_word.Length];
-		for (int i = 0; i < _word.Length; i++) {
+		offScreenLetters = new RectTransform[_letters.Length];
+		for (int i = 0; i < _letters.Length; i++) {
 			offScreenLetters[i] = Instantiate (letterIndicator) as RectTransform; 
-			offScreenLetters[i].GetComponentInChildren <Text> ().text = _word[i].ToString ();
+			offScreenLetters[i].GetComponentInChildren <Text> ().text = _letters[i].ToString ();
 			offScreenLetters[i].SetParent (mRectTransform, false);
 			offScreenLetters[i].gameObject.SetActive (false);
 		}

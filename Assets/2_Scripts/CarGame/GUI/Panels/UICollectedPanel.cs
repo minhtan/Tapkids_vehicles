@@ -10,7 +10,7 @@ public class UICollectedPanel : MonoBehaviour {
 
 	private Transform mTransform;
 	void OnEnable () {
-		Messenger.AddListener <string> (EventManager.GameState.INIT.ToString (), HandleInitGame);
+		Messenger.AddListener <string, string> (EventManager.GameState.INIT.ToString (), HandleInitGame);
 		Messenger.AddListener <string> (EventManager.Vehicle.COLLECT_LETTER.ToString (), HandleCollectLetter);
 		Messenger.AddListener <string> (EventManager.GUI.REMOVE_LETTER.ToString (), HandleRemoveLetter);
 
@@ -18,7 +18,7 @@ public class UICollectedPanel : MonoBehaviour {
 	}
 
 	void Disable () {
-		Messenger.RemoveListener <string> (EventManager.GameState.INIT.ToString (), HandleInitGame);
+		Messenger.RemoveListener <string, string> (EventManager.GameState.INIT.ToString (), HandleInitGame);
 		Messenger.RemoveListener <string> (EventManager.Vehicle.COLLECT_LETTER.ToString (), HandleCollectLetter);
 		Messenger.RemoveListener <string> (EventManager.GUI.REMOVE_LETTER.ToString (), HandleRemoveLetter);
 	}
@@ -27,7 +27,7 @@ public class UICollectedPanel : MonoBehaviour {
 		mTransform = GetComponent <Transform> ();
 	}
 
-	void HandleInitGame (string _letters) {
+	void HandleInitGame (string envLetter, string _letters) {
 		if (collectedTextPrefab == null) return;
 
 		// TODO: convert this to pool 
