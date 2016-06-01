@@ -103,6 +103,21 @@ public class CarGameController : MonoBehaviour {
 		if (_isFound) {	// FOUND MAP
 			AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.SCAN_MAP);
 
+			Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
+			Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
+
+			// Enable rendering:
+			foreach (Renderer component in rendererComponents)
+			{
+				component.enabled = true;
+			}
+
+			// Enable colliders:
+			foreach (Collider component in colliderComponents)
+			{
+				component.enabled = true;
+			}
+
 			if (givenLetters.Length > 0) {	// check given letters
 				if (_machine.currentState.GetType () == typeof (CGARMapState)) 
 				{	
@@ -113,6 +128,20 @@ public class CarGameController : MonoBehaviour {
 				Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString(), GameConstant.LetterScanMessage, 1f);
 			}
 		} else {		// LOST MAP
+			Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
+			Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
+
+			// Disable rendering:
+			foreach (Renderer component in rendererComponents)
+			{
+				component.enabled = false;
+			}
+
+			// Disable colliders:
+			foreach (Collider component in colliderComponents)
+			{
+				component.enabled = false;
+			}
 			if(_machine.currentState.GetType () == typeof (CGStartState))
 				_machine.changeState <CGARMapState> ();
 		}

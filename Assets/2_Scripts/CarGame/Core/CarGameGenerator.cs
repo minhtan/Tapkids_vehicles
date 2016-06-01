@@ -33,7 +33,7 @@ public class CarGameGenerator : MonoBehaviour {
 
 	#region MONO
 	void OnEnable () {
-		Messenger.AddListener <string> (EventManager.GameState.INIT.ToString(), HandleInitGame);
+		Messenger.AddListener <string, string> (EventManager.GameState.INIT.ToString(), HandleInitGame);
 		Messenger.AddListener <bool> (EventManager.GameState.START.ToString (), HandleStartGame);
 		Messenger.AddListener (EventManager.GameState.RESET.ToString (), HandleResetGame);
 
@@ -41,7 +41,7 @@ public class CarGameGenerator : MonoBehaviour {
 	}
 
 	void OnDisable () {
-		Messenger.RemoveListener <string> (EventManager.GameState.INIT.ToString(), HandleInitGame);
+		Messenger.RemoveListener <string, string> (EventManager.GameState.INIT.ToString(), HandleInitGame);
 		Messenger.RemoveListener <bool> (EventManager.GameState.START.ToString (), HandleStartGame);
 		Messenger.RemoveListener (EventManager.GameState.RESET.ToString (), HandleResetGame);
 
@@ -54,9 +54,24 @@ public class CarGameGenerator : MonoBehaviour {
 	#endregion MONO
 
 	#region private functions
-	private void HandleInitGame (string _word) {
-		StartCoroutine (SetupEnvironment(_word.Substring (0, 1), () => {
-			
+	private void HandleInitGame (string envLetter, string _letters) {
+		StartCoroutine (SetupEnvironment(envLetter, () => {
+
+			Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
+			Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
+
+			// Enable rendering:
+			foreach (Renderer component in rendererComponents)
+			{
+				component.enabled = false;
+			}
+
+			// Enable colliders:
+			foreach (Collider component in colliderComponents)
+			{
+				component.enabled = false;
+			}
+
 			StartCoroutine(SetupCar ());
 
 			letterDictionary = new Dictionary<string, GameObject> ();
@@ -66,8 +81,8 @@ public class CarGameGenerator : MonoBehaviour {
 			letterDictionary.Clear ();
 
 			letterPoints = GameObject.FindGameObjectsWithTag ("LetterPoint");
-			for (int i = 0; i < _word.Length; i++) {
-				StartCoroutine(SetupLetter (_word[i].ToString (), letterPoints[i].transform.position));
+			for (int i = 0; i < _letters.Length; i++) {
+				StartCoroutine(SetupLetter (_letters[i].ToString (), letterPoints[i].transform.position));
 			}
 			Debug.Log ("finish");
 		}));
@@ -103,13 +118,13 @@ public class CarGameGenerator : MonoBehaviour {
 	}
 
 	private IEnumerator HandleGameStartCo () {
-		if (obstacleGameObjects.Count > 0) {
-			for (int i = 0; i < obstacleGameObjects.Count; i++) {
-				if (obstacleGameObjects[i] != null)
-					obstacleGameObjects[i].SetActive (true);
-				yield return new WaitForSeconds (delayTime);
-			}
-		}
+//		if (obstacleGameObjects.Count > 0) {
+//			for (int i = 0; i < obstacleGameObjects.Count; i++) {
+//				if (obstacleGameObjects[i] != null)
+//					obstacleGameObjects[i].SetActive (true);
+//				yield return new WaitForSeconds (delayTime);
+//			}
+//		}
 
 		if (letterDictionary.Count > 0) {
 			foreach (KeyValuePair <string, GameObject> pair in letterDictionary) {
@@ -128,7 +143,6 @@ public class CarGameGenerator : MonoBehaviour {
 			_callback ();
 		}));
 	}
-
 
 	private IEnumerator SetupCar () {
 		yield return new WaitForSeconds (1f);

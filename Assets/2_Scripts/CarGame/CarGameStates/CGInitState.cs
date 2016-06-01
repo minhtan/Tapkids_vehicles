@@ -25,7 +25,7 @@ public class CGInitState : SKState<CarGameController> {
 //		CarGameEventController.OnInitGame (_context.wordGameData.letters);
 //		Messenger.Broadcast <string> (EventManager.GameState.INITGAME.ToString (), _context.wordGameData.letters);
 		if (_context.givenLetters.Length > 0) {
-			Messenger.Broadcast <string> (EventManager.GameState.INIT.ToString (), _context.givenLetters);
+			Messenger.Broadcast <string, string> (EventManager.GameState.INIT.ToString (), _context.givenLetters.Substring (0, 1),_context.givenLetters);
 
 			_machine.changeState <CGARMapState> ();
 		}
