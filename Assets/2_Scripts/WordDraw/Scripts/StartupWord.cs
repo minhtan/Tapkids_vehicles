@@ -26,9 +26,18 @@ public class StartupWord : MonoBehaviour
 	void Start ()
 	{
 		snapShot = GameObject.FindObjectOfType<CaptureAndSave> ();
-		ArController.Instance.ToggleAR (true);
-		ArController.Instance.SetCenterMode (true);
-		ArController.Instance.SetArMaxStimTargets (1);
+		if(ArController.Instance != null){
+			ArController.Instance.ToggleAR (true);
+			ArController.Instance.SetCenterMode (true);
+			ArController.Instance.SetArMaxStimTargets (1);
+		}
+		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_MENU_BTN.ToString (), true);
+	}
+
+	void OnDestroy(){
+		if(ArController.Instance != null){
+			ArController.Instance.ToggleAR (false);
+		}
 	}
 
 	void OnEnable ()

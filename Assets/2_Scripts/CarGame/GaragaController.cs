@@ -36,6 +36,8 @@ public class GaragaController : MonoBehaviour {
 	private float backwardPos = -20f;
 
 	private int curVehicleRotateId;
+
+	MainMenuController3D menu;
 	#endregion private members
 
 	#region Mono
@@ -59,6 +61,7 @@ public class GaragaController : MonoBehaviour {
 	}
 
 	void Start () {
+		menu = FindObjectOfType <MainMenuController3D> ();
 		vehicles = new List <GameObject> ();
 		// get player unlocked list
 
@@ -172,8 +175,11 @@ public class GaragaController : MonoBehaviour {
 	public BezierSpline spline3;
 	public BezierSpline spline4;
 	bool valid = true;	// handle tween
+
 	private void HandleSelectVehicle (int _index) {
 		if (valid == false) return;
+
+		menu.SetTweenLock (true);
 		valid = false;
 		if (_index == 1)
 			NextOne ();
@@ -213,7 +219,9 @@ public class GaragaController : MonoBehaviour {
 			// get carMats from arcade controller
 //			Messenger.Broadcast <CarColor, CarColor> (EventManager.GUI.UPDATE_LIGHT_TRAFFIC.ToString (), vehicles [currentSelectedIndex].GetComponent <ArcadeCarController> ().carMats[0].color, vehicles [currentSelectedIndex].GetComponent <ArcadeCarController> ().carMats[1].color);
 			curVehicleRotateId = LeanTween.rotateAroundLocal (vehicles [currentSelectedIndex], Vector3.up, 360f, 10f).setLoopClamp().id;
+			menu.SetTweenLock (false);
 		});
+
 	}
 
 	void PrevOne () {
@@ -245,6 +253,7 @@ public class GaragaController : MonoBehaviour {
 			valid = true;
 			Messenger.Broadcast <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), vehicles [currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle);
 			curVehicleRotateId = LeanTween.rotateAroundLocal (vehicles [currentSelectedIndex], Vector3.up, 360f, 10f).setLoopClamp().id;
+			menu.SetTweenLock (false);
 		});
 	}
 
@@ -276,16 +285,12 @@ public class GaragaController : MonoBehaviour {
 		}
 	}
 
-
-	MainMenuController3D menu;
 	private void HandleExitGarage () {
-		if (menu == null){
-			menu = FindObjectOfType <MainMenuController3D> ();
-		}
 		if (menu.IsInMenu) return;
 	
 		// check if current select car is not unlocked 
 		if (!PlayerDataController.Instance.unlockedIds.Contains (vehicles [currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle.id)) {
+			menu.SetTweenLock (true);
 			ClearVehicle ();
 			locker.SetActive (false);
 		}
@@ -322,7 +327,7 @@ public class GaragaController : MonoBehaviour {
 			LeanTween.scale (vehicles [lastUnlockedIndex - 1], Vector3.zero, 1f).setEase (LeanTweenType.easeInQuint);
 			StartCoroutine (MoveVehicle (vehicles [lastUnlockedIndex - 1].transform, spline2, 1f, () => {
 				LeanTween.scale (vehicles [lastUnlockedIndex - 1], Vector3.one, 1f).setEase (LeanTweenType.easeOutQuint);
-				StartCoroutine (MoveVehicle (vehicles [lastUnlockedIndex - 1].transform, spline3, 1f, null));
+				StartCoroutine (MoveVehicle (vehicles [lastUnlockedIndex - 1].transform, spline3, 1f, () => { menu.SetTweenLock (false); }));
 			}));
 		}));
 
@@ -333,6 +338,7 @@ public class GaragaController : MonoBehaviour {
 			StartCoroutine (MoveVehicle (vehicles [lastUnlockedIndex].transform, spline2, 1f, () => {
 				HandleElevator (vehicles [lastUnlockedIndex], true, () => {
 					curVehicleRotateId = LeanTween.rotateAroundLocal (vehicles [currentSelectedIndex], Vector3.up, 360f, 10f).setLoopClamp().id;
+					currentSelectedIndex = lastUnlockedIndex;
 				});
 			}));
 		}));
@@ -340,7 +346,7 @@ public class GaragaController : MonoBehaviour {
 		yield return new WaitForSeconds (.5f);
 		vehicles [lastUnlockedIndex + 1].SetActive (true);
 		StartCoroutine (MoveVehicle (vehicles [lastUnlockedIndex + 1].transform, spline1, 1f, () => {
-			currentSelectedIndex = lastUnlockedIndex;
+
 		}));
 	}
 
@@ -354,7 +360,7 @@ public class GaragaController : MonoBehaviour {
 		}
 
 		if (_isGoingUp) {
-			LeanTween.scale (_go, new Vector3 (scaleFacetor, scaleFacetor, scaleFacetor), .5f).setEase (LeanTweenType.easeOutQuint);
+			LeanTween.scale (_go, scaleFacetor.ToVector3(), .5f).setEase (LeanTweenType.easeOutQuint);
 			LeanTween.move (_go, diskUp.position, .5f).setEase (LeanTweenType.easeOutQuint);	
 			LeanTween.move (disk.gameObject, diskUp.position , .5f).setEase (LeanTweenType.easeOutQuint).setOnComplete (_callback);
 		} else {

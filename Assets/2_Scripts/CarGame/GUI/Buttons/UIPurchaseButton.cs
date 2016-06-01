@@ -63,16 +63,19 @@ public class UIPurchaseButton : MonoBehaviour {
 	public void OnButtonTap (int _id) {
 		if (!menu.IsInMenu) {
 			if (gameObject.GetInstanceID () == _id) {
+				menu.SetTweenLock (true);
 //				Debug.Log (" ????");
 				GUIController.Instance.OpenDialog ("Purchase Confirm")
 					.AddButton ("No", 
 						UIDialogButton.Anchor.BOTTOM_RIGHT, 
 						delegate { 
 //							Debug.Log ("No");
+							menu.SetTweenLock (false);
 						}
 					)
 					.AddButton ("Yes", UIDialogButton.Anchor.BOTTOM_LEFT,  
 						delegate { 
+							menu.SetTweenLock (false);
 							Messenger.Broadcast (EventManager.GUI.PURCHASE_VEHICLE.ToString ());
 //							Debug.Log ("Yes");
 						}

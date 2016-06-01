@@ -16,6 +16,7 @@ namespace Vuforia
 	ITrackableEventHandler
 	{
 		public string targetName;
+		public AudioClip clip;
 		public bool isLetter = false;
 
 		#region PRIVATE_MEMBER_VARIABLES
@@ -91,9 +92,15 @@ namespace Vuforia
 
 		void _ShowModel(){
 			StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (AssetController.bundleName, targetName, (bundle) => {
-				go = GameObject.Instantiate(bundle);
-				go.transform.SetParent (transform, false);
-
+				go = GameObject.Instantiate (bundle, transform.position, transform.rotation) as GameObject;
+				go.transform.SetParent (transform, true);
+//				go.transform.Rotate(0f, -90f, 0f);
+				if(go.GetComponent<Rigidbody>() != null){
+					go.GetComponent<Rigidbody>().isKinematic = true;
+				}
+				if(clip != null){
+					AudioManager.Instance.PlayTemp(clip);
+				}
 				go_anim = go.GetComponentInChildren<Animator>();
 
 				if(isLetter){
