@@ -8,6 +8,7 @@ public class MainMenuController3D : MonoBehaviour {
 	float minDrag = 10f;
 	float holdTime;
 	int swingTweenID;
+	bool isMenuTweening = false;
 	bool isTweenLocked = false;
 	bool isUILocked = false;
 	bool isInMenu = true;
@@ -115,7 +116,6 @@ public class MainMenuController3D : MonoBehaviour {
 
 		RaycastHit hitInfo;
 		Ray ray = fg.GetRay ();
-
 		if (Physics.Raycast (ray, out hitInfo)) {
 			Messenger.Broadcast<int> (EventManager.GUI.MENU_BTN_UP.ToString (), hitInfo.collider.gameObject.GetInstanceID ());
 		}
@@ -201,11 +201,14 @@ public class MainMenuController3D : MonoBehaviour {
 	}
 		
 	void ToMenu(bool ovrd = false){
+		if (isMenuTweening)
+			return;
+		
 		if (!isInMenu || ovrd) {
-			SetTweenLock (true);
+			isMenuTweening = true;
 			LeanTween.rotateLocal (gameObject, menuPos, menuTweenTime).setOnComplete(() => {
 				SwingCam(-1f);
-				SetTweenLock (false);
+				isMenuTweening = false;
 			});
 			Messenger.Broadcast (EventManager.GUI.TO_MENU.ToString());
 			isInMenu = true;
@@ -213,11 +216,14 @@ public class MainMenuController3D : MonoBehaviour {
 	}
 
 	void ToGarage(bool ovrd = false){
+		if (isMenuTweening)
+			return;
+
 		if (isInMenu || ovrd) {
-			SetTweenLock (true);
+			isMenuTweening = true;
 			LeanTween.rotateLocal (gameObject, garagePos, menuTweenTime).setOnComplete(() => {
 				SwingCam(1f);
-				SetTweenLock (false);
+				isMenuTweening = false;
 			});
 			Messenger.Broadcast (EventManager.GUI.TO_GARAGE.ToString());
 			isInMenu = false;
