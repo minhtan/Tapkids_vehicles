@@ -3,7 +3,6 @@
 public class SplineWalker : MonoBehaviour {
 
 	public BezierSpline spline1;
-	public BezierSpline spline2;
 
 	public float duration;
 
