@@ -13,12 +13,14 @@ public class CG2InitState : SKState<CarGameController2> {
 	public override void begin ()
 	{
 		Debug.Log("Init State >>>");
+		_context.wordGameDatas = DataUltility.ReadDataForWordGame ();
+		_context.wordGameData = _context.RandomData ();
 
-//		_context.wordGameData = DataUltility.ReadDataForCarGame ();
-//		_context.RandomWord();
+		_context.playableLetters = DataUltility.GetPlayableLetters (_context.wordGameData);
+		_context.answers = DataUltility.GetAnswersList (_context.wordGameData);
 
 		// broadcast event load car, letter, obstacle
-		Messenger.Broadcast <string> (EventManager.GameState.INIT.ToString (), "land");//_context.letters);
+		Messenger.Broadcast <string, string> (EventManager.GameState.INIT.ToString (), _context.RandomLetter ().ToString (), _context.wordGameData.letters);
 	}
 
 	public override void reason ()

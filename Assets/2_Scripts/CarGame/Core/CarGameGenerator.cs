@@ -33,7 +33,7 @@ public class CarGameGenerator : MonoBehaviour {
 
 	#region MONO
 	void OnEnable () {
-		Messenger.AddListener <string> (EventManager.GameState.INIT.ToString(), HandleInitGame);
+		Messenger.AddListener <string, string> (EventManager.GameState.INIT.ToString(), HandleInitGame);
 		Messenger.AddListener <bool> (EventManager.GameState.START.ToString (), HandleStartGame);
 		Messenger.AddListener (EventManager.GameState.RESET.ToString (), HandleResetGame);
 
@@ -41,7 +41,7 @@ public class CarGameGenerator : MonoBehaviour {
 	}
 
 	void OnDisable () {
-		Messenger.RemoveListener <string> (EventManager.GameState.INIT.ToString(), HandleInitGame);
+		Messenger.RemoveListener <string, string> (EventManager.GameState.INIT.ToString(), HandleInitGame);
 		Messenger.RemoveListener <bool> (EventManager.GameState.START.ToString (), HandleStartGame);
 		Messenger.RemoveListener (EventManager.GameState.RESET.ToString (), HandleResetGame);
 
@@ -50,47 +50,54 @@ public class CarGameGenerator : MonoBehaviour {
 
 	void Start () {
 		mTransform = GetComponent <Transform> ();
-
-//		if (letterPoints.Length <= 0) 
-//			Debug.Log ("Setup Error, There is no Letter Point in the environment");
-//
-//		if (obstaclePoints.Length <= 0) 
-//			Debug.Log ("Setup Error, There is no Obstacle Point in the environment");
-//		
-//	
-//		if (cartPoint == null) 
-//			Debug.Log ("Setup Error, There is no Car Point in the environment");
 	}
 	#endregion MONO
 
 	#region private functions
-	private void HandleInitGame (string _word) {
+	private void HandleInitGame (string envLetter, string _letters) {
+		StartCoroutine (SetupEnvironment(envLetter, () => {
+
+			Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
+			Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
+
+			// Enable rendering:
+			foreach (Renderer component in rendererComponents)
+			{
+				component.enabled = false;
+			}
+
+			// Enable colliders:
+			foreach (Collider component in colliderComponents)
+			{
+				component.enabled = false;
+			}
+
+			StartCoroutine(SetupCar ());
+
+			letterDictionary = new Dictionary<string, GameObject> ();
+			foreach (KeyValuePair <string, GameObject> pair in letterDictionary) {
+				GameObject.Destroy (pair.Value);
+			}
+			letterDictionary.Clear ();
+
+			letterPoints = GameObject.FindGameObjectsWithTag ("LetterPoint");
+			for (int i = 0; i < _letters.Length; i++) {
+				StartCoroutine(SetupLetter (_letters[i].ToString (), letterPoints[i].transform.position));
+			}
+			Debug.Log ("finish");
+		}));
 		#region demo
-		cartPoint = GameObject.FindWithTag ("CarPoint").transform;
-		StartCoroutine(SetupCar ());
-
-		letterDictionary = new Dictionary<string, GameObject> ();
-		foreach (KeyValuePair <string, GameObject> pair in letterDictionary) {
-			GameObject.Destroy (pair.Value);
-		}
-		letterDictionary.Clear ();
-
-		letterPoints = GameObject.FindGameObjectsWithTag ("LetterPoint");
-		for (int i = 0; i < _word.Length; i++) {
-			StartCoroutine(SetupLetter (_word[i].ToString (), letterPoints[i].transform.position));
-		}
-
 		// setup obstacles
-		obstacleGameObjects = new List<GameObject> ();
-		for (int i = 0; i < obstacleGameObjects.Count; i++) {
-			GameObject.Destroy (obstacleGameObjects[i]);
-		}
-		obstacleGameObjects.Clear ();
-
-		obstaclePoints= GameObject.FindGameObjectsWithTag ("ObstaclePoint");
-		for (int i = 0; i < obstaclePoints.Length; i++) {
-			StartCoroutine (SetupObstacle (obstaclePoints[i].transform.position));
-		}
+//		obstacleGameObjects = new List<GameObject> ();
+//		for (int i = 0; i < obstacleGameObjects.Count; i++) {
+//			GameObject.Destroy (obstacleGameObjects[i]);
+//		}
+//		obstacleGameObjects.Clear ();
+//
+//		obstaclePoints= GameObject.FindGameObjectsWithTag ("ObstaclePoint");
+//		for (int i = 0; i < obstaclePoints.Length; i++) {
+//			StartCoroutine (SetupObstacle (obstaclePoints[i].transform.position));
+//		}
 		#endregion demo
 	}
 
@@ -111,13 +118,13 @@ public class CarGameGenerator : MonoBehaviour {
 	}
 
 	private IEnumerator HandleGameStartCo () {
-		if (obstacleGameObjects.Count > 0) {
-			for (int i = 0; i < obstacleGameObjects.Count; i++) {
-				if (obstacleGameObjects[i] != null)
-					obstacleGameObjects[i].SetActive (true);
-				yield return new WaitForSeconds (delayTime);
-			}
-		}
+//		if (obstacleGameObjects.Count > 0) {
+//			for (int i = 0; i < obstacleGameObjects.Count; i++) {
+//				if (obstacleGameObjects[i] != null)
+//					obstacleGameObjects[i].SetActive (true);
+//				yield return new WaitForSeconds (delayTime);
+//			}
+//		}
 
 		if (letterDictionary.Count > 0) {
 			foreach (KeyValuePair <string, GameObject> pair in letterDictionary) {
@@ -128,22 +135,20 @@ public class CarGameGenerator : MonoBehaviour {
 		}
 	}
 
+	private IEnumerator SetupEnvironment (string _letter, System.Action _callback) {
+		yield return new WaitForSeconds (1f);
+		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (GameConstant.assetBundleName, _letter + "_env", (bundle) => {
+			GameObject letterEnv = Instantiate (bundle) as GameObject;
+			letterEnv.transform.SetParent (mTransform);
+			_callback ();
+		}));
+	}
+
 	private IEnumerator SetupCar () {
 		yield return new WaitForSeconds (1f);
-		// TODO: fix player current vehicle 
 		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (GameConstant.assetBundleName, PlayerDataController.Instance.mPlayer.vehicleName, (bundle) => {
+			cartPoint = GameObject.FindWithTag ("CarPoint").transform;
 			carGameObject = Instantiate (bundle, cartPoint.position + pointOffset, Quaternion.identity) as GameObject;
-
-//			for (int i = 0; i < PlayerDataController.Instance.mPlayer.unlockedVehicles.Count; i++) {
-//				if (carGameObject.GetComponent <ArcadeCarController> ().vehicle.id == PlayerDataController.Instance.mPlayer.unlockedVehicles [i].id) {
-//					Renderer [] renderers = carGameObject.GetComponentsInChildren <Renderer> ();
-//					for (int j = 0; j < renderers.Length; j++) {
-//						renderers [j].material = carGameObject.GetComponent <ArcadeCarController> ().vehicle.carMats [PlayerDataController.Instance.mPlayer.unlockedVehicles [i].matId].mat;
-//					}
-//					break;
-//				}
-//			}
-
 			int carId = carGameObject.GetComponent <ArcadeCarController> ().vehicle.id;
 			int matId;
 			if (PlayerDataController.Instance.mPlayer.unlockedVehicles.ContainsKey (carId)) {
@@ -154,8 +159,6 @@ public class CarGameGenerator : MonoBehaviour {
 					}
 				}
 			}
-
-
 			carGameObject.transform.SetParent (mTransform, false);
 			carGameObject.SetActive (false);
 		}));
@@ -167,7 +170,7 @@ public class CarGameGenerator : MonoBehaviour {
 			GameObject letterGameObject = Instantiate (bundle, position + pointOffset, Quaternion.identity) as GameObject;
 			letterGameObject.AddComponent <LetterController> ();
 			letterGameObject.GetComponent <LetterController> ().letterName = _letter;
-//			letterGameObject.transform.localScale = new Vector3 (2f, 2f, 2f);
+			letterGameObject.transform.localScale = new Vector3 (2f, 2f, 2f);
 			letterGameObject.transform.SetParent (mTransform, false);
 			letterGameObject.SetActive (false);
 			letterDictionary.Add (_letter, letterGameObject);

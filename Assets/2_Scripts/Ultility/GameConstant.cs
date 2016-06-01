@@ -3,12 +3,12 @@
 public static class GameConstant  {
 	public const string assetBundleName = "car_asset";
 
-	public static readonly List<string> vehicles = new List<string> (new string[] {"Ambulance", "Bus", "Car", "DeliveryTruck", "ElectricBike", "FireTruck", "GarbageTruck", "Helicopter", 
-		"IcecreamTruck", "JetSki", "Kayak", "Limousine", "Motorcycle", "NavySubmarine", "OutriggerCanoe", "PoliceCar", "Quadbike", "Rickshaw", 
-		"SpaceShuttle", "Train", "UltralightCraft", "Van", "Windjammer", "Excavator", "Yacht", "Zeppelin"});
+	public static readonly List<string> vehicles = new List<string> (new string[] {"ambulance", "bus", "car", "deliverytruck", "electricbike", "firetruck", "garbagetruck", "helicopter", 
+		"icecreamtruck", "jetski", "kayak", "limousine", "motorcycle", "navysubmarine", "outriggercanoe", "policecar", "quadbike", "rickshaw", 
+		"spaceshuttle", "train", "ultralightcraft", "van", "windjammer", "excavator", "yacht", "zeppelin"});
 
-	public static readonly List<string> fourWheels = new List<string> (new string[] {"Ambulance", "Bus", "Car", "DeliveryTruck", "FireTruck", "GarbageTruck", 
-		"IcecreamTruck", "Limousine", "PoliceCar", "Van", "Excavator"});
+	public static readonly List<string> fourWheels = new List<string> (new string[] {"ambulance", "bus", "car", "deliverytruck", "firetruck", "garbagetruck", 
+		"icecreamtruck", "limousine", "policecar", "van", "excavator"});
 	
 	public const string WinMessage = "You Win";
 	public const string LoseMessage = "You Lose";
