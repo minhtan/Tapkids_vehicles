@@ -5,6 +5,9 @@ using Lean;
 
 public class MainMenuController3D : MonoBehaviour {
 
+	float minDrag = 10f;
+	float holdTime;
+	int swingTweenID;
 	bool isTweenLocked = false;
 	bool isUILocked = false;
 	bool isInMenu = true;
@@ -23,12 +26,26 @@ public class MainMenuController3D : MonoBehaviour {
 	public Transform garageBtns;
 	float totalD;
 
-	// Use this for initialization
+	void OnEnable(){
+		LeanTouch.OnFingerDown += OnFingerDown;
+		LeanTouch.OnFingerTap += OnTap;
+		LeanTouch.OnFingerDrag += OnDrag;
+		LeanTouch.OnFingerUp += OnFingerUp;
+	}
+
+	void OnDisable(){
+		LeanTouch.OnFingerDown -= OnFingerDown;
+		LeanTouch.OnFingerTap -= OnTap;
+		LeanTouch.OnFingerDrag -= OnDrag;
+		LeanTouch.OnFingerUp -= OnFingerUp;
+	}
+
 	void Start () {
 		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_MENU_BTN.ToString (), false);
 		SetFieldOfView ();
 		menuPos = transform.localRotation.eulerAngles;
 		totalD = garagePos.y - menuPos.y;
+		SwingCam (-1f);
 	}
 
 	void Update(){
@@ -63,21 +80,15 @@ public class MainMenuController3D : MonoBehaviour {
 			Debug.Log ("default");
 		}
 	}
-	
-	void OnEnable(){
-		LeanTouch.OnFingerSwipe += OnFingerSwipe;
-		LeanTouch.OnFingerDown += OnFingerDown;
-		LeanTouch.OnFingerTap += OnTap;
-		LeanTouch.OnFingerDrag += OnDrag;
-		LeanTouch.OnFingerUp += OnFingerUp;
-	}
 
-	void OnDisable(){
-		LeanTouch.OnFingerSwipe -= OnFingerSwipe;
-		LeanTouch.OnFingerDown -= OnFingerDown;
-		LeanTouch.OnFingerTap -= OnTap;
-		LeanTouch.OnFingerDrag -= OnDrag;
-		LeanTouch.OnFingerUp -= OnFingerUp;
+	void SwingCam(float angle){
+		Vector3 v = new Vector3(
+			transform.localRotation.eulerAngles.x,
+			transform.localRotation.eulerAngles.y + angle,
+			transform.localRotation.eulerAngles.z
+		);
+
+		swingTweenID = LeanTween.rotateLocal (gameObject, v, 3f).setEase (LeanTweenType.easeInOutQuad).setLoopPingPong().uniqueId;
 	}
 
 	void OnFingerDown(LeanFinger fg){
@@ -88,15 +99,20 @@ public class MainMenuController3D : MonoBehaviour {
 
 		RaycastHit hitInfo;
 		Ray ray = fg.GetRay ();
-
 		if (Physics.Raycast (ray, out hitInfo)) {
 			Messenger.Broadcast<int> (EventManager.GUI.MENU_BTN_DOWN.ToString (), hitInfo.collider.gameObject.GetInstanceID ());
 		}
 
 		drag = 0;
+		holdTime = Time.time;
 	}
 
 	void OnFingerUp(LeanFinger fg){
+		//here do raycast things
+		if(isUILocked){
+			return;
+		}
+
 		RaycastHit hitInfo;
 		Ray ray = fg.GetRay ();
 
@@ -104,31 +120,65 @@ public class MainMenuController3D : MonoBehaviour {
 			Messenger.Broadcast<int> (EventManager.GUI.MENU_BTN_UP.ToString (), hitInfo.collider.gameObject.GetInstanceID ());
 		}
 
-		if(drag <= -Screen.width/2){
-			ToMenu (true);
-		}else if(drag >= Screen.width/2){
-			ToGarage (true);
+		//here do tween things
+		if(isTweenLocked){
+			return;
+		}
+
+		holdTime = Time.time - holdTime;
+		if(holdTime < 0.5f){
+			Swiped (drag);
 		}else{
-			SnapBack();
+			Held ();
+		}
+	}
+
+	void Swiped(float drag){
+		if (Mathf.Abs (drag) < minDrag) {
+			return;
+		}
+
+		LeanTween.cancel (swingTweenID);
+		if(drag < 0){
+			ToMenu (true);
+		}else{
+			ToGarage (true);
+		}
+	}
+
+	void Held(){
+		float anglePercentage = (transform.localRotation.eulerAngles.y - menuPos.y) / (garagePos.y - menuPos.y);
+		if (anglePercentage > 0.5f) {
+			ToGarage (true);
+		} else {
+			ToMenu (true);
 		}
 	}
 
 	void OnDrag(LeanFinger fg){
+		//here do raycast things
+		if (isUILocked) {
+			return;
+		}
+
 		RaycastHit hitInfo;
 		Ray ray = fg.GetRay ();
-
 		if (Physics.Raycast (ray, out hitInfo)) {
 			Messenger.Broadcast<int> (EventManager.GUI.MENU_BTN_HOLD.ToString (), hitInfo.collider.gameObject.GetInstanceID ());
 		} else {
 			Messenger.Broadcast<int> (EventManager.GUI.MENU_BTN_HOLD.ToString (), 0);
 		}
 
-		if(isUILocked || isTweenLocked){
+		//here do tween things
+		if(isTweenLocked){
 			return;
 		}
 
 		drag += fg.DeltaScreenPosition.x;
-		LeanTween.rotateAroundLocal (gameObject, Vector3.up, fg.DeltaScreenPosition.x * 0.03f, 0);
+		if(Mathf.Abs(drag) > minDrag){
+			LeanTween.cancel (swingTweenID);
+			LeanTween.rotateAroundLocal (gameObject, Vector3.up, fg.DeltaScreenPosition.x * 0.03f, 0);
+		}
 	}
 
 	void OnTap(LeanFinger fg){
@@ -149,28 +199,14 @@ public class MainMenuController3D : MonoBehaviour {
 			ToGarage (true);
 		}
 	}
-
-	void OnFingerSwipe(LeanFinger finger){
-		if(isUILocked || isTweenLocked){
-			return;
-		}
-
-		var swipe = finger.SwipeDelta;
-
-		//swipe left
-		if (swipe.x < -Mathf.Abs (swipe.y)) {
-			ToMenu ();
-		}
-
-		//swipe right
-		if (swipe.x > Mathf.Abs (swipe.y)) {
-			ToGarage ();
-		}
-	}
 		
 	void ToMenu(bool ovrd = false){
 		if (!isInMenu || ovrd) {
-			LeanTween.rotateLocal (gameObject, menuPos, menuTweenTime);
+			SetTweenLock (true);
+			LeanTween.rotateLocal (gameObject, menuPos, menuTweenTime).setOnComplete(() => {
+				SwingCam(-1f);
+				SetTweenLock (false);
+			});
 			Messenger.Broadcast (EventManager.GUI.TO_MENU.ToString());
 			isInMenu = true;
 		}
@@ -178,7 +214,11 @@ public class MainMenuController3D : MonoBehaviour {
 
 	void ToGarage(bool ovrd = false){
 		if (isInMenu || ovrd) {
-			LeanTween.rotateLocal (gameObject, garagePos, menuTweenTime);
+			SetTweenLock (true);
+			LeanTween.rotateLocal (gameObject, garagePos, menuTweenTime).setOnComplete(() => {
+				SwingCam(1f);
+				SetTweenLock (false);
+			});
 			Messenger.Broadcast (EventManager.GUI.TO_GARAGE.ToString());
 			isInMenu = false;
 		}

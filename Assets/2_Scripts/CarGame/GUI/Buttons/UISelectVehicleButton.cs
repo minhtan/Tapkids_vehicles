@@ -59,7 +59,7 @@ public class UISelectVehicleButton : MonoBehaviour {
 	void HandleBtnHold(int _id){
 		if (isPressed) {
 			if (_id == gameObject.GetInstanceID () && !menu.IsInMenu) {
-				LeanTween.moveLocalY (gameObject, -2*initY, 0.1f);
+				LeanTween.moveLocalY (gameObject, -2.5f*initY, 0.1f);
 			} else {
 				LeanTween.moveLocalY (gameObject, initY, 0.1f);
 			}
