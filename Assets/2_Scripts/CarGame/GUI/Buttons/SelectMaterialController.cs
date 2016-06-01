@@ -14,7 +14,7 @@ public class SelectMaterialController : MonoBehaviour {
 	public LightMat[] lightMats;
 	public Renderer[] lightRenderers;
 
-	public bool[] lights;
+	public Material matLock;
 	#region private members
 	#endregion private members
 	 
@@ -24,11 +24,6 @@ public class SelectMaterialController : MonoBehaviour {
 	}
 
 	void Start () {
-		// setup toggle group
-		if (lightRenderers.Length > 0) {
-			lights = new bool[lightRenderers.Length];
-		}
-
 	}
 
 	void OnDisable () {
@@ -48,15 +43,22 @@ public class SelectMaterialController : MonoBehaviour {
 
 	#region private functions
 	void HandleUpdateVehicle (Vehicle _vehicle) {
-		for (int i = 0; i < lights.Length; i++) {
-			if (_vehicle.matId == i) {
-				lightRenderers [i].material = GetMatByColor (_vehicle.carMats[i].color).matOff;
-				lights[i] = true;
-			} else {
-				lightRenderers [i].material = GetMatByColor (_vehicle.carMats[i].color).matOn;
-				lights[i] = false;
+		if (PlayerDataController.Instance.unlockedIds.Contains (_vehicle.id)) {
+			for (int i = 0; i < lightRenderers.Length; i++) {
+				if (_vehicle.matId == i) {
+					lightRenderers [i].material = GetMatByColor (_vehicle.carMats[i].color).matOff;
+				} else {
+					lightRenderers [i].material = GetMatByColor (_vehicle.carMats[i].color).matOn;
+				}
+			}
+		} else {
+			for (int i = 0; i < lightRenderers.Length; i++) {
+				lightRenderers [i].material = matLock ;
 			}
 		}
+
 	}
+
+
 	#endregion private functions
 }
