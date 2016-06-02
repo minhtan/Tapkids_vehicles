@@ -179,7 +179,7 @@ public class GaragaController : MonoBehaviour {
 
 	private void HandleSelectVehicle (int _index) {
 		if (valid == false) return;
-
+		purchaseButton.SetActive (false);
 		menu.SetTweenLock (true);
 		valid = false;
 		if (_index == 1)
@@ -297,7 +297,7 @@ public class GaragaController : MonoBehaviour {
 
 	private void HandleExitGarage () {
 		if (menu.IsInMenu) return;
-	
+		purchaseButton.SetActive (false);
 		// check if current select car is not unlocked 
 		if (!PlayerDataController.Instance.unlockedIds.Contains (vehicles [currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle.id)) {
 			menu.SetTweenLock (true);
@@ -358,7 +358,6 @@ public class GaragaController : MonoBehaviour {
 			StartCoroutine (MoveVehicle (vehicles [HandleCurrentIndex (lastUnlockedIndex, 0)].transform, spline2, 1f, () => {
 				HandleElevator (vehicles [HandleCurrentIndex (lastUnlockedIndex, 0)], true, () => {
 					currentSelectedIndex = HandleCurrentIndex (lastUnlockedIndex, 0);
-					purchaseButton.SetActive (false);
 					curVehicleRotateId = LeanTween.rotateAroundLocal (vehicles [HandleCurrentIndex (currentSelectedIndex, 0)], Vector3.up, 360f, 10f).setLoopClamp().id;
 				});
 			}));
