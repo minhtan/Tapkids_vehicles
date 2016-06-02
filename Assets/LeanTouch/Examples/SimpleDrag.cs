@@ -38,6 +38,9 @@ public class SimpleDrag : MonoBehaviour
 	
 	public void OnFingerDown(Lean.LeanFinger finger)
 	{
+		if (Lean.LeanTouch.GuiInUse)
+			return;
+		
 		// Raycast information
 		var ray = finger.GetRay();
 		var hit = default(RaycastHit);

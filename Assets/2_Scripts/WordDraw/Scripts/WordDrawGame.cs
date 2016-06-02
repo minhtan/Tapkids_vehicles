@@ -14,11 +14,18 @@ namespace WordDraw
 		public LetterSpawner _spawner;
 		public WordDrawScore _wordDrawScore;
 
+		private const string TEXT_CAREFULLY = "More Carefully";
+		private const string TEXT_GOOD_JOB = "Good Job";
+		private const string TEXT_COMBO = "Combo X";
+		private const string TEXT_GAME_OVER = "Game Over";
+
 		void OnEnable ()
 		{
 			LeanGestureRecognizer.OnGestureReset += OnGestureReset;
 			LetterSpawner.OnGameOver += OnGameOver;
 			LetterSpawner.OnNoMatchResult += OnNoMatch;
+			LetterSpawner.OnCorrect += OnCorrect;
+			LetterSpawner.OnReturnBonusCount += OnBonus;
 			LeanGestureRecognizer.OnGestureDetected += OnResult;
 			Messenger.AddListener<bool> (EventManager.GameState.PAUSE.ToString(), Pause);
 			UICountDownText.OnEndCountDown += OnStartGame;
@@ -29,6 +36,8 @@ namespace WordDraw
 			LeanGestureRecognizer.OnGestureReset -= OnGestureReset;
 			LetterSpawner.OnGameOver -= OnGameOver;
 			LetterSpawner.OnNoMatchResult -= OnNoMatch;
+			LetterSpawner.OnCorrect -= OnCorrect;
+			LetterSpawner.OnReturnBonusCount -= OnBonus;
 			LeanGestureRecognizer.OnGestureDetected -= OnResult;
 			UICountDownText.OnEndCountDown -= OnStartGame;
 		}
@@ -61,9 +70,21 @@ namespace WordDraw
 			SceneController.Instance.ReloadCurrentScene ();
 		}
 
+		private void OnCorrect()
+		{
+			_statusText.text = TEXT_GOOD_JOB;
+			StartCoroutine (ResetStatusTextCor());
+		}
+
+		private void OnBonus(int count)
+		{
+			_statusText.text = TEXT_COMBO + count;
+			StartCoroutine (ResetStatusTextCor());
+		}
+
 		private void OnNoMatch()
 		{
-			_statusText.text = "More Carefully";
+			_statusText.text = TEXT_CAREFULLY;
 			StartCoroutine (ResetStatusTextCor());
 		}
 
@@ -91,7 +112,7 @@ namespace WordDraw
 
 		private void OnGameOver()
 		{
-			_statusText.text = "GAMEOVER";
+			_statusText.text = TEXT_GAME_OVER;
 			_drawer.enabled = false;
 			_wordDrawScore.enabled = false;
 		}
