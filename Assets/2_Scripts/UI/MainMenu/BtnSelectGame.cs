@@ -5,6 +5,7 @@ using Lean;
 public class BtnSelectGame : MonoBehaviour {
 	public SceneController.SceneID sceneToLoad;
 	MainMenuController3D menu;
+	public float swing;
 
 	void Start(){
 		menu = FindObjectOfType<MainMenuController3D> ();
@@ -21,8 +22,10 @@ public class BtnSelectGame : MonoBehaviour {
 	void OnBtnTap(int _id){
 		if(menu.IsInMenu){
 			if(_id == gameObject.GetInstanceID()){
-				LeanTween.rotateAroundLocal (gameObject, Vector3.forward, 720f, 0.5f).setEase (LeanTweenType.easeOutBack).setOnComplete (() => {
-					SceneController.Instance.LoadingSceneAsync (sceneToLoad);				
+				LeanTween.rotateAroundLocal (gameObject, Vector3.forward, swing, 0.1f).setEase (LeanTweenType.linear).setOnComplete (() => {
+					LeanTween.rotateAroundLocal (gameObject, Vector3.forward, -swing, 0.9f).setEase (LeanTweenType.easeOutElastic).setOnComplete (() => {
+						SceneController.Instance.LoadingSceneAsync (sceneToLoad);				
+					});
 				});
 			}
 		}
