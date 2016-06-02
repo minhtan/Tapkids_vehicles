@@ -1618,25 +1618,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 340825166}
---- !u!1 &344985061 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 100010, guid: 5c418b5fae161c34999b6500c9b22abd, type: 3}
-  m_PrefabInternal: {fileID: 1518263796}
---- !u!114 &344985062
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 344985061}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 541a76f9c03874323b5154b14ac00427, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spline1: {fileID: 1642030562}
-  duration: 50
-  lookForward: 1
-  mode: 1
 --- !u!1 &360301229
 GameObject:
   m_ObjectHideFlags: 0
@@ -2262,7 +2243,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneToLoad: 6
   swing: 30
-  clip: {fileID: 8300000, guid: 3f27d3b66b39d42eb980d262cbe85694, type: 3}
 --- !u!65 &462009297
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2288,7 +2268,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneToLoad: 3
   swing: 30
-  clip: {fileID: 8300000, guid: 3f27d3b66b39d42eb980d262cbe85694, type: 3}
 --- !u!65 &462009299
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2314,7 +2293,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneToLoad: 5
   swing: -30
-  clip: {fileID: 8300000, guid: 3f27d3b66b39d42eb980d262cbe85694, type: 3}
 --- !u!65 &462009301
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2340,7 +2318,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneToLoad: 2
   swing: 30
-  clip: {fileID: 8300000, guid: 3f27d3b66b39d42eb980d262cbe85694, type: 3}
 --- !u!65 &462009303
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2366,7 +2343,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneToLoad: 4
   swing: -30
-  clip: {fileID: 8300000, guid: 3f27d3b66b39d42eb980d262cbe85694, type: 3}
 --- !u!1 &471052766
 GameObject:
   m_ObjectHideFlags: 0
@@ -7186,8 +7162,6 @@ MonoBehaviour:
   diskUp: {fileID: 620353346}
   locker: {fileID: 339865905}
   purchaseButton: {fileID: 1039951370}
-  carClip: {fileID: 8300000, guid: 6001e8b6cd5af4361bb35db67bf2a80e, type: 3}
-  lockClip: {fileID: 8300000, guid: 530abb17754a2469ba28f9817c52aa39, type: 3}
   vehicles: []
   spline1: {fileID: 1289213534}
   spline2: {fileID: 586243602}
@@ -10542,60 +10516,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1498054831}
---- !u!1001 &1518263796
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 400010, guid: 5c418b5fae161c34999b6500c9b22abd, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -44.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 400010, guid: 5c418b5fae161c34999b6500c9b22abd, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 22.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 400010, guid: 5c418b5fae161c34999b6500c9b22abd, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.024409331
-      objectReference: {fileID: 0}
-    - target: {fileID: 400010, guid: 5c418b5fae161c34999b6500c9b22abd, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400010, guid: 5c418b5fae161c34999b6500c9b22abd, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400010, guid: 5c418b5fae161c34999b6500c9b22abd, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400010, guid: 5c418b5fae161c34999b6500c9b22abd, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 400010, guid: 5c418b5fae161c34999b6500c9b22abd, type: 3}
-      propertyPath: m_RootOrder
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 400010, guid: 5c418b5fae161c34999b6500c9b22abd, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 400010, guid: 5c418b5fae161c34999b6500c9b22abd, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 400010, guid: 5c418b5fae161c34999b6500c9b22abd, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 100
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 5c418b5fae161c34999b6500c9b22abd, type: 3}
-  m_IsPrefabParent: 0
 --- !u!1 &1523303920
 GameObject:
   m_ObjectHideFlags: 0
@@ -15170,8 +15090,6 @@ MonoBehaviour:
   diskUp: {fileID: 0}
   locker: {fileID: 0}
   purchaseButton: {fileID: 0}
-  carClip: {fileID: 0}
-  lockClip: {fileID: 0}
   vehicles: []
   spline1: {fileID: 0}
   spline2: {fileID: 0}
