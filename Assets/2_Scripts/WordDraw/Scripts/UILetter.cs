@@ -9,6 +9,9 @@ namespace WordDraw
 		[SerializeField]
 		private Letters letter;
 
+		[SerializeField]
+		private bool _autoConfig = true;
+
 		private Vector2 _explodeDir;
 		private Rigidbody2D _body;
 		private BoxCollider2D _collider;
@@ -24,7 +27,9 @@ namespace WordDraw
 			_rectTrans = GetComponent<RectTransform> ();
 			_body = GetComponent<Rigidbody2D> ();
 			_explodeDir = new Vector2 (1f, 0f);
-			SetupLetter ();
+
+			if (_autoConfig)
+				SetupLetter ();
 		}
 
 
@@ -42,7 +47,7 @@ namespace WordDraw
 			_collider.offset = offset;
 		}
 
-		public void DestroyLetter(int curDifficulty)
+		public void DestroyLetter (int curDifficulty)
 		{
 			_collider.enabled = false;
 			_body.AddForce (_explodeDir * 300f * (curDifficulty + 1), ForceMode2D.Impulse);

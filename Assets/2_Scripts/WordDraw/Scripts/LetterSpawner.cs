@@ -39,6 +39,7 @@ namespace WordDraw
 
 		public WordDrawDifficulty CurrentDifficulty { get { return _difficulties [_curDifficulty]; } }
 
+		public static UnityAction OnCorrect;
 		public static UnityAction<Letters> OnReturnRecognizedResult;
 		public static UnityAction<int> OnReturnBonusCount;
 		public static UnityAction OnNoMatchResult;
@@ -97,7 +98,12 @@ namespace WordDraw
 				}
 			}
 
-			if (correctCount > 1) {
+			if(correctCount == 1)
+			{
+				if (OnCorrect != null)
+					OnCorrect ();
+			}
+			else if (correctCount > 1) {
 				if (OnReturnBonusCount != null)
 					OnReturnBonusCount (correctCount);
 			} else if (correctCount == 0) {
