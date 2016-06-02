@@ -370,18 +370,16 @@ public class GaragaController : MonoBehaviour {
 
 	void HandleElevator (GameObject _go, bool _isGoingUp, System.Action _callback) {
 		float scaleFacetor = _go.GetComponent <ArcadeCarController> ().vehicle.garageScale;
-
-		if (!PlayerDataController.Instance.mPlayer.unlockedVehicles.ContainsKey (_go.GetComponent<ArcadeCarController> ().vehicle.id)) {
-			locker.SetActive (true);
-		} else {
-			locker.SetActive (false);
-		}
+		bool isUnlocked = PlayerDataController.Instance.mPlayer.unlockedVehicles.ContainsKey (_go.GetComponent<ArcadeCarController> ().vehicle.id);
 
 		if (_isGoingUp) {
-			LeanTween.scale (_go, scaleFacetor.ToVector3(), .5f).setEase (LeanTweenType.easeOutQuint);
+			LeanTween.scale (_go, isUnlocked ? scaleFacetor.ToVector3() : (scaleFacetor * .7f).ToVector3 (), .5f).setEase (LeanTweenType.easeOutQuint).setOnComplete ( () => {
+				HandleLocker (_go);
+			});
 			LeanTween.move (_go, diskUp.position, .5f).setEase (LeanTweenType.easeOutQuint);	
 			LeanTween.move (disk.gameObject, diskUp.position , .5f).setEase (LeanTweenType.easeOutQuint).setOnComplete (_callback);
 		} else {
+			locker.SetActive (false);
 			LeanTween.scale (_go, Vector3.zero, .5f).setEase (LeanTweenType.easeInQuint).setOnComplete ( () => {
 				LeanTween.cancel (curVehicleRotateId);
 			});
@@ -430,8 +428,19 @@ public class GaragaController : MonoBehaviour {
 		}
 	}
 
-
-	 private void HandlePurchaseVehicle () {
+	private void HandleLocker (GameObject _go) {
+		if (!PlayerDataController.Instance.mPlayer.unlockedVehicles.ContainsKey (_go.GetComponent<ArcadeCarController> ().vehicle.id)) {
+			locker.SetActive (true);
+		} else {
+			locker.SetActive (false);
+		}
+		///
+		BoxCollider body = _go.transform.Find ("Colliders").GetComponent <BoxCollider> ();
+		float offset = 5.5f;
+		Vector3 lockerPos = new Vector3 (body.bounds.center.x, body.bounds.size.y + offset, body.bounds.center.z);
+		locker.transform.position = lockerPos;
+	}
+	private void HandlePurchaseVehicle () {
 		// check cost
 		if (PlayerDataController.Instance.mPlayer.credit >= vehicles[currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle.costPoint) {
 			PlayerDataController.Instance.UnlockVehicle (vehicles[currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle);
@@ -445,6 +454,8 @@ public class GaragaController : MonoBehaviour {
 					renderers [j].material =  vehicles[currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle.carMats [_matID].mat;
 				}
 			}
+
+			LeanTween.scale (vehicles [currentSelectedIndex], vehicles [currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle.garageScale.ToVector3 (), .5f).setEase (LeanTweenType.easeOutBack);
 			locker.SetActive (false);
 			Messenger.Broadcast <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), vehicles[currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle);
 		} else {

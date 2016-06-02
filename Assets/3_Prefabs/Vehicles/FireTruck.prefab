@@ -125,7 +125,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 459360}
   m_Layer: 0
-  m_Name: Fire truck
+  m_Name: Meshes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -597,12 +597,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5248ffd71b704e1d90954e56bc87d4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  carMats:
-  - mat: {fileID: 2100000, guid: 6fd36073e027440388bd66b734b41b94, type: 2}
-    color: 4
-  - mat: {fileID: 2100000, guid: 40372c53295d64ad5b0c9ea125dbeb07, type: 2}
-    color: 3
-  garageScale: 1.47
   vehicle:
     id: 5
     name: FireTruck
@@ -805,6 +799,10 @@ Prefab:
       propertyPath: vehicle.carMats.Array.data[1].mat
       value: 
       objectReference: {fileID: 2100000, guid: 40372c53295d64ad5b0c9ea125dbeb07, type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_Name
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 107962}

@@ -9,7 +9,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 462802}
   m_Layer: 0
-  m_Name: Limousine
+  m_Name: Meshes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -570,7 +570,7 @@ BoxCollider:
   m_GameObject: {fileID: 112354}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1.5254995, y: 0.55301213, z: 3.4446664}
   m_Center: {x: 0.0032684207, y: 0.4018973, z: -0.34014416}
@@ -584,8 +584,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.6771238, y: 0.5506077, z: 5.9294806}
-  m_Center: {x: -0.008425117, y: -0.14479017, z: 0.014757156}
+  m_Size: {x: 1.6771238, y: 1.0665879, z: 5.9294806}
+  m_Center: {x: -0.008425117, y: 0.15184718, z: 0.014757156}
 --- !u!114 &11412110
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -597,12 +597,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5248ffd71b704e1d90954e56bc87d4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  carMats:
-  - mat: {fileID: 2100000, guid: 098794d6032bc4eb68b42d64d8c346c4, type: 2}
-    color: 6
-  - mat: {fileID: 2100000, guid: e526c3e03a53140c7b8d42593d2191d1, type: 2}
-    color: 4
-  garageScale: 1.55
   vehicle:
     id: 8
     name: Limousine
@@ -805,6 +799,10 @@ Prefab:
       propertyPath: vehicle.carMats.Array.data[1].mat
       value: 
       objectReference: {fileID: 2100000, guid: e526c3e03a53140c7b8d42593d2191d1, type: 2}
+    - target: {fileID: 0}
+      propertyPath: m_Name
+      value: Meshes
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 175580}
