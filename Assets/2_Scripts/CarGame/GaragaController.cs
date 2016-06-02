@@ -317,15 +317,15 @@ public class GaragaController : MonoBehaviour {
 				vehicles [HandleCurrentIndex (currentSelectedIndex, -1)].SetActive (false);
 			}));
 
-			LeanTween.scale (vehicles [currentSelectedIndex], Vector3.one, 1f).setEase (LeanTweenType.easeOutQuint);
+			LeanTween.scale (vehicles [currentSelectedIndex], Vector3.one, .5f).setEase (LeanTweenType.easeOutQuint);
 			StartCoroutine (MoveVehicle (vehicles [currentSelectedIndex].transform, spline3, () => {
 				StartCoroutine (MoveVehicle (vehicles [currentSelectedIndex].transform, spline4, () => {
 					vehicles [currentSelectedIndex].SetActive (false);
 				}));
 			}));
-			LeanTween.scale (vehicles [HandleCurrentIndex (currentSelectedIndex, 1)], Vector3.zero, 1f).setEase (LeanTweenType.easeInQuint);
+			LeanTween.scale (vehicles [HandleCurrentIndex (currentSelectedIndex, 1)], Vector3.zero, .5f).setEase (LeanTweenType.easeInQuint);
 			StartCoroutine (MoveVehicle (vehicles [HandleCurrentIndex (currentSelectedIndex, 1)].transform, spline2, () => {
-				LeanTween.scale (vehicles [HandleCurrentIndex (currentSelectedIndex, 1)], Vector3.one, 1f).setEase (LeanTweenType.easeOutQuint);
+				LeanTween.scale (vehicles [HandleCurrentIndex (currentSelectedIndex, 1)], Vector3.one, .5f).setEase (LeanTweenType.easeOutQuint);
 				StartCoroutine (MoveVehicle (vehicles [HandleCurrentIndex (currentSelectedIndex, 1)].transform, spline3, () => {
 					StartCoroutine (MoveVehicle (vehicles [HandleCurrentIndex (currentSelectedIndex, 1)].transform, spline4, () => {
 						vehicles [HandleCurrentIndex (currentSelectedIndex, 1)].SetActive (false);
@@ -339,9 +339,9 @@ public class GaragaController : MonoBehaviour {
 	IEnumerator ReSetupVehicles () {
 		vehicles [HandleCurrentIndex (lastUnlockedIndex, -1)].SetActive (true);
 		StartCoroutine (MoveVehicle (vehicles [HandleCurrentIndex (lastUnlockedIndex, -1)].transform, spline1, () => {
-			LeanTween.scale (vehicles [HandleCurrentIndex (lastUnlockedIndex, -1)], Vector3.zero, 1f).setEase (LeanTweenType.easeInQuint);
+			LeanTween.scale (vehicles [HandleCurrentIndex (lastUnlockedIndex, -1)], Vector3.zero, .5f).setEase (LeanTweenType.easeInQuint);
 			StartCoroutine (MoveVehicle (vehicles [HandleCurrentIndex (lastUnlockedIndex, -1)].transform, spline2, () => {
-				LeanTween.scale (vehicles [HandleCurrentIndex (lastUnlockedIndex, -1)], Vector3.one, 1f).setEase (LeanTweenType.easeOutQuint);
+				LeanTween.scale (vehicles [HandleCurrentIndex (lastUnlockedIndex, -1)], Vector3.one, .5f).setEase (LeanTweenType.easeOutQuint);
 				StartCoroutine (MoveVehicle (vehicles [HandleCurrentIndex (lastUnlockedIndex, -1)].transform, spline3, () => { menu.SetTweenLock (false); }));
 			}));
 		}));
@@ -349,7 +349,7 @@ public class GaragaController : MonoBehaviour {
 		yield return new WaitForSeconds (.25f);
 		vehicles [HandleCurrentIndex (lastUnlockedIndex, 0)].SetActive (true);
 		StartCoroutine (MoveVehicle (vehicles [HandleCurrentIndex (lastUnlockedIndex, 0)].transform, spline1, () => {
-			LeanTween.scale (vehicles [HandleCurrentIndex (lastUnlockedIndex, 0)], Vector3.zero, 1f).setEase (LeanTweenType.easeInQuint);
+			LeanTween.scale (vehicles [HandleCurrentIndex (lastUnlockedIndex, 0)], Vector3.zero, .5f).setEase (LeanTweenType.easeInQuint);
 			StartCoroutine (MoveVehicle (vehicles [HandleCurrentIndex (lastUnlockedIndex, 0)].transform, spline2, () => {
 				HandleElevator (vehicles [HandleCurrentIndex (lastUnlockedIndex, 0)], true, () => {
 					currentSelectedIndex = HandleCurrentIndex (lastUnlockedIndex, 0);
