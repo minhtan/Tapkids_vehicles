@@ -6,6 +6,8 @@ public class UISelectMaterialButton : MonoBehaviour {
 	public int matId;
 	public bool isOn;
 	private MainMenuController3D menu;
+	public AudioClip clip;
+
 	void OnEnable () {
 		Messenger.AddListener <int> (EventManager.GUI.MENU_BTN_TAP.ToString (), OnButtonTap);
 		Messenger.AddListener <int> (EventManager.GUI.CHANGE_MATERIAL.ToString (), HandleChangeMaterial);
@@ -22,7 +24,7 @@ public class UISelectMaterialButton : MonoBehaviour {
 			if (gameObject.GetInstanceID () == _id) {
 				if (!isOn) {
 					Messenger.Broadcast <int> (EventManager.GUI.CHANGE_MATERIAL.ToString (), matId);
-					AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.BUTTON_CLICK);
+					AudioManager.Instance.PlayTemp (clip);
 					isOn = true;
 				}
 			}

@@ -25,6 +25,9 @@ public class GaragaController : MonoBehaviour {
 
 	public GameObject locker;
 	public GameObject purchaseButton;
+
+	public AudioClip carMove;
+	public AudioClip carUnlock;
 	#endregion public members
 
 	#region private members
@@ -182,6 +185,8 @@ public class GaragaController : MonoBehaviour {
 		purchaseButton.SetActive (false);
 		menu.SetTweenLock (true);
 		valid = false;
+		AudioManager.Instance.PlayTemp (carMove);
+
 		if (_index == 1)
 			NextOne ();
 		else
@@ -410,6 +415,7 @@ public class GaragaController : MonoBehaviour {
 				}
 			}
 
+			AudioManager.Instance.PlayTemp (carUnlock);
 			LeanTween.scale (vehicles [currentSelectedIndex], vehicles [currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle.garageScale.ToVector3 (), .5f).setEase (LeanTweenType.easeOutBack);
 			locker.SetActive (false);
 			purchaseButton.SetActive (false);
