@@ -14,7 +14,7 @@ public class GaragaController : MonoBehaviour {
 
 	#region public members
 	public Material lockedMaterial;
-	private int currentSelectedIndex;
+	public int currentSelectedIndex;
 	public Transform disk;
 
 	public Transform initPos;
@@ -73,39 +73,56 @@ public class GaragaController : MonoBehaviour {
 
 		// then setup garage
 		for (int i = 0; i < GameConstant.fourWheels.Count; i++) {
-			StartCoroutine (SetupCar (GameConstant.fourWheels[i], () => {
-				vehicles = vehicles.OrderBy (x => x.GetComponent <ArcadeCarController> ().vehicle.id).ToList();
+			StartCoroutine (SetupVehicles (GameConstant.fourWheels[i], () => {
+				for (int j = 0; j < vehicles.Count; j++) {
+					int vehicleId = vehicles[j].GetComponent <ArcadeCarController> ().vehicle.id;
+					if (vehicleId == PlayerDataController.Instance.mPlayer.vehicleId) {
+						vehicles[j].SetActive (true);
+						currentSelectedIndex = j;
+						lastUnlockedIndex = currentSelectedIndex;
+
+						vehicles[j].transform.localPosition = diskUp.position;
+						vehicles[j].transform.localScale = vehicles[j].GetComponent <ArcadeCarController> ().vehicle.garageScale.ToVector3 ();
+						curVehicleRotateId = LeanTween.rotateAroundLocal (vehicles[j], Vector3.up, 360f, 10f).setLoopClamp().id;
+		
+						Messenger.Broadcast <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), vehicles[j].GetComponent <ArcadeCarController> ().vehicle);
+					} 
+					else if (vehicleId == HandleCurrentIndex (PlayerDataController.Instance.mPlayer.vehicleId, 1)) {
+//						int _nextId = HandleCurrentIndex (vehicleId, 1);
+						vehicles [vehicleId].transform.position = nextPos.position;
+						vehicles [vehicleId].transform.rotation = nextPos.rotation;
+						vehicles [vehicleId].SetActive (true);
+					} 
+					else if (vehicleId == HandleCurrentIndex (PlayerDataController.Instance.mPlayer.vehicleId, -1)) {
+//						int _prevId = HandleCurrentIndex (vehicleId, -1);	
+						vehicles [vehicleId].transform.position = prevPos.position;
+						vehicles [vehicleId].transform.rotation = prevPos.rotation;
+						vehicles [vehicleId].SetActive (true);
+					}
+					Debug.Log ("");
+				}
 			}));
 		}
 	}
 
-	private IEnumerator SetupCar (string _vehicleName, System.Action _callback) {
+	private IEnumerator SetupVehicles (string _vehicleName, System.Action _callback = null) {
 		yield return new WaitForSeconds (1f);
 		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (GameConstant.assetBundleName, _vehicleName, (bundle) => {
 			GameObject carGameObject = Instantiate (bundle, initPos.position, Quaternion.identity) as GameObject;
+			int carId = carGameObject.GetComponent <ArcadeCarController> ().vehicle.id;
 			vehicles.Add (carGameObject);
 			carGameObject.GetComponent <Rigidbody> ().isKinematic = true;
 			carGameObject.SetActive (false);
-			// apply lock shader
-			if (!PlayerDataController.Instance.unlockedIds.Contains (carGameObject.GetComponent <ArcadeCarController> ().vehicle.id)) {
+			carGameObject.transform.SetParent (mTransform, false);
+
+//			// apply lock shader
+			if (!PlayerDataController.Instance.unlockedIds.Contains (carId)) {
 				Renderer[] renderers = carGameObject.GetComponentsInChildren <Renderer> ();
 				for (int j = 0; j < renderers.Length; j++) {
 					renderers [j].material = lockedMaterial;
 				}
 			} 
-
-			// apply material matching with player data
-//			for (int i = 0; i < PlayerDataController.Instance.mPlayer.unlockedVehicles.Count; i++) {
-//				if (carGameObject.GetComponent <ArcadeCarController> ().vehicle.id == PlayerDataController.Instance.mPlayer.unlockedVehicles [i].id ) {
-//					carGameObject.GetComponent <ArcadeCarController> ().vehicle.matId = PlayerDataController.Instance.mPlayer.unlockedVehicles [i].matId;
-//					Renderer [] renderers = carGameObject.GetComponentsInChildren <Renderer> ();
-//					for (int j = 0; j < renderers.Length; j++) {
-//						renderers [j].material = carGameObject.GetComponent <ArcadeCarController> ().vehicle.carMats [PlayerDataController.Instance.mPlayer.unlockedVehicles [i].matId].mat;
-//					}
-//					break;
-//				}
-//			}
-			int carId = carGameObject.GetComponent <ArcadeCarController> ().vehicle.id;
+			// apply current selected material
 			if (PlayerDataController.Instance.mPlayer.unlockedVehicles.ContainsKey (carId)) {
 				int _matID;
 				if (PlayerDataController.Instance.mPlayer.unlockedVehicles.TryGetValue (carId, out _matID)) {
@@ -116,34 +133,38 @@ public class GaragaController : MonoBehaviour {
 					}
 				}
 			}
-			carGameObject.transform.SetParent (mTransform, false);
+
 			// update player current car 
-			if (PlayerDataController.Instance.mPlayer.vehicleId == carGameObject.GetComponent <ArcadeCarController> ().vehicle.id) {
-				carGameObject.SetActive (true);
-				currentSelectedIndex = HandleCurrentIndex (vehicles.IndexOf (carGameObject) , 0);
-				lastUnlockedIndex = currentSelectedIndex;
+//			if (PlayerDataController.Instance.mPlayer.vehicleId == carId) {
+//				carGameObject.SetActive (true);
+//				currentSelectedIndex = HandleCurrentIndex (vehicles.IndexOf (carGameObject) , 0);
+//				lastUnlockedIndex = currentSelectedIndex;
+//
+//				carGameObject.transform.localPosition = diskUp.position;
+//				carGameObject.transform.localScale = new Vector3 (carGameObject.GetComponent <ArcadeCarController> ().vehicle.garageScale,carGameObject.GetComponent <ArcadeCarController> ().vehicle.garageScale,carGameObject.GetComponent <ArcadeCarController> ().vehicle.garageScale);
+//				curVehicleRotateId = LeanTween.rotateAroundLocal (carGameObject, Vector3.up, 360f, 10f).setLoopClamp().id;
+//
+//				Messenger.Broadcast <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), carGameObject.GetComponent <ArcadeCarController> ().vehicle);
+//			} else if (HandleCurrentIndex (PlayerDataController.Instance.mPlayer.vehicleId, 1) == carId) {
+//				// setup next vehicle position
+//				int id = HandleCurrentIndex (currentSelectedIndex, 1);
+//				vehicles [HandleCurrentIndex (currentSelectedIndex, 1)].transform.position = nextPos.position;
+//				vehicles [HandleCurrentIndex (currentSelectedIndex, 1)].transform.rotation = nextPos.rotation;
+//				vehicles [HandleCurrentIndex (currentSelectedIndex, 1)].SetActive (true);
+//			} else if (HandleCurrentIndex (PlayerDataController.Instance.mPlayer.vehicleId, - 1) == carId) {
+//				// setup previous vehicle position
+//				int _prevId = HandleCurrentIndex (currentSelectedIndex, -1);	
+//				vehicles [HandleCurrentIndex (currentSelectedIndex, -1)].transform.position = prevPos.position;
+//				vehicles [HandleCurrentIndex (currentSelectedIndex, -1)].transform.rotation = prevPos.rotation;
+//				vehicles [HandleCurrentIndex (currentSelectedIndex, -1)].SetActive (true);
+//			}
 
-				vehicles [HandleCurrentIndex (currentSelectedIndex, -1)].transform.position = prevPos.position;
-				vehicles [HandleCurrentIndex (currentSelectedIndex, -1)].transform.rotation = prevPos.rotation;
-				vehicles [HandleCurrentIndex (currentSelectedIndex, -1)].SetActive (true);
-
-				carGameObject.transform.localPosition = diskUp.position;
-
-				carGameObject.transform.localScale = new Vector3 (carGameObject.GetComponent <ArcadeCarController> ().vehicle.garageScale,carGameObject.GetComponent <ArcadeCarController> ().vehicle.garageScale,carGameObject.GetComponent <ArcadeCarController> ().vehicle.garageScale);
-				curVehicleRotateId = LeanTween.rotateAroundLocal (carGameObject, Vector3.up, 360f, 10f).setLoopClamp().id;
-
-				Debug.Log (carGameObject.GetComponent <ArcadeCarController> ().vehicle.matId);
-
-				Messenger.Broadcast <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), carGameObject.GetComponent <ArcadeCarController> ().vehicle);
-			} else if (currentSelectedIndex != 0) {
-				vehicles [HandleCurrentIndex (currentSelectedIndex, 1)].transform.position = nextPos.position;
-				vehicles [HandleCurrentIndex (currentSelectedIndex, 1)].transform.rotation = nextPos.rotation;
-				vehicles [HandleCurrentIndex (currentSelectedIndex, 1)].SetActive (true);
-			} 
-			if (_vehicleName == GameConstant.fourWheels [GameConstant.fourWheels.Count - 1]) {
-				_callback ();
-			}
 		}));
+
+		yield return new WaitForSeconds (.5f);
+		if (_vehicleName == GameConstant.fourWheels [GameConstant.fourWheels.Count - 1]) {
+			_callback ();
+		}
 	}
 
 	void SetCarPosition () {
@@ -298,6 +319,7 @@ public class GaragaController : MonoBehaviour {
 	private void HandleExitGarage () {
 		if (menu.IsInMenu) return;
 		purchaseButton.SetActive (false);
+
 		// check if current select car is not unlocked 
 		if (!PlayerDataController.Instance.unlockedIds.Contains (vehicles [currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle.id)) {
 			menu.SetTweenLock (true);
@@ -313,6 +335,8 @@ public class GaragaController : MonoBehaviour {
 				ClearVehicle ();
 			}
 			locker.SetActive (false);
+		} else {
+
 		}
 	}
 
