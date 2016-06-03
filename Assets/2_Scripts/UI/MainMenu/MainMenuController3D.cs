@@ -61,16 +61,8 @@ public class MainMenuController3D : MonoBehaviour {
 		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_PLAYER_PNL.ToString (), false);
 	}
 
-	public bool IsCamRoatating(){
-//		float currentAngle = transform.localRotation.eulerAngles.y;
-//
-//		if (currentAngle < menuPos.y || currentAngle > garagePos.y) {
-//			return false;
-//		} else {
-//			return true;
-//		}
-
-		if (drag > minDrag) {
+	public bool IsCamRotating(){
+		if (Mathf.Abs(drag) > minDrag) {
 			return true;
 		} else {
 			return false;
