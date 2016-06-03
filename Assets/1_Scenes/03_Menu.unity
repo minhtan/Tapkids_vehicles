@@ -4332,7 +4332,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2b3bf7147a034bf0bfc73ba9e713c6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panelName: ingame
 --- !u!225 &794832319
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -7141,6 +7140,79 @@ CanvasRenderer:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 989256567}
+--- !u!1001 &992984507
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 400010, guid: 5c418b5fae161c34999b6500c9b22abd, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.82420987
+      objectReference: {fileID: 0}
+    - target: {fileID: 400010, guid: 5c418b5fae161c34999b6500c9b22abd, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.03791706
+      objectReference: {fileID: 0}
+    - target: {fileID: 400010, guid: 5c418b5fae161c34999b6500c9b22abd, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.024409331
+      objectReference: {fileID: 0}
+    - target: {fileID: 400010, guid: 5c418b5fae161c34999b6500c9b22abd, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400010, guid: 5c418b5fae161c34999b6500c9b22abd, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400010, guid: 5c418b5fae161c34999b6500c9b22abd, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400010, guid: 5c418b5fae161c34999b6500c9b22abd, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400010, guid: 5c418b5fae161c34999b6500c9b22abd, type: 3}
+      propertyPath: m_RootOrder
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 400010, guid: 5c418b5fae161c34999b6500c9b22abd, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 400010, guid: 5c418b5fae161c34999b6500c9b22abd, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 400010, guid: 5c418b5fae161c34999b6500c9b22abd, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 100
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 5c418b5fae161c34999b6500c9b22abd, type: 3}
+  m_IsPrefabParent: 0
+--- !u!1 &992984508 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100010, guid: 5c418b5fae161c34999b6500c9b22abd, type: 3}
+  m_PrefabInternal: {fileID: 992984507}
+--- !u!114 &992984509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 992984508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 541a76f9c03874323b5154b14ac00427, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spline1: {fileID: 1642030562}
+  duration: 50
+  lookForward: 1
+  mode: 1
 --- !u!1 &995771675
 GameObject:
   m_ObjectHideFlags: 0
@@ -10126,7 +10198,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0aacaae54a77460c9aace101650f699, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panelName: pause
 --- !u!114 &1401973217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16922,7 +16993,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0aacaae54a77460c9aace101650f699, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panelName: pause
 --- !u!114 &2001260425
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17514,7 +17584,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2b3bf7147a034bf0bfc73ba9e713c6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panelName: ingame
 --- !u!225 &2103994290
 CanvasGroup:
   m_ObjectHideFlags: 0
