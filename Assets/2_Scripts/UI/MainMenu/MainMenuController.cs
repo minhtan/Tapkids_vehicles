@@ -46,7 +46,6 @@ public class MainMenuController : MonoBehaviour {
 	void Start(){
 //		if (GUIController.Instance != null) {
 		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_MENU_BTN.ToString (), false);
-		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_PLAYER_PNL.ToString (), true);
 //		}
 		CreateCarTexture ();
 		InitPosition ();

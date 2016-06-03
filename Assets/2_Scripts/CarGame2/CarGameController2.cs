@@ -54,7 +54,6 @@ public class CarGameController2 : MonoBehaviour {
 
 //		if (GUIController.Instance != null) {
 		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_MENU_BTN.ToString (), true);
-		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_PLAYER_PNL.ToString (), false);
 //		}
 
 		_machine = new SKStateMachine <CarGameController2> (this, new CG2InitState ());

@@ -44,6 +44,7 @@ public class MainMenuController3D : MonoBehaviour {
 	void Start () {
 		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_MENU_BTN.ToString (), false);
 		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_PLAYER_PNL.ToString (), true);
+		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_SFX_BTN.ToString (), true);
 
 		SetFieldOfView ();
 		menuPos = transform.localRotation.eulerAngles;
@@ -53,6 +54,11 @@ public class MainMenuController3D : MonoBehaviour {
 
 	void Update(){
 		ResizingBtns ();
+	}
+
+	void OnDestroy () {
+		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_SFX_BTN.ToString (), false);
+		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_PLAYER_PNL.ToString (), false);
 	}
 
 	void ResizingBtns(){

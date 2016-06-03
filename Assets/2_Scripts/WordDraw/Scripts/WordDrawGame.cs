@@ -46,7 +46,6 @@ namespace WordDraw
 		{
 			AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.CORRECT_WORD);
 			Messenger.Broadcast<bool> (EventManager.GUI.TOGGLE_MENU_BTN.ToString(), true);
-			Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_PLAYER_PNL.ToString (), false);
 			StartCoroutine (GameCoroutine());
 		}
 
