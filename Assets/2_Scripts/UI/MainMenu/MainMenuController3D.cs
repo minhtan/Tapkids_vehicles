@@ -61,6 +61,22 @@ public class MainMenuController3D : MonoBehaviour {
 		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_PLAYER_PNL.ToString (), false);
 	}
 
+	public bool IsCamRoatating(){
+//		float currentAngle = transform.localRotation.eulerAngles.y;
+//
+//		if (currentAngle < menuPos.y || currentAngle > garagePos.y) {
+//			return false;
+//		} else {
+//			return true;
+//		}
+
+		if (drag > minDrag) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	void ResizingBtns(){
 		float currentD = garagePos.y - transform.localRotation.eulerAngles.y;
 		float menuBtnScale = Mathf.Clamp01( currentD / totalD );
