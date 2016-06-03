@@ -30,6 +30,7 @@ public class UIPausePanel : MonoBehaviour {
 
 	#region private functions
 	private void HandlePauseGame (bool _isPaused) {
+//		Debug.Log ("Pause");
 		mCanvasGroup.alpha = _isPaused ? 1f : 0f;
 		mCanvasGroup.interactable = _isPaused ? true : false;
 		mCanvasGroup.blocksRaycasts = _isPaused ? true : false;

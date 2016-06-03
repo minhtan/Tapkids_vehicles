@@ -2,36 +2,34 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class UIMenuToggleButton : MonoBehaviour {
+public class UIMenuButton : MonoBehaviour {
 
 	#region public members
 	#endregion public members
 
 	#region private members
 	private CanvasGroup mCanvasGroup;
-	private Toggle mToggle;
+	private Button mButton;
 	#endregion private members
 
 	#region Mono
 	void OnEnable () {
 		Messenger.AddListener <bool> (EventManager.GUI.TOGGLE_MENU_BTN.ToString (), HandleToggleMenuBtn);
-		Messenger.AddListener <bool> (EventManager.GameState.PAUSE.ToString (), HandlePauseGame);
 	}
 
 	void Start () {
 		mCanvasGroup = GetComponent <CanvasGroup> ();
-		mToggle = GetComponent <Toggle> ();
+		mButton = GetComponent <Button> ();
 
-		if (mToggle != null) {
-			mToggle.onValueChanged.AddListener (delegate {
-				Messenger.Broadcast<bool> (EventManager.GameState.PAUSE.ToString(), mToggle.isOn);
+		if (mButton != null) {
+			mButton.onClick.AddListener (delegate {
+				Messenger.Broadcast<bool> (EventManager.GameState.PAUSE.ToString(), true);
 			});
 		}
 	}
 
 	void OnDisable () {
 		Messenger.RemoveListener <bool> (EventManager.GUI.TOGGLE_MENU_BTN.ToString (), HandleToggleMenuBtn);
-		Messenger.RemoveListener <bool> (EventManager.GameState.PAUSE.ToString (), HandlePauseGame);
 	}
 
 	#endregion Mono
@@ -46,10 +44,6 @@ public class UIMenuToggleButton : MonoBehaviour {
 		mCanvasGroup.blocksRaycasts = _isToggled ? true : false;
 	}
 
-	private void HandlePauseGame (bool _isPaused) {
-		if (!_isPaused)
-			mToggle.isOn = false;
-	}
 	#endregion private functions
 
 }
