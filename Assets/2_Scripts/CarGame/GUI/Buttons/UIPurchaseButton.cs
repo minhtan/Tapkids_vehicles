@@ -19,17 +19,20 @@ public class UIPurchaseButton : MonoBehaviour {
 		if (!menu.IsInMenu) {
 			if (gameObject.GetInstanceID () == _id) {
 				AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.BUTTON_CLICK);
+				menu.SetTweenLock (true);
 				GUIController.Instance.OpenDialog ("Purchase Confirm")
 					.AddButton ("No", 
 						UIDialogButton.Anchor.BOTTOM_RIGHT, 
 						delegate { 
 							AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.BUTTON_CLICK);
+							menu.SetTweenLock (false);
 						}
 					)
 					.AddButton ("Yes", UIDialogButton.Anchor.BOTTOM_LEFT,  
 						delegate { 
 							Messenger.Broadcast (EventManager.GUI.PURCHASE_VEHICLE.ToString ());
 							AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.BUTTON_CLICK);
+							menu.SetTweenLock (false);
 						}
 					);
 			}

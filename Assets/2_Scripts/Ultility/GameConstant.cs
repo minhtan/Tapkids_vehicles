@@ -24,6 +24,9 @@ public static class GameConstant  {
 
 	public const int ISLAND_ID = 2; //1 for animal, 2 for vehicle
 	public const string UNLOCKED = "unlock";
+
+	public const string SFX_STATE = "SFX_STATE";
+
 	public enum unlockStatus{
 		VALID,
 		INVALID

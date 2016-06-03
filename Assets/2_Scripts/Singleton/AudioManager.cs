@@ -227,6 +227,12 @@ public class AudioManager : UnitySingletonPersistent<AudioManager>
 		}
 	}
 
+	public void ToggleSound(bool state){
+		_backgroundSource.enabled = state;
+		_tempSource.enabled = state;
+		_uiSource.enabled = state;
+	}
+
 	# endregion
 
 	# region GET METHODE
