@@ -58,16 +58,9 @@ public class CarGameGenerator : MonoBehaviour {
 		StartCoroutine (SetupEnvironment(envLetter, () => {
 
 			Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
-			Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
 
 			// Enable rendering:
 			foreach (Renderer component in rendererComponents)
-			{
-				component.enabled = false;
-			}
-
-			// Enable colliders:
-			foreach (Collider component in colliderComponents)
 			{
 				component.enabled = false;
 			}

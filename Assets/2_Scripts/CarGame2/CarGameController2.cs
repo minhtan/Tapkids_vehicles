@@ -52,9 +52,10 @@ public class CarGameController2 : MonoBehaviour {
 			ArController.Instance.SetArMaxStimTargets (1);
 		}
 
-		if (GUIController.Instance != null) {
-			Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_MENU_BTN.ToString (), true);
-		}
+//		if (GUIController.Instance != null) {
+		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_MENU_BTN.ToString (), true);
+		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_PLAYER_PNL.ToString (), false);
+//		}
 
 		_machine = new SKStateMachine <CarGameController2> (this, new CG2InitState ());
 		_machine.addState (new CG2ARMapState ());
@@ -114,16 +115,9 @@ public class CarGameController2 : MonoBehaviour {
 		if (_isFound) {	// FOUND MAP
 			
 			Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
-			Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
 
 			// Enable rendering:
 			foreach (Renderer component in rendererComponents)
-			{
-				component.enabled = true;
-			}
-
-			// Enable colliders:
-			foreach (Collider component in colliderComponents)
 			{
 				component.enabled = true;
 			}
@@ -137,16 +131,9 @@ public class CarGameController2 : MonoBehaviour {
 		} else {		// LOST MAP
 			
 			Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
-			Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
 
 			// Disable rendering:
 			foreach (Renderer component in rendererComponents)
-			{
-				component.enabled = false;
-			}
-
-			// Disable colliders:
-			foreach (Collider component in colliderComponents)
 			{
 				component.enabled = false;
 			}

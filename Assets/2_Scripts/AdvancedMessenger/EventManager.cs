@@ -17,6 +17,7 @@ public class EventManager {
 		UPDATE_CREDIT,
 		//
 		TOGGLE_MENU_BTN,
+		TOGGLE_PLAYER_PNL,
 		TOGGLE_TUTORIAL,
 		//
 		TOGGLE_SOUND,

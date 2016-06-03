@@ -43,6 +43,8 @@ public class MainMenuController3D : MonoBehaviour {
 
 	void Start () {
 		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_MENU_BTN.ToString (), false);
+		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_PLAYER_PNL.ToString (), true);
+
 		SetFieldOfView ();
 		menuPos = transform.localRotation.eulerAngles;
 		totalD = garagePos.y - menuPos.y;

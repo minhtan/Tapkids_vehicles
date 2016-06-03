@@ -32,6 +32,7 @@ public class StartupWord : MonoBehaviour
 			ArController.Instance.SetArMaxStimTargets (1);
 		}
 		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_MENU_BTN.ToString (), true);
+		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_PLAYER_PNL.ToString (), false);
 	}
 
 	void OnDestroy(){

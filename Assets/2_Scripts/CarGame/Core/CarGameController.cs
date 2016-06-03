@@ -46,9 +46,10 @@ public class CarGameController : MonoBehaviour {
 			ArController.Instance.SetArMaxStimTargets (1);
 		}
 
-		if (GUIController.Instance != null) {
-			Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_MENU_BTN.ToString (), true);
-		}
+//		if (GUIController.Instance != null) {
+		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_MENU_BTN.ToString (), true);
+		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_PLAYER_PNL.ToString (), false);
+//		}
 
 		// setup finite state machine
 		_machine = new SKStateMachine <CarGameController> (this, new CGARCardState ());
@@ -104,16 +105,9 @@ public class CarGameController : MonoBehaviour {
 			AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.SCAN_MAP);
 
 			Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
-			Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
 
 			// Enable rendering:
 			foreach (Renderer component in rendererComponents)
-			{
-				component.enabled = true;
-			}
-
-			// Enable colliders:
-			foreach (Collider component in colliderComponents)
 			{
 				component.enabled = true;
 			}
@@ -129,7 +123,6 @@ public class CarGameController : MonoBehaviour {
 			}
 		} else {		// LOST MAP
 			Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
-			Collider[] colliderComponents = GetComponentsInChildren<Collider>(true);
 
 			// Disable rendering:
 			foreach (Renderer component in rendererComponents)
@@ -137,11 +130,6 @@ public class CarGameController : MonoBehaviour {
 				component.enabled = false;
 			}
 
-			// Disable colliders:
-			foreach (Collider component in colliderComponents)
-			{
-				component.enabled = false;
-			}
 			if(_machine.currentState.GetType () == typeof (CGStartState))
 				_machine.changeState <CGARMapState> ();
 		}

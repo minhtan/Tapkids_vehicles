@@ -44,9 +44,10 @@ public class MainMenuController : MonoBehaviour {
 
 	#region mono
 	void Start(){
-		if (GUIController.Instance != null) {
-			Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_MENU_BTN.ToString (), false);
-		}
+//		if (GUIController.Instance != null) {
+		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_MENU_BTN.ToString (), false);
+		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_PLAYER_PNL.ToString (), true);
+//		}
 		CreateCarTexture ();
 		InitPosition ();
 		SetUpSceneIndex ();

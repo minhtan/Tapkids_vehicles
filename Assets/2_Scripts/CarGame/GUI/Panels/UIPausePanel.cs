@@ -5,7 +5,6 @@ using System.Collections;
 public class UIPausePanel : MonoBehaviour {
 
 	#region public members
-	public string panelName = "pause";
 	#endregion public members
 
 	#region private members
@@ -14,13 +13,9 @@ public class UIPausePanel : MonoBehaviour {
 
 	#region Mono
 	void OnEnable () {
-//		CarGameEventController.TogglePanel += OnTogglePanel;
-//		CarGameEventController.PauseGame += OnPauseGame;
 		Messenger.AddListener <bool> (EventManager.GameState.PAUSE.ToString (), HandlePauseGame);
 	}
 	void Disable () {
-//		CarGameEventController.TogglePanel -= OnTogglePanel;
-//		CarGameEventController.PauseGame -= OnPauseGame;
 		Messenger.RemoveListener <bool> (EventManager.GameState.PAUSE.ToString (), HandlePauseGame);
 	}
 
@@ -40,17 +35,6 @@ public class UIPausePanel : MonoBehaviour {
 		mCanvasGroup.blocksRaycasts = _isPaused ? true : false;
 	}
 
-	private void OnTogglePanel (string _name) {
-		mCanvasGroup.alpha = panelName.Equals (_name) ? 1f : 0f;
-		mCanvasGroup.interactable = panelName.Equals (_name) ? true : false;
-		mCanvasGroup.blocksRaycasts = panelName.Equals (_name) ? true : false;
-//		LeanTween.value (gameObject, panelName.Equals (_name) ? 0f : 1f, panelName.Equals (_name) ? 1f : 0f, 1f)
-//			.setOnUpdate ((float alpha) => mCanvasGroup.alpha = alpha)
-//			.setOnComplete (() => { 
-//				mCanvasGroup.interactable = panelName.Equals (_name) ? true : false;
-//				mCanvasGroup.blocksRaycasts = panelName.Equals (_name) ? true : false;
-//			});
-	}
 	#endregion private functions
 
 }
