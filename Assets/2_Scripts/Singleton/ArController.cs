@@ -47,7 +47,7 @@ public class ArController : UnitySingletonPersistent<ArController> {
 	#endregion
 
 	void OnFingerTap(LeanFinger fg){
-		if(VuforiaBehaviour.Instance.enabled == true){
+		if(!LeanTouch.GuiInUse && VuforiaBehaviour.Instance.enabled == true){
 			isFocusing = !isFocusing;
 		}
 	}

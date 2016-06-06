@@ -48,7 +48,7 @@ public class UISelectVehicleButton : MonoBehaviour {
 		if (isPressed) {
 			LeanTween.moveLocalY (gameObject, initY, 0.1f);
 
-			if (_id == gameObject.GetInstanceID () && !menu.IsInMenu) {
+			if (_id == gameObject.GetInstanceID () && !menu.IsInMenu && !menu.IsCamRotating()) {
 				Messenger.Broadcast <int> (EventManager.GUI.SELECT_VEHICLE.ToString (), index);
 			}
 

@@ -8,7 +8,10 @@ public class UIDialogButton
 	{
 		BOTTOM_RIGHT,
 		BOTTOM_LEFT,
-		BOTTOM_CENTER
+		BOTTOM_CENTER,
+		CENTER_LEFT,
+		CENTER_RIGHT,
+		CENTER
 	}
 
 	private string _buttonText;
@@ -31,6 +34,25 @@ public class UIDialogButton
 			rectTrans.anchorMax = Vector2.right;
 			rectTrans.anchorMin = Vector2.right;
 			rectTrans.pivot = Vector2.right;
+		}
+		else if(_anchor == Anchor.CENTER_LEFT)
+		{	
+			rectTrans.anchorMax = Vector2.up / 2;
+			rectTrans.anchorMin = Vector2.up / 2;
+			rectTrans.pivot = Vector2.up / 2;
+		}
+		else if (_anchor == Anchor.CENTER_RIGHT)
+		{
+			Vector2 anchor = new Vector2 (1f, 0.5f);
+			rectTrans.anchorMax = anchor;
+			rectTrans.anchorMin = anchor;
+			rectTrans.pivot = anchor;
+		}
+		else if(_anchor == Anchor.CENTER)
+		{
+			rectTrans.anchorMax = Vector2.one / 2;
+			rectTrans.anchorMin = Vector2.one / 2;
+			rectTrans.pivot = Vector2.one / 2;
 		}
 	}
 
@@ -81,7 +103,7 @@ public class UIDialogButton
 		public float Vertical;
 		public float Horizontal;
 
-		public Padding (float vertical, float horizontal)
+		public Padding (float horizontal, float vertical)
 		{
 			Vertical = vertical;
 			Horizontal = horizontal;

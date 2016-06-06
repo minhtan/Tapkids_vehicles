@@ -24,7 +24,7 @@ public class MainMenuController3D : MonoBehaviour {
 	float drag;
 
 	public Transform menuBtns;
-	public Transform garageBtns;
+	public Transform[] garageBtns;
 	float totalD;
 
 	void OnEnable(){
@@ -61,12 +61,22 @@ public class MainMenuController3D : MonoBehaviour {
 		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_PLAYER_PNL.ToString (), false);
 	}
 
+	public bool IsCamRotating(){
+		if (Mathf.Abs(drag) > minDrag) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	void ResizingBtns(){
 		float currentD = garagePos.y - transform.localRotation.eulerAngles.y;
 		float menuBtnScale = Mathf.Clamp01( currentD / totalD );
 
 		menuBtns.localScale = menuBtnScale.ToVector3 ();
-		garageBtns.localScale = (1f - menuBtnScale).ToVector3 ();
+		for (int i = 0; i < garageBtns.Length; i++) {
+			garageBtns[i].localScale = (1f - menuBtnScale).ToVector3 ();
+		}
 	}
 
 	public void SetTweenLock(bool state){
