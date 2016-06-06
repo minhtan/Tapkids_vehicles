@@ -176,7 +176,7 @@ Transform:
   - {fileID: 28972136}
   - {fileID: 281942426}
   m_Father: {fileID: 2139739779}
-  m_RootOrder: 6
+  m_RootOrder: 5
 --- !u!1 &137263772
 GameObject:
   m_ObjectHideFlags: 0
@@ -5604,6 +5604,7 @@ GameObject:
   - 4: {fileID: 1409508592}
   - 23: {fileID: 1409508594}
   - 102: {fileID: 1409508593}
+  - 114: {fileID: 1409508595}
   m_Layer: 0
   m_Name: Title
   m_TagString: Untagged
@@ -5670,6 +5671,18 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
+--- !u!114 &1409508595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1409508591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80a98a519816e4ee19280d4c46c74402, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PhraseName: Title
 --- !u!1 &1421796221
 GameObject:
   m_ObjectHideFlags: 0
@@ -9637,15 +9650,15 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400026, guid: 847856d345c43d6459762e493b93eae6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.021
       objectReference: {fileID: 0}
     - target: {fileID: 400026, guid: 847856d345c43d6459762e493b93eae6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.31106514
+      value: 0.226
       objectReference: {fileID: 0}
     - target: {fileID: 400026, guid: 847856d345c43d6459762e493b93eae6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.007
       objectReference: {fileID: 0}
     - target: {fileID: 400026, guid: 847856d345c43d6459762e493b93eae6, type: 3}
       propertyPath: m_LocalRotation.x
@@ -9673,15 +9686,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400026, guid: 847856d345c43d6459762e493b93eae6, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.35000002
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 400026, guid: 847856d345c43d6459762e493b93eae6, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.35
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 400026, guid: 847856d345c43d6459762e493b93eae6, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.35000002
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 2300004, guid: 847856d345c43d6459762e493b93eae6, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -9849,6 +9862,7 @@ GameObject:
   - 4: {fileID: 1987529662}
   - 23: {fileID: 1987529664}
   - 102: {fileID: 1987529663}
+  - 114: {fileID: 1987529665}
   m_Layer: 0
   m_Name: Info
   m_TagString: Untagged
@@ -9916,6 +9930,18 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
+--- !u!114 &1987529665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1987529661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80a98a519816e4ee19280d4c46c74402, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PhraseName: Info
 --- !u!4 &2007455542 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: e48f79fc725ea8a41ad6c92cb2e6aa5b, type: 2}
@@ -10066,8 +10092,8 @@ Transform:
   - {fileID: 1553668978}
   - {fileID: 706074703}
   - {fileID: 1356084843}
-  - {fileID: 685146071}
   - {fileID: 80835571}
+  - {fileID: 685146071}
   - {fileID: 1432568851}
   - {fileID: 246160375}
   - {fileID: 1039951371}

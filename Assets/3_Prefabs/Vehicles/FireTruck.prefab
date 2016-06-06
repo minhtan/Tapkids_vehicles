@@ -602,8 +602,8 @@ MonoBehaviour:
     name: FireTruck
     desc: 
     matId: 0
-    maxSpeed: 0
-    costPoint: 50
+    maxSpeed: 30
+    costPoint: 500
     carMats:
     - mat: {fileID: 2100000, guid: 6fd36073e027440388bd66b734b41b94, type: 2}
       color: 4
@@ -777,7 +777,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: vehicle.costPoint
-      value: 50
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: vehicle.garageScale
@@ -802,6 +802,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_Name
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: vehicle.maxSpeed
+      value: 30
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

@@ -40,6 +40,9 @@ public class UICollectedPanel : MonoBehaviour {
 		if (_letters.Length > 0) {
 			for (int i = 0; i < _letters.Length; i++ ) {
 				GameObject letter = Instantiate (collectedTextPrefab) as GameObject;
+
+//				DataUltility.GetGameImage ( 
+
 				letter.transform.SetParent (mTransform, false);
 				collectedLetters.Add (letter);
 			}

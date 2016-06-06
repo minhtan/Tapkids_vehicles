@@ -140,12 +140,11 @@ public class CarGameController : MonoBehaviour {
 		AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.CARGAME_COLLECT_LETTER);
 
 		// handle trigger gameover
-		if (givenLetters.Length == collectedLetters.Length && givenLetters.Equals (collectedLetters)) {
-			_machine.changeState <CGGameOverState> ();
-			Messenger.Broadcast <int> (EventManager.GameState.GAMEOVER.ToString (), 0);
+		if (givenLetters.Equals (collectedLetters)) {
 			AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.CORRECT_WORD);
+			_machine.changeState <CGGameOverState> ();
 		} else if (givenLetters.Length == collectedLetters.Length && !givenLetters.Equals (collectedLetters)) {
-			Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), GameConstant.WrongMessage, 1f);
+//			Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), GameConstant.WrongMessage, 1f);
 			AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.INCORRECT_WORD);
 		}
 	}
@@ -158,20 +157,5 @@ public class CarGameController : MonoBehaviour {
 			AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.CARGAME_DROP_LETTER);
 		}
 	}
-
-//	private void HandleGatherLetter () {
-//		if (collectedLetters.Length > 0) {
-//			if (GameConstant.vehicles.Contains (collectedLetters)) {
-//				_machine.changeState <CGGameOverState> ();
-//				Messenger.Broadcast <int> (EventManager.GameState.GAMEOVER.ToString (), 0);
-//				AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.CORRECT_WORD);
-//			} else {
-//				Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), GameConstant.WrongMessage, 1f);
-//				AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.INCORRECT_WORD);
-//			}
-//		}
-//	}
 	#endregion private functions
-
-
 }

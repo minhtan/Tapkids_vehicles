@@ -28,7 +28,7 @@ public class ArcadeCarController : MonoBehaviour {
 	[SerializeField] private Vector3 centerOfMass;
 	[Range(0, 1)] [SerializeField] private float steerHelper;
 	[SerializeField] private float maximumSteerAngle = 25f;
-	[SerializeField] private float maxMotorTorque = 300f;
+	[SerializeField] private float maxMotorTorque = 200f;
 	[SerializeField] private float brakeTorque = 20000f;
 
 	private float oldRotation;

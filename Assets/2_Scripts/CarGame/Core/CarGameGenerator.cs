@@ -20,7 +20,7 @@ public class CarGameGenerator : MonoBehaviour {
 	private GameObject[] letterPoints;	// stores letter's positions in environment
 	private GameObject[] obstaclePoints;	
 
-	private Dictionary <string, GameObject> letterDictionary;
+	private Dictionary <string, Transform> letterDictionary = new Dictionary<string, Transform> ();
 	private List <GameObject> obstacleGameObjects;
 	private Vehicle currentVehicle;
 	private GameObject carGameObject;
@@ -28,6 +28,8 @@ public class CarGameGenerator : MonoBehaviour {
 	private Vector3 pointOffset = new Vector3 (0f, .5f, 0f);
 
 	private float delayTime = .5f;
+	private float scaleFactor = 2f;
+
 	private Transform mTransform;
 	#endregion private members
 
@@ -67,18 +69,18 @@ public class CarGameGenerator : MonoBehaviour {
 
 			StartCoroutine(SetupCar ());
 
-			letterDictionary = new Dictionary<string, GameObject> ();
-			foreach (KeyValuePair <string, GameObject> pair in letterDictionary) {
-				GameObject.Destroy (pair.Value);
-			}
-			letterDictionary.Clear ();
+			letterDictionary = new Dictionary<string, Transform> ();
+//			foreach (KeyValuePair <string, GameObject> pair in letterDictionary) {
+//				GameObject.Destroy (pair.Value);
+//			}
+//			letterDictionary.Clear ();
 
 			letterPoints = GameObject.FindGameObjectsWithTag ("LetterPoint");
 			for (int i = 0; i < _letters.Length; i++) {
 				StartCoroutine(SetupLetter (_letters[i].ToString (), letterPoints[i].transform.position));
 			}
-			Debug.Log ("finish");
 		}));
+
 		#region demo
 		// setup obstacles
 //		obstacleGameObjects = new List<GameObject> ();
@@ -99,7 +101,7 @@ public class CarGameGenerator : MonoBehaviour {
 			if (carGameObject != null)
 				carGameObject.SetActive (true);
 
-			StopAllCoroutines ();
+//			StopAllCoroutines ();
 			StartCoroutine (HandleGameStartCo ());
 		}
 	}
@@ -107,7 +109,13 @@ public class CarGameGenerator : MonoBehaviour {
 	private void HandleResetGame () {
 		// TODO: reset game
 		// remove obstacle
+
 		// remove letter
+		foreach (KeyValuePair <string, Transform> pair in letterDictionary) {
+//			GameObject.Destroy (pair.Value.gameObject);
+			Transform.Destroy (pair.Value);
+		}
+		letterDictionary.Clear ();
 	}
 
 	private IEnumerator HandleGameStartCo () {
@@ -120,9 +128,9 @@ public class CarGameGenerator : MonoBehaviour {
 //		}
 
 		if (letterDictionary.Count > 0) {
-			foreach (KeyValuePair <string, GameObject> pair in letterDictionary) {
-				pair.Value.SetActive (true);
-				pair.Value.transform.localScale = new Vector3 (2f, 2f, 2f);
+			foreach (KeyValuePair <string, Transform> pair in letterDictionary) {
+				pair.Value.gameObject.SetActive (true);
+				pair.Value.transform.localScale = scaleFactor.ToVector3 ();
 				yield return new WaitForSeconds (delayTime);
 			}
 		}
@@ -163,10 +171,9 @@ public class CarGameGenerator : MonoBehaviour {
 			GameObject letterGameObject = Instantiate (bundle, position + pointOffset, Quaternion.identity) as GameObject;
 			letterGameObject.AddComponent <LetterController> ();
 			letterGameObject.GetComponent <LetterController> ().letterName = _letter;
-			letterGameObject.transform.localScale = new Vector3 (2f, 2f, 2f);
 			letterGameObject.transform.SetParent (mTransform, false);
 			letterGameObject.SetActive (false);
-			letterDictionary.Add (_letter, letterGameObject);
+			letterDictionary.Add (_letter, letterGameObject.transform);
 		}));
 	}
 
@@ -183,9 +190,19 @@ public class CarGameGenerator : MonoBehaviour {
 
 	private void HandleDropLetter (string _letters) {
 		if (letterDictionary.ContainsKey (_letters)) {
-			GameObject letter;
+			Transform letter;
 			letterDictionary.TryGetValue (_letters, out letter);
-			letter.SetActive (true);
+			System.Random rnd = new System.Random ();
+			int rd;
+			do {
+				rd = rnd.Next (letterPoints.Length);
+			} while (letterDictionary.ContainsValue (letterPoints[rd].transform));
+
+			letter.gameObject.SetActive (true);
+			letter.localPosition = letterPoints[rd].transform.position;
+			letter.localScale = scaleFactor.ToVector3 ();
+		} else {
+
 		}
 	}
 	#endregion private functions

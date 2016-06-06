@@ -9,6 +9,8 @@ public class CGGameOverState : SKState<CarGameController> {
 	public override void begin ()
 	{
 		Debug.Log("Game Over State >>>");
+		// TODO: pass star count to gameover panel
+		Messenger.Broadcast <int> (EventManager.GameState.GAMEOVER.ToString (), 0);
 	}
 
 	public override void reason ()
