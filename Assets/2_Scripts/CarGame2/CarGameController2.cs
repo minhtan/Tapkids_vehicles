@@ -17,8 +17,6 @@ public class CarGameController2 : MonoBehaviour {
 	[HideInInspector]
 	public string collectedLetters;
 	[HideInInspector]
-	public char envLetter;
-	[HideInInspector]
 	public List<WordGameData> wordGameDatas;
 	[HideInInspector]
 	public WordGameData wordGameData;
@@ -72,7 +70,7 @@ public class CarGameController2 : MonoBehaviour {
 		UnityEngine.Random.seed = Environment.TickCount;
 		int rd;
 		do {
-			rd = Mathf.RoundToInt (UnityEngine.Random.Range (0, wordGameDatas.Count));
+			rd = UnityEngine.Random.Range (0, wordGameDatas.Count);
 		} while (rd == lastRandomIndex);
 		lastRandomIndex = rd;
 		return wordGameDatas[rd];
@@ -147,13 +145,32 @@ public class CarGameController2 : MonoBehaviour {
 
 	// handle car events
 	void HandleCollectLetter (string _letter) {
-
+		collectedLetters = string.Concat (collectedLetters, _letter);
+		AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.CARGAME_COLLECT_LETTER);
 	}
 	void HandleDropLetter () {
+		if (collectedLetters.Length > 0) {
+			string letter = collectedLetters[collectedLetters.Length - 1].ToString ();
+			Messenger.Broadcast <string> (EventManager.GUI.REMOVE_LETTER.ToString (), letter);
 
+			collectedLetters = collectedLetters.Substring (0, collectedLetters.Length - 1);
+			AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.CARGAME_DROP_LETTER);
+		}
 	}
-	void HandleGatherLetter () {
 
+	void HandleGatherLetter () {
+		if (answers.Contains (collectedLetters)) {
+			AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.CORRECT_WORD);
+			playableLetters.Remove (collectedLetters);
+			collectedLetters = string.Empty;
+
+			// check if there is no word left, trigger gameover state
+			if (playableLetters.Count == 0) {
+				_machine.changeState <CG2GameOverState> ();
+			}
+		} else {
+			AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.INCORRECT_WORD);
+		}
 	}
 	#endregion private function
 }

@@ -602,7 +602,7 @@ MonoBehaviour:
     name: IcecreamTruck
     desc: 
     matId: 0
-    maxSpeed: 0
+    maxSpeed: 30
     costPoint: 500
     carMats:
     - mat: {fileID: 2100000, guid: 9141f14d4e71844e29e6eede1844eb43, type: 2}
@@ -799,6 +799,10 @@ Prefab:
       propertyPath: vehicle.carMats.Array.data[1].mat
       value: 
       objectReference: {fileID: 2100000, guid: 4cc16090dc1ed402591f714dd749a2c4, type: 2}
+    - target: {fileID: 0}
+      propertyPath: vehicle.maxSpeed
+      value: 30
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 106522}

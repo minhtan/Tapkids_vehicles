@@ -613,7 +613,7 @@ MonoBehaviour:
     name: DeliveryTruck
     desc: 
     matId: 0
-    maxSpeed: 0
+    maxSpeed: 30
     costPoint: 500
     carMats:
     - mat: {fileID: 2100000, guid: a4ca887bcacb542ccae38fafeed41251, type: 2}
@@ -810,6 +810,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: vehicle.carMats.Array.data[0].color
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: vehicle.maxSpeed
+      value: 30
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

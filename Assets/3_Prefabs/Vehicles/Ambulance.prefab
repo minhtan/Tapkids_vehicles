@@ -613,7 +613,7 @@ MonoBehaviour:
     name: Ambulance
     desc: 
     matId: 0
-    maxSpeed: 0
+    maxSpeed: 30
     costPoint: 500
     carMats:
     - mat: {fileID: 2100000, guid: e6f4e03adf78d6c4985037cfa27757f7, type: 2}
@@ -799,6 +799,10 @@ Prefab:
       propertyPath: vehicle.carMats.Array.data[1].mat
       value: 
       objectReference: {fileID: 2100000, guid: cb9638f8de59c416799188e40114f335, type: 2}
+    - target: {fileID: 0}
+      propertyPath: vehicle.maxSpeed
+      value: 30
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 187932}

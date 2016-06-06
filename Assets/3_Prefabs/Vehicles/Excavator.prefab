@@ -602,7 +602,7 @@ MonoBehaviour:
     name: Excavator
     desc: 
     matId: 0
-    maxSpeed: 0
+    maxSpeed: 30
     costPoint: 500
     carMats:
     - mat: {fileID: 2100000, guid: c328bcdf7854b4ab9b3c30e20a07f870, type: 2}
@@ -807,6 +807,10 @@ Prefab:
       propertyPath: vehicle.carMats.Array.data[1].mat
       value: 
       objectReference: {fileID: 2100000, guid: 92258bc320fcf4a19806a1ec5beaff72, type: 2}
+    - target: {fileID: 0}
+      propertyPath: vehicle.maxSpeed
+      value: 30
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 135088}
