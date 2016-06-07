@@ -409,6 +409,7 @@ public class GaragaController : MonoBehaviour {
 			LeanTween.scale (vehicles [currentSelectedIndex], vehicles [currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle.garageScale.ToVector3 (), .5f).setEase (LeanTweenType.easeOutBack);
 			locker.SetActive (false);
 			purchaseButton.SetActive (false);
+			StartCoroutine (ShowPurchaseMessage ());
 
 			// broadcast event > update gui
 			Messenger.Broadcast <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), vehicles[currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle);
@@ -417,6 +418,13 @@ public class GaragaController : MonoBehaviour {
 			GUIController.Instance.OpenDialog ("Khong du tien!!!")
 				.AddButton ("Ok", UIDialogButton.Anchor.BOTTOM_CENTER);
 		}
+	}
+
+	public GameObject purchaseMessage;
+	IEnumerator ShowPurchaseMessage(){
+		purchaseMessage.SetActive (true);
+		yield return new WaitForSeconds (2f);
+		purchaseMessage.SetActive (false);
 	}
 
 	void HandleChangeMaterial (int _matId) {
