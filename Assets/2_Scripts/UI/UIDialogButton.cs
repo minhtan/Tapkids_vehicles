@@ -63,7 +63,7 @@ public class UIDialogButton
 		_callback = callback;
 	}
 
-	public UIDialogButton (string buttonText, Anchor anchor, float paddingX, float paddingY, Callback callback) : this (buttonText, anchor, callback = null)
+	public UIDialogButton (string buttonText, Anchor anchor, float paddingX, float paddingY, Callback callback) : this (buttonText, anchor, callback)
 	{
 		_padding = new Padding(paddingX, paddingY);
 	}
