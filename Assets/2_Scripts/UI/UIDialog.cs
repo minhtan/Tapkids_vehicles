@@ -11,12 +11,22 @@ public class UIDialog : MonoBehaviour
 	private GameObject _imageTemplate;
 
 	private Text _messageText;
+	private ContentSizeFitter _sizer;
+	/// <summary>
+	/// The Text that has ContentSizeFitter used for messure text size in pixel.
+	/// </summary>
 	private Text _sizeCalculator;
+
+	private const char CharacterImage = '*';
+	private float _charImageWith;
 
 	void Awake ()
 	{
 		_messageText = transform.GetChild (0).GetComponent<Text> ();
+		_sizer = _messageText.GetComponent<ContentSizeFitter> ();
 		_sizeCalculator = transform.GetChild (1).GetComponent<Text> ();
+
+		_charImageWith = GetTextLength (CharacterImage.ToString());
 	}
 
 	public UIDialog AddButton (string text, UIDialogButton.Anchor anchor, Callback callback = null)
@@ -31,6 +41,11 @@ public class UIDialog : MonoBehaviour
 		return this;
 	}
 
+	/// <summary>
+	/// Sets the message text and replace ImageChar with image.
+	/// </summary>
+	/// <param name="text">Text.</param>
+	/// <param name="uiSprites">Array of sprites that replace ImageChar characters.</param>
 	public void SetMessageText (string text, params Sprite[] uiSprites)
 	{
 		_messageText.text = text;
@@ -38,20 +53,25 @@ public class UIDialog : MonoBehaviour
 		if (uiSprites.Length <= 0)
 			return;
 
-		int textLength = text.Length;
+		int textHalfLength = text.Length / 2;
 		int spriteCount = 0;
 
-		for (int i = 0; i < textLength; i++) {
-			if (text [i] != '%')
+		_sizer.SetLayoutHorizontal ();
+		_sizer.SetLayoutVertical ();
+
+		for (int i = 0; i < text.Length; i++) {
+			if (text [i] != CharacterImage)
 				continue;
 
-			if (i > textLength / 2)
-				CreateImage (i, text.Substring (textLength / 2, i - textLength / 2), Vector2.right, uiSprites [spriteCount]);
+			if (i > textHalfLength)
+				CreateImage (i, text.Substring (textHalfLength + 1, i - textHalfLength), Vector2.right, uiSprites [spriteCount]);
 			else
-				CreateImage (i, text.Substring (i, textLength / 2 - i), Vector2.left, uiSprites [spriteCount]);
+				CreateImage (i, text.Substring (i + 1, textHalfLength - i), Vector2.left, uiSprites [spriteCount]);
 			
 			spriteCount++;
 		}
+
+		//_messageText.text = text.Replace (CharacterImage, ' ');
 	}
 
 	private void CreateButton (UIDialogButton dialogBut)
@@ -64,6 +84,14 @@ public class UIDialog : MonoBehaviour
 		dialogBut.SetButtonText (buttonTrans.GetChild (0).GetComponent<Text> ());
 	}
 
+	/// <summary>
+	/// Creates the image ui object and set its size, position.
+	/// </summary>
+	/// <param name="insertIndex">The position index of image in string.</param>
+	/// <param name="gapStringFromCenter">String that is between center char and image char.</param>
+	/// <param name="offsetSide">Determine the image is left or right of center.</param>
+	/// <param name="offsetScalar">Determine how much the image is move from position.</param>
+	/// <param name="sprite">Sprite that replaces image char.</param>
 	private void CreateImage (int insertIndex, string gapStringFromCenter, Vector2 offsetSide, Sprite sprite)
 	{
 		GameObject imageGO = Instantiate (_imageTemplate) as GameObject;
@@ -78,15 +106,25 @@ public class UIDialog : MonoBehaviour
 		int imageSize = _messageText.fontSize;
 		rectTrans.sizeDelta = new Vector2 (imageSize, imageSize);
 
-		float pixelCenterOffset = GetTextLength (gapStringFromCenter, offsetSide);
-		Debug.Log (pixelCenterOffset);
+		float pixelCenterOffset = GetTextLength (gapStringFromCenter);
 		Vector2 offsetX = pixelCenterOffset * offsetSide;
 
-		Vector2 pos = rectTrans.localPosition;
+		string firstHalf = _messageText.text.Substring (0, _messageText.text.Length / 2 + 1);
+
+		float halfLengthPixel = GetTextLength (firstHalf);
+
+		offsetX.x = offsetX.x - Mathf.Abs(_messageText.rectTransform.sizeDelta.x) / 2 + halfLengthPixel;
+
+		Vector2 pos = Vector2.zero;
 		pos = pos + offsetX;
+		pos.x = pos.x - _charImageWith / 2;
+		
 		rectTrans.localPosition = pos;
 	}
 
+	/// <summary>
+	/// Remove buttons that were created before
+	/// </summary>
 	public void RefreshDialog ()
 	{
 		for (int i = 2; i < transform.childCount; i++) {
@@ -94,13 +132,20 @@ public class UIDialog : MonoBehaviour
 		}
 	}
 
-	private float GetTextLength (string text, Vector2 offset)
+	/// <summary>
+	/// Gets the length of a text using ContentSizeFitter component.
+	/// </summary>
+	/// <returns>The text length.</returns>
+	/// <param name="text">Text.</param>
+	/// <param name="offset">Offset vector position to left (-1,0) or right (1,0).</param>
+	/// <param name="scalar">Offset scalar.</param>
+	private float GetTextLength (string text)
 	{
 		_sizeCalculator.fontSize = _messageText.fontSize;
 		_sizeCalculator.text = text;
 		ContentSizeFitter sizeFilter = _sizeCalculator.gameObject.GetComponent<ContentSizeFitter> ();
 		sizeFilter.SetLayoutHorizontal ();
 		sizeFilter.SetLayoutVertical ();
-		return _sizeCalculator.rectTransform.sizeDelta.x + offset.x * 15f;
+		return _sizeCalculator.rectTransform.sizeDelta.x;
 	}
 }
