@@ -11,6 +11,7 @@ public class UISelectMaterialButton : MonoBehaviour {
 	void OnEnable () {
 		Messenger.AddListener <int> (EventManager.GUI.MENU_BTN_TAP.ToString (), OnButtonTap);
 		Messenger.AddListener <int> (EventManager.GUI.CHANGE_MATERIAL.ToString (), HandleChangeMaterial);
+		Messenger.AddListener <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), HandleUpdateVehicle);
 	}
 	void Start () {
 		menu = FindObjectOfType <MainMenuController3D> ();
@@ -18,6 +19,7 @@ public class UISelectMaterialButton : MonoBehaviour {
 	void OnDisable () {
 		Messenger.RemoveListener <int> (EventManager.GUI.MENU_BTN_TAP.ToString (), OnButtonTap);
 		Messenger.RemoveListener <int> (EventManager.GUI.CHANGE_MATERIAL.ToString (), HandleChangeMaterial);
+		Messenger.RemoveListener <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), HandleUpdateVehicle);
 	}
 	public void OnButtonTap (int _id) {
 		if (!menu.IsInMenu) {
@@ -37,5 +39,12 @@ public class UISelectMaterialButton : MonoBehaviour {
 		}
 	}
 
+	void HandleUpdateVehicle (Vehicle _vehicle) {
+		if (_vehicle.matId == matId) {
+			isOn = true;
+		} else {
+			isOn = false;
+		}
+	}
 
 }
