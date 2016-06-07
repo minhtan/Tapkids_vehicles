@@ -6,8 +6,6 @@ public class GUIController : UnitySingletonPersistent<GUIController>
 	[SerializeField]
 	private UIDialog _dialog;	
 
-	public Sprite _sprite;
-
 	public UIDialog OpenDialog (string message, params Sprite[] uiSprites)
 	{
 		_dialog.gameObject.SetActive (true);

@@ -201,6 +201,8 @@ public class CarGameGenerator : MonoBehaviour {
 			letter.gameObject.SetActive (true);
 			letter.localPosition = letterPoints[rd].transform.position;
 			letter.localScale = scaleFactor.ToVector3 ();
+
+			letterDictionary [_letters] = letter;
 		} else {
 
 		}
