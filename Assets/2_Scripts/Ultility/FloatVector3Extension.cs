@@ -9,6 +9,5 @@ public static class FloatVector3Extension {
 
 	public static float ToFloat(this Vector3 vc3){
 		return vc3.x;
-
 	}
 }

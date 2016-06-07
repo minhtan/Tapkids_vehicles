@@ -19,9 +19,8 @@ public class LetterController : MonoBehaviour {
 	}
 
 	void OnEnable () {
-		transform.localPosition = new Vector3 (transform.localPosition.x, transform.localPosition.y - 1f, transform.localPosition.z);
-
-		LeanTween.moveLocal (gameObject, originPos, 1f).setEase (LeanTweenType.easeOutBack);
+//		transform.localPosition = new Vector3 (transform.localPosition.x, transform.localPosition.y - 1f, transform.localPosition.z);
+//		LeanTween.moveLocal (gameObject, originPos, 1f).setEase (LeanTweenType.easeOutBack);
 	}
 
 	void OnDisable () {

@@ -28,18 +28,12 @@ public class PlayerDataController : UnitySingletonPersistent<PlayerDataControlle
 			TapkidsData.AddPlayer (mPlayer);
 			TapkidsData.Save ();
 		}
-
-//		for (int i = 0; i < mPlayer.unlockedVehicles.Count; i++) {
-//			unlockedIds.Add (mPlayer.unlockedVehicles.);
-//		}
 		foreach (KeyValuePair <int, int> d in mPlayer.unlockedVehicles) {
 			unlockedIds.Add (d.Key);
 		}
 	}
 
 	void OnEnable () {
-		Messenger.AddListener <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), HandleSelectVehicle);
-//		Messenger.AddListener (EventManager.GUI.PURCHASEVEHICLE.ToString (), HandlePurchaseVehicle);
 	}
 
 	void Start () {
@@ -47,8 +41,6 @@ public class PlayerDataController : UnitySingletonPersistent<PlayerDataControlle
 	}
 
 	void OnDisable () {
-//		Messenger.RemoveListener <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), HandleSelectVehicle);
-//		Messenger.RemoveListener (EventManager.GUI.PURCHASEVEHICLE.ToString (), HandlePurchaseVehicle);
 	}
 	#endregion MONO
 
@@ -90,32 +82,18 @@ public class PlayerDataController : UnitySingletonPersistent<PlayerDataControlle
 		TapkidsData.Save ();
 	}
 
-	public void UpdateVehicle (Vehicle _vehicle) {
-//		for (int i = 0; i < mPlayer.unlockedVehicles.Count; i++) {
-//			if (mPlayer.unlockedVehicles [i] == _vehicle.id) {
-//				mPlayer.unlockedVehicles [i].matId = _vehicle.matId;
-//				break;
-//			}
-//		}
-		if (mPlayer.unlockedVehicles.ContainsKey (_vehicle.id)) 
-//			mPlayer.unlockedVehicles.TryGetValue (_vehicle.id, out _vehicle.matId);
-			mPlayer.unlockedVehicles[_vehicle.id] = _vehicle.matId;
+	public void UpdateCurrentVehicle (int _id) {
+		mPlayer.vehicleId = _id;
+		TapkidsData.players[currentPlayer].vehicleId = mPlayer.vehicleId;
+		TapkidsData.Save ();
+	}
+	public void UpdateVehicleMaterial (Vehicle _vehicle) {
+		mPlayer.unlockedVehicles[_vehicle.id] = _vehicle.matId;
 		TapkidsData.players[currentPlayer].unlockedVehicles = mPlayer.unlockedVehicles;
 		TapkidsData.Save ();
 	}
 	#endregion public functions
 
 	#region private functions
-	void HandleSelectVehicle (Vehicle _newVehicle) {
-		// check unlocked car
-		if (PlayerDataController.Instance.unlockedIds.Contains (_newVehicle.id)) {
-			mPlayer.vehicleId = _newVehicle.id;
-			mPlayer.vehicleName = _newVehicle.name;
-		} else {
-			// do nothing
-		}
-	}
-
-
 	#endregion private functions
 }
