@@ -20,7 +20,6 @@ public class UIPlayerPanel : MonoBehaviour {
 	}
 
 	void OnTogglePlayerPanel (bool _isOn) {
-		Debug.Log ("player");
 		mCanvasGroup.alpha = _isOn ? 1f : 0f;
 		mCanvasGroup.interactable = _isOn ? true : false;
 		mCanvasGroup.blocksRaycasts = _isOn ? true : false;

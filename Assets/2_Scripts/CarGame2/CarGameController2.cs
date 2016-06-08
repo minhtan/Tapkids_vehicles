@@ -161,7 +161,10 @@ public class CarGameController2 : MonoBehaviour {
 	void HandleGatherLetter () {
 		if (answers.Contains (collectedLetters)) {
 			AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.CORRECT_WORD);
-			playableLetters.Remove (collectedLetters);
+
+			Messenger.Broadcast (EventManager.GUI.CORRECTWORD.ToString ());
+
+			answers.Remove (collectedLetters);
 			collectedLetters = string.Empty;
 
 			// check if there is no word left, trigger gameover state

@@ -300,7 +300,7 @@ public class GaragaController : MonoBehaviour {
 			}
 			locker.SetActive (false);
 		} else {
-			PlayerDataController.Instance.UpdateCurrentVehicle (vehicles [currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle.id);
+			PlayerDataController.Instance.UpdateCurrentVehicle (vehicles [currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle);
 		}
 	}
 

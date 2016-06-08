@@ -4,7 +4,7 @@ using System.Collections;
 
 
 public class UIPurchaseButton : MonoBehaviour {
-	
+	public Sprite coin;
 	private MainMenuController3D menu;
 	private GaragaController garage;
 	void OnEnable () {
@@ -23,15 +23,15 @@ public class UIPurchaseButton : MonoBehaviour {
 				AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.BUTTON_CLICK);
 				menu.SetTweenLock (true);
 				int cost = garage.vehicles[garage.currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle.costPoint;
-				GUIController.Instance.OpenDialog ("Do you want to purchase this vehicle for " + cost + " ?")
+				GUIController.Instance.OpenDialog ("Do you want to purchase this vehicle for " + cost + "  *  ?", coin)
 					.AddButton ("No", 
-						UIDialogButton.Anchor.BOTTOM_RIGHT, 
+						UIDialogButton.Anchor.CENTER, 120, -60, 
 						delegate { 
 							AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.BUTTON_CLICK);
 							menu.SetTweenLock (false);
 						}
 					)
-					.AddButton ("Yes", UIDialogButton.Anchor.BOTTOM_LEFT,  
+					.AddButton ("Yes", UIDialogButton.Anchor.CENTER, -120, -60,
 						delegate { 
 							Messenger.Broadcast (EventManager.GUI.PURCHASE_VEHICLE.ToString ());
 							AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.BUTTON_CLICK);
