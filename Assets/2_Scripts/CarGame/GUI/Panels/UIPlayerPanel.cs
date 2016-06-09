@@ -16,7 +16,7 @@ public class UIPlayerPanel : MonoBehaviour {
 	}
 
 	void OnDisable () {
-		Messenger.AddListener <bool> (EventManager.GUI.TOGGLE_PLAYER_PNL.ToString (), OnTogglePlayerPanel);
+		Messenger.RemoveListener <bool> (EventManager.GUI.TOGGLE_PLAYER_PNL.ToString (), OnTogglePlayerPanel);
 	}
 
 	void OnTogglePlayerPanel (bool _isOn) {
