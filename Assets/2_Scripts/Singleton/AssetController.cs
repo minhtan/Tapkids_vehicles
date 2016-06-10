@@ -13,7 +13,7 @@ public class AssetController : UnitySingletonPersistent<AssetController> {
 
 	#region Mono
 	IEnumerator Start (){
-//		Caching.CleanCache ();
+		Caching.CleanCache ();
 		yield return StartCoroutine( Initialize() );
 	}
 	#endregion
