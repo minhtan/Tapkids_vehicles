@@ -28,8 +28,8 @@ public class AssetController : UnitySingletonPersistent<AssetController> {
 		// (This is very dependent on the production workflow of the project. 
 		// 	Another approach would be to make this configurable in the standalone player.)
 		#if DEVELOPMENT_BUILD && UNITY_EDITOR
-//		AssetBundleManager.SetDevelopmentAssetBundleServer ();
-		AssetBundleManager.SetSourceAssetBundleURL(url);
+		AssetBundleManager.SetDevelopmentAssetBundleServer ();
+//		AssetBundleManager.SetSourceAssetBundleURL(url);
 		#else
 		// Use the following code if AssetBundles are embedded in the project for example via StreamingAssets folder etc:
 		//AssetBundleManager.SetSourceAssetBundleURL(Application.dataPath + "/");

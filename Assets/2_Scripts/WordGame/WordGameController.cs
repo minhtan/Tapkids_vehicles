@@ -204,6 +204,7 @@ public class WordGameController : MonoBehaviour {
 	}
 
 	void ShowResult(){
+		HidePnlHint ();
 		txt_ResultWords.text = foundAnswers.Count + "/" + (answers.Count + foundAnswers.Count);
 		txt_ResultScore.text = currentScore.ToString();
 
