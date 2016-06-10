@@ -8,7 +8,7 @@ public class MainMenuController3D : MonoBehaviour {
 	float minDrag = 10f;
 	float holdTime;
 	int swingTweenID;
-	bool isMenuTweening = false;
+	bool isMenuTweening = true;
 	bool isTweenLocked = false;
 	bool isUILocked = false;
 	bool isInMenu = true;
@@ -54,6 +54,7 @@ public class MainMenuController3D : MonoBehaviour {
 
 		LeanTween.moveLocal (camObj, camFinalPos.localPosition, 2.0f).setEase(LeanTweenType.easeOutCirc).setOnComplete (() => {
 			SwingCam (-1f);
+			isMenuTweening = false;
 		});
 	}
 
