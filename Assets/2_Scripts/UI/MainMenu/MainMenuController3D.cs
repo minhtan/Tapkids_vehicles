@@ -23,6 +23,8 @@ public class MainMenuController3D : MonoBehaviour {
 	float menuTweenTime = 0.2f;
 	float drag;
 
+	public GameObject camObj;
+	public Transform camFinalPos;
 	public Transform menuBtns;
 	public Transform[] garageBtns;
 	float totalD;
@@ -49,7 +51,10 @@ public class MainMenuController3D : MonoBehaviour {
 		SetFieldOfView ();
 		menuPos = transform.localRotation.eulerAngles;
 		totalD = garagePos.y - menuPos.y;
-		SwingCam (-1f);
+
+		LeanTween.moveLocal (camObj, camFinalPos.localPosition, 2.0f).setEase(LeanTweenType.easeOutCirc).setOnComplete (() => {
+			SwingCam (-1f);
+		});
 	}
 
 	void Update(){
@@ -60,6 +65,34 @@ public class MainMenuController3D : MonoBehaviour {
 		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_SFX_BTN.ToString (), false);
 		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_PLAYER_PNL.ToString (), false);
 	}
+
+	IEnumerator MoveVehicle (Transform _trans, BezierSpline _spline, System.Action _callback = null, bool _isGoingForward = true) {
+		float progress = _isGoingForward ? 0 : 1;
+		float _duration_ = 2f;
+		while (true) {
+			if (_isGoingForward) {
+				progress += Time.deltaTime / _duration_;
+				if (progress > 1f) {
+					if (_callback != null)
+						_callback ();
+					yield break;
+				}
+			}else{
+				progress -= Time.deltaTime / _duration_;
+				if (progress < 0f) {
+					if (_callback != null)
+						_callback ();
+					yield break;
+				}
+			}
+
+			Vector3 position = _spline.GetPoint(progress);
+			_trans.position = position;
+			_trans.LookAt(position + _spline.GetDirection(progress));
+			yield return null;
+		}
+	}
+
 
 	public bool IsCamRotating(){
 		if (Mathf.Abs(drag) > minDrag) {
