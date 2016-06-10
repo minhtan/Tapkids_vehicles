@@ -91,6 +91,9 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 			if (averagePercent == 0.95f) {
 				if (OnEndLoading != null)
 					OnEndLoading ();
+
+				yield return new WaitForSeconds (2f);
+
 				async.allowSceneActivation = true;
 				yield break;
 			}
