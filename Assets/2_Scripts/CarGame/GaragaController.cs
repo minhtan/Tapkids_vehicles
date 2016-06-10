@@ -108,7 +108,7 @@ public class GaragaController : MonoBehaviour {
 
 	#region private functions
 	private IEnumerator SetupVehicles (string _vehicleName, System.Action _callback = null) {
-		yield return new WaitForSeconds (1f);
+		yield return new WaitForSeconds (0f);
 		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (GameConstant.assetBundleName, _vehicleName, (bundle) => {
 			GameObject carGameObject = Instantiate (bundle, initPos.position, Quaternion.identity) as GameObject;
 			int carId = carGameObject.GetComponent <ArcadeCarController> ().vehicle.id;
