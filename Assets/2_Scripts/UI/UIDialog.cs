@@ -11,22 +11,25 @@ public class UIDialog : MonoBehaviour
 	private GameObject _imageTemplate;
 
 	private Text _messageText;
-	private ContentSizeFitter _sizer;
 	/// <summary>
 	/// The Text that has ContentSizeFitter used for messure text size in pixel.
 	/// </summary>
 	private Text _sizeCalculator;
 
-	private const char CharacterImage = '*';
+	private static char _characterImage = '*';
 	private float _charImageWith;
+	private float _textSizePixelX;
+
+	public static char CharacterImage {
+		get{ return _characterImage; }
+	}
 
 	void Awake ()
 	{
 		_messageText = transform.GetChild (0).GetComponent<Text> ();
-		_sizer = _messageText.GetComponent<ContentSizeFitter> ();
 		_sizeCalculator = transform.GetChild (1).GetComponent<Text> ();
 
-		_charImageWith = GetTextLength (CharacterImage.ToString());
+		_charImageWith = GetTextLength (_characterImage.ToString ());
 	}
 
 	public UIDialog AddButton (string text, UIDialogButton.Anchor anchor, Callback callback = null)
@@ -39,6 +42,11 @@ public class UIDialog : MonoBehaviour
 	{
 		CreateButton (new UIDialogButton (text, anchor, paddingX, paddingY, callback));
 		return this;
+	}
+
+	public void setCharacterImage (char characterImage)
+	{
+		_characterImage = characterImage;
 	}
 
 	/// <summary>
@@ -56,11 +64,10 @@ public class UIDialog : MonoBehaviour
 		int textHalfLength = text.Length / 2;
 		int spriteCount = 0;
 
-		_sizer.SetLayoutHorizontal ();
-		_sizer.SetLayoutVertical ();
+		_textSizePixelX = GetTextLength (text);
 
 		for (int i = 0; i < text.Length; i++) {
-			if (text [i] != CharacterImage)
+			if (text [i] != _characterImage)
 				continue;
 
 			if (i > textHalfLength)
@@ -113,7 +120,7 @@ public class UIDialog : MonoBehaviour
 
 		float halfLengthPixel = GetTextLength (firstHalf);
 
-		offsetX.x = offsetX.x - Mathf.Abs(_messageText.rectTransform.sizeDelta.x) / 2 + halfLengthPixel;
+		offsetX.x = offsetX.x - _textSizePixelX / 2 + halfLengthPixel;
 
 		Vector2 pos = Vector2.zero;
 		pos = pos + offsetX;
