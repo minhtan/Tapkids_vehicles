@@ -13,6 +13,8 @@ namespace Lean
 
 		public string FallbackText;
 
+		public int charSize;
+
 		// This gets called every time the translation needs updating
 		public override void UpdateTranslation(LeanTranslation translation)
 		{
@@ -22,7 +24,7 @@ namespace Lean
 			// Use translation?
 			if (translation != null)
 			{
-				text.text = translation.Text;
+				text.text = StringUltil.TextWrap(translation.Text, charSize);
 			}
 			// Use fallback?
 			else if (AllowFallback == true)
