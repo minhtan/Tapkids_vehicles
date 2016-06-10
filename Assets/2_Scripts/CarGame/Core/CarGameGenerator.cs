@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -20,7 +21,9 @@ public class CarGameGenerator : MonoBehaviour {
 	private GameObject[] letterPoints;	// stores letter's positions in environment
 	private GameObject[] obstaclePoints;	
 
-	private Dictionary <string, Transform> letterDictionary = new Dictionary<string, Transform> ();
+	private Dictionary <string, Transform> letterToTransform;
+	private Dictionary <string, Vector3> letterToPosition;
+
 	private List <GameObject> obstacleGameObjects;
 	private Vehicle currentVehicle;
 	private GameObject carGameObject;
@@ -38,16 +41,17 @@ public class CarGameGenerator : MonoBehaviour {
 		Messenger.AddListener <string, string> (EventManager.GameState.INIT.ToString(), HandleInitGame);
 		Messenger.AddListener <bool> (EventManager.GameState.START.ToString (), HandleStartGame);
 		Messenger.AddListener (EventManager.GameState.RESET.ToString (), HandleResetGame);
-
 		Messenger.AddListener <string> (EventManager.GUI.REMOVE_LETTER.ToString (), HandleDropLetter);
+		Messenger.AddListener (EventManager.GUI.CORRECTWORD.ToString (), HandleCorrectWord);
+
 	}
 
 	void OnDisable () {
 		Messenger.RemoveListener <string, string> (EventManager.GameState.INIT.ToString(), HandleInitGame);
 		Messenger.RemoveListener <bool> (EventManager.GameState.START.ToString (), HandleStartGame);
 		Messenger.RemoveListener (EventManager.GameState.RESET.ToString (), HandleResetGame);
-
 		Messenger.RemoveListener <string> (EventManager.GUI.REMOVE_LETTER.ToString (), HandleDropLetter);
+		Messenger.AddListener (EventManager.GUI.CORRECTWORD.ToString (), HandleCorrectWord);
 	}
 
 	void Start () {
@@ -69,7 +73,8 @@ public class CarGameGenerator : MonoBehaviour {
 
 			StartCoroutine(SetupCar ());
 
-			letterDictionary = new Dictionary<string, Transform> ();
+			letterToTransform = new Dictionary<string, Transform> ();
+			letterToPosition = new Dictionary<string, Vector3> ();
 //			foreach (KeyValuePair <string, GameObject> pair in letterDictionary) {
 //				GameObject.Destroy (pair.Value);
 //			}
@@ -111,11 +116,11 @@ public class CarGameGenerator : MonoBehaviour {
 		// remove obstacle
 
 		// remove letter
-		foreach (KeyValuePair <string, Transform> pair in letterDictionary) {
+		foreach (KeyValuePair <string, Transform> pair in letterToTransform) {
 //			GameObject.Destroy (pair.Value.gameObject);
 			Transform.Destroy (pair.Value);
 		}
-		letterDictionary.Clear ();
+		letterToTransform.Clear ();
 	}
 
 	private IEnumerator HandleGameStartCo () {
@@ -127,8 +132,8 @@ public class CarGameGenerator : MonoBehaviour {
 //			}
 //		}
 
-		if (letterDictionary.Count > 0) {
-			foreach (KeyValuePair <string, Transform> pair in letterDictionary) {
+		if (letterToTransform.Count > 0) {
+			foreach (KeyValuePair <string, Transform> pair in letterToTransform) {
 				pair.Value.gameObject.SetActive (true);
 				pair.Value.transform.localScale = scaleFactor.ToVector3 ();
 				yield return new WaitForSeconds (delayTime);
@@ -165,15 +170,19 @@ public class CarGameGenerator : MonoBehaviour {
 		}));
 	}
 
-	private IEnumerator SetupLetter (string _letter, Vector3 position) {
+	private IEnumerator SetupLetter (string _letter, Vector3 _position) {
 		yield return new WaitForSeconds (1f);
 		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (GameConstant.assetBundleName, _letter, (bundle) => {
-			GameObject letterGameObject = Instantiate (bundle, position + pointOffset, Quaternion.identity) as GameObject;
+			GameObject letterGameObject = Instantiate (bundle, _position + pointOffset, Quaternion.identity) as GameObject;
 			letterGameObject.AddComponent <LetterController> ();
 			letterGameObject.GetComponent <LetterController> ().letterName = _letter;
+//			letterGameObject.AddComponent <Rigidbody> ();
+//			letterGameObject.GetComponent <Rigidbody> ().constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
 			letterGameObject.transform.SetParent (mTransform, false);
 			letterGameObject.SetActive (false);
-			letterDictionary.Add (_letter, letterGameObject.transform);
+			letterToTransform.Add (_letter, letterGameObject.transform);
+			letterToPosition.Add (_letter, _position);
+//			newLetterDictionary.Add (position, letterGameObject);
 		}));
 	}
 
@@ -189,22 +198,46 @@ public class CarGameGenerator : MonoBehaviour {
 	}
 
 	private void HandleDropLetter (string _letters) {
-		if (letterDictionary.ContainsKey (_letters)) {
-			Transform letter;
-			letterDictionary.TryGetValue (_letters, out letter);
+		if (letterToTransform.ContainsKey (_letters)) {
 			System.Random rnd = new System.Random ();
 			int rd;
 			do {
 				rd = rnd.Next (letterPoints.Length);
-			} while (letterDictionary.ContainsValue (letterPoints[rd].transform));
+			} while (letterToPosition.ContainsValue (letterPoints[rd].transform.position)); // wrong
 
-			letter.gameObject.SetActive (true);
-			letter.localPosition = letterPoints[rd].transform.position;
-			letter.localScale = scaleFactor.ToVector3 ();
+			Transform letter;
+			if (letterToTransform.TryGetValue (_letters, out letter)) {
+				letter.gameObject.SetActive (true);
+				letter.localPosition = letterPoints[rd].transform.position;
+				letter.localScale = scaleFactor.ToVector3 ();
 
-			letterDictionary [_letters] = letter;
+				letterToTransform [_letters] = letter;
+				letterToPosition [_letters] = letterPoints[rd].transform.position;
+			} else {
+
+			}
 		} else {
 
+		}
+	}
+
+	private void HandleCorrectWord () {
+		foreach (var letter in letterToTransform) {
+			if (!letter.Value.gameObject.activeInHierarchy) {
+				System.Random _random = new System.Random();
+				int rand;
+				do {
+					rand = _random.Next (letterPoints.Length);
+				} while (letterToPosition.ContainsValue (letterPoints[rand].transform.position));
+
+				letter.Value.gameObject.SetActive (true);
+				letter.Value.localPosition = letterPoints[rand].transform.position;
+				letter.Value.localScale = scaleFactor.ToVector3 ();
+
+				letterToPosition [letter.Key] = letterPoints[rand].transform.position;
+			} else {
+
+			}
 		}
 	}
 	#endregion private functions

@@ -93,7 +93,7 @@ GameObject:
   - 114: {fileID: 11451910}
   m_Layer: 0
   m_Name: GarbageTruck
-  m_TagString: Untagged
+  m_TagString: Vehicle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -610,7 +610,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   vehicle:
     id: 5
-    name: GabageTruck
+    name: GarbageTruck
     desc: 
     matId: 0
     maxSpeed: 30
@@ -769,7 +769,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: vehicle.name
-      value: GabageTruck
+      value: GarbageTruck
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: vehicle.id
@@ -802,6 +802,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: vehicle.maxSpeed
       value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_TagString
+      value: Vehicle
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

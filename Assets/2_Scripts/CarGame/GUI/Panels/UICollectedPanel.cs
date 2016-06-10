@@ -13,7 +13,7 @@ public class UICollectedPanel : MonoBehaviour {
 		Messenger.AddListener <string, string> (EventManager.GameState.INIT.ToString (), HandleInitGame);
 		Messenger.AddListener <string> (EventManager.Vehicle.COLLECT_LETTER.ToString (), HandleCollectLetter);
 		Messenger.AddListener <string> (EventManager.GUI.REMOVE_LETTER.ToString (), HandleRemoveLetter);
-
+		Messenger.AddListener (EventManager.GUI.CORRECTWORD.ToString (), HandleCorrectWord);
 		// TODO: handle drop text
 	}
 
@@ -21,6 +21,7 @@ public class UICollectedPanel : MonoBehaviour {
 		Messenger.RemoveListener <string, string> (EventManager.GameState.INIT.ToString (), HandleInitGame);
 		Messenger.RemoveListener <string> (EventManager.Vehicle.COLLECT_LETTER.ToString (), HandleCollectLetter);
 		Messenger.RemoveListener <string> (EventManager.GUI.REMOVE_LETTER.ToString (), HandleRemoveLetter);
+		Messenger.RemoveListener (EventManager.GUI.CORRECTWORD.ToString (), HandleCorrectWord);
 	}
 
 	void Awake () {
@@ -65,6 +66,11 @@ public class UICollectedPanel : MonoBehaviour {
 				return;
 			}
 		}
+	}
 
+	void HandleCorrectWord () {
+		for (int i = 0; i < collectedLetters.Count; i++) {
+			collectedLetters [i].GetComponentInChildren <Text> ().text = "";
+		}
 	}
 }

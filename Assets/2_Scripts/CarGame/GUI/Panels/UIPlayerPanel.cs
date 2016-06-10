@@ -16,11 +16,10 @@ public class UIPlayerPanel : MonoBehaviour {
 	}
 
 	void OnDisable () {
-		Messenger.AddListener <bool> (EventManager.GUI.TOGGLE_PLAYER_PNL.ToString (), OnTogglePlayerPanel);
+		Messenger.RemoveListener <bool> (EventManager.GUI.TOGGLE_PLAYER_PNL.ToString (), OnTogglePlayerPanel);
 	}
 
 	void OnTogglePlayerPanel (bool _isOn) {
-		Debug.Log ("player");
 		mCanvasGroup.alpha = _isOn ? 1f : 0f;
 		mCanvasGroup.interactable = _isOn ? true : false;
 		mCanvasGroup.blocksRaycasts = _isOn ? true : false;

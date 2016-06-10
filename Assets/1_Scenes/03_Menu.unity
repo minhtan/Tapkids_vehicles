@@ -268,6 +268,7 @@ MonoBehaviour:
   PhraseName: Startup
   AllowFallback: 0
   FallbackText: 
+  charSize: 15
 --- !u!1 &223585314
 GameObject:
   m_ObjectHideFlags: 0
@@ -1635,6 +1636,7 @@ MonoBehaviour:
   PhraseName: WordGame
   AllowFallback: 0
   FallbackText: 
+  charSize: 8
 --- !u!1 &620353345
 GameObject:
   m_ObjectHideFlags: 0
@@ -1991,7 +1993,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &740984418
 Transform:
   m_ObjectHideFlags: 0
@@ -3986,6 +3988,7 @@ MonoBehaviour:
   PhraseName: Cargame2
   AllowFallback: 0
   FallbackText: 
+  charSize: 8
 --- !u!1001 &992984507
 Prefab:
   m_ObjectHideFlags: 0
@@ -4101,6 +4104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00954968f692044a88b70d722854d178, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  coin: {fileID: 21300000, guid: fa6bdb1996eb84d67a0b58d80dcfe07a, type: 3}
 --- !u!23 &1039951373
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -4496,7 +4500,7 @@ MonoBehaviour:
   locker: {fileID: 339865905}
   purchaseButton: {fileID: 1039951370}
   carMove: {fileID: 8300000, guid: 6001e8b6cd5af4361bb35db67bf2a80e, type: 3}
-  carUnlock: {fileID: 8300000, guid: 530abb17754a2469ba28f9817c52aa39, type: 3}
+  carUnlock: {fileID: 8300000, guid: 658f1a35c429d45cf829a8c54020aa7b, type: 3}
   vehicles: []
   spline1: {fileID: 1289213534}
   spline2: {fileID: 586243602}
@@ -5757,6 +5761,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PhraseName: Title
+  size: 18
 --- !u!1 &1421796221
 GameObject:
   m_ObjectHideFlags: 0
@@ -5768,7 +5773,6 @@ GameObject:
   - 20: {fileID: 1421796226}
   - 92: {fileID: 1421796225}
   - 124: {fileID: 1421796224}
-  - 81: {fileID: 1421796223}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -5788,13 +5792,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1919124333}
   m_RootOrder: 0
---- !u!81 &1421796223
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1421796221}
-  m_Enabled: 1
 --- !u!124 &1421796224
 Behaviour:
   m_ObjectHideFlags: 0
@@ -7682,6 +7679,7 @@ MonoBehaviour:
   PhraseName: WordDrawGame
   AllowFallback: 0
   FallbackText: 
+  charSize: 8
 --- !u!4 &1608532559 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400016, guid: a0f5428ac5ce684488553007b77a7213, type: 3}
@@ -9899,6 +9897,7 @@ MonoBehaviour:
   PhraseName: Cargame
   AllowFallback: 0
   FallbackText: 
+  charSize: 8
 --- !u!1 &1859059486
 GameObject:
   m_ObjectHideFlags: 0
@@ -10163,7 +10162,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1987529661}
   m_LocalRotation: {x: 0.00000005960466, y: -0.7071068, z: -0.7071068, w: -0.00000014901164}
-  m_LocalPosition: {x: 0, y: 0, z: 0.2201}
+  m_LocalPosition: {x: 0, y: 0, z: 0.2904}
   m_LocalScale: {x: 0.004264795, y: 0.004507868, z: 0.004353671}
   m_Children: []
   m_Father: {fileID: 786024340}
@@ -10180,7 +10179,7 @@ TextMesh:
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
-  m_Anchor: 4
+  m_Anchor: 1
   m_Alignment: 1
   m_TabSize: 4
   m_FontSize: 24
@@ -10228,6 +10227,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PhraseName: Info
+  size: 18
 --- !u!4 &2007455542 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: e48f79fc725ea8a41ad6c92cb2e6aa5b, type: 2}
