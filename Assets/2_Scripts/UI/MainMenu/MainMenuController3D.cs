@@ -52,7 +52,7 @@ public class MainMenuController3D : MonoBehaviour {
 		menuPos = transform.localRotation.eulerAngles;
 		totalD = garagePos.y - menuPos.y;
 
-		LeanTween.moveLocal (camObj, camFinalPos.localPosition, 2.0f).setEase(LeanTweenType.easeOutCirc).setOnComplete (() => {
+		LeanTween.moveLocal (camObj, camFinalPos.localPosition, 2.0f).setEase(LeanTweenType.easeInQuad).setOnComplete (() => {
 			SwingCam (-1f);
 			isMenuTweening = false;
 		});
