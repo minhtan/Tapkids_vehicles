@@ -7,9 +7,12 @@ public class BtnSelectGame : MonoBehaviour {
 	MainMenuController3D menu;
 	public float swing;
 	public AudioClip clip;
+	public bool requireActivation;
+	private Checkcode checkCode;
 
 	void Start(){
 		menu = FindObjectOfType<MainMenuController3D> ();
+		checkCode = FindObjectOfType<Checkcode> ();
 	}
 
 	void OnEnable(){
@@ -23,12 +26,21 @@ public class BtnSelectGame : MonoBehaviour {
 	void OnBtnTap(int _id){
 		if(menu.IsInMenu){
 			if(_id == gameObject.GetInstanceID()){
+				
+				if (requireActivation && checkCode != null) {
+					if(!checkCode.IsGameActivated()){
+						checkCode.ShowActivationPnl ();
+						return;
+					}
+				}
+
 				AudioManager.Instance.PlayTemp (clip);
 				LeanTween.rotateAroundLocal (gameObject, Vector3.forward, swing, 0.1f).setEase (LeanTweenType.linear).setOnComplete (() => {
 					LeanTween.rotateAroundLocal (gameObject, Vector3.forward, -swing, 0.9f).setEase (LeanTweenType.easeOutElastic).setOnComplete (() => {
 						SceneController.Instance.LoadingSceneAsync (sceneToLoad);				
 					});
 				});
+
 			}
 		}
 	}

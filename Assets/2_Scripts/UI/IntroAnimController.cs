@@ -26,8 +26,8 @@ public class IntroAnimController : MonoBehaviour {
 		
 	public void OnAnimationEnd()
 	{
-//		SceneController.Instance.LoadingSceneAsync (SceneController.SceneID.MENU);
 		OnEndLoading();
+		SceneController.Instance.LoadingSceneAsync (SceneController.SceneID.MENU);
 	}
 
 	private void SetActiveGO(GameObject[] gos, bool active)

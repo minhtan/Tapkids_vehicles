@@ -8,6 +8,7 @@ public class Checkcode : MonoBehaviour {
 	public Text txt;
 	public GameObject pnlCheckCode;
 	public bool test;
+	public bool activationRequired;
 
 	void OnEnable(){
 		PlayerPrefs.DeleteKey (GameConstant.UNLOCKED);
@@ -25,13 +26,19 @@ public class Checkcode : MonoBehaviour {
 				}
 			}));
 		} else {
-			SceneController.Instance.LoadingSceneAsync (SceneController.SceneID.MENU);
+//			SceneController.Instance.LoadingSceneAsync (SceneController.SceneID.MENU);
 		}
+	}
+
+	public void ShowActivationPnl(){
+		pnlCheckCode.SetActive (true);
 	}
 
 	void OnCodeValid(){
 		PlayerPrefs.SetInt(GameConstant.UNLOCKED, (int)GameConstant.unlockStatus.VALID);
-		SceneController.Instance.LoadingSceneAsync (SceneController.SceneID.MENU);
+		pnlCheckCode.SetActive (false);
+
+//		SceneController.Instance.LoadingSceneAsync (SceneController.SceneID.MENU);
 	}
 
 	public void _Check(){
@@ -117,6 +124,17 @@ public class Checkcode : MonoBehaviour {
 			return false;
 		} else {
 			return true;
+		}
+	}
+
+	public bool IsGameActivated(){
+		if (!activationRequired)
+			return true;
+		
+		if (PlayerPrefs.HasKey (GameConstant.UNLOCKED) && PlayerPrefs.GetInt (GameConstant.UNLOCKED) == (int)GameConstant.unlockStatus.VALID) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 
