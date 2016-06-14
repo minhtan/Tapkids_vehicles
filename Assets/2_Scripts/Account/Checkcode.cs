@@ -11,7 +11,7 @@ public class Checkcode : MonoBehaviour {
 	public bool activationRequired;
 
 	void OnEnable(){
-		PlayerPrefs.DeleteKey (GameConstant.UNLOCKED);
+//		PlayerPrefs.DeleteKey (GameConstant.UNLOCKED);
 		if (!PlayerPrefs.HasKey (GameConstant.UNLOCKED) || PlayerPrefs.GetInt (GameConstant.UNLOCKED) != (int)GameConstant.unlockStatus.VALID) {
 			pnlCheckCode.SetActive (true);
 
