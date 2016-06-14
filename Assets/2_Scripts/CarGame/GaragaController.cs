@@ -159,7 +159,6 @@ public class GaragaController : MonoBehaviour {
 		purchaseButton.SetActive (false);
 		menu.SetTweenLock (true);
 		valid = false;
-		AudioManager.Instance.PlayTemp (carMove);
 
 		if (_index == 1)
 			NextOne ();
@@ -185,6 +184,7 @@ public class GaragaController : MonoBehaviour {
 	}
 
 	private void NextOne () {
+		AudioManager.Instance.PlayTemp (carMove);
 		//
 		vehicles [HandleCurrentIndex (currentSelectedIndex, 2)].SetActive (true);
 		StartCoroutine (MoveVehicle (vehicles [HandleCurrentIndex (currentSelectedIndex, 2)].transform, spline1));
@@ -225,6 +225,7 @@ public class GaragaController : MonoBehaviour {
 	}
 
 	private void PrevOne () {
+		AudioManager.Instance.PlayTemp (carMove);
 		vehicles [HandleCurrentIndex (currentSelectedIndex, -2)].SetActive (true);
 		StartCoroutine (MoveVehicle (vehicles [HandleCurrentIndex (currentSelectedIndex, -2)].transform, spline4, () => { 
 			PrevTwo(); 
