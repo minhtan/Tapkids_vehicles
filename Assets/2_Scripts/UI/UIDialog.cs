@@ -79,7 +79,7 @@ public class UIDialog : MonoBehaviour
 		}
 
 		//_messageText.text = text.Replace (CharacterImage, ' ');
-	}
+	}	
 
 	private void CreateButton (UIDialogButton dialogBut)
 	{

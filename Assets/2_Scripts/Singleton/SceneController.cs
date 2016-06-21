@@ -13,8 +13,6 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 {
 	#region VAR
 
-	public Text _text;
-
 	public enum SceneID
 	{
 		INTRO,
@@ -69,8 +67,6 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 		if (OnStartLoading != null)
 			OnStartLoading ();
 		
-		_text.text = "id " + id;
-
 		AsyncOperation async = SceneManager.LoadSceneAsync ((int)id);
 
 		async.allowSceneActivation = false;	
@@ -80,8 +76,6 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 			if (OnLoadingScene != null)
 				OnLoadingScene (averagePercent);	
 			
-			_text.text = async.progress + " " + AssetBundleManager.ReturnProgress ();
-
 			if (AssetBundleManager.IsInprogress ()) {
 				averagePercent = (async.progress + AssetBundleManager.ReturnProgress ()) / 2;
 			} else {
