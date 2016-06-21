@@ -60,6 +60,7 @@ public class VuforiaScanner : MonoBehaviour, ITrackerEventHandler
 		{
 			if(!string.IsNullOrEmpty(tempText)) {
 				Messenger.Broadcast<string> (EventManager.AR.QR_TRACKING.ToString(), tempText);
+				tempText = null;
 			}
 		}
 	}

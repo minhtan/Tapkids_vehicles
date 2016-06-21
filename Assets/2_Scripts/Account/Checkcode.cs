@@ -76,7 +76,7 @@ public class Checkcode : MonoBehaviour {
 			GUIController.Instance.OpenDialog (LeanLocalization.GetTranslation("InvalidKey").Text).AddButton (
 				LeanLocalization.GetTranslation("Ok").Text, 
 				UIDialogButton.Anchor.BOTTOM_CENTER, 
-				() => {}
+				() => {isProcessing = false;}
 			);
 			return;
 		}
@@ -109,9 +109,7 @@ public class Checkcode : MonoBehaviour {
 											GUIController.Instance.OpenDialog(returnOverRideKeyData.message).AddButton(
 												LeanLocalization.GetTranslation("Ok").Text, 
 												UIDialogButton.Anchor.BOTTOM_CENTER, 
-												() => {
-														Debug.Log("ok here");
-														isProcessing = false;}
+												() => {isProcessing = false;}
 											);
 										}
 									}else{
