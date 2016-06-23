@@ -66,9 +66,15 @@ public class ArController : UnitySingletonPersistent<ArController> {
 		VuforiaUnity.SetHint (Vuforia.VuforiaUnity.VuforiaHint.HINT_MAX_SIMULTANEOUS_IMAGE_TARGETS, targetNums);
 	}
 
-	public void ToggleAR(bool state){
+	public void ToggleAR(bool state, bool isQR = false){
 		VuforiaBehaviour.Instance.enabled = state;
 		camera.enabled = state;
+
+		if (isQR && state) {
+			GetComponent<VuforiaScanner> ().enabled = state;
+		} else {
+			GetComponent<VuforiaScanner> ().enabled = false;
+		}
 	}
 
 	public void SetCenterMode(bool isCameraCenter){

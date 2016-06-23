@@ -24,6 +24,7 @@ public class WordGameController : MonoBehaviour {
 			ArController.Instance.ToggleAR (false);
 		}
 	}
+
 	#region Vars
 	//Core
 	private Dictionary<string, FSMTrackable> letterToImgTarget = new Dictionary<string, FSMTrackable>();
