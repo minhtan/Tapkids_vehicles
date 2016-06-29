@@ -79,7 +79,7 @@ public class UIDialog : MonoBehaviour
 		}
 
 		//_messageText.text = text.Replace (CharacterImage, ' ');
-	}
+	}	
 
 	private void CreateButton (UIDialogButton dialogBut)
 	{
@@ -105,7 +105,7 @@ public class UIDialog : MonoBehaviour
 
 		Image image = imageGO.GetComponent<Image> ();
 		image.sprite = sprite;
-
+		
 		RectTransform rectTrans = imageGO.GetComponent<RectTransform> ();
 		rectTrans.SetParent (_messageText.transform, false);
 		rectTrans.localPosition = Vector2.zero;

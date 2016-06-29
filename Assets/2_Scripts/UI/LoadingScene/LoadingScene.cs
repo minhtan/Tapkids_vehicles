@@ -2,25 +2,40 @@
 using System.Collections;
 
 public class LoadingScene : MonoBehaviour {
+	public GameObject _loadingBar;
+	public GameObject _background;
+	public GameObject _logo;
 
 	void OnEnable()
 	{
 		SceneController.OnStartLoading += OnStartLoading;
 		SceneController.OnEndLoading += OnEndLoading;
+		SceneController.OnSceneChange += OnSceneChange;
 	}
 
 	void OnDisable()
 	{
 		SceneController.OnStartLoading -= OnStartLoading;
 		SceneController.OnEndLoading -= OnEndLoading;
+		SceneController.OnSceneChange -= OnSceneChange;
+	}
+
+	private void OnSceneChange(SceneController.SceneID prev, SceneController.SceneID current)
+	{
+		if(prev == SceneController.SceneID.INTRO && current == SceneController.SceneID.MENU)
+		{
+			_logo.SetActive (true);
+		}
+		else
+		{
+			_logo.SetActive (false);
+		}
 	}
 
 	private void OnStartLoading()
 	{
-		foreach(Transform trans in transform)
-		{
-			trans.gameObject.SetActive (true);
-		}
+		_loadingBar.SetActive (true);
+		_background.SetActive (true);
 	}
 
 	private void OnEndLoading()	

@@ -13,8 +13,6 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 {
 	#region VAR
 
-	public Text _text;
-
 	public enum SceneID
 	{
 		INTRO,
@@ -32,7 +30,11 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 
 	public static UnityAction OnStartLoading;
 	public static UnityAction OnEndLoading;
-	public static UnityAction<float> OnLoadingScene;
+	public static UnityAction<float> OnLoadingScene;	
+	public static UnityAction<SceneID, SceneID> OnSceneChange;
+
+	private SceneID _currentScene;
+	private SceneID _prevScene;
 
 	public override void Awake ()
 	{
@@ -66,11 +68,15 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 		if (delay > 0f)
 			yield return new WaitForSeconds (delay);
 
+		_prevScene = _currentScene;
+		_currentScene = id;
+
+		if (OnSceneChange != null)
+			OnSceneChange (_prevScene, _currentScene);
+
 		if (OnStartLoading != null)
 			OnStartLoading ();
 		
-		_text.text = "id " + id;
-
 		AsyncOperation async = SceneManager.LoadSceneAsync ((int)id);
 
 		async.allowSceneActivation = false;	
@@ -80,13 +86,11 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 			if (OnLoadingScene != null)
 				OnLoadingScene (averagePercent);	
 			
-			_text.text = async.progress + " " + AssetBundleManager.ReturnProgress ();
-
 			if (AssetBundleManager.IsInprogress ()) {
 				averagePercent = (async.progress + AssetBundleManager.ReturnProgress ()) / 2;
 			} else {
 				averagePercent = (async.progress + 1f) / 2;
-			}
+			} 
 
 			if (averagePercent == 0.95f) {
 				yield return new WaitForSeconds (2f);
@@ -95,6 +99,7 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 					OnEndLoading ();
 				
 				async.allowSceneActivation = true;
+				
 				yield break;
 			}
 			
