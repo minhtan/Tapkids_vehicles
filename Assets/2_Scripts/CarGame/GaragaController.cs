@@ -59,12 +59,7 @@ public class GaragaController : MonoBehaviour {
 	void Start () {
 		menu = FindObjectOfType <MainMenuController3D> ();
 		vehicles = new List <GameObject> ();
-		// get player unlocked list
 
-		// compare with avaiable vehicle list
-
-		// then setup garage
-//		Invoke ("SetupGarage", 1f);
 		SetupGarage ();
 	}
 	void SetupGarage () {
@@ -75,32 +70,6 @@ public class GaragaController : MonoBehaviour {
 		}
 	}
 
-//	void SetupCurrentVehicle () {
-//		for (int i = 0; i < vehicles.Count; i++) {
-//			int vehicleId = vehicles[i].GetComponent <ArcadeCarController> ().vehicle.id;
-//			if (vehicleId == PlayerDataController.Instance.mPlayer.vehicleId) {
-//				vehicles[vehicleId].SetActive (true);
-//				currentSelectedIndex = i;
-//				lastUnlockedIndex = currentSelectedIndex;
-//
-//				vehicles[vehicleId].transform.localPosition = diskUp.position;
-//				vehicles[vehicleId].transform.localScale = vehicles[currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle.garageScale.ToVector3 ();
-//				curVehicleRotateId = LeanTween.rotateAroundLocal (vehicles[currentSelectedIndex], Vector3.up, 360f, 10f).setLoopClamp().id;
-//
-//				Messenger.Broadcast <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), vehicles[currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle);
-//			} 
-//			else if (vehicleId == HandleCurrentIndex (PlayerDataController.Instance.mPlayer.vehicleId, 1)) {
-//				vehicles [vehicleId].transform.position = nextPos.position;
-//				vehicles [vehicleId].transform.rotation = nextPos.rotation;
-//				vehicles [vehicleId].SetActive (true);
-//			} 
-//			else if (vehicleId == HandleCurrentIndex (PlayerDataController.Instance.mPlayer.vehicleId, -1)) {
-//				vehicles [vehicleId].transform.position = prevPos.position;
-//				vehicles [vehicleId].transform.rotation = prevPos.rotation;
-//				vehicles [vehicleId].SetActive (true);
-//			}
-//		}
-//	}
 	#endregion Mono
 
 	#region public functions
