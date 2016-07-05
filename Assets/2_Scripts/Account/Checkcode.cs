@@ -5,17 +5,17 @@ using System.Text.RegularExpressions;
 using Lean;
 
 public class Checkcode : MonoBehaviour {
-	public Text txt;
+	public InputField inputCode;
 	public GameObject pnlCheckCode;
 	public GameObject btnQRBack;
+	public GameObject pnlWait;
 	public bool test;
 	public bool activationRequired;
-	public bool isProcessing = false;
 
 	void OnEnable(){
 //		PlayerPrefs.DeleteKey (GameConstant.UNLOCKED);
 		if (!PlayerPrefs.HasKey (GameConstant.UNLOCKED) || PlayerPrefs.GetInt (GameConstant.UNLOCKED) != (int)GameConstant.unlockStatus.VALID) {
-			pnlCheckCode.SetActive (true);
+			pnlWait.SetActive (true);
 
 			StartCoroutine(WebServiceUltility.CheckDevice((returnData) => {
 				if(returnData != null){
@@ -24,6 +24,7 @@ public class Checkcode : MonoBehaviour {
 					}else{
 						PlayerPrefs.SetInt(GameConstant.UNLOCKED, (int)GameConstant.unlockStatus.INVALID);
 						pnlCheckCode.SetActive (true);
+						pnlWait.SetActive (false);
 					}
 				}
 			}));
@@ -39,11 +40,9 @@ public class Checkcode : MonoBehaviour {
 	}
 
 	void HandleQrTrack(string qrText){
-		Debug.Log (qrText);
-		if(!isProcessing){
-			isProcessing = true;
-			_Check (qrText);
-		}
+		_Check (qrText);
+		inputCode.text = qrText;
+		ToogleQR (false);
 	}
 
 	public void ToogleQR(bool state){
@@ -61,7 +60,7 @@ public class Checkcode : MonoBehaviour {
 		ArController.Instance.ToggleAR (false);
 		pnlCheckCode.SetActive (false);
 		btnQRBack.SetActive (false);
-		isProcessing = true;
+		pnlWait.SetActive (false);
 	}
 
 	public void _Check(string theCode = null){
@@ -70,18 +69,20 @@ public class Checkcode : MonoBehaviour {
 			return;
 		}
 
-		string textToCheck = (string.IsNullOrEmpty(theCode)) ? txt.text : theCode;
+		string textToCheck = (string.IsNullOrEmpty(theCode)) ? inputCode.text : theCode;
 
 		if (!CheckRegex (textToCheck)) {
 			GUIController.Instance.OpenDialog (LeanLocalization.GetTranslation("InvalidKey").Text).AddButton (
 				LeanLocalization.GetTranslation("Ok").Text, 
-				UIDialogButton.Anchor.BOTTOM_CENTER, 
-				() => {isProcessing = false;}
+				UIDialogButton.Anchor.CENTER, 0, -60,
+					() => {inputCode.text = "";}
 			);
 			return;
 		}
 
+		pnlWait.SetActive (true);
 		StartCoroutine(WebServiceUltility.CheckKey(WebServiceUltility.CHECK_KEY_URL, textToCheck, "", (returnData) => {
+			pnlWait.SetActive (false);
 			if(returnData != null){
 				if(returnData.success){
 					//Succes
@@ -94,12 +95,12 @@ public class Checkcode : MonoBehaviour {
 						GUIController.Instance.OpenDialog(returnData.message)
 							.AddButton(
 								LeanLocalization.GetTranslation("No").Text, 
-								UIDialogButton.Anchor.BOTTOM_LEFT, 
-								() => {}
+								UIDialogButton.Anchor.CENTER, 120, -60,
+									() => {inputCode.text = "";}
 							)
 							.AddButton(
 								LeanLocalization.GetTranslation("Yes").Text, 
-								UIDialogButton.Anchor.BOTTOM_RIGHT, 
+								UIDialogButton.Anchor.CENTER,  -120, -60,
 								() => {
 									StartCoroutine(WebServiceUltility.CheckKey(WebServiceUltility.OVERRIDE_KEY_URL, textToCheck, "", (returnOverRideKeyData) => {
 									if(returnOverRideKeyData != null){
@@ -108,15 +109,15 @@ public class Checkcode : MonoBehaviour {
 										}else{
 											GUIController.Instance.OpenDialog(returnOverRideKeyData.message).AddButton(
 												LeanLocalization.GetTranslation("Ok").Text, 
-												UIDialogButton.Anchor.BOTTOM_CENTER, 
-												() => {isProcessing = false;}
+													UIDialogButton.Anchor.CENTER, 0, -60, 
+													() => {inputCode.text = "";}
 											);
 										}
 									}else{
 										GUIController.Instance.OpenDialog("Fail to connect").AddButton(
 											LeanLocalization.GetTranslation("Ok").Text, 
-											UIDialogButton.Anchor.BOTTOM_CENTER, 
-											() => {isProcessing = false;}
+												UIDialogButton.Anchor.CENTER, 0, -60, 
+												() => {inputCode.text = "";}
 										);
 								}
 							}));
@@ -127,8 +128,8 @@ public class Checkcode : MonoBehaviour {
 						//Key invalid
 						GUIController.Instance.OpenDialog(returnData.message).AddButton(
 							LeanLocalization.GetTranslation("Ok").Text,  
-							UIDialogButton.Anchor.BOTTOM_CENTER, 
-							() => {isProcessing = false;}
+							UIDialogButton.Anchor.CENTER, 0, -60, 
+								() => {inputCode.text = "";}
 						);
 					}
 				}
@@ -136,8 +137,8 @@ public class Checkcode : MonoBehaviour {
 				//Fail to connect
 				GUIController.Instance.OpenDialog(LeanLocalization.GetTranslation("FailedToConnect").Text).AddButton(
 					LeanLocalization.GetTranslation("Ok").Text, 
-					UIDialogButton.Anchor.BOTTOM_CENTER, 
-					() => {}
+					UIDialogButton.Anchor.CENTER, 0, -60, 
+						() => {inputCode.text = "";}
 				);
 			}
 		}));
