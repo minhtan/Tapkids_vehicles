@@ -4,6 +4,7 @@ using WordDraw;
 using PDollarGestureRecognizer;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using Lean;
 
 public class StartupWord : MonoBehaviour
 {
@@ -171,5 +172,15 @@ public class StartupWord : MonoBehaviour
 	public void _CaptureAndSave ()
 	{
 		snapShot.CaptureAndSaveToAlbum ();
+		StartCoroutine (ShowDialog ());
+	}
+
+	IEnumerator ShowDialog(){
+		yield return null;
+		GUIController.Instance.OpenDialog (LeanLocalization.GetTranslation("PhotoCaptured").Text).AddButton (
+			LeanLocalization.GetTranslation("Ok").Text, 
+			UIDialogButton.Anchor.CENTER, 0, -60,
+			() => {}
+		);
 	}
 }

@@ -65,11 +65,14 @@ public class ArController : UnitySingletonPersistent<ArController> {
 		VuforiaUnity.SetHint (Vuforia.VuforiaUnity.VuforiaHint.HINT_MAX_SIMULTANEOUS_IMAGE_TARGETS, targetNums);
 	}
 
-	public void ToggleAR(bool state, bool isQR = false){
-//		VuforiaBehaviour.Instance.enabled = state;
+	public void ToggleAR(bool state, bool toggleQR = false, bool toggleVuforia = true){
+		if (toggleVuforia || state) {
+			VuforiaBehaviour.Instance.enabled = state;
+		}
+
 		camera.enabled = state;
 
-		if (isQR && state) {
+		if (toggleQR && state) {
 			GetComponent<VuforiaScanner> ().enabled = state;
 		} else {
 			GetComponent<VuforiaScanner> ().enabled = false;
@@ -77,7 +80,6 @@ public class ArController : UnitySingletonPersistent<ArController> {
 	}
 
 	IEnumerator StartQRScanner(bool state){
-
 		while(!isVuforiaReady){
 			yield return null;
 		}

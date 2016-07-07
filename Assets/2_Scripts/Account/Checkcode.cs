@@ -13,7 +13,7 @@ public class Checkcode : MonoBehaviour {
 	public bool activationRequired;
 
 	void OnEnable(){
-//		PlayerPrefs.DeleteKey (GameConstant.UNLOCKED);
+		PlayerPrefs.DeleteKey (GameConstant.UNLOCKED);
 		if (!PlayerPrefs.HasKey (GameConstant.UNLOCKED) || PlayerPrefs.GetInt (GameConstant.UNLOCKED) != (int)GameConstant.unlockStatus.VALID) {
 			pnlWait.SetActive (true);
 
@@ -46,7 +46,7 @@ public class Checkcode : MonoBehaviour {
 	}
 
 	public void ToogleQR(bool state){
-		ArController.Instance.ToggleAR (state, state);
+		ArController.Instance.ToggleAR (state, state, false);
 		pnlCheckCode.SetActive (!state);
 		btnQRBack.SetActive (state);
 	}
@@ -55,9 +55,9 @@ public class Checkcode : MonoBehaviour {
 		pnlCheckCode.SetActive (true);
 	}
 
-	void OnCodeValid(){
+	public void OnCodeValid(){
 		PlayerPrefs.SetInt(GameConstant.UNLOCKED, (int)GameConstant.unlockStatus.VALID);
-		ArController.Instance.ToggleAR (false);
+		ArController.Instance.ToggleAR (false, false, false);
 		pnlCheckCode.SetActive (false);
 		btnQRBack.SetActive (false);
 		pnlWait.SetActive (false);
