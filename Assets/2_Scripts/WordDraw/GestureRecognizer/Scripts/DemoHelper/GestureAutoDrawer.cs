@@ -61,7 +61,9 @@ public class GestureAutoDrawer : MonoBehaviour
 
 		rectTrans.localScale = Vector2.one * _scaleFactor;
 		Quaternion localRot = rectTrans.localRotation;
-		localRot.x = 180f;
+		localRot.x = 0f;
+		localRot.y = 0f;
+		localRot.z = 0f;
 		rectTrans.localRotation = localRot;
 
 		lineList.Add (line);

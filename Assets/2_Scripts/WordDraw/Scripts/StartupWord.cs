@@ -153,6 +153,8 @@ public class StartupWord : MonoBehaviour
 
 	private void DrawTutorial ()
 	{
+		GameObject autoDrawStrokes = GameObject.Find ("GestureAutoStroke0");
+
 		string gestureName = _currentLetterBut.Letter.ToString () + "training";
 		_autoDrawer.AutoDrawGesture (gestureName);
 	}
