@@ -24975,8 +24975,6 @@ GameObject:
   - 114: {fileID: 1631973790}
   - 50: {fileID: 1631973789}
   - 114: {fileID: 1631973788}
-  - 114: {fileID: 1631973786}
-  - 114: {fileID: 1631973785}
   m_Layer: 5
   m_Name: Letter
   m_TagString: Untagged
@@ -25002,79 +25000,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 494, y: 465}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1631973785
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400532, guid: a0902d57a4fe44acdabc96fb7aad9f9b,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1631973783}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1862395651, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 0
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 2035827764}
-          m_MethodName: SetDrawing
-          m_Mode: 6
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 1
-          m_CallState: 2
-        - m_Target: {fileID: 2035827764}
-          m_MethodName: ChangeToNextStroke
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 1
-          m_CallState: 2
-      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
-        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  - eventID: 1
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 2035827764}
-          m_MethodName: SetDrawing
-          m_Mode: 6
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
-        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  delegates: []
---- !u!114 &1631973786
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11413172, guid: a0902d57a4fe44acdabc96fb7aad9f9b,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1631973783}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35523f5092ec2bf48945af27c1d65c80, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  AlphaThreshold: 0
-  IncludeMaterialAlpha: 0
 --- !u!114 &1631973788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30366,7 +30291,7 @@ MonoBehaviour:
   lineMaterial: {fileID: 0}
   useEndCap: 1
   capTex: {fileID: 2800000, guid: f65488447067c4317b962dcc15a74530, type: 3}
-  capMaterial: {fileID: 2100000, guid: f62c0ac5b634d0bdc55c8ba8b987587e, type: 2}
+  capMaterial: {fileID: 2100000, guid: 081829ede11744365810ba5cdd6ce261, type: 2}
 --- !u!114 &2035827763
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -6,6 +6,8 @@ public class LoadingScene : MonoBehaviour {
 	public GameObject _background;
 	public GameObject _logo;
 
+	public float _delayHide = 0.5f;
+
 	void OnEnable()
 	{
 		SceneController.OnStartLoading += OnStartLoading;
@@ -45,7 +47,7 @@ public class LoadingScene : MonoBehaviour {
 
 	IEnumerator DelayHide()
 	{
-		yield return new WaitForSeconds (.5f);
+		yield return new WaitForSeconds (_delayHide);
 		foreach(Transform trans in transform)
 		{
 			trans.gameObject.SetActive (false);
