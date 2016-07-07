@@ -14,31 +14,24 @@ using ZXing.Client.Result;
 using Vuforia;
 
 [AddComponentMenu("System/VuforiaScanner")]
-public class VuforiaScanner : MonoBehaviour, ITrackerEventHandler
+public class VuforiaScanner : MonoBehaviour
 {
 	bool isFrameFormatSet;
 	string tempText;
 	private Image image;
 
-	IBarcodeReader barcodeReader = new BarcodeReader();
-
-	void Start () {
-
-		VuforiaBehaviour qcarBehaviour = GetComponent<VuforiaBehaviour>();
-
-		if (qcarBehaviour) {
-			qcarBehaviour.RegisterTrackerEventHandler(this);
-		}
-			
-	}
+	IBarcodeReader barcodeReader;
 
 	public void OnInitialized ()
 	{
 		Debug.Log ("Init-ed");
 	}
 
-	public void OnTrackablesUpdated ()
-	{
+	void OnEnable(){
+		barcodeReader = new BarcodeReader();
+	}
+
+	void Update(){
 		try
 		{
 			if(!isFrameFormatSet) {
@@ -50,6 +43,7 @@ public class VuforiaScanner : MonoBehaviour, ITrackerEventHandler
 			if (data != null)
 			{
 				tempText = data.Text;
+				Debug.Log(data);
 			}
 		}
 		catch {
@@ -64,4 +58,5 @@ public class VuforiaScanner : MonoBehaviour, ITrackerEventHandler
 			}
 		}
 	}
+		
 }
