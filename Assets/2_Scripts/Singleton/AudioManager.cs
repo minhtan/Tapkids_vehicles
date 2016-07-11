@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using Lean;
 
 public class AudioManager : UnitySingletonPersistent<AudioManager>
 {
@@ -44,20 +45,25 @@ public class AudioManager : UnitySingletonPersistent<AudioManager>
 	private LocalizedAudioWrapper _currentLocalized;
 	private Dictionary<string, Dictionary<AudioKey.UNIQUE_KEY, CLIPTYPE>> _audioLocalizedDict;
 
-	void OnEnable ()
-	{
-		Lean.LeanLocalization.OnLocalizationChanged += OnChangeLanguage;
-	}
-
-	void OnDisable ()
-	{
-		Lean.LeanLocalization.OnLocalizationChanged -= OnChangeLanguage;
-	}
-
 	void Awake ()
 	{
 		base.Awake ();
 		PreProcessingAudioArray ();
+	}
+
+	void OnEnable()
+	{
+		LeanLocalization.OnLocalizationChanged += OnLocalizationChanged;
+	}
+
+	void OnDisable()
+	{
+		LeanLocalization.OnLocalizationChanged -= OnLocalizationChanged;
+	}
+
+	private void OnLocalizationChanged()
+	{
+		_currentLocalized = GetCurrentLocalizedWrapper ();
 	}
 
 	private void PreProcessingAudioArray ()
@@ -77,11 +83,6 @@ public class AudioManager : UnitySingletonPersistent<AudioManager>
 			AddAudioToDict (_localizedAudioWrappers [i].tmpAudios, _tempSource, CLIPTYPE.TEMPORARY, _audioLocalizedDict [localizedKey]);
 			AddAudioToDict (_localizedAudioWrappers [i].uiAudios, _uiSource, CLIPTYPE.UI, _audioLocalizedDict [localizedKey]);
 		}
-	}
-
-	private void OnChangeLanguage ()
-	{
-		
 	}
 
 	private void AddAudioToDict (AudioClipInfo[] audioArray, AudioSource audioSource, CLIPTYPE type, Dictionary<AudioKey.UNIQUE_KEY, CLIPTYPE> dict)
@@ -115,7 +116,7 @@ public class AudioManager : UnitySingletonPersistent<AudioManager>
 		if (type == CLIPTYPE.BACKGROUND)
 			PlayLoop (_currentLocalized, type, key);
 		else
-			PlayOne (_currentLocalized, type, key);
+			PlayOne (_currentLocalized, type, key);	
 	}
 
 	private AudioSource PlayLoop (LocalizedAudioWrapper localized, CLIPTYPE type, AudioKey.UNIQUE_KEY key)
@@ -224,6 +225,11 @@ public class AudioManager : UnitySingletonPersistent<AudioManager>
 
 		for (int i = 0; i < _tmpAudios.Length; i++) {
 			_tmpAudios [i].audioSource.volume = volume;
+		}
+
+		for(int i = 0; i < _uiAudios.Length; i++)
+		{
+			_uiAudios [i].audioSource.volume = volume;
 		}
 	}
 

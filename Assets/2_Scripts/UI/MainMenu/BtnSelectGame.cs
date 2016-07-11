@@ -35,9 +35,11 @@ public class BtnSelectGame : MonoBehaviour {
 				}
 
 				AudioManager.Instance.PlayTemp (clip);
+				OnDisable();
+
 				LeanTween.rotateAroundLocal (gameObject, Vector3.forward, swing, 0.1f).setEase (LeanTweenType.linear).setOnComplete (() => {
 					LeanTween.rotateAroundLocal (gameObject, Vector3.forward, -swing, 0.9f).setEase (LeanTweenType.easeOutElastic).setOnComplete (() => {
-						SceneController.Instance.LoadingSceneAsync (sceneToLoad);				
+						SceneController.Instance.LoadingSceneAsync (sceneToLoad);
 					});
 				});
 

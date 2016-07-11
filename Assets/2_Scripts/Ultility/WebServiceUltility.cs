@@ -15,6 +15,7 @@ public class WebServiceUltility : MonoBehaviour {
 	public const string CHECK_KEY_URL = "check_key";
 	public const string OVERRIDE_KEY_URL = "override_key";
 	public const string CHECK_DEVICE_URL = "check_device";
+	public const string ORDER_KEY_URL = "order_key";
 
 	public class WebData
 	{
@@ -111,4 +112,41 @@ public class WebServiceUltility : MonoBehaviour {
 		}
 	}
 
+	public static IEnumerator OrderKey (string transactionID, System.Action<WebData> returnData, string methodURL = WebServiceUltility.ORDER_KEY_URL){
+		string url = baseURL + methodURL;
+
+		dictInput.Clear();
+		dictInput.Add("uuID", UUID);
+		dictInput.Add ("transactionID", transactionID);
+
+		string input = Json.Serialize(dictInput);
+		byte[] body = Encoding.UTF8.GetBytes(input);
+		WWW www = new WWW(url, body, headers);
+		yield return www;
+
+		string result = www.text;
+		if (result != "" && result != null) {
+			result = result.Substring (1, result.Length - 2).Replace("\\", "");
+			Debug.Log ("CheckDevice API result: " + result);
+
+			Dictionary<string, System.Object> dictResult = Json.Deserialize (result) as Dictionary<string, System.Object>;
+
+			string success = dictResult ["success"].ToString ().ToLower();
+			string msg = dictResult ["message"].ToString ();
+			int statusCode = System.Int32.Parse(dictResult ["status_code"].ToString());
+
+			WebData data = new WebData ();
+			if (success.Equals ("true")) {
+				data.success = true;
+			} else {
+				data.success = false;
+			}
+			data.message = msg;
+			data.status_code = statusCode;
+
+			returnData (data);
+		} else {
+			returnData (null);
+		}
+	}
 }

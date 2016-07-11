@@ -32,7 +32,7 @@ public class Demo : MonoBehaviour {
 	void Start () {
 
 		platform = Application.platform;
-		drawArea = new Rect(0, 0, Screen.width - Screen.width / 3, Screen.height);
+		drawArea = new Rect(0, 0, Screen.width, Screen.height);
 
 		//Load pre-made gestures
 		TextAsset[] gesturesXml = Resources.LoadAll<TextAsset>("GestureSet/10-stylus-MEDIUM/");
@@ -100,7 +100,7 @@ public class Demo : MonoBehaviour {
 
 		GUI.Box(drawArea, "Draw Area");
 
-		GUI.Label(new Rect(10, Screen.height - 40, 500, 50), message);
+		GUI.Label(new Rect(10, Screen.height, Screen.width, 50), message);
 
 		if (GUI.Button(new Rect(Screen.width - 100, 10, 100, 30), "Recognize")) {
 

@@ -59,22 +59,32 @@ public class ArController : UnitySingletonPersistent<ArController> {
 	void OnVuforiaStarted(){
 		ArController.Instance.ToggleAR (false);
 		isVuforiaReady = true;
-//		SceneController.Instance.LoadingSceneAsync (SceneController.SceneID.MENU);
 	}
 
 	public void SetArMaxStimTargets(int targetNums){
 		VuforiaUnity.SetHint (Vuforia.VuforiaUnity.VuforiaHint.HINT_MAX_SIMULTANEOUS_IMAGE_TARGETS, targetNums);
 	}
 
-	public void ToggleAR(bool state, bool isQR = false){
-		VuforiaBehaviour.Instance.enabled = state;
+	public void ToggleAR(bool state, bool toggleQR = false, bool toggleVuforia = true){
+		if (toggleVuforia || state) {
+			VuforiaBehaviour.Instance.enabled = state;
+		}
+
 		camera.enabled = state;
 
-		if (isQR && state) {
+		if (toggleQR && state) {
 			GetComponent<VuforiaScanner> ().enabled = state;
 		} else {
 			GetComponent<VuforiaScanner> ().enabled = false;
 		}
+	}
+
+	IEnumerator StartQRScanner(bool state){
+		while(!isVuforiaReady){
+			yield return null;
+		}
+
+		GetComponent<VuforiaScanner> ().enabled = state;
 	}
 
 	public void SetCenterMode(bool isCameraCenter){

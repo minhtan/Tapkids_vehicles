@@ -4,6 +4,7 @@ using WordDraw;
 using PDollarGestureRecognizer;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using Lean;
 
 public class StartupWord : MonoBehaviour
 {
@@ -16,7 +17,7 @@ public class StartupWord : MonoBehaviour
 	public GameObject _drawLetterBut;
 	public GameObject _exitBut;
 	public float _showTemplateDuration = 2f;
-
+	public float _scaleTemplateFactor = 3f;
 	private UILetterButton _currentLetterBut;
 
 	CaptureAndSave snapShot;
@@ -28,7 +29,7 @@ public class StartupWord : MonoBehaviour
 		snapShot = GameObject.FindObjectOfType<CaptureAndSave> ();
 		if(ArController.Instance != null){
 			ArController.Instance.ToggleAR (true);
-			ArController.Instance.SetCenterMode (true);
+			ArController.Instance.SetCenterMode (false);
 			ArController.Instance.SetArMaxStimTargets (1);
 		}
 		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_MENU_BTN.ToString (), true);
@@ -92,8 +93,17 @@ public class StartupWord : MonoBehaviour
 		_currentLetterBut.Letter = WordDrawConfig.GetLetterFromName (letterName);
 
 		GameObject letterGo = Resources.Load<GameObject> ("Letters/" + letterName.ToUpper ());
+		GameObject child = _letterHolder.transform.GetChild (0).gameObject;
 
-		_letterHolder.transform.GetChild (0).GetComponent<Image> ().sprite = letterGo.GetComponent<Image> ().sprite;
+		Image image = child.GetComponent<Image> ();
+		image.sprite = letterGo.GetComponent<Image> ().sprite;
+
+		image.SetNativeSize ();
+		RectTransform rectTrans = child.GetComponent<RectTransform> ();
+		Vector3 size = rectTrans.sizeDelta;
+		size.x = size.x * _scaleTemplateFactor;
+		size.y = size.y * _scaleTemplateFactor;
+		rectTrans.sizeDelta = size;
 		_drawLetterBut.SetActive (true);
 	}
 
@@ -144,6 +154,8 @@ public class StartupWord : MonoBehaviour
 
 	private void DrawTutorial ()
 	{
+		GameObject autoDrawStrokes = GameObject.Find ("GestureAutoStroke0");
+
 		string gestureName = _currentLetterBut.Letter.ToString () + "training";
 		_autoDrawer.AutoDrawGesture (gestureName);
 	}
@@ -162,5 +174,15 @@ public class StartupWord : MonoBehaviour
 	public void _CaptureAndSave ()
 	{
 		snapShot.CaptureAndSaveToAlbum ();
+		StartCoroutine (ShowDialog ());
+	}
+
+	IEnumerator ShowDialog(){
+		yield return null;
+		GUIController.Instance.OpenDialog (LeanLocalization.GetTranslation("PhotoCaptured").Text).AddButton (
+			LeanLocalization.GetTranslation("Ok").Text, 
+			UIDialogButton.Anchor.CENTER, 0, -60,
+			() => {}
+		);
 	}
 }

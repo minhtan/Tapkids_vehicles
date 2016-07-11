@@ -94,6 +94,7 @@ namespace Vuforia
 			StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (AssetController.bundleName, targetName, (bundle) => {
 				go = GameObject.Instantiate (bundle, transform.position, transform.rotation) as GameObject;
 				go.transform.SetParent (transform, true);
+				go.AddComponent<SimpleRotateScale>();
 //				go.transform.Rotate(0f, -90f, 0f);
 				if(go.GetComponent<Rigidbody>() != null){
 					go.GetComponent<Rigidbody>().isKinematic = true;
