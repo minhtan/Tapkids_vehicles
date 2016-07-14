@@ -13,7 +13,7 @@ public class AssetController : UnitySingletonPersistent<AssetController> {
 
 	#region Mono
 	IEnumerator Start (){
-//		Caching.CleanCache ();
+		Caching.CleanCache ();
 		yield return StartCoroutine( Initialize() );
 	}
 	#endregion
@@ -25,7 +25,7 @@ public class AssetController : UnitySingletonPersistent<AssetController> {
 		DontDestroyOnLoad(gameObject);
 
 		// With this code, when in-editor or using a development builds: Always use the AssetBundle Server
-		// (This is very dependent on the production workflow of the project. 
+		// (This is very dependent on the production workflow of the project.
 		// 	Another approach would be to make this configurable in the standalone player.)
 		#if DEVELOPMENT_BUILD && UNITY_EDITOR
 		AssetBundleManager.SetDevelopmentAssetBundleServer ();
@@ -58,7 +58,7 @@ public class AssetController : UnitySingletonPersistent<AssetController> {
 		AssetBundleLoadAssetOperation request = AssetBundleManager.LoadAssetAsync(assetBundleName, assetName, typeof(GameObject) );
 		if (request == null)
 			yield break;
-		
+
 		yield return StartCoroutine(request);
 
 		// Get the asset.
@@ -81,7 +81,7 @@ public class AssetController : UnitySingletonPersistent<AssetController> {
 	 private IEnumerator mymethod ()
 		{
 			yield return StartCoroutine (InstantiateGameObjectAsync (assetBundleName, assetName, (bundle) => {
-				
+
 			}));
 		}
 	*/
