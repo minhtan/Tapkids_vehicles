@@ -64,6 +64,9 @@ public class StartupWord : MonoBehaviour
 	public void OnClick ()
 	{
 		ArController.Instance.ToggleAR (false);
+
+		pnlLetterUI.SetActive (false);
+
 		DrawTutorial ();
 	}
 
