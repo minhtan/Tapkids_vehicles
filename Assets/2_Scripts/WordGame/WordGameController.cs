@@ -162,8 +162,8 @@ public class WordGameController : MonoBehaviour {
 				go.transform.SetParent (pnl_LetterToHint.transform, false);
 				LeanTween.alpha (go.GetComponent<RectTransform>(), 0f, 0f);
 			}
+			ShowPnlHint ();
 		}
-		ShowPnlHint ();
 	}
 
 	void HidePnlHint(){
@@ -276,7 +276,7 @@ public class WordGameController : MonoBehaviour {
 
 		ArController.Instance.SetArMaxStimTargets (playableLetters.Count);
 
-		FindMinWordLength ();
+//		FindMinWordLength ();
 	}
 
 	void _ReadyAllTargets(){
@@ -358,7 +358,8 @@ public class WordGameController : MonoBehaviour {
 	}
 
 	int GetWordScore(string word){
-		return letterPoint * word.Length * ((word.Length - minWordLength) * scoreStep + 1);
+//		return letterPoint * word.Length * ((word.Length - minWordLength) * scoreStep + 1);
+		return letterPoint * word.Length;
 	}
 	#endregion
 }
