@@ -34,24 +34,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &104414
-GameObject:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 485660}
-  - 33: {fileID: 3301416}
-  - 23: {fileID: 2354282}
-  - 64: {fileID: 6439814}
-  m_Layer: 0
-  m_Name: Cone001
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &106750
 GameObject:
   m_ObjectHideFlags: 1
@@ -678,7 +660,6 @@ Transform:
   - {fileID: 416438}
   - {fileID: 437588}
   - {fileID: 417574}
-  - {fileID: 485660}
   - {fileID: 460774}
   - {fileID: 494988}
   - {fileID: 456084}
@@ -697,7 +678,7 @@ Transform:
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children: []
   m_Father: {fileID: 428910}
-  m_RootOrder: 9
+  m_RootOrder: 8
 --- !u!4 &431554
 Transform:
   m_ObjectHideFlags: 1
@@ -757,7 +738,7 @@ Transform:
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 428910}
-  m_RootOrder: 10
+  m_RootOrder: 9
 --- !u!4 &452144
 Transform:
   m_ObjectHideFlags: 1
@@ -793,7 +774,7 @@ Transform:
   m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
   m_Children: []
   m_Father: {fileID: 428910}
-  m_RootOrder: 8
+  m_RootOrder: 7
 --- !u!4 &460774
 Transform:
   m_ObjectHideFlags: 1
@@ -805,7 +786,7 @@ Transform:
   m_LocalScale: {x: 1.8000002, y: 1.8, z: 1.8000002}
   m_Children: []
   m_Father: {fileID: 428910}
-  m_RootOrder: 6
+  m_RootOrder: 5
 --- !u!4 &461760
 Transform:
   m_ObjectHideFlags: 1
@@ -869,18 +850,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 428910}
   m_RootOrder: 1
---- !u!4 &485660
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 104414}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -17.31717, y: 4.6655354, z: 8.387751}
-  m_LocalScale: {x: 25.164755, y: 25.164753, z: 20}
-  m_Children: []
-  m_Father: {fileID: 428910}
-  m_RootOrder: 5
 --- !u!4 &487112
 Transform:
   m_ObjectHideFlags: 1
@@ -940,7 +909,7 @@ Transform:
   m_LocalScale: {x: 1.8000002, y: 1.8, z: 1.8000002}
   m_Children: []
   m_Father: {fileID: 428910}
-  m_RootOrder: 7
+  m_RootOrder: 6
 --- !u!4 &496376
 Transform:
   m_ObjectHideFlags: 1
@@ -1159,32 +1128,6 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!23 &2354282
-MeshRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 104414}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_Materials:
-  - {fileID: 2100000, guid: 58b00c2ab8a8f1945bac736bab4052e9, type: 2}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 1
-  m_ReflectionProbeUsage: 1
-  m_ProbeAnchor: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
 --- !u!23 &2376552
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -1237,13 +1180,6 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!33 &3301416
-MeshFilter:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 104414}
-  m_Mesh: {fileID: 4300106, guid: cfb4f7972fa80004bbb352a96f653e6a, type: 3}
 --- !u!33 &3306228
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -1319,18 +1255,6 @@ MeshCollider:
   serializedVersion: 2
   m_Convex: 0
   m_Mesh: {fileID: 4300000, guid: cfb4f7972fa80004bbb352a96f653e6a, type: 3}
---- !u!64 &6439814
-MeshCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 104414}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Convex: 0
-  m_Mesh: {fileID: 4300106, guid: cfb4f7972fa80004bbb352a96f653e6a, type: 3}
 --- !u!65 &6506984
 BoxCollider:
   m_ObjectHideFlags: 1
