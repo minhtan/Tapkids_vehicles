@@ -23,6 +23,7 @@ public class StartupWord : MonoBehaviour
 	CaptureAndSave snapShot;
 	public GameObject pnlLetterUI;
 	public GameObject pnlVehicleUI;
+	public GameObject canvasLetter;
 
 	void Start ()
 	{
@@ -32,6 +33,7 @@ public class StartupWord : MonoBehaviour
 			ArController.Instance.SetCenterMode (false);
 			ArController.Instance.SetArMaxStimTargets (1);
 		}
+			
 		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_MENU_BTN.ToString (), true);
 	}
 
@@ -48,6 +50,8 @@ public class StartupWord : MonoBehaviour
 		StartupRecognizer.OnGestureReset += OnGestureReset;
 		Messenger.AddListener <bool, string> (EventManager.AR.LETTER_IMAGE_TRACKING.ToString (), OnLetterFound);
 		Messenger.AddListener <bool, string> (EventManager.AR.VEHICLE_IMAGE_TRACKING.ToString (), OnVehicleFound);
+		Messenger.AddListener( EventManager.GameState.RESET.ToString(), OnExitClick );
+
 		_recognizer.RegisterInputHandler ();
 	}
 
@@ -58,20 +62,31 @@ public class StartupWord : MonoBehaviour
 		StartupRecognizer.OnGestureReset -= OnGestureReset;
 		Messenger.RemoveListener <bool, string> (EventManager.AR.LETTER_IMAGE_TRACKING.ToString (), OnLetterFound);
 		Messenger.RemoveListener <bool, string> (EventManager.AR.VEHICLE_IMAGE_TRACKING.ToString (), OnVehicleFound);
+		Messenger.RemoveListener( EventManager.GameState.RESET.ToString(), OnExitClick );
+
 	}
 
 
 	public void OnClick ()
 	{
 		ArController.Instance.ToggleAR (false);
+
+		pnlLetterUI.SetActive (false);
+		_tutText.SetTutText (UITutText.TutText.WELCOME);
+
 		DrawTutorial ();
 	}
 
 	public void OnExitClick ()
 	{
-		ArController.Instance.ToggleAR (true);
-		_drawer.ResetStroke ();
-		_exitBut.SetActive (false);
+		if(canvasLetter.activeSelf){
+			ArController.Instance.ToggleAR (true);
+			_drawer.ResetStroke ();
+			canvasLetter.SetActive (false);
+//		_exitBut.SetActive (false);
+		}else{
+			
+		}
 	}
 
 	private void OnVehicleFound (bool state, string vehicleName)
@@ -168,7 +183,7 @@ public class StartupWord : MonoBehaviour
 
 		_autoDrawer.ResetStroke ();
 		_tutText.SetTutText (UITutText.TutText.LET_WRITE);
-		_exitBut.SetActive (true);
+//		_exitBut.SetActive (true);
 	}
 
 	public void _CaptureAndSave ()
