@@ -34,6 +34,18 @@ namespace UnityStandardAssets.CrossPlatformInput
 		}
 
 		void Update () { 
+			#if UNITY_EDITOR
+			float vert = Input.GetAxisRaw ("Vertical");
+			float hor = Input.GetAxis ("Horizontal");
+
+			if (vert != 0) {
+				mAccelerate.Update (Math.Sign (vert));
+			}
+			if (hor != 0) {
+				mSteer.Update (Math.Sign (hor));
+			}
+			#endif
+
 			if (Input.touchCount > 0) {
 				for (int i = 0; i < Input.touchCount; i++) {
 					if (Input.touches[i].position.x > centerOfScreen.x) {

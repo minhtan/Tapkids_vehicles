@@ -31,13 +31,13 @@ public class ArcadeCarUserController : MonoBehaviour {
 
 	void FixedUpdate () {
 		// pass the input to the car!
-//		float h = CrossPlatformInputManager.GetAxis("Steer");
-//		float v = CrossPlatformInputManager.GetAxis("Accelerate");
-
+		float h = CrossPlatformInputManager.GetAxis("Steer");
+		float v = CrossPlatformInputManager.GetAxis("Accelerate");
+		car.Move (h, v);
 //		float h = CrossPlatformInputManager.GetAxis("Horizontal");
-		float v = CrossPlatformInputManager.GetAxis("Vertical");
-
-		car.Move (wheelAngle, v);
+//		float v = CrossPlatformInputManager.GetAxis("Vertical");
+//
+//		car.Move (wheelAngle, v);
 	}
 	#endregion Mono
 
