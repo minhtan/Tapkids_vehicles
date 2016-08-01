@@ -40,6 +40,12 @@ public class LoadingScene : MonoBehaviour {
 		_background.SetActive (true);
 	}
 
+	public void ShowLoading(){
+		_logo.SetActive (true);
+		_loadingBar.SetActive (true);
+		_background.SetActive (true);
+	}
+
 	private void OnEndLoading()	
 	{
 		StartCoroutine (DelayHide());
