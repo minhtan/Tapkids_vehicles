@@ -24,13 +24,13 @@ public class LoadingScene : MonoBehaviour {
 
 	private void OnSceneChange(SceneController.SceneID prev, SceneController.SceneID current)
 	{
-		if(prev == SceneController.SceneID.INTRO && current == SceneController.SceneID.MENU)
+		if(prev != SceneController.SceneID.INTRO)
 		{
-			_logo.SetActive (true);
+			_logo.SetActive (false);
 		}
 		else
 		{
-			_logo.SetActive (false);
+			_logo.SetActive (true);
 		}
 	}
 
