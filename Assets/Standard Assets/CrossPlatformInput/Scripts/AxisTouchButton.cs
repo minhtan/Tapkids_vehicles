@@ -10,8 +10,8 @@ namespace UnityStandardAssets.CrossPlatformInput
 		// (typically with one having -1 and one having 1 axisValues)
 		public string axisName = "Horizontal"; // The name of the axis
 		public float axisValue = 1; // The axis that the value has
-		public float responseSpeed = 100f; // The speed at which the axis touch button responds
-//		public float returnToCentreSpeed = 3; // The speed at which the button will return to its centre
+		public float responseSpeed = 3; // The speed at which the axis touch button responds
+		public float returnToCentreSpeed = 3; // The speed at which the button will return to its centre
 
 		AxisTouchButton m_PairedWith; // Which button this one is paired with
 		CrossPlatformInputManager.VirtualAxis m_Axis; // A reference to the virtual axis as it is in the cross platform input

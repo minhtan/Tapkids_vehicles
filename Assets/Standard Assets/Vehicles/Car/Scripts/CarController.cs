@@ -25,7 +25,6 @@ namespace UnityStandardAssets.Vehicles.Car
         [SerializeField] private Vector3 m_CentreOfMassOffset;
         [SerializeField] private float m_MaximumSteerAngle;
         [Range(0, 1)] [SerializeField] private float m_SteerHelper; // 0 is raw physics , 1 the car will grip in the direction it is facing
-		[Range(0, 1)] [SerializeField] private float m_StuckHelper; 
         [Range(0, 1)] [SerializeField] private float m_TractionControl; // 0 is no traction control, 1 is full interference
         [SerializeField] private float m_FullTorqueOverAllWheels;
         [SerializeField] private float m_ReverseTorque;
@@ -38,8 +37,8 @@ namespace UnityStandardAssets.Vehicles.Car
         [SerializeField] private float m_SlipLimit;
         [SerializeField] private float m_BrakeTorque;
 
-//        private Quaternion[] m_WheelMeshLocalRotations;
-//        private Vector3 m_Prevpos, m_Pos;
+        private Quaternion[] m_WheelMeshLocalRotations;
+        private Vector3 m_Prevpos, m_Pos;
         private float m_SteerAngle;
         private int m_GearNum;
         private float m_GearFactor;
@@ -59,11 +58,11 @@ namespace UnityStandardAssets.Vehicles.Car
         // Use this for initialization
         private void Start()
         {
-//            m_WheelMeshLocalRotations = new Quaternion[4];
-//            for (int i = 0; i < 4; i++)
-//            {
-//                m_WheelMeshLocalRotations[i] = m_WheelMeshes[i].transform.localRotation;
-//            }
+            m_WheelMeshLocalRotations = new Quaternion[4];
+            for (int i = 0; i < 4; i++)
+            {
+                m_WheelMeshLocalRotations[i] = m_WheelMeshes[i].transform.localRotation;
+            }
             m_WheelColliders[0].attachedRigidbody.centerOfMass = m_CentreOfMassOffset;
 
             m_MaxHandbrakeTorque = float.MaxValue;
@@ -141,8 +140,7 @@ namespace UnityStandardAssets.Vehicles.Car
             //clamp input values
             steering = Mathf.Clamp(steering, -1, 1);
             AccelInput = accel = Mathf.Clamp(accel, 0, 1);
-//            BrakeInput = footbrake = -1*Mathf.Clamp(footbrake, -1, 0);
-			BrakeInput = footbrake = Mathf.Clamp(footbrake, 0, 1);
+            BrakeInput = footbrake = -1*Mathf.Clamp(footbrake, -1, 0);
             handbrake = Mathf.Clamp(handbrake, 0, 1);
 
             //Set the steer on the front wheels.
@@ -151,10 +149,8 @@ namespace UnityStandardAssets.Vehicles.Car
             m_WheelColliders[0].steerAngle = m_SteerAngle;
             m_WheelColliders[1].steerAngle = m_SteerAngle;
 
-            SteerHelper ();
-			StuckHelper (accel);
-            ApplyDrive (accel, footbrake);
-
+            SteerHelper();
+            ApplyDrive(accel, footbrake);
             CapSpeed();
 
             //Set the handbrake.
@@ -171,7 +167,7 @@ namespace UnityStandardAssets.Vehicles.Car
             GearChanging();
 
             AddDownForce();
-//            CheckForWheelSpin();
+            CheckForWheelSpin();
             TractionControl();
         }
 
@@ -199,7 +195,7 @@ namespace UnityStandardAssets.Vehicles.Car
 
         private void ApplyDrive(float accel, float footbrake)
         {
-			
+
             float thrustTorque;
             switch (m_CarDriveType)
             {
@@ -222,26 +218,19 @@ namespace UnityStandardAssets.Vehicles.Car
                     break;
 
             }
-//			Debug.Log(Vector3.Angle(transform.forward, m_Rigidbody.velocity));
-	
 
-			for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
-//				Debug.Log( CurrentSpeed + " / " + footbrake + " / " + m_WheelColliders[0].rpm);
-				if (CurrentSpeed > 5 && footbrake > 0f && m_WheelColliders[i].rpm > 0f)
+                if (CurrentSpeed > 5 && Vector3.Angle(transform.forward, m_Rigidbody.velocity) < 50f)
                 {
                     m_WheelColliders[i].brakeTorque = m_BrakeTorque*footbrake;
                 }
-				else if (accel > 0)
-					m_WheelColliders[i].brakeTorque = 0f;
-//				else 
-//				if (footbrake > 0)
-//                {
-//                    m_WheelColliders[i].brakeTorque = 0f;
-//					m_WheelColliders[i].motorTorque = -m_ReverseTorque * footbrake;
-//                }
+                else if (footbrake > 0)
+                {
+                    m_WheelColliders[i].brakeTorque = 0f;
+                    m_WheelColliders[i].motorTorque = -m_ReverseTorque*footbrake;
+                }
             }
-
         }
 
 
@@ -256,30 +245,16 @@ namespace UnityStandardAssets.Vehicles.Car
             }
 
             // this if is needed to avoid gimbal lock problems that will make the car suddenly shift direction
-			if (Mathf.Abs(m_OldRotation - transform.eulerAngles.y) < 10f) {
-				var turnAdjust = (transform.eulerAngles.y - m_OldRotation) * m_SteerHelper;
-                Quaternion velRotation = Quaternion.AngleAxis(turnAdjust, Vector3.up);
+            if (Mathf.Abs(m_OldRotation - transform.eulerAngles.y) < 10f)
+            {
+                var turnadjust = (transform.eulerAngles.y - m_OldRotation) * m_SteerHelper;
+                Quaternion velRotation = Quaternion.AngleAxis(turnadjust, Vector3.up);
                 m_Rigidbody.velocity = velRotation * m_Rigidbody.velocity;
             }
             m_OldRotation = transform.eulerAngles.y;
         }
 
-		private void StuckHelper (float accel) {
-			for (int i = 0; i < 4; i++)
-			{
-				WheelHit wheelhit;
-				m_WheelColliders[i].GetGroundHit(out wheelhit);
-				if (wheelhit.normal == Vector3.zero)
-					return; // wheels arent on the ground so dont realign the rigidbody velocity
-			}
 
-			Ray ray = new Ray (transform.position, Vector3.forward);
-			RaycastHit hit;
-			Physics.Raycast (ray, out hit, 1f);
-			if(hit.collider != null) {
-				transform.Rotate ((accel > 0 ? Vector3.right : Vector3.left) * 10f);
-			}
-		}
         // this is used to add more grip in relation to speed
         private void AddDownForce()
         {
