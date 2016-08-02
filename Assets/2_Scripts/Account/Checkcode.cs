@@ -13,8 +13,9 @@ public class Checkcode : MonoBehaviour {
 	public bool activationRequired;
 
 	void OnEnable(){
-		PlayerPrefs.DeleteKey (GameConstant.UNLOCKED);
-		if (!PlayerPrefs.HasKey (GameConstant.UNLOCKED) || PlayerPrefs.GetInt (GameConstant.UNLOCKED) != (int)GameConstant.unlockStatus.VALID) {
+		if (test) {
+			PlayerPrefs.DeleteKey (GameConstant.UNLOCKED);
+		}else if (!PlayerPrefs.HasKey (GameConstant.UNLOCKED) || PlayerPrefs.GetInt (GameConstant.UNLOCKED) != (int)GameConstant.unlockStatus.VALID) {
 			pnlWait.SetActive (true);
 
 			StartCoroutine(WebServiceUltility.CheckDevice((returnData) => {

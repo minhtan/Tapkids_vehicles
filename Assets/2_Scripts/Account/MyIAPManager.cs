@@ -7,9 +7,6 @@ using System.Runtime.InteropServices;
 
 public class MyIAPManager : MonoBehaviour, IStoreListener{
 
-//	[DllImport ("__Internal")]
-//	private static extern void _CallIAP ();
-
 	private IStoreController controller;
 	private IExtensionProvider extensions;
 	private string productName = "online_code";
@@ -124,13 +121,6 @@ public class MyIAPManager : MonoBehaviour, IStoreListener{
 
 	//public method
 	public void _BuyCodeOnline(){
-		#if UNITY_ANDROID
-			BuyProductID (productName);
-		#endif
-		#if UNITY_IOS
-//		if (Application.platform != RuntimePlatform.OSXEditor)
-//			_CallIAP();
-			BuyProductID (productID);
-		#endif
+		BuyProductID (productName);
 	}
 }

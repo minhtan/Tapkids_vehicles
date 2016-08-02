@@ -9,11 +9,14 @@ public class AssetController : UnitySingletonPersistent<AssetController> {
 	private string url = "http://103.27.239.161/Tapkid/Vehicle/";
 	public const string AssetBundlesOutputPath = "/AssetBundles/";
 	public static string bundleName = "car_asset";
+	public bool clearCache;
 	#endregion
 
 	#region Mono
 	IEnumerator Start (){
-//		Caching.CleanCache ();
+		if(clearCache){
+			Caching.CleanCache ();
+		}
 		yield return StartCoroutine( Initialize() );
 	}
 	#endregion
