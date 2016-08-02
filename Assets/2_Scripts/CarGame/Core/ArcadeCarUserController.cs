@@ -11,7 +11,7 @@ public class ArcadeCarUserController : MonoBehaviour {
 	#region private members
 
 	private ArcadeCarController car;
-	private float wheelAngle;
+//	private float wheelAngle;
 	#endregion private members
 
 	#region Mono
@@ -21,22 +21,23 @@ public class ArcadeCarUserController : MonoBehaviour {
 		car = GetComponent <ArcadeCarController> ();
 	}
 
-	void OnEnable () {
-		Messenger.AddListener <float> (EventManager.GUI.WHEEL_FRAME_TURN.ToString (), HandleWheelTurn);
-	}
-
-	void OnDisable () {
-		Messenger.RemoveListener <float> (EventManager.GUI.WHEEL_FRAME_TURN.ToString (), HandleWheelTurn);
-	}
+//	void OnEnable () {
+//		Messenger.AddListener <float> (EventManager.GUI.WHEEL_FRAME_TURN.ToString (), HandleWheelTurn);
+//	}
+//
+//	void OnDisable () {
+//		Messenger.RemoveListener <float> (EventManager.GUI.WHEEL_FRAME_TURN.ToString (), HandleWheelTurn);
+//	}
 
 	void FixedUpdate () {
 		// pass the input to the car!
-		float h = CrossPlatformInputManager.GetAxis("Steer");
-		float v = CrossPlatformInputManager.GetAxis("Accelerate");
+//		float h = CrossPlatformInputManager.GetAxis("Steer");
+//		float v = CrossPlatformInputManager.GetAxis("Accelerate");
+
+		float h = CrossPlatformInputManager.GetAxis("Horizontal");
+		float v = CrossPlatformInputManager.GetAxis("Vertical");
 		car.Move (h, v);
-//		float h = CrossPlatformInputManager.GetAxis("Horizontal");
-//		float v = CrossPlatformInputManager.GetAxis("Vertical");
-//
+
 //		car.Move (wheelAngle, v);
 	}
 	#endregion Mono
@@ -45,10 +46,10 @@ public class ArcadeCarUserController : MonoBehaviour {
 	#endregion public functions
 
 	#region private functions
-	void HandleWheelTurn (float angle) {
-		wheelAngle = angle/3;
-
-	}
+//	void HandleWheelTurn (float angle) {
+//		wheelAngle = angle/3;
+//
+//	}
 	#endregion private functions
 
 }

@@ -21,9 +21,9 @@ public class UISuggestionText : MonoBehaviour {
 	void HandleLetterTracking (string _letters) {
 		mText.text = "";
 
-		System.Random r = new System.Random();
-		int[] myValues;
-		IEnumerable<int> threeRandom = myValues.OrderBy(x => r.Next()).Take(3);
+//		System.Random r = new System.Random();
+//		int[] myValues;
+//		IEnumerable<int> threeRandom = myValues.OrderBy(x => r.Next()).Take(3);
 
 		for (int i = 0; i < _letters.Length; i++) {
 			if (i % 2 == 0) {

@@ -64,7 +64,7 @@ public class ArcadeCarController : MonoBehaviour {
 	#region public functions
 	// handle car movement
 	public void Move (float steer, float accel) {
-		if (!isStart) return;
+//		if (!isStart) return;
 
 		for (int i = 0; i < 4; i++) {
 			Quaternion quaternion;
@@ -77,12 +77,12 @@ public class ArcadeCarController : MonoBehaviour {
 		}
 
 		// clamp input value
-//		steer = Mathf.Clamp (steer, -1, 1);
-//		steerAngle = steer * maximumSteerAngle;
-		steerAngle = Mathf.Clamp (steer, maximumSteerAngle * -1, maximumSteerAngle);
+		steer = Mathf.Clamp (steer, -1, 1);
+		steerAngle = steer * maximumSteerAngle;
+		steerAngle = Mathf.Clamp (steerAngle, maximumSteerAngle * -1, maximumSteerAngle);
+
 		wheelColliders[0].steerAngle = steerAngle;
 		wheelColliders[1].steerAngle = steerAngle;
-//		SteerHelper ();
 
 //		accel = Mathf.Clamp (accel, 0, 1);
 		ApplyDrive (accel);

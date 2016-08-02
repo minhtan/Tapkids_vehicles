@@ -155,7 +155,7 @@ public class GaragaController : MonoBehaviour {
 			}
 		}));
 
-		yield return new WaitForSeconds (1f);
+		yield return new WaitForSeconds (2f);
 		if (_vehicleName == GameConstant.fourWheels [GameConstant.fourWheels.Count - 1]) {
 			_callback ();
 		}
