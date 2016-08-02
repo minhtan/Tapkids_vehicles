@@ -168,7 +168,7 @@ public class CarGameController2 : MonoBehaviour {
 			collectedLetters = string.Empty;
 
 			// check if there is no word left, trigger gameover state
-			if (playableLetters.Count == 0) {
+			if (answers.Count == 0) {
 				_machine.changeState <CG2GameOverState> ();
 			}
 		} else {

@@ -36,21 +36,17 @@ public class UIGameOverPanel : MonoBehaviour {
 		mCanvasGroup.interactable = true;
 		mCanvasGroup.blocksRaycasts = true;
 
-		if (gameOverMessage != null) {
-			gameOverMessage.text = GameConstant.WinMessage;
-		}
+//		if (gameOverMessage != null) {
+//			gameOverMessage.text = GameConstant.WinMessage;
+//		}
 
-		if (starImages.Length > 0 && starImages.Length <= _starNum) {
-			int i = 0; 
-			while (i < _starNum) {
-				starImages[i].enabled = true;
-				i++;
-			}
-		}
-//
-//		mCanvasGroup.alpha = _isToggled ? 1f : 0f;
-//		mCanvasGroup.interactable = _isToggled ? true : false;
-//		mCanvasGroup.blocksRaycasts = _isToggled ? true : false;
+//		if (starImages.Length > 0 && starImages.Length <= _starNum) {
+//			int i = 0; 
+//			while (i < _starNum) {
+//				starImages[i].enabled = true;
+//				i++;
+//			}
+//		}
 	}
 	#endregion private functions
 

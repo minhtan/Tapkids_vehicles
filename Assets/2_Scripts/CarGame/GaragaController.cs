@@ -5,6 +5,20 @@ using System;
 using System.Linq;
 public class GaragaController : MonoBehaviour {
 
+	public enum VehicleNames {
+		Ambulance, 
+		Bus, 
+		Car,
+		Deliverytruck,
+		Firetruck,
+		Garbagetruck, 
+		Icecreamtruck,
+		Limousine,
+		Policecar, 
+		Van, 
+		Excavator
+	}
+
 	#region public members
 	public Material lockedMaterial;
 	public int currentSelectedIndex;
@@ -64,10 +78,27 @@ public class GaragaController : MonoBehaviour {
 	}
 	void SetupGarage () {
 		for (int i = 0; i < GameConstant.fourWheels.Count; i++) {
-			StartCoroutine (SetupVehicles (GameConstant.fourWheels[i], () => {
-				StartCoroutine (ReSetupVehicles (5f));
+			StartCoroutine (SetupVehicle (GameConstant.fourWheels[i], () => {
+				StartCoroutine (ReSetupVehicles ());
 			}));
 		}
+
+		// setup 3 cars only
+//		var curVehicleName = (VehicleNames)Enum.Parse(typeof(VehicleNames), PlayerDataController.Instance.mPlayer.vehicleName);
+//
+//		if (curVehicleName == Enum.GetValues(typeof(VehicleNames)).Cast<VehicleNames>().Min()) {
+//			StartCoroutine (_SetupVehicle(Enum.GetValues(typeof(VehicleNames)).Cast<VehicleNames>().Max().ToString()));
+//		} else {
+//			StartCoroutine (_SetupVehicle((curVehicleName - 1).ToString()));
+//		}
+//
+//		StartCoroutine (_SetupVehicle(curVehicleName.ToString()));
+//	
+//		if (curVehicleName == Enum.GetValues(typeof(VehicleNames)).Cast<VehicleNames>().Max()) {
+//			StartCoroutine (_SetupVehicle(Enum.GetValues(typeof(VehicleNames)).Cast<VehicleNames>().Min().ToString()));
+//		} else {
+//			StartCoroutine (_SetupVehicle((curVehicleName + 1).ToString()));
+//		}
 	}
 
 	#endregion Mono
@@ -76,8 +107,20 @@ public class GaragaController : MonoBehaviour {
 	#endregion public functions
 
 	#region private functions
-	private IEnumerator SetupVehicles (string _vehicleName, System.Action _callback = null) {
+
+	private IEnumerator _SetupVehicle (string _vehicleName) {
 		yield return new WaitForSeconds (0f);
+
+		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (GameConstant.assetBundleName, _vehicleName, (bundle) => {
+			GameObject carGameObject = Instantiate (bundle, initPos.position, Quaternion.identity) as GameObject;
+			vehicles.Add (carGameObject);
+			carGameObject.GetComponent <Rigidbody> ().isKinematic = true;
+			carGameObject.SetActive (false);
+			carGameObject.transform.SetParent (mTransform, false);
+		}));
+	}
+
+	private IEnumerator SetupVehicle (string _vehicleName, System.Action _callback = null) {
 		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (GameConstant.assetBundleName, _vehicleName, (bundle) => {
 			GameObject carGameObject = Instantiate (bundle, initPos.position, Quaternion.identity) as GameObject;
 			int carId = carGameObject.GetComponent <ArcadeCarController> ().vehicle.id;
@@ -91,13 +134,14 @@ public class GaragaController : MonoBehaviour {
 				lastUnlockedIndex = currentSelectedIndex;
 			}
 
-			//			// apply lock shader
+			// apply lock shader
 			if (!PlayerDataController.Instance.unlockedIds.Contains (carId)) {
 				Renderer[] renderers = carGameObject.GetComponentsInChildren <Renderer> ();
 				for (int j = 0; j < renderers.Length; j++) {
 					renderers [j].material = lockedMaterial;
 				}
 			} 
+
 			// apply current selected material
 			if (PlayerDataController.Instance.mPlayer.unlockedVehicles.ContainsKey (carId)) {
 				int _matID;
@@ -111,7 +155,7 @@ public class GaragaController : MonoBehaviour {
 			}
 		}));
 
-		yield return new WaitForSeconds (.5f);
+		yield return new WaitForSeconds (1f);
 		if (_vehicleName == GameConstant.fourWheels [GameConstant.fourWheels.Count - 1]) {
 			_callback ();
 		}
@@ -304,15 +348,17 @@ public class GaragaController : MonoBehaviour {
 				StartCoroutine (MoveVehicle (vehicles [HandleCurrentIndex (currentSelectedIndex, 1)].transform, spline3, () => {
 					StartCoroutine (MoveVehicle (vehicles [HandleCurrentIndex (currentSelectedIndex, 1)].transform, spline4, () => {
 						vehicles [HandleCurrentIndex (currentSelectedIndex, 1)].SetActive (false);
-						StartCoroutine (ReSetupVehicles (0f));
+						StartCoroutine (ReSetupVehicles ());
 					}));
 				}));
 			}));
 		});
 	}
 
-	private IEnumerator ReSetupVehicles (float _delayTime) {
-		yield return new WaitForSeconds (_delayTime);
+	private IEnumerator ReSetupVehicles () {
+		
+		yield return new WaitForSeconds (0f);
+
 		vehicles [HandleCurrentIndex (lastUnlockedIndex, -1)].SetActive (true);
 		AudioManager.Instance.PlayTemp (carMove);
 		StartCoroutine (MoveVehicle (vehicles [HandleCurrentIndex (lastUnlockedIndex, -1)].transform, spline1, () => {

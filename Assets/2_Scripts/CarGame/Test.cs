@@ -1,11 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Linq;
+
 public class Test : MonoBehaviour {
 
+	public enum myList {
+		item1,
+		item2,
+		item3,
+		item4,
+		item5
+	}
 	// Use this for initialization
 	void Start () {
-	
+		Debug.Log (myList.item1);
+
+		Debug.Log (Enum.GetValues(typeof(myList)).Cast<myList>().Max());
+		Debug.Log (Enum.GetValues(typeof(myList)).Cast<myList>().Min());
+		Debug.Log (myList.item1 + 1);
 	}
 	
 	// Update is called once per frame
@@ -13,17 +26,4 @@ public class Test : MonoBehaviour {
 	
 	}
 
-	void OnGUI () {
-		DateTime time = DateTime.Now;
-
-		string day = time.Day.ToString().PadLeft(2, '0');;
-		string month = time.Month.ToString().PadLeft(2, '0');;
-		string year = time.Year.ToString();
-
-		string hour = time.Hour.ToString().PadLeft(2, '0');
-		string minute = time.Minute.ToString().PadLeft(2, '0');
-		string second = time.Second.ToString().PadLeft(2, '0');
-
-		GUILayout.Label(day + "/" + month + "/" + year + " - " + hour + ":" + minute + ":" + second);
-	}
 }

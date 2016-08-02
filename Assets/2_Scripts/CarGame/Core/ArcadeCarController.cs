@@ -18,7 +18,6 @@ public class ArcadeCarController : MonoBehaviour {
 	#region public members
 	[SerializeField]
 	public Vehicle vehicle;
-//	public Material [] _carMats;
 
 	#endregion
 
