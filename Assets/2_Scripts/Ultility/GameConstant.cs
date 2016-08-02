@@ -32,4 +32,17 @@ public static class GameConstant  {
 		INVALID
 	}
 
+	public enum cars {
+		Ambulance,
+		Bus,
+		Car,
+		Deliverytruck,
+		Firetruck,
+		Garbagetruck,
+		Icecreamtruck,
+		Limousine,
+		Policecar,
+		Van,
+		Excavator
+	}
 }

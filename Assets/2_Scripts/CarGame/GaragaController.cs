@@ -65,7 +65,7 @@ public class GaragaController : MonoBehaviour {
 	void SetupGarage () {
 		for (int i = 0; i < GameConstant.fourWheels.Count; i++) {
 			StartCoroutine (SetupVehicles (GameConstant.fourWheels[i], () => {
-				StartCoroutine (ReSetupVehicles (1f));
+				StartCoroutine (ReSetupVehicles (5f));
 			}));
 		}
 	}
