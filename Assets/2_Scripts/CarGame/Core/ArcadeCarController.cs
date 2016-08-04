@@ -64,7 +64,7 @@ public class ArcadeCarController : MonoBehaviour {
 	#region public functions
 	// handle car movement
 	public void Move (float steer, float accel) {
-//		if (!isStart) return;
+		if (!isStart) return;
 
 		for (int i = 0; i < 4; i++) {
 			Quaternion quaternion;

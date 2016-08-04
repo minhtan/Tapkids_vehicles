@@ -28,7 +28,7 @@ public class EventManager {
 		REMOVE_LETTER,
 		//
 		DROPBUTTON,
-		CORRECTWORD,
+//		CORRECTWORD,
 		// 
 		COUNTDOWN,
 		MENU_WHEEL_TURN,

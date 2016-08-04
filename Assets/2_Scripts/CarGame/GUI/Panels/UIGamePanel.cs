@@ -13,11 +13,11 @@ public class UIGamePanel : MonoBehaviour {
 
 	#region Mono
 	void OnEnable () {
-//		Messenger.AddListener <bool> (EventManager.GUI.TOGGLE_INGAME.ToString (), OnToggleInGamePanel);
+		Messenger.AddListener <bool, Transform> (EventManager.AR.MAP_IMAGE_TRACKING.ToString (), HandleMapTracking);
 	}
 
 	void OnDisable () {
-//		Messenger.RemoveListener <bool> (EventManager.GUI.TOGGLE_INGAME.ToString (), OnToggleInGamePanel);
+		Messenger.RemoveListener  <bool, Transform> (EventManager.AR.MAP_IMAGE_TRACKING.ToString (), HandleMapTracking);
 	}
 
 	void Start () {
@@ -29,11 +29,13 @@ public class UIGamePanel : MonoBehaviour {
 	#endregion public functions
 
 	#region private functions
-//	private void OnToggleInGamePanel (bool _isToggled) {
-//		mCanvasGroup.alpha = _isToggled ? 1f : 0f;
-//		mCanvasGroup.interactable = _isToggled ? true : false;
-//		mCanvasGroup.blocksRaycasts = _isToggled ? true : false;
-//	}
+	private void HandleMapTracking (bool _isFound, Transform transform) {
+		if (mCanvasGroup == null) return;
+
+		mCanvasGroup.alpha = _isFound ? 1f : 0f;
+		mCanvasGroup.blocksRaycasts = _isFound ? true : false;
+		mCanvasGroup.interactable = _isFound ? true : false;
+	}
 	#endregion private functions
 
 }

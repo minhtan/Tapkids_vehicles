@@ -31,7 +31,7 @@ public class CarGameGenerator : MonoBehaviour {
 	private Vector3 pointOffset = new Vector3 (0f, .5f, 0f);
 
 	private float delayTime = .5f;
-	private float scaleFactor = 2f;
+	private float scaleFactor = 3f;
 
 	private Transform mTransform;
 	#endregion private members
@@ -42,7 +42,7 @@ public class CarGameGenerator : MonoBehaviour {
 		Messenger.AddListener <bool> (EventManager.GameState.START.ToString (), HandleStartGame);
 		Messenger.AddListener (EventManager.GameState.RESET.ToString (), HandleResetGame);
 		Messenger.AddListener <string> (EventManager.GUI.REMOVE_LETTER.ToString (), HandleDropLetter);
-		Messenger.AddListener (EventManager.GUI.CORRECTWORD.ToString (), HandleCorrectWord);
+//		Messenger.AddListener (EventManager.GUI.CORRECTWORD.ToString (), HandleCorrectWord);
 
 	}
 
@@ -51,7 +51,7 @@ public class CarGameGenerator : MonoBehaviour {
 		Messenger.RemoveListener <bool> (EventManager.GameState.START.ToString (), HandleStartGame);
 		Messenger.RemoveListener (EventManager.GameState.RESET.ToString (), HandleResetGame);
 		Messenger.RemoveListener <string> (EventManager.GUI.REMOVE_LETTER.ToString (), HandleDropLetter);
-		Messenger.AddListener (EventManager.GUI.CORRECTWORD.ToString (), HandleCorrectWord);
+//		Messenger.AddListener (EventManager.GUI.CORRECTWORD.ToString (), HandleCorrectWord);
 	}
 
 	void Start () {

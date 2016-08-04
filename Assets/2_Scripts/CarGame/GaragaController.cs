@@ -3,21 +3,28 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+
+/// <summary>
+/// Nếu bạn đọc được dòng comment này thì có lẽ bạn là người đang chịu trách nhiệm với project. 
+/// Thú thật rằng sau khi viết những dòng code bên dưới, tôi thực sự áy náy và cắn dứt lương tâm.
+/// Cầu chúa phù hộ cho bạn :(
+/// </summary>
+
 public class GaragaController : MonoBehaviour {
 
-	public enum VehicleNames {
-		Ambulance, 
-		Bus, 
-		Car,
-		Deliverytruck,
-		Firetruck,
-		Garbagetruck, 
-		Icecreamtruck,
-		Limousine,
-		Policecar, 
-		Van, 
-		Excavator
-	}
+//	public enum VehicleNames {
+//		Ambulance, 
+//		Bus, 
+//		Car,
+//		Deliverytruck,
+//		Firetruck,
+//		Garbagetruck, 
+//		Icecreamtruck,
+//		Limousine,
+//		Policecar, 
+//		Van, 
+//		Excavator
+//	}
 
 	#region public members
 	public Material lockedMaterial;
@@ -42,9 +49,6 @@ public class GaragaController : MonoBehaviour {
 	private Transform mTransform;
 
 	private int lastUnlockedIndex;
-
-	private float forwardPos = 20f;
-	private float backwardPos = -20f;
 
 	private int curVehicleRotateId;
 
@@ -77,11 +81,50 @@ public class GaragaController : MonoBehaviour {
 		SetupGarage ();
 	}
 	void SetupGarage () {
+
+		// load from resource
 		for (int i = 0; i < GameConstant.fourWheels.Count; i++) {
-			StartCoroutine (SetupVehicle (GameConstant.fourWheels[i], () => {
-				StartCoroutine (ReSetupVehicles ());
-			}));
+			GameObject carGameObject = Instantiate(Resources.Load("Vehicles/" + GameConstant.fourWheels[i], typeof(GameObject))) as GameObject;
+			int carId = carGameObject.GetComponent <ArcadeCarController> ().vehicle.id;
+			vehicles.Add (carGameObject);
+			carGameObject.GetComponent <Rigidbody> ().isKinematic = true;
+			carGameObject.SetActive (false);
+			carGameObject.transform.SetParent (mTransform, false);
+
+			if (carId == PlayerDataController.Instance.mPlayer.vehicleId) {
+				currentSelectedIndex = carId;
+				lastUnlockedIndex = currentSelectedIndex;
+			}
+
+			// apply lock shader
+			if (!PlayerDataController.Instance.unlockedIds.Contains (carId)) {
+				Renderer[] renderers = carGameObject.GetComponentsInChildren <Renderer> ();
+				for (int j = 0; j < renderers.Length; j++) {
+					renderers [j].material = lockedMaterial;
+				}
+			} 
+
+			// apply current selected material
+			if (PlayerDataController.Instance.mPlayer.unlockedVehicles.ContainsKey (carId)) {
+				int _matID;
+				if (PlayerDataController.Instance.mPlayer.unlockedVehicles.TryGetValue (carId, out _matID)) {
+					carGameObject.GetComponent <ArcadeCarController> ().vehicle.matId = _matID;
+					Renderer [] renderers = carGameObject.GetComponentsInChildren <Renderer> ();
+					for (int j = 0; j < renderers.Length; j++) {
+						renderers [j].material = carGameObject.GetComponent <ArcadeCarController> ().vehicle.carMats [_matID].mat;
+					}
+				}
+			}
 		}
+
+		StartCoroutine (ReSetupVehicles ());
+
+		// load from assetbundle
+//		for (int i = 0; i < GameConstant.fourWheels.Count; i++) {
+//			StartCoroutine (SetupVehicle (GameConstant.fourWheels[i], () => {
+//				StartCoroutine (ReSetupVehicles ());
+//			}));
+//		}
 
 		// setup 3 cars only
 //		var curVehicleName = (VehicleNames)Enum.Parse(typeof(VehicleNames), PlayerDataController.Instance.mPlayer.vehicleName);
@@ -108,7 +151,7 @@ public class GaragaController : MonoBehaviour {
 
 	#region private functions
 
-	private IEnumerator _SetupVehicle (string _vehicleName) {
+	private IEnumerator _SetupVehicle (string _vehicleName, System.Action _callback = null) {
 		yield return new WaitForSeconds (0f);
 
 		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (GameConstant.assetBundleName, _vehicleName, (bundle) => {
@@ -155,7 +198,7 @@ public class GaragaController : MonoBehaviour {
 			}
 		}));
 
-		yield return new WaitForSeconds (2f);
+		yield return new WaitForSeconds (0f);
 		if (_vehicleName == GameConstant.fourWheels [GameConstant.fourWheels.Count - 1]) {
 			_callback ();
 		}
@@ -407,7 +450,7 @@ public class GaragaController : MonoBehaviour {
 		}
 	}
 
-	private void HandleLocker (GameObject _go) {
+		private void HandleLocker (GameObject _go) {
 		if (!PlayerDataController.Instance.mPlayer.unlockedVehicles.ContainsKey (_go.GetComponent<ArcadeCarController> ().vehicle.id)) {
 			locker.SetActive (true);
 		} else {
