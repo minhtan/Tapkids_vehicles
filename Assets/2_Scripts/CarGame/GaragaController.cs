@@ -458,9 +458,8 @@ public class GaragaController : MonoBehaviour {
 		}
 		///
 		BoxCollider body = _go.transform.Find ("Colliders").GetComponent <BoxCollider> ();
-		float offset = 5.5f;
-		Vector3 lockerPos = new Vector3 (body.bounds.center.x, body.bounds.size.y + offset, body.bounds.center.z);
-		locker.transform.position = lockerPos;
+		float offset = 6f;
+		locker.transform.position = new Vector3 (body.bounds.center.x, body.bounds.size.y + offset, body.bounds.center.z);;
 	}
 
 	private void HandlePurchaseVehicle () {

@@ -5,6 +5,8 @@ using System.Collections;
 public class UIPausePanel : MonoBehaviour {
 
 	#region public members
+	public GameObject resetButton;
+	public GameObject tutorialButton;
 	#endregion public members
 
 	#region private members
@@ -36,6 +38,14 @@ public class UIPausePanel : MonoBehaviour {
 		mCanvasGroup.blocksRaycasts = _isPaused ? true : false;
 	}
 
+
+	public void ToggleResetButton (bool _state) {
+		resetButton.SetActive(_state);
+	}
+
+	public void ToggleTutorialButton (bool _state) {
+		tutorialButton.SetActive(_state);
+	}
 	#endregion private functions
 
 }
