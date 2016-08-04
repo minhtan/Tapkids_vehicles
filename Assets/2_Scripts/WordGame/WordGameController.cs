@@ -16,12 +16,25 @@ public class WordGameController : MonoBehaviour {
 	void OnEnable(){
 		Messenger.AddListener<bool>( EventManager.GameState.PAUSE.ToString(), ToggleGamePause );
 		Messenger.AddListener( EventManager.GameState.RESET.ToString(), _ResetGame );
+
+		pauseMenu = GameObject.FindObjectOfType<UIPausePanel> ();
+		if(pauseMenu != null){
+			pauseMenu.ToggleResetButton (true);
+			pauseMenu.ToggleTutorialButton (true);
+		}
 	}
 
 	void OnDestroy(){
-//		Messenger.Cleanup ();
+		Messenger.RemoveListener<bool>( EventManager.GameState.PAUSE.ToString(), ToggleGamePause );
+		Messenger.RemoveListener( EventManager.GameState.RESET.ToString(), _ResetGame );
+
 		if(ArController.Instance != null){
 			ArController.Instance.ToggleAR (false);
+		}
+
+		if(pauseMenu != null){
+			pauseMenu.ToggleResetButton (false);
+			pauseMenu.ToggleTutorialButton (false);
 		}
 	}
 
@@ -61,6 +74,7 @@ public class WordGameController : MonoBehaviour {
 	public Text txt_ResultWords;
 	public Text txt_ResultScore;
 	public Text txt_FoundWords;
+	private UIPausePanel pauseMenu;
 	#endregion
 
 	#region Data funcs

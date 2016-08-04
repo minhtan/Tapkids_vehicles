@@ -19,6 +19,7 @@ public class StartupWord : MonoBehaviour
 	public float _showTemplateDuration = 2f;
 	public float _scaleTemplateFactor = 3f;
 	private UILetterButton _currentLetterBut;
+	private UIPausePanel pauseMenu;
 
 	CaptureAndSave snapShot;
 	public GameObject pnlLetterUI;
@@ -28,13 +29,13 @@ public class StartupWord : MonoBehaviour
 	void Start ()
 	{
 		snapShot = GameObject.FindObjectOfType<CaptureAndSave> ();
+		pauseMenu = GameObject.FindObjectOfType<UIPausePanel> ();
 		if(ArController.Instance != null){
 			ArController.Instance.ToggleAR (true);
 			ArController.Instance.SetCenterMode (false);
 			ArController.Instance.SetArMaxStimTargets (1);
 			ArController.Instance.ToggleLight (true);
-		}
-			
+		}						
 		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_MENU_BTN.ToString (), true);
 	}
 
@@ -73,6 +74,10 @@ public class StartupWord : MonoBehaviour
 	{
 		ArController.Instance.ToggleAR (false);
 
+		if(pauseMenu != null){
+			pauseMenu.ToggleResetButton (true);
+		}
+
 		pnlLetterUI.SetActive (false);
 		_tutText.SetTutText (UITutText.TutText.WELCOME);
 
@@ -83,6 +88,11 @@ public class StartupWord : MonoBehaviour
 	{
 		if(canvasLetter.activeSelf){
 			ArController.Instance.ToggleAR (true);
+
+			if(pauseMenu != null){
+				pauseMenu.ToggleResetButton (false);
+			}
+
 			_drawer.ResetStroke ();
 			canvasLetter.SetActive (false);
 //		_exitBut.SetActive (false);
