@@ -50,6 +50,7 @@ public class Checkcode : MonoBehaviour {
 		ArController.Instance.ToggleAR (state, state, false);
 		pnlCheckCode.SetActive (!state);
 		btnQRBack.SetActive (state);
+		GameObject.Find ("Garage").SetActive (!state);
 	}
 
 	public void ShowActivationPnl(){

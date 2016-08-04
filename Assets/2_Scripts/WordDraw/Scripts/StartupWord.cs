@@ -32,6 +32,7 @@ public class StartupWord : MonoBehaviour
 			ArController.Instance.ToggleAR (true);
 			ArController.Instance.SetCenterMode (false);
 			ArController.Instance.SetArMaxStimTargets (1);
+			ArController.Instance.ToggleLight (true);
 		}
 			
 		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_MENU_BTN.ToString (), true);
@@ -40,6 +41,7 @@ public class StartupWord : MonoBehaviour
 	void OnDestroy(){
 		if(ArController.Instance != null){
 			ArController.Instance.ToggleAR (false);
+			ArController.Instance.ToggleLight (false);
 		}
 	}
 
