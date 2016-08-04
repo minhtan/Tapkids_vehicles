@@ -48,6 +48,7 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 
 	public void LoadingSceneAsync (SceneID id, float delay = 0f)
 	{
+		Debug.Log ("Loading");
 		if (id == SceneID.MENU)
 		if (!NetworkManager.Instance.HasInternetAvailable ()) {
 			GUIController.Instance.OpenDialog ("Internet connection problem!")

@@ -6,6 +6,7 @@ Confidential and Proprietary - Qualcomm Connected Experiences, Inc.
 
 using UnityEngine;
 using PlayMaker;
+using Lean;
 
 namespace Vuforia
 {
@@ -90,6 +91,12 @@ namespace Vuforia
 			fsm.Fsm.Event ("ready");
 		}
 
+		void TriggerAnimTap(LeanFinger fg){
+			if(go_anim != null && go_anim.GetCurrentAnimatorStateInfo(0).IsName("idle") && !go_anim.IsInTransition(0)){
+				go_anim.SetTrigger ("tap");
+			}
+		}
+
 		void _ShowModel(){
 			StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (AssetController.bundleName, targetName, (bundle) => {
 				go = GameObject.Instantiate (bundle, transform.position, transform.rotation) as GameObject;
@@ -105,7 +112,10 @@ namespace Vuforia
 				go_anim = go.GetComponentInChildren<Animator>();
 
 				if(isLetter){
+					go.transform.Rotate(0f, -180f, 0f);
 					Messenger.Broadcast<bool, string>(EventManager.AR.LETTER_IMAGE_TRACKING.ToString(), true, targetName);
+					go_anim.enabled = true;
+					LeanTouch.OnFingerTap += TriggerAnimTap;
 				}else{
 					Messenger.Broadcast<bool, string>(EventManager.AR.VEHICLE_IMAGE_TRACKING.ToString(), true, targetName);
 				}
@@ -121,6 +131,7 @@ namespace Vuforia
 
 				if (isLetter) {
 					Messenger.Broadcast<bool, string> (EventManager.AR.LETTER_IMAGE_TRACKING.ToString (), false, targetName);
+					LeanTouch.OnFingerTap -= TriggerAnimTap;
 				} else {
 					Messenger.Broadcast<bool, string>(EventManager.AR.VEHICLE_IMAGE_TRACKING.ToString(), false, targetName);
 				}
