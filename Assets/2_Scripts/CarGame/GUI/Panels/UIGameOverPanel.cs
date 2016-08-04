@@ -5,8 +5,8 @@ using System.Collections;
 public class UIGameOverPanel : MonoBehaviour {
 
 	#region public members
-	public Text gameOverMessage;
-	public Image[] starImages;
+//	public Text gameOverMessage;
+//	public Image[] starImages;
 	#endregion public members
 
 	#region private members

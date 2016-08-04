@@ -162,15 +162,16 @@ public class CarGameController2 : MonoBehaviour {
 		if (answers.Contains (collectedLetters)) {
 			AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.CORRECT_WORD);
 
-			Messenger.Broadcast (EventManager.GUI.CORRECTWORD.ToString ());
+			_machine.changeState <CG2GameOverState> ();
 
-			answers.Remove (collectedLetters);
-			collectedLetters = string.Empty;
+//			Messenger.Broadcast (EventManager.GUI.CORRECTWORD.ToString ());
+//			answers.Remove (collectedLetters);
+//			collectedLetters = string.Empty;
 
 			// check if there is no word left, trigger gameover state
-			if (answers.Count == 0) {
-				_machine.changeState <CG2GameOverState> ();
-			}
+//			if (answers.Count == 0) {
+//				_machine.changeState <CG2GameOverState> ();
+//			}
 		} else {
 			AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.INCORRECT_WORD);
 		}
