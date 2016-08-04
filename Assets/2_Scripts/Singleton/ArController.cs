@@ -11,6 +11,7 @@ public class ArController : UnitySingletonPersistent<ArController> {
 	bool isFocusing;
 	bool isVuforiaReady = false;
 	Camera camera;
+	Light light;
 
 	public bool IsVuforiaReady {
 		get {
@@ -25,6 +26,7 @@ public class ArController : UnitySingletonPersistent<ArController> {
 		base.Awake ();
 		VuforiaBehaviour.Instance.RegisterVuforiaStartedCallback (OnVuforiaStarted);
 		camera = GetComponentInChildren<Camera> ();
+		light = GetComponentInChildren<Light> ();
 	}
 
 	void Update(){
@@ -77,6 +79,12 @@ public class ArController : UnitySingletonPersistent<ArController> {
 		} else {
 			GetComponent<VuforiaScanner> ().enabled = false;
 		}
+	}
+
+	public void ToggleLight(bool state){
+		if(this.light != null && state != this.light.enabled){
+			this.light.enabled = state;
+		}	
 	}
 
 	IEnumerator StartQRScanner(bool state){

@@ -7,6 +7,8 @@ Confidential and Proprietary - Qualcomm Connected Experiences, Inc.
 using UnityEngine;
 using PlayMaker;
 using Lean;
+using System.Collections;
+using System;
 
 namespace Vuforia
 {
@@ -98,29 +100,52 @@ namespace Vuforia
 		}
 
 		void _ShowModel(){
-			StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (AssetController.bundleName, targetName, (bundle) => {
-				go = GameObject.Instantiate (bundle, transform.position, transform.rotation) as GameObject;
-				go.transform.SetParent (transform, true);
-				go.AddComponent<SimpleRotateScale>();
-//				go.transform.Rotate(0f, -90f, 0f);
-				if(go.GetComponent<Rigidbody>() != null){
-					go.GetComponent<Rigidbody>().isKinematic = true;
-				}
-				if(clip != null){
-					AudioManager.Instance.PlayTemp(clip);
-				}
-				go_anim = go.GetComponentInChildren<Animator>();
+			if (isLetter) {
+				StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (AssetController.bundleName, targetName, (bundle) => {
+					go = GameObject.Instantiate (bundle, transform.position, transform.rotation) as GameObject;
+					go.transform.SetParent (transform, true);
+					go.AddComponent<SimpleRotateScale> ();
+					if (go.GetComponent<Rigidbody> () != null) {
+						go.GetComponent<Rigidbody> ().isKinematic = true;
+					}
+					if (clip != null) {
+						AudioManager.Instance.PlayTemp (clip);
+					}
+					go_anim = go.GetComponentInChildren<Animator> ();
 
-				if(isLetter){
-					go.transform.Rotate(0f, -180f, 0f);
-					Messenger.Broadcast<bool, string>(EventManager.AR.LETTER_IMAGE_TRACKING.ToString(), true, targetName);
+					go.transform.Rotate (0f, -180f, 0f);
+					Messenger.Broadcast<bool, string> (EventManager.AR.LETTER_IMAGE_TRACKING.ToString (), true, targetName);
 					go_anim.enabled = true;
 					LeanTouch.OnFingerTap += TriggerAnimTap;
-				}else{
-					Messenger.Broadcast<bool, string>(EventManager.AR.VEHICLE_IMAGE_TRACKING.ToString(), true, targetName);
-				}
-			}));
+				}));
+			} else {
+				StartCoroutine(LoadFromResource (targetName, (prefab) => {
+					go = GameObject.Instantiate (prefab, transform.position, transform.rotation) as GameObject;
+					go.transform.SetParent (transform, true);
+					go.AddComponent<SimpleRotateScale> ();
+					if (go.GetComponent<Rigidbody> () != null) {
+						go.GetComponent<Rigidbody> ().isKinematic = true;
+					}
+					if (clip != null) {
+						AudioManager.Instance.PlayTemp (clip);
+					}
+					go_anim = go.GetComponentInChildren<Animator> ();
+
+					Messenger.Broadcast<bool, string> (EventManager.AR.VEHICLE_IMAGE_TRACKING.ToString (), true, targetName);
+				}));
+			}
 		}
+
+		IEnumerator LoadFromResource(string asset, Action<GameObject> callback){
+			ResourceRequest rr = Resources.LoadAsync<GameObject> ("Vehicles/" + asset);
+			while(!rr.isDone){
+				yield return null;
+			}
+			GameObject go = rr.asset as GameObject;
+			if (go != null) {
+				callback (go);
+			}
+		} 
 
 		void _HideModel(){
 			if(go != null){
