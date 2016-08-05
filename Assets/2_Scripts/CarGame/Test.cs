@@ -5,25 +5,36 @@ using System.Linq;
 
 public class Test : MonoBehaviour {
 
-	public enum myList {
-		item1,
-		item2,
-		item3,
-		item4,
-		item5
+	void Start(){
+		StartCoroutine(RunVehicle(gameObject.transform, GameObject.FindObjectOfType<BezierSpline>(), () => {
+			
+		}));
 	}
-	// Use this for initialization
-	void Start () {
-		Debug.Log (myList.item1);
 
-		Debug.Log (Enum.GetValues(typeof(myList)).Cast<myList>().Max());
-		Debug.Log (Enum.GetValues(typeof(myList)).Cast<myList>().Min());
-		Debug.Log (myList.item1 + 1);
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+	IEnumerator RunVehicle (Transform _trans, BezierSpline _spline, System.Action _callback = null, bool _isGoingForward = true, float _duration = 1f) {
+		float progress = _isGoingForward ? 0 : 1;
+		while (true) {
+			if (_isGoingForward) {
+				progress += Time.deltaTime / _duration;
+				if (progress >= 1f) {
+					if (_callback != null)
+						_callback ();
+					yield break;
+				}
+			}else{
+				progress -= Time.deltaTime / _duration;
+				if (progress < 0f) {
+					if (_callback != null)
+						_callback ();
+					yield break;
+				}
+			}
+
+			Vector3 position = _spline.GetPoint(progress);
+			_trans.localPosition = position;
+			_trans.LookAt(position + _spline.GetDirection(progress));
+			yield return null;
+		}
 	}
 
 }

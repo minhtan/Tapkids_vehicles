@@ -21,6 +21,8 @@ namespace Vuforia
 		public string targetName;
 		public AudioClip clip;
 		public bool isLetter = false;
+		bool isVehicleRunning = false;
+		BezierSpline spline;
 
 		#region PRIVATE_MEMBER_VARIABLES
 
@@ -93,8 +95,48 @@ namespace Vuforia
 			fsm.Fsm.Event ("ready");
 		}
 
+		void CallRunVehicle(LeanFinger fg){
+			if(!isVehicleRunning && !LeanTouch.GuiInUse){
+				isVehicleRunning = true;
+				GameObject g = transform.GetChild (0).gameObject;
+				StartCoroutine (RunVehicle(g.transform, spline, ()=>{
+					LeanTween.rotate(g, Vector3.zero, 0.2f);
+					LeanTween.move(g, Vector3.zero, 0.2f).setOnComplete(()=>{
+						isVehicleRunning = false;
+					});
+				}, true, 3.0f));
+			}
+		}
+		
+		IEnumerator RunVehicle (Transform _trans, BezierSpline _spline, System.Action _callback = null, bool _isGoingForward = true, float _duration = 1f) {
+			float progress = _isGoingForward ? 0 : 1;
+			while (true) {
+				if (_isGoingForward) {
+					progress += Time.deltaTime / _duration;
+					if (progress >= 1f) {
+						if (_callback != null)
+							_callback ();
+						yield break;
+					}
+				}else{
+					progress -= Time.deltaTime / _duration;
+					if (progress < 0f) {
+						if (_callback != null)
+							_callback ();
+						yield break;
+					}
+				}
+
+				Vector3 position = _spline.GetPoint(progress);
+				_trans.localPosition = position;
+				_trans.LookAt(_trans.position + _spline.GetDirection(progress));
+
+				yield return null;
+			}
+		}
+
 		void TriggerAnimTap(LeanFinger fg){
-			if(go_anim != null && go_anim.GetCurrentAnimatorStateInfo(0).IsName("idle") && !go_anim.IsInTransition(0)){
+			if(go_anim != null && go_anim.GetCurrentAnimatorStateInfo(0).IsName("idle") && !go_anim.IsInTransition(0) && !LeanTouch.GuiInUse){
 				go_anim.SetTrigger ("tap");
 			}
 		}
@@ -114,11 +156,13 @@ namespace Vuforia
 					go_anim = go.GetComponentInChildren<Animator> ();
 
 					go.transform.Rotate (0f, -180f, 0f);
-					Messenger.Broadcast<bool, string> (EventManager.AR.LETTER_IMAGE_TRACKING.ToString (), true, targetName);
 					go_anim.enabled = true;
+
+					Messenger.Broadcast<bool, string> (EventManager.AR.LETTER_IMAGE_TRACKING.ToString (), true, targetName);
 					LeanTouch.OnFingerTap += TriggerAnimTap;
 				}));
 			} else {
+				spline = GameObject.FindObjectOfType<BezierSpline> ();
 				StartCoroutine(LoadFromResource (targetName, (prefab) => {
 					go = GameObject.Instantiate (prefab, transform.position, transform.rotation) as GameObject;
 					go.transform.SetParent (transform, true);
@@ -132,6 +176,7 @@ namespace Vuforia
 					go_anim = go.GetComponentInChildren<Animator> ();
 
 					Messenger.Broadcast<bool, string> (EventManager.AR.VEHICLE_IMAGE_TRACKING.ToString (), true, targetName);
+					LeanTouch.OnFingerTap += CallRunVehicle;
 				}));
 			}
 		}
@@ -158,7 +203,8 @@ namespace Vuforia
 					Messenger.Broadcast<bool, string> (EventManager.AR.LETTER_IMAGE_TRACKING.ToString (), false, targetName);
 					LeanTouch.OnFingerTap -= TriggerAnimTap;
 				} else {
-					Messenger.Broadcast<bool, string>(EventManager.AR.VEHICLE_IMAGE_TRACKING.ToString(), false, targetName);
+					Messenger.Broadcast<bool, string> (EventManager.AR.VEHICLE_IMAGE_TRACKING.ToString(), false, targetName);
+					LeanTouch.OnFingerTap -= CallRunVehicle;
 				}
 			}
 		}

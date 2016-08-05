@@ -9,6 +9,7 @@ public class SimpleRotateScale : MonoBehaviour
 //		Lean.LeanTouch.RotateObject(transform, Lean.LeanTouch.TwistDegrees);
 		float rotation = transform.localRotation.eulerAngles.y + Lean.LeanTouch.TwistDegrees*-1.5f;
 		LeanTween.rotateY (transform.gameObject, rotation, 0);
+
 		// This will scale the current transform based on a multi finger pinch gesture
 		Lean.LeanTouch.ScaleObject(transform, Lean.LeanTouch.PinchScale);
 
