@@ -56,6 +56,7 @@ public class CarGameGenerator : MonoBehaviour {
 
 	void Start () {
 		mTransform = GetComponent <Transform> ();
+		cartPoint = GameObject.FindWithTag ("CarPoint").transform;
 	}
 	#endregion MONO
 
@@ -71,7 +72,9 @@ public class CarGameGenerator : MonoBehaviour {
 				component.enabled = false;
 			}
 
-			StartCoroutine(SetupCar ());
+
+			SetupCar ();
+			//			StartCoroutine(SetupCar ());
 
 			letterToTransform = new Dictionary<string, Transform> ();
 			letterToPosition = new Dictionary<string, Vector3> ();
@@ -150,7 +153,24 @@ public class CarGameGenerator : MonoBehaviour {
 		}));
 	}
 
-	private IEnumerator SetupCar () {
+	private void SetupCar () {
+		GameObject carGameObject = Instantiate(Resources.Load("Vehicles/" + PlayerDataController.Instance.mPlayer.vehicleName, typeof(GameObject)), cartPoint.position + pointOffset, Quaternion.identity) as GameObject;
+		int carId = carGameObject.GetComponent <ArcadeCarController> ().vehicle.id;
+		int matId;
+		if (PlayerDataController.Instance.mPlayer.unlockedVehicles.ContainsKey (carId)) {
+			if (PlayerDataController.Instance.mPlayer.unlockedVehicles.TryGetValue (carId, out matId)) {
+				Renderer [] renderers = carGameObject.GetComponentsInChildren <Renderer> ();
+				for (int j = 0; j < renderers.Length; j++) {
+					renderers [j].material = carGameObject.GetComponent <ArcadeCarController> ().vehicle.carMats [matId].mat;
+				}
+			}
+		}
+		carGameObject.transform.SetParent (mTransform, false);
+		carGameObject.SetActive (false);
+
+	}
+
+	private IEnumerator SetupCarCo () {
 		yield return new WaitForSeconds (1f);
 		StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (GameConstant.assetBundleName, PlayerDataController.Instance.mPlayer.vehicleName, (bundle) => {
 			cartPoint = GameObject.FindWithTag ("CarPoint").transform;
