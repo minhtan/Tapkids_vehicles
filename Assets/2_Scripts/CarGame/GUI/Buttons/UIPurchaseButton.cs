@@ -25,13 +25,13 @@ public class UIPurchaseButton : MonoBehaviour {
 				int cost = garage.vehicles[garage.currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle.costPoint;
 				GUIController.Instance.OpenDialog ("Do you want to purchase this vehicle for " + cost + "  *  ?", coin)
 					.AddButton ("No", 
-						UIDialogButton.Anchor.CENTER, 120, -60, 
+						UIDialogButton.Anchor.CENTER, 0, -135, 
 						delegate { 
 							AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.BUTTON_CLICK);
 							menu.SetTweenLock (false);
 						}
 					)
-					.AddButton ("Yes", UIDialogButton.Anchor.CENTER, -120, -60,
+					.AddButton ("Yes", UIDialogButton.Anchor.CENTER, 0, -25,
 						delegate { 
 							Messenger.Broadcast (EventManager.GUI.PURCHASE_VEHICLE.ToString ());
 							AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.BUTTON_CLICK);

@@ -76,7 +76,7 @@ public class Checkcode : MonoBehaviour {
 		if (!CheckRegex (textToCheck)) {
 			GUIController.Instance.OpenDialog (LeanLocalization.GetTranslation("InvalidKey").Text).AddButton (
 				LeanLocalization.GetTranslation("Ok").Text, 
-				UIDialogButton.Anchor.CENTER, 0, -60,
+				UIDialogButton.Anchor.CENTER, 0, -25,
 					() => {inputCode.text = "";}
 			);
 			return;
@@ -97,12 +97,12 @@ public class Checkcode : MonoBehaviour {
 						GUIController.Instance.OpenDialog(returnData.message)
 							.AddButton(
 								LeanLocalization.GetTranslation("No").Text, 
-								UIDialogButton.Anchor.CENTER, 120, -60,
+								UIDialogButton.Anchor.CENTER, 0, -135,
 									() => {inputCode.text = "";}
 							)
 							.AddButton(
 								LeanLocalization.GetTranslation("Yes").Text, 
-								UIDialogButton.Anchor.CENTER,  -120, -60,
+								UIDialogButton.Anchor.CENTER,  0, -25,
 								() => {
 									StartCoroutine(WebServiceUltility.CheckKey(WebServiceUltility.OVERRIDE_KEY_URL, textToCheck, "", (returnOverRideKeyData) => {
 									if(returnOverRideKeyData != null){
@@ -111,14 +111,14 @@ public class Checkcode : MonoBehaviour {
 										}else{
 											GUIController.Instance.OpenDialog(returnOverRideKeyData.message).AddButton(
 												LeanLocalization.GetTranslation("Ok").Text, 
-													UIDialogButton.Anchor.CENTER, 0, -60, 
+													UIDialogButton.Anchor.CENTER, 0, -25, 
 													() => {inputCode.text = "";}
 											);
 										}
 									}else{
 										GUIController.Instance.OpenDialog("Fail to connect").AddButton(
 											LeanLocalization.GetTranslation("Ok").Text, 
-												UIDialogButton.Anchor.CENTER, 0, -60, 
+												UIDialogButton.Anchor.CENTER, 0, -25, 
 												() => {inputCode.text = "";}
 										);
 								}
@@ -130,7 +130,7 @@ public class Checkcode : MonoBehaviour {
 						//Key invalid
 						GUIController.Instance.OpenDialog(returnData.message).AddButton(
 							LeanLocalization.GetTranslation("Ok").Text,  
-							UIDialogButton.Anchor.CENTER, 0, -60, 
+							UIDialogButton.Anchor.CENTER, 0, -25, 
 								() => {inputCode.text = "";}
 						);
 					}
@@ -139,7 +139,7 @@ public class Checkcode : MonoBehaviour {
 				//Fail to connect
 				GUIController.Instance.OpenDialog(LeanLocalization.GetTranslation("FailedToConnect").Text).AddButton(
 					LeanLocalization.GetTranslation("Ok").Text, 
-					UIDialogButton.Anchor.CENTER, 0, -60, 
+					UIDialogButton.Anchor.CENTER, 0, -25, 
 						() => {inputCode.text = "";}
 				);
 			}
