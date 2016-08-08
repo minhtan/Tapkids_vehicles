@@ -68,7 +68,7 @@ public class MyIAPManager : MonoBehaviour, IStoreListener{
 	public void OnPurchaseFailed (Product i, PurchaseFailureReason p)
 	{
 		Debug.Log ("Purchase failed");
-		GUIController.Instance.OpenDialog ("Purchase failed").AddButton ("Ok", UIDialogButton.Anchor.CENTER, 0, -60);
+		GUIController.Instance.OpenDialog ("Purchase failed").AddButton ("Ok", UIDialogButton.Anchor.CENTER, 0, -25);
 	}
 
 	private bool IsInitialized()

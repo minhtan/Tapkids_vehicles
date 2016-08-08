@@ -26,6 +26,8 @@ public class StartupWord : MonoBehaviour
 	public GameObject pnlVehicleUI;
 	public GameObject canvasLetter;
 
+	string targetName;
+
 	void Start ()
 	{
 		snapShot = GameObject.FindObjectOfType<CaptureAndSave> ();
@@ -104,11 +106,13 @@ public class StartupWord : MonoBehaviour
 	private void OnVehicleFound (bool state, string vehicleName)
 	{
 		pnlVehicleUI.SetActive (state);
+		targetName = vehicleName;
 	}
 
 	private void OnLetterFound (bool found, string letterName)
 	{
 		pnlLetterUI.SetActive (found);
+		targetName = letterName;
 
 		if (!found) {
 			_drawLetterBut.SetActive (false);
@@ -208,8 +212,15 @@ public class StartupWord : MonoBehaviour
 		yield return null;
 		GUIController.Instance.OpenDialog (LeanLocalization.GetTranslation("PhotoCaptured").Text).AddButton (
 			LeanLocalization.GetTranslation("Ok").Text, 
-			UIDialogButton.Anchor.CENTER, 0, -60,
+			UIDialogButton.Anchor.CENTER, 0, -25,
 			() => {}
 		);
+	}
+
+	public void _PlayModelSound(){
+		AudioClip clip = Resources.Load<AudioClip> ("Sounds/" + targetName);
+		if (clip != null) {
+			AudioManager.Instance.PlayTemp (clip);
+		}
 	}
 }
