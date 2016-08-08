@@ -56,7 +56,6 @@ public class CarGameGenerator : MonoBehaviour {
 
 	void Start () {
 		mTransform = GetComponent <Transform> ();
-		cartPoint = GameObject.FindWithTag ("CarPoint").transform;
 	}
 	#endregion MONO
 
@@ -71,10 +70,8 @@ public class CarGameGenerator : MonoBehaviour {
 			{
 				component.enabled = false;
 			}
-
-
 			SetupCar ();
-			//			StartCoroutine(SetupCar ());
+//			StartCoroutine(SetupCar ());
 
 			letterToTransform = new Dictionary<string, Transform> ();
 			letterToPosition = new Dictionary<string, Vector3> ();
@@ -154,7 +151,8 @@ public class CarGameGenerator : MonoBehaviour {
 	}
 
 	private void SetupCar () {
-		GameObject carGameObject = Instantiate(Resources.Load("Vehicles/" + PlayerDataController.Instance.mPlayer.vehicleName, typeof(GameObject)), cartPoint.position + pointOffset, Quaternion.identity) as GameObject;
+		cartPoint = GameObject.FindWithTag ("CarPoint").transform;
+		carGameObject = Instantiate(Resources.Load("Vehicles/" + PlayerDataController.Instance.mPlayer.vehicleName, typeof(GameObject)), cartPoint.position + pointOffset, Quaternion.identity) as GameObject;
 		int carId = carGameObject.GetComponent <ArcadeCarController> ().vehicle.id;
 		int matId;
 		if (PlayerDataController.Instance.mPlayer.unlockedVehicles.ContainsKey (carId)) {
