@@ -161,7 +161,7 @@ public class CarGameController2 : MonoBehaviour {
 	void HandleGatherLetter () {
 		if (answers.Contains (collectedLetters)) {
 			AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.CORRECT_WORD);
-
+			PlayerDataController.Instance.UpdatePlayerCredit(collectedLetters.Length * 5);
 			_machine.changeState <CG2GameOverState> ();
 
 //			Messenger.Broadcast (EventManager.GUI.CORRECTWORD.ToString ());
