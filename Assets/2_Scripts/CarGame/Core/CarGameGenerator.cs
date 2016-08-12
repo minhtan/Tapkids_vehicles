@@ -25,7 +25,7 @@ public class CarGameGenerator : MonoBehaviour {
 //	private Dictionary <string, Vector3> letterToPosition;
 
 	private List<Transform> letters;
-	private List<Transform> letterPositions;
+	private List<Vector3> letterPositions;
 
 	private List <GameObject> obstacleGameObjects;
 	private Vehicle currentVehicle;
