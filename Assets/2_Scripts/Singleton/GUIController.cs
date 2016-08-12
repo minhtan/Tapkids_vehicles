@@ -8,7 +8,8 @@ public class GUIController : UnitySingletonPersistent<GUIController>
 
 	public UIDialog OpenDialog (string message, params Sprite[] uiSprites)
 	{
-		_dialog.gameObject.SetActive (true);
+		if(!_dialog.gameObject.activeInHierarchy)
+			_dialog.gameObject.SetActive (true);
 		_dialog.RefreshDialog ();
 		_dialog.SetMessageText (message, uiSprites);
 		return _dialog;

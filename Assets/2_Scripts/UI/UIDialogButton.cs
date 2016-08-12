@@ -96,6 +96,7 @@ public class UIDialogButton
 		button.onClick.AddListener (() => {
 			button.gameObject.transform.parent.gameObject.SetActive (false);
 		});
+
 	}
 
 	private class Padding

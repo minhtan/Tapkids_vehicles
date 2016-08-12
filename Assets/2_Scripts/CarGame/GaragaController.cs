@@ -488,8 +488,7 @@ public class GaragaController : MonoBehaviour {
 			Messenger.Broadcast <Vehicle> (EventManager.GUI.UPDATE_VEHICLE.ToString (), vehicles[currentSelectedIndex].GetComponent <ArcadeCarController> ().vehicle);
 
 		} else {
-			GUIController.Instance.OpenDialog ("Khong du tien!!!")
-				.AddButton ("Ok", UIDialogButton.Anchor.BOTTOM_CENTER);
+			Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), GameConstant.PurchaseUnsuccessful, 1f);
 		}
 	}
 
