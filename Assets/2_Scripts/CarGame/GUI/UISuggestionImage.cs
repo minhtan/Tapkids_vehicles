@@ -21,7 +21,7 @@ public class UISuggestionImage : MonoBehaviour {
 
 	void HandleLetterTracking (string _letters) {
 		if (_letters == "excavator")
-			mImage.sprite = DataUltility.GetLetterImage (_letters[1].ToString().ToLower ());
-		mImage.sprite = DataUltility.GetLetterImage (_letters[0].ToString().ToLower ());
+			mImage.sprite = DataUltility.GetVehicleImage (_letters[1].ToString().ToLower ());
+		mImage.sprite = DataUltility.GetVehicleImage (_letters[0].ToString().ToLower ());
 	}
 }

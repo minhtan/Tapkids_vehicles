@@ -32,7 +32,11 @@ public class DataUltility
 
 
 	public static Sprite GetLetterImage(string name){
-		return Resources.Load<Sprite> ("LettersImage/" + name);
+		return Resources.Load<Sprite> ("LetterImages/" + name);
+	}
+
+	public static Sprite GetVehicleImage(string name){
+		return Resources.Load<Sprite> ("VehicleImages/" + name);
 	}
 
 	public static Sprite GetGameImage(string name){

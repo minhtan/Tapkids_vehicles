@@ -21,8 +21,11 @@ public class CarGameGenerator : MonoBehaviour {
 	private GameObject[] letterPoints;	// stores letter's positions in environment
 	private GameObject[] obstaclePoints;	
 
-	private Dictionary <string, Transform> letterToTransform;
-	private Dictionary <string, Vector3> letterToPosition;
+//	private Dictionary <string, Transform> letterToTransform;
+//	private Dictionary <string, Vector3> letterToPosition;
+
+	private List<Transform> letters;
+	private List<Transform> letterPositions;
 
 	private List <GameObject> obstacleGameObjects;
 	private Vehicle currentVehicle;
@@ -73,15 +76,13 @@ public class CarGameGenerator : MonoBehaviour {
 			SetupCar ();
 //			StartCoroutine(SetupCar ());
 
-			letterToTransform = new Dictionary<string, Transform> ();
-			letterToPosition = new Dictionary<string, Vector3> ();
-//			foreach (KeyValuePair <string, GameObject> pair in letterDictionary) {
-//				GameObject.Destroy (pair.Value);
-//			}
-//			letterDictionary.Clear ();
+//			letterToTransform = new Dictionary<string, Transform> ();
+//			letterToPosition = new Dictionary<string, Vector3> ();
+			letters = new List<Transform> ();
+			letterPositions = new List<Vector3> ();
 
 			letterPoints = GameObject.FindGameObjectsWithTag ("LetterPoint");
-			for (int i = 0; i < _letters.Length; i++) {
+ 			for (int i = 0; i < _letters.Length; i++) {
 				StartCoroutine(SetupLetter (_letters[i].ToString (), letterPoints[i].transform.position));
 			}
 		}));
@@ -116,11 +117,14 @@ public class CarGameGenerator : MonoBehaviour {
 		// remove obstacle
 
 		// remove letter
-		foreach (KeyValuePair <string, Transform> pair in letterToTransform) {
-//			GameObject.Destroy (pair.Value.gameObject);
-			Transform.Destroy (pair.Value);
+//		foreach (KeyValuePair <string, Transform> pair in letterToTransform) {
+//			Transform.Destroy (pair.Value);
+//		}
+//		letterToTransform.Clear ();
+		for (int i = 0; i < letters.Count; i++) {
+			Transform.Destroy (letters[i]);
 		}
-		letterToTransform.Clear ();
+		letters.Clear ();
 	}
 
 	private IEnumerator HandleGameStartCo () {
@@ -132,10 +136,18 @@ public class CarGameGenerator : MonoBehaviour {
 //			}
 //		}
 
-		if (letterToTransform.Count > 0) {
-			foreach (KeyValuePair <string, Transform> pair in letterToTransform) {
-				pair.Value.gameObject.SetActive (true);
-				pair.Value.transform.localScale = scaleFactor.ToVector3 ();
+//		if (letterToTransform.Count > 0) {
+//			foreach (KeyValuePair <string, Transform> pair in letterToTransform) {
+//				pair.Value.gameObject.SetActive (true);
+//				pair.Value.transform.localScale = scaleFactor.ToVector3 ();
+//				yield return new WaitForSeconds (delayTime);
+//			}
+//		}
+
+		if (letters.Count > 0) {
+			for (int i = 0; i < letters.Count; i++) {
+				letters[i].gameObject.SetActive (true);
+				letters[i].localScale = scaleFactor.ToVector3();
 				yield return new WaitForSeconds (delayTime);
 			}
 		}
@@ -194,13 +206,12 @@ public class CarGameGenerator : MonoBehaviour {
 			GameObject letterGameObject = Instantiate (bundle, _position + pointOffset, Quaternion.identity) as GameObject;
 			letterGameObject.AddComponent <LetterController> ();
 			letterGameObject.GetComponent <LetterController> ().letterName = _letter;
-//			letterGameObject.AddComponent <Rigidbody> ();
-//			letterGameObject.GetComponent <Rigidbody> ().constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
 			letterGameObject.transform.SetParent (mTransform, false);
 			letterGameObject.SetActive (false);
-			letterToTransform.Add (_letter, letterGameObject.transform);
-			letterToPosition.Add (_letter, _position);
-//			newLetterDictionary.Add (position, letterGameObject);
+			letters.Add(letterGameObject.transform);
+			letterPositions.Add(_position);
+//			letterToTransform.Add (_letter, letterGameObject.transform);
+//			letterToPosition.Add (_letter, _position);
 		}));
 	}
 
@@ -216,47 +227,64 @@ public class CarGameGenerator : MonoBehaviour {
 	}
 
 	private void HandleDropLetter (string _letters) {
-		if (letterToTransform.ContainsKey (_letters)) {
-			System.Random rnd = new System.Random ();
-			int rd;
-			do {
-				rd = rnd.Next (letterPoints.Length);
-			} while (letterToPosition.ContainsValue (letterPoints[rd].transform.position)); // wrong
+//		if (letterToTransform.ContainsKey (_letters)) {
+//			System.Random rnd = new System.Random ();
+//			int rd;
+//			do {
+//				rd = rnd.Next (letterPoints.Length);
+//			} while (letterToPosition.ContainsValue (letterPoints[rd].transform.position)); // wrong
+//
+//			Transform letter;
+//			if (letterToTransform.TryGetValue (_letters, out letter)) {
+//				letter.gameObject.SetActive (true);
+//				letter.localPosition = letterPoints[rd].transform.position;
+//				letter.localScale = scaleFactor.ToVector3 ();
+//
+//				letterToTransform [_letters] = letter;
+//				letterToPosition [_letters] = letterPoints[rd].transform.position;
+//			} else {
+//
+//			}
+//		} else {
+//
+//		}
 
-			Transform letter;
-			if (letterToTransform.TryGetValue (_letters, out letter)) {
-				letter.gameObject.SetActive (true);
-				letter.localPosition = letterPoints[rd].transform.position;
-				letter.localScale = scaleFactor.ToVector3 ();
 
-				letterToTransform [_letters] = letter;
-				letterToPosition [_letters] = letterPoints[rd].transform.position;
-			} else {
+		System.Random rnd = new System.Random ();
+		int rd;
+		do {
+			rd = rnd.Next (letterPoints.Length);
+		} while (letterPositions.Contains (letterPoints[rd].transform.position)); // wrong
 
-			}
-		} else {
+		for (int i = 0; i < letters.Count; i++) {
+			if (_letters == letters[i].GetComponent<LetterController> ().letterName) {
+				letters[i].gameObject.SetActive (true);
+				letters[i].localPosition = letterPoints[rd].transform.position;
+				letters[i].localScale = scaleFactor.ToVector3 ();
 
-		}
-	}
-
-	private void HandleCorrectWord () {
-		foreach (var letter in letterToTransform) {
-			if (!letter.Value.gameObject.activeInHierarchy) {
-				System.Random _random = new System.Random();
-				int rand;
-				do {
-					rand = _random.Next (letterPoints.Length);
-				} while (letterToPosition.ContainsValue (letterPoints[rand].transform.position));
-
-				letter.Value.gameObject.SetActive (true);
-				letter.Value.localPosition = letterPoints[rand].transform.position;
-				letter.Value.localScale = scaleFactor.ToVector3 ();
-
-				letterToPosition [letter.Key] = letterPoints[rand].transform.position;
-			} else {
-
+				letterPositions[i] = letters[i].localPosition;
 			}
 		}
 	}
+
+//	private void HandleCorrectWord () {
+//		foreach (var letter in letterToTransform) {
+//			if (!letter.Value.gameObject.activeInHierarchy) {
+//				System.Random _random = new System.Random();
+//				int rand;
+//				do {
+//					rand = _random.Next (letterPoints.Length);
+//				} while (letterToPosition.ContainsValue (letterPoints[rand].transform.position));
+//
+//				letter.Value.gameObject.SetActive (true);
+//				letter.Value.localPosition = letterPoints[rand].transform.position;
+//				letter.Value.localScale = scaleFactor.ToVector3 ();
+//
+//				letterToPosition [letter.Key] = letterPoints[rand].transform.position;
+//			} else {
+//
+//			}
+//		}
+//	}
 	#endregion private functions
 }
