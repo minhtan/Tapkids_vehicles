@@ -87,7 +87,7 @@ public class CarGameController : MonoBehaviour {
 	#region private functions
 	// handle ar events
 	private void HandleARCardTracking (bool _isFound, string _givenLetters) {
-		if (_isFound) {	// FOUND LETTER
+		if (_isFound && _machine.currentState.GetType () == typeof (CGARCardState)) {	// FOUND LETTER
 			givenLetters = _givenLetters;
 			_machine.changeState <CGInitState> ();
 			AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.SCAN_LETTER);
@@ -118,7 +118,8 @@ public class CarGameController : MonoBehaviour {
 					mTransform.SetParent (_parent);
 				}
 			} else {
-				Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString(), GameConstant.LetterScanMessage, 1f);
+				GUIController.Instance.OpenDialog ("Please scan a vehicle!!!")
+					.AddButton ("Ok", UIDialogButton.Anchor.BOTTOM_CENTER, 0, 32);
 			}
 		} else {		// LOST MAP
 			Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);

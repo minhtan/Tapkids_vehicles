@@ -23,7 +23,7 @@ public class PlayerDataController : UnitySingletonPersistent<PlayerDataControlle
 			if (firstVehicle != null)
 				newCarList.Add (firstVehicle.GetComponent <ArcadeCarController> ().vehicle.id, 0);
 
-			mPlayer = new Player (0, 20000, 0, "Ambulance", newCarList); 
+			mPlayer = new Player (0, 100, 0, "Ambulance", newCarList); 
 
 			TapkidsData.AddPlayer (mPlayer);
 			TapkidsData.Save ();

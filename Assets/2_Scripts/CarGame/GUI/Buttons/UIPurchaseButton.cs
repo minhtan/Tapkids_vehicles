@@ -31,7 +31,7 @@ public class UIPurchaseButton : MonoBehaviour {
 							menu.SetTweenLock (false);
 						}
 					)
-					.AddButton ("Yes", UIDialogButton.Anchor.CENTER, 0, -25,
+					.AddButton ("Yes", UIDialogButton.Anchor.CENTER, 0, -0,
 						delegate { 
 							Messenger.Broadcast (EventManager.GUI.PURCHASE_VEHICLE.ToString ());
 							AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.BUTTON_CLICK);
