@@ -19,7 +19,6 @@ namespace Vuforia
 	ITrackableEventHandler
 	{
 		public string targetName;
-		public AudioClip clip;
 		public bool isLetter = false;
 		bool isVehicleRunning = false;
 		BezierSpline spline;
@@ -150,6 +149,8 @@ namespace Vuforia
 					if (go.GetComponent<Rigidbody> () != null) {
 						go.GetComponent<Rigidbody> ().isKinematic = true;
 					}
+
+					AudioClip clip = Resources.Load<AudioClip> ("Sounds/" + targetName);
 					if (clip != null) {
 						AudioManager.Instance.PlayTemp (clip);
 					}
@@ -170,6 +171,8 @@ namespace Vuforia
 					if (go.GetComponent<Rigidbody> () != null) {
 						go.GetComponent<Rigidbody> ().isKinematic = true;
 					}
+
+					AudioClip clip = Resources.Load<AudioClip> ("Sounds/" + targetName);
 					if (clip != null) {
 						AudioManager.Instance.PlayTemp (clip);
 					}
