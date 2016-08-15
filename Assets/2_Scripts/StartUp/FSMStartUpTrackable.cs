@@ -194,7 +194,7 @@ namespace Vuforia
 
 		void _HideModel(){
 			if(go != null){
-				GameObject.Destroy(go);
+				GameObject.DestroyImmediate(go);
 				go = null;
 				go_anim = null;
 				Resources.UnloadUnusedAssets();

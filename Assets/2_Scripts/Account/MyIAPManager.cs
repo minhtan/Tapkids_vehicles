@@ -47,6 +47,7 @@ public class MyIAPManager : MonoBehaviour, IStoreListener{
 		this.extensions = extensions;
 		Product pr = controller.products.WithStoreSpecificID (productName);
 		string price = pr.metadata.localizedPrice + " " + pr.metadata.isoCurrencyCode;
+		Messenger.Broadcast<string> (EventManager.GUI.IAP_INIT.ToString (), price);
 	}
 
 	public void OnInitializeFailed (InitializationFailureReason error)
