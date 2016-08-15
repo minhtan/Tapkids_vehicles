@@ -143,6 +143,7 @@ public class CarGameController : MonoBehaviour {
 		// handle trigger gameover
 		if (givenLetters.Equals (collectedLetters)) {
 			AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.CORRECT_WORD);
+			PlayerDataController.Instance.UpdatePlayerCredit(givenLetters.Length * 5);
 			_machine.changeState <CGGameOverState> ();
 		} else if (givenLetters.Length == collectedLetters.Length && !givenLetters.Equals (collectedLetters)) {
 //			Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString (), GameConstant.WrongMessage, 1f);
