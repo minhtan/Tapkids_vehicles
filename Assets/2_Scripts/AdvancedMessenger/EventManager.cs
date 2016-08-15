@@ -38,7 +38,8 @@ public class EventManager {
 		MENU_BTN_DOWN,
 		MENU_BTN_UP,
 		MENU_BTN_HOLD,
-		SPRITE_RUN_FINISH
+		SPRITE_RUN_FINISH,
+		IAP_INIT
 	}
 
 	//

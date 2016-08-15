@@ -9,6 +9,7 @@ public class Checkcode : MonoBehaviour {
 	public GameObject pnlCheckCode;
 	public GameObject btnQRBack;
 	public GameObject pnlWait;
+	public GameObject garage;
 	public bool test;
 	public bool activationRequired;
 
@@ -50,7 +51,9 @@ public class Checkcode : MonoBehaviour {
 		ArController.Instance.ToggleAR (state, state, false);
 		pnlCheckCode.SetActive (!state);
 		btnQRBack.SetActive (state);
-		GameObject.Find ("Garage").SetActive (!state);
+		garage.SetActive (!state);
+		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_PLAYER_PNL.ToString (), !state);
+		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_SFX_BTN.ToString (), !state);
 	}
 
 	public void ShowActivationPnl(){
@@ -63,6 +66,11 @@ public class Checkcode : MonoBehaviour {
 		pnlCheckCode.SetActive (false);
 		btnQRBack.SetActive (false);
 		pnlWait.SetActive (false);
+		GUIController.Instance.OpenDialog(LeanLocalization.GetTranslation("UnlockedSuccess").Text).AddButton(
+			LeanLocalization.GetTranslation("Ok").Text,
+			UIDialogButton.Anchor.CENTER, 0, -25,
+			() => {inputCode.text = "";}
+		);
 	}
 
 	public void _Check(string theCode = null){
