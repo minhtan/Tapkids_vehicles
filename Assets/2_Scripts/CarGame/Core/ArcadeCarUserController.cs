@@ -36,7 +36,7 @@ public class ArcadeCarUserController : MonoBehaviour {
 
 		float h = CrossPlatformInputManager.GetAxis("Horizontal");
 		float v = CrossPlatformInputManager.GetAxis("Vertical");
-		car.Move (h, v);
+		car.Move (h, v, v, 0f);
 
 //		car.Move (wheelAngle, v);
 	}

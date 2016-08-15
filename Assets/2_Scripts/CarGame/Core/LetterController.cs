@@ -39,7 +39,16 @@ public class LetterController : MonoBehaviour {
 		mTransform.LookAt (mTransform.position + mainCamera.transform.rotation * Vector3.forward, mainCamera.transform.rotation * Vector3.up);
 	}
 
-	void OnCollisionEnter (Collision _other) {
+//	void OnCollisionEnter (Collision _other) {
+//		if (_other.gameObject.tag != "Vehicle") return;
+//		// collect letter
+//		Messenger.Broadcast <string> (EventManager.Vehicle.COLLECT_LETTER.ToString (), letterName);
+//
+//		// disable letter
+//		gameObject.SetActive (false);
+//	}
+
+	void OnTriggerEnter (Collider _other){
 		if (_other.gameObject.tag != "Vehicle") return;
 		// collect letter
 		Messenger.Broadcast <string> (EventManager.Vehicle.COLLECT_LETTER.ToString (), letterName);
