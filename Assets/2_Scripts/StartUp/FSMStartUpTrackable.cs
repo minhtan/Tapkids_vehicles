@@ -95,7 +95,7 @@ namespace Vuforia
 		}
 
 		void CallRunVehicle(LeanFinger fg){
-			if(!isVehicleRunning && !LeanTouch.GuiInUse){
+			if(!isVehicleRunning && !LeanTouch.GuiInUse && !fg.IsOverGui && !fg.StartedOverGui){
 				isVehicleRunning = true;
 				GameObject g = transform.GetChild (0).gameObject;
 				StartCoroutine (RunVehicle(g.transform, spline, ()=>{
@@ -135,7 +135,7 @@ namespace Vuforia
 		}
 
 		void TriggerAnimTap(LeanFinger fg){
-			if(go_anim != null && go_anim.GetCurrentAnimatorStateInfo(0).IsName("idle") && !go_anim.IsInTransition(0) && !LeanTouch.GuiInUse){
+			if(go_anim != null && go_anim.GetCurrentAnimatorStateInfo(0).IsName("idle") && !go_anim.IsInTransition(0) && !LeanTouch.GuiInUse && !fg.IsOverGui && !fg.StartedOverGui){
 				go_anim.SetTrigger ("tap");
 			}
 		}
