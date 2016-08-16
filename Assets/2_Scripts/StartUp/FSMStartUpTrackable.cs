@@ -168,8 +168,12 @@ namespace Vuforia
 					go = GameObject.Instantiate (prefab, transform.position, transform.rotation) as GameObject;
 					go.transform.SetParent (transform, true);
 					go.AddComponent<SimpleRotateScale> ();
-					if (go.GetComponent<Rigidbody> () != null) {
-						go.GetComponent<Rigidbody> ().isKinematic = true;
+					try{
+						Destroy(go.GetComponent<Rigidbody> ());
+						Destroy(go.GetComponent<ArcadeCarUserController>());
+						Destroy(go.GetComponent<ArcadeCarController>());
+					}catch(Exception e){
+						
 					}
 
 					AudioClip clip = Resources.Load<AudioClip> ("Sounds/" + targetName);
