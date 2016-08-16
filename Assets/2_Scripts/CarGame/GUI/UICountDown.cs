@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-
-public class UIGameTimeText : MonoBehaviour {
-
+public class UICountDown : MonoBehaviour {
+	
 	private Text mText;
+	private CanvasGroup mCanvasGroup;
 	private	float countDownTimer;
 	bool flag = false;
 
@@ -17,13 +17,20 @@ public class UIGameTimeText : MonoBehaviour {
 	}
 	void Start () {
 		mText = GetComponent <Text> ();
+		mCanvasGroup = GetComponent <CanvasGroup> ();
 		countDownTimer = 3f;
 	}
+
 	void Update (){
 		if (flag) {
 			countDownTimer -= Time.deltaTime;
 			if (countDownTimer > 0)
 				mText.text = countDownTimer.ToString("f0");
+			else {
+				flag = false;
+				mCanvasGroup.alpha = 0f;
+//				gameObject.SetActive(false);
+			}
 		}
 	}
 
@@ -32,10 +39,7 @@ public class UIGameTimeText : MonoBehaviour {
 	#region private methods
 	private void HandleInitGame (string _firstLetter, string _givenLetters){
 		flag = true;
+		mCanvasGroup.alpha = 1f;
 	}
-
-
 	#endregion private methods
-
-
 }
