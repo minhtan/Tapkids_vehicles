@@ -94,7 +94,6 @@ public class MainMenuController3D : MonoBehaviour {
 		}
 	}
 
-
 	public bool IsCamRotating(){
 		if (Mathf.Abs(drag) > minDrag) {
 			return true;
@@ -135,13 +134,15 @@ public class MainMenuController3D : MonoBehaviour {
 	}
 
 	void SwingCam(float angle){
-		Vector3 v = new Vector3(
-			transform.localRotation.eulerAngles.x,
-			transform.localRotation.eulerAngles.y + angle,
-			transform.localRotation.eulerAngles.z
-		);
+//		if(transform.localRotation.eulerAngles == garagePos || transform.localRotation.eulerAngles == menuPos){
+			Vector3 v = new Vector3(
+				transform.localRotation.eulerAngles.x,
+				transform.localRotation.eulerAngles.y + angle,
+				transform.localRotation.eulerAngles.z
+			);
 
-		swingTweenID = LeanTween.rotateLocal (gameObject, v, 3f).setEase (LeanTweenType.easeInOutQuad).setLoopPingPong().uniqueId;
+			swingTweenID = LeanTween.rotateLocal (gameObject, v, 3f).setEase (LeanTweenType.easeInOutQuad).setLoopPingPong().uniqueId;
+		//}
 	}
 
 	void OnFingerDown(LeanFinger fg){
@@ -212,6 +213,8 @@ public class MainMenuController3D : MonoBehaviour {
 		if (isUILocked) {
 			return;
 		}
+
+		LeanTween.cancel (swingTweenID);
 
 		RaycastHit hitInfo;
 		Ray ray = fg.GetRay ();

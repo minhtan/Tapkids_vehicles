@@ -113,6 +113,7 @@ namespace WordDraw
 
 		private void OnGameOver()
 		{
+			_drawer.ResetStroke ();
 			_statusText.text = TEXT_GAME_OVER;
 			_drawer.enabled = false;
 			_wordDrawScore.enabled = false;
