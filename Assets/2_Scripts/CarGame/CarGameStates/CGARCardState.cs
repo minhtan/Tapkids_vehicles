@@ -8,7 +8,7 @@ public class CGARCardState : SKState<CarGameController> {
 	{
 		Debug.Log("Wait Letter State >>>");
 
-		Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString(), GameConstant.LetterScanMessage, 3f);
+//		Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString(), GameConstant.LetterScanMessage, 3f);
 	}
 
 	public override void reason ()

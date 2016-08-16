@@ -1,20 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System;
-using System.Linq;
+using UnityEngine.UI;
 
-public class Test : StateMachineBehaviour {
+public class Test : MonoBehaviour {
+	Text mText;
+	float countDownTimer = 10f;
+	float mTime;
 
+	void Start () {
+		mText = GetComponent <Text> ();
 
-	public bool active;
-	public override void OnStateEnter (Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-	{
-		Debug.Log ("Start " + layerIndex);
 	}
 
-	public override void OnStateExit (Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-	{
-		
+	void Update () {
+		countDownTimer -= Time.deltaTime;
+		Debug.Log (countDownTimer.ToString("f0"));
 	}
 
 }

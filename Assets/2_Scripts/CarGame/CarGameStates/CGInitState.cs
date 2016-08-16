@@ -5,7 +5,7 @@ using Prime31.StateKit;
 public class CGInitState : SKState<CarGameController> {
 
 	#region private members
-//	private	float countDownTimer = 3f;
+	private	float countDownTimer = 3f;
 
 	#endregion private members
 
@@ -25,21 +25,21 @@ public class CGInitState : SKState<CarGameController> {
 //		CarGameEventController.OnInitGame (_context.wordGameData.letters);
 //		Messenger.Broadcast <string> (EventManager.GameState.INITGAME.ToString (), _context.wordGameData.letters);
 		if (_context.givenLetters.Length > 0) {
-			Messenger.Broadcast <string, string> (EventManager.GameState.INIT.ToString (), _context.givenLetters.Substring (0, 1),_context.givenLetters);
+			Messenger.Broadcast <string, string> (EventManager.GameState.INIT.ToString (), _context.givenLetters[0].ToString(), _context.givenLetters);
 
-			_machine.changeState <CGARMapState> ();
+//			_machine.changeState <CGARMapState> ();
 		}
 	}
 
 	public override void reason ()
 	{
-//		if (countDownTimer <= 0f) {
-//			_machine.changeState <CGStartState> ();
-//		}
+		if (countDownTimer <= 0f) {
+			_machine.changeState <CGARMapState> ();
+		}
 	}
 	public override void update (float deltaTime)
 	{
-//		countDownTimer -= Time.deltaTime;
+		countDownTimer -= Time.deltaTime;
 	}
 
 	public override void end ()

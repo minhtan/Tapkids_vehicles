@@ -116,6 +116,7 @@ public class CarGameController : MonoBehaviour {
 				{	
 					_machine.changeState <CGStartState> ();
 					mTransform.SetParent (_parent);
+					Messenger.Broadcast (EventManager.GUI.TOGGLE_GAME_PNL.ToString (), true);
 				}
 			} else {
 				GUIController.Instance.OpenDialog ("Please scan a vehicle!!!")
@@ -132,6 +133,8 @@ public class CarGameController : MonoBehaviour {
 
 			if(_machine.currentState.GetType () == typeof (CGStartState))
 				_machine.changeState <CGARMapState> ();
+			
+			Messenger.Broadcast (EventManager.GUI.TOGGLE_GAME_PNL.ToString (), true);
 		}
 	}
 

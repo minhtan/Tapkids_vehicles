@@ -18,6 +18,7 @@ public class EventManager {
 		//
 		TOGGLE_MENU_BTN,
 		TOGGLE_PLAYER_PNL,
+		TOGGLE_GAME_PNL,
 		TOGGLE_SFX_BTN,
 		TOGGLE_TUTORIAL,
 		//
