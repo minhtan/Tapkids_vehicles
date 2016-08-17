@@ -17,7 +17,6 @@ public class GestureLineDrawing : GestureDrawing
 	private int sqrMinPixelMove;
 	private bool canDraw = false;
 
-
 	void Awake ()
 	{
 		if (useEndCap) {
@@ -39,6 +38,8 @@ public class GestureLineDrawing : GestureDrawing
 	{
 		GameObject vestrosityGO = GameObject.Find ("VectorCanvas");
 		vestrosityGO.AddComponent<DestroyOnLoad> ();
+		Canvas canvas = vestrosityGO.GetComponent<Canvas> ();
+		canvas.sortingOrder = 100;
 	}
 
 	private void AddStroke (int index)
@@ -57,18 +58,12 @@ public class GestureLineDrawing : GestureDrawing
 
 	protected override void StrokeStart (Lean.LeanFinger finger)
 	{
-		if (!canDraw)
-			return;
-		
 		ChangeToNextStroke ();
 	}
 
 	protected override void StrokeDrag (Lean.LeanFinger finger)
 	{
-		if (!canDraw)
-			return;
-		
-		if ((finger.ScreenPosition - previousPosition).sqrMagnitude > sqrMinPixelMove && canDraw) {	
+		if ((finger.ScreenPosition - previousPosition).sqrMagnitude > sqrMinPixelMove) {	
 
 			previousPosition = finger.ScreenPosition;
 			currentLine.points2.Add (finger.ScreenPosition);
@@ -91,8 +86,6 @@ public class GestureLineDrawing : GestureDrawing
 			lineList [i].points2.Clear ();
 			lineList [i].Draw ();
 		}
-
-		canDraw = false;
 	}
 
 	/// <summary>
@@ -109,7 +102,6 @@ public class GestureLineDrawing : GestureDrawing
 
 		previousPosition = Input.mousePosition;
 		currentLine.points2.Add (Input.mousePosition);
-		canDraw = true;
 	}
 
 	public void SetDrawing(bool isActive)
