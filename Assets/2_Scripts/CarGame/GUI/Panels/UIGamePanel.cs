@@ -13,11 +13,11 @@ public class UIGamePanel : MonoBehaviour {
 
 	#region Mono
 	void OnEnable () {
-		Messenger.AddListener <bool, Transform> (EventManager.GUI.TOGGLE_GAME_PNL.ToString (), HandleToggleGamePanel);
+		Messenger.AddListener <bool> (EventManager.GUI.TOGGLE_GAME_PNL.ToString (), HandleToggleGamePanel);
 	}
 
 	void OnDisable () {
-		Messenger.RemoveListener  <bool, Transform> (EventManager.GUI.TOGGLE_GAME_PNL.ToString (), HandleToggleGamePanel);
+		Messenger.RemoveListener  <bool> (EventManager.GUI.TOGGLE_GAME_PNL.ToString (), HandleToggleGamePanel);
 	}
 
 	void Start () {
@@ -29,7 +29,7 @@ public class UIGamePanel : MonoBehaviour {
 	#endregion public functions
 
 	#region private functions
-	private void HandleToggleGamePanel (bool _isFound, Transform transform) {
+	private void HandleToggleGamePanel (bool _isFound) {
 		if (mCanvasGroup == null) return;
 
 		mCanvasGroup.alpha = _isFound ? 1f : 0f;

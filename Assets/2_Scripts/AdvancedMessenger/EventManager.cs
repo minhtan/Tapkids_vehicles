@@ -5,7 +5,6 @@ public class EventManager {
 	public enum GUI{
 		NOTIFY,
 		SHOWSUGGESTION,
-		NEXT,
 		//
 		TO_GARAGE,
 		TO_MENU,
@@ -29,6 +28,8 @@ public class EventManager {
 		REMOVE_LETTER,
 		//
 		DROPBUTTON,
+		NEXTBUTTON,
+
 //		CORRECTWORD,
 		// 
 		COUNTDOWN,

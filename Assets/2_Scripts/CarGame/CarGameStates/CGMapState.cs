@@ -10,7 +10,7 @@ public class CGARMapState : SKState<CarGameController> {
 	{
 		Debug.Log("Map State >>>");
 
-		Messenger.Broadcast <bool> (EventManager.GameState.START.ToString (), false);
+		Messenger.Broadcast <bool> (EventManager.GameState.START.ToString (), false);	// pause game
 //		for (int i = 0; i < _context.mTransform.childCount; i++) 
 //			_context.mTransform.GetChild (i).gameObject.SetActive (false);
 		

@@ -10,10 +10,10 @@ public class UICountDown : MonoBehaviour {
 
 	#region MONO
 	void OnEnable () {
-		Messenger.AddListener <string, string> (EventManager.GameState.INIT.ToString (), HandleInitGame);
+		Messenger.AddListener (EventManager.GUI.NEXTBUTTON.ToString (), HandleNextButton);
 	}
 	void OnDislabe () {
-		Messenger.RemoveListener <string, string> (EventManager.GameState.INIT.ToString (), HandleInitGame);
+		Messenger.RemoveListener (EventManager.GUI.NEXTBUTTON.ToString (), HandleNextButton);
 	}
 	void Start () {
 		mText = GetComponent <Text> ();
@@ -29,7 +29,7 @@ public class UICountDown : MonoBehaviour {
 			else {
 				flag = false;
 				mCanvasGroup.alpha = 0f;
-//				gameObject.SetActive(false);
+				Messenger.Broadcast (EventManager.GUI.COUNTDOWN.ToString ());
 			}
 		}
 	}
@@ -37,7 +37,7 @@ public class UICountDown : MonoBehaviour {
 	#endregion MONO
 
 	#region private methods
-	private void HandleInitGame (string _firstLetter, string _givenLetters){
+	private void HandleNextButton (){
 		flag = true;
 		mCanvasGroup.alpha = 1f;
 	}

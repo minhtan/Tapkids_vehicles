@@ -22,6 +22,8 @@ public class CarGameController : MonoBehaviour {
 	#endregion public members
 
 	#region private members
+
+	private bool countDownFinished = false;
 	#endregion private members
 
 	#region Mono
@@ -37,6 +39,8 @@ public class CarGameController : MonoBehaviour {
 		Messenger.AddListener <string> (EventManager.Vehicle.COLLECT_LETTER.ToString (), HandleCollectLetter);
 
 		Messenger.AddListener (EventManager.GUI.DROPBUTTON.ToString (), HandleDropLetter);
+
+		Messenger.AddListener (EventManager.GUI.COUNTDOWN.ToString (), HandleCountDown);
 	}
 
 	void Start () {
@@ -73,6 +77,8 @@ public class CarGameController : MonoBehaviour {
 		Messenger.RemoveListener <string> (EventManager.Vehicle.COLLECT_LETTER.ToString (), HandleCollectLetter);
 
 		Messenger.RemoveListener (EventManager.GUI.DROPBUTTON.ToString (), HandleDropLetter);
+
+		Messenger.RemoveListener (EventManager.GUI.COUNTDOWN.ToString (), HandleCountDown);
 	}
 
 	void OnDestroy () {
@@ -100,23 +106,24 @@ public class CarGameController : MonoBehaviour {
 	private void HandleARMapTracking (bool _isFound, Transform _parent) {
 		if (_machine == null) return;
 
+
 		if (_isFound) {	// FOUND MAP
-			AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.SCAN_MAP);
-
-			Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
-
-			// Enable rendering:
-			foreach (Renderer component in rendererComponents)
-			{
-				component.enabled = true;
-			}
-
 			if (givenLetters.Length > 0) {	// check given letters
-				if (_machine.currentState.GetType () == typeof (CGARMapState)) 
+				if (_machine.currentState.GetType () == typeof (CGARMapState) && countDownFinished) 
 				{	
+					AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.SCAN_MAP);
+
+					Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
+
+					// Enable rendering:
+					foreach (Renderer component in rendererComponents)
+					{
+						component.enabled = true;
+					}
 					_machine.changeState <CGStartState> ();
+
 					mTransform.SetParent (_parent);
-					Messenger.Broadcast (EventManager.GUI.TOGGLE_GAME_PNL.ToString (), true);
+					Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_GAME_PNL.ToString (), true);
 				}
 			} else {
 				GUIController.Instance.OpenDialog ("Please scan a vehicle!!!")
@@ -134,7 +141,7 @@ public class CarGameController : MonoBehaviour {
 			if(_machine.currentState.GetType () == typeof (CGStartState))
 				_machine.changeState <CGARMapState> ();
 			
-			Messenger.Broadcast (EventManager.GUI.TOGGLE_GAME_PNL.ToString (), true);
+			Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_GAME_PNL.ToString (), false);
 		}
 	}
 
@@ -161,6 +168,10 @@ public class CarGameController : MonoBehaviour {
 			collectedLetters = collectedLetters.Substring (0, collectedLetters.Length - 1);
 			AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.CARGAME_DROP_LETTER);
 		}
+	}
+
+	private void HandleCountDown () {
+		countDownFinished = true;
 	}
 	#endregion private functions
 }
