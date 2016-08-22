@@ -100,7 +100,7 @@ public class ArcadeCarController : MonoBehaviour {
 	#region public functions
 	// handle car movement
 	public void Move (float steer, float accel, float footbrake, float handbrake) {
-//		if (!isStart) return;
+		if (!isStart) return;
 
 		for (int i = 0; i < 4; i++) {
 			Quaternion quaternion;
@@ -381,11 +381,7 @@ public class ArcadeCarController : MonoBehaviour {
 
 	#region event subscribers
 	private void HandleStartGame (bool _state) {
-		if (_state) {
-			isStart = true;
-		} else {
-
-		}
+		isStart = _state;
 	}
 
 	private void HandleGameOver (int _starAmount) {

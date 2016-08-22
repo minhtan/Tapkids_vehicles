@@ -204,7 +204,6 @@ GameObject:
   - 4: {fileID: 498868}
   - 54: {fileID: 5442256}
   - 114: {fileID: 11450794}
-  - 114: {fileID: 11409522}
   m_Layer: 0
   m_Name: Ambulance
   m_TagString: Vehicle
@@ -615,17 +614,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.3098778, y: 1.4203384, z: 3.8246384}
   m_Center: {x: 0.014616907, y: 0.63634455, z: -0.35157824}
---- !u!114 &11409522
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 187932}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c517f888296b4370a2ff1ff77ff4e17, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &11450794
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -661,7 +649,7 @@ MonoBehaviour:
   - {fileID: 158406}
   - {fileID: 198482}
   - {fileID: 143752}
-  centerOfMass: {x: 0, y: -5, z: 0}
+  centerOfMass: {x: 0, y: -10, z: 0}
   maximumSteerAngle: 30
   steerHelper: 0.5
   m_TractionControl: 1
@@ -851,7 +839,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: centerOfMass.y
-      value: -5
+      value: -10
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: fullTorqueOverAllWheels

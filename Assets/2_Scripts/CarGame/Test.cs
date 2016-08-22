@@ -1,20 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System;
-using System.Linq;
+using UnityEngine.UI;
 
-public class Test : StateMachineBehaviour {
+public class Test : MonoBehaviour {
+	Text mText;
 
-
-	public bool active;
-	public override void OnStateEnter (Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-	{
-		Debug.Log ("Start " + layerIndex);
+	void Start () {
+		mText = GetComponent <Text> ();
 	}
 
-	public override void OnStateExit (Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-	{
-		
+	void FixedUpdate () {
+		Debug.Log (SecondsToHhMmSs ((int)Time.time));
 	}
-
+	private string SecondsToHhMmSs(int seconds)
+	{
+//		return string.Format("{0:00}:{1:00}:{2:00}",seconds/3600,(seconds/60)%60,seconds%60);
+		return string.Format("{0:00}:{1:00}", (seconds/60)%60, seconds%60);
+	}
 }

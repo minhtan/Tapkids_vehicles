@@ -106,7 +106,6 @@ GameObject:
   - 4: {fileID: 444702}
   - 54: {fileID: 5407840}
   - 114: {fileID: 11469050}
-  - 114: {fileID: 11498710}
   m_Layer: 0
   m_Name: Excavator
   m_TagString: Vehicle
@@ -712,7 +711,7 @@ MonoBehaviour:
   - {fileID: 173350}
   - {fileID: 134252}
   - {fileID: 173468}
-  centerOfMass: {x: 0, y: -5, z: 0}
+  centerOfMass: {x: 0, y: -10, z: 0}
   maximumSteerAngle: 30
   steerHelper: 0.5
   m_TractionControl: 1
@@ -725,17 +724,6 @@ MonoBehaviour:
   revRangeBoundary: 1
   m_SlipLimit: 0.3
   brakeTorque: 20000
---- !u!114 &11498710
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 135088}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c517f888296b4370a2ff1ff77ff4e17, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!146 &14625586
 WheelCollider:
   m_ObjectHideFlags: 1
@@ -917,7 +905,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: centerOfMass.y
-      value: -5
+      value: -10
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_TractionControl

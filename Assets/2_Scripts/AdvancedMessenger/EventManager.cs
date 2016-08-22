@@ -5,7 +5,6 @@ public class EventManager {
 	public enum GUI{
 		NOTIFY,
 		SHOWSUGGESTION,
-		NEXT,
 		//
 		TO_GARAGE,
 		TO_MENU,
@@ -18,6 +17,7 @@ public class EventManager {
 		//
 		TOGGLE_MENU_BTN,
 		TOGGLE_PLAYER_PNL,
+		TOGGLE_GAME_PNL,
 		TOGGLE_SFX_BTN,
 		TOGGLE_TUTORIAL,
 		//
@@ -28,6 +28,8 @@ public class EventManager {
 		REMOVE_LETTER,
 		//
 		DROPBUTTON,
+		NEXTBUTTON,
+
 //		CORRECTWORD,
 		// 
 		COUNTDOWN,
