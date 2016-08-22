@@ -61,7 +61,7 @@ public class GestureAutoDrawer : MonoBehaviour
 
 		rectTrans.localScale = Vector2.one * _scaleFactor;
 		Quaternion localRot = rectTrans.localRotation;
-		localRot.x = 0f;
+		localRot.x = 180f;
 		localRot.y = 0f;
 		localRot.z = 0f;
 		rectTrans.localRotation = localRot;
@@ -126,7 +126,6 @@ public class GestureAutoDrawer : MonoBehaviour
 			currentLine.points2.Add (new Vector2 (stroke [curIndex].X, stroke [curIndex].Y));
 
 			currentLine.Draw ();
-
 			yield return wait;
 		}
 	}
