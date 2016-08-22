@@ -29,7 +29,6 @@ public class EventManager {
 		//
 		DROPBUTTON,
 		NEXTBUTTON,
-
 //		CORRECTWORD,
 		// 
 		COUNTDOWN,
@@ -41,7 +40,12 @@ public class EventManager {
 		MENU_BTN_UP,
 		MENU_BTN_HOLD,
 		SPRITE_RUN_FINISH,
-		IAP_INIT
+		IAP_INIT,
+		// CAR GAME TUT
+		NEXT_TUT_BTN,
+		BACK_TUT_BTN,
+		SKIP_TUT_BTN
+
 	}
 
 	//

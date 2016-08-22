@@ -29,7 +29,7 @@ public class UINextButton : MonoBehaviour {
 	}
 
 	void ShowNextButton (string _) {
-		LeanTween.value (gameObject, 0f, 1f, 5f)
+		LeanTween.value (gameObject, 0f, 1f, 3f)
 			.setOnUpdate ((float alpha) => mCanvasGroup.alpha = alpha)
 			.setOnComplete (() => {
 				mCanvasGroup.interactable = true;

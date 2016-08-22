@@ -27,6 +27,7 @@ public static class GameConstant  {
 
 	public const string SFX_STATE = "SFX_STATE";
 
+//	public const string 
 	public enum unlockStatus{
 		VALID,
 		INVALID

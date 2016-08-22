@@ -1,87 +1,106 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 using System.Collections;
 
-public class UITutorialPanel : MonoBehaviour, IPointerClickHandler {
+public class UITutorialPanel : MonoBehaviour {
 
 	#region public members
-	public string panelName = "tutorial";
+	public GameObject ipad;
+	public GameObject icon;
+	public GameObject bubbleText;
+	public GameObject backButton;
+	public GameObject nextButton;
+	public GameObject skipButton;
 	#endregion public members
 
 	#region private members
-	private int currentStep = -1;
-
 	private CanvasGroup mCanvasGroup;
+	private int currentStep = 1;
 	#endregion private members
 
 	#region Mono
 	void OnEnable () {
-//		CarGameEventController.ToggleTutorialPanel += OnToggleTutorialPanel;
-		Messenger.AddListener <bool> (EventManager.GUI.TOGGLE_TUTORIAL.ToString (), HandleToggleTutorialPanel);
-	}
-
-	void Disable () {
-//		CarGameEventController.ToggleTutorialPanel -= OnToggleTutorialPanel;
-		Messenger.RemoveListener <bool> (EventManager.GUI.TOGGLE_TUTORIAL.ToString (), HandleToggleTutorialPanel);
+		Messenger.AddListener <bool> (EventManager.GUI.TOGGLE_TUTORIAL.ToString (), HandleToggleTutorial);
+		Messenger.AddListener <int> (EventManager.GUI.NEXT_TUT_BTN.ToString (), DoSomething);
+		Messenger.AddListener <int> (EventManager.GUI.BACK_TUT_BTN.ToString (), DoSomething);
+		Messenger.AddListener <int> (EventManager.GUI.SKIP_TUT_BTN.ToString (), DoSomething);
 	}
 
 	void Start () {
 		mCanvasGroup = GetComponent <CanvasGroup> ();
+		DisplayStep (currentStep);
+	}
+
+	void OnDisable () {
+		Messenger.RemoveListener <bool> (EventManager.GUI.TOGGLE_TUTORIAL.ToString (), HandleToggleTutorial);
+		Messenger.RemoveListener <int> (EventManager.GUI.NEXT_TUT_BTN.ToString (), DoSomething);
+		Messenger.RemoveListener <int> (EventManager.GUI.BACK_TUT_BTN.ToString (), DoSomething);
+		Messenger.RemoveListener <int> (EventManager.GUI.SKIP_TUT_BTN.ToString (), DoSomething);
 	}
 	#endregion Mono
-
-	#region IPointerClickHandler implementation
-
-	public void OnPointerClick (PointerEventData eventData)
-	{
-		RectTransform mRectTransform = GetComponent <RectTransform> ();
-		if (mRectTransform != null) {
-			Vector2 localCursor;
-			if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(GetComponent<RectTransform>(), eventData.position, eventData.pressEventCamera, out localCursor))
-				return;
-
-			if (localCursor.x > 0) { // NEXT
-				if (currentStep >= 0)
-					transform.GetChild (currentStep).gameObject.SetActive (false);
-
-				if ( currentStep < transform.childCount)
-					transform.GetChild (++currentStep).gameObject.SetActive (true);
-				if (currentStep > 3) {
-//					CarGameEventController.OnTogglePanel ("ingame");
-					HandleToggleTutorialPanel (false);
-					currentStep = -1;
-				}
-			} else { // SKIP
-//				CarGameEventController.OnTogglePanel ("ingame");
-				HandleToggleTutorialPanel (false);
-				currentStep = -1;
-			}
-//			Debug.Log("LocalCursor:" + localCursor);
-		}
-	}
-	#endregion
 
 	#region public functions
 	#endregion public functions
 
 	#region private functions
-	private void HandleToggleTutorialPanel (bool _isToggled) {
-		mCanvasGroup.alpha =_isToggled ? 1f : 0f;
-		mCanvasGroup.interactable = _isToggled ? true : false;
-		mCanvasGroup.blocksRaycasts = _isToggled ? true : false;
+	private void HandleToggleTutorial (bool _isFound) {
+		if (mCanvasGroup == null) return;
+
+		mCanvasGroup.alpha = _isFound ? 1f : 0f;
+		mCanvasGroup.blocksRaycasts = _isFound ? true : false;
+		mCanvasGroup.interactable = _isFound ? true : false;
 	}
-//	private void OnTogglePanel (string _name) {
-//		mCanvasGroup.alpha = panelName.Equals (_name) ? 1f : 0f;
-//		mCanvasGroup.interactable = panelName.Equals (_name) ? true : false;
-//		mCanvasGroup.blocksRaycasts = panelName.Equals (_name) ? true : false;
-//		LeanTween.value (gameObject, panelName.Equals (_name) ? 0f : 1f, panelName.Equals (_name) ? 1f : 0f, 1f)
-//			.setOnUpdate ((float alpha) => mCanvasGroup.alpha = alpha)
-//			.setOnComplete (() => { 
-//				mCanvasGroup.interactable = panelName.Equals (_name) ? true : false;
-//				mCanvasGroup.blocksRaycasts = panelName.Equals (_name) ? true : false;
-//			});
-//	}
+
+	private void DoSomething (int increment) {
+		currentStep += increment;
+		DisplayStep(currentStep);
+	}
+
+	private void DisplayStep (int step) {
+		switch(step) {
+		case 0:
+			// skip tut
+			break;
+		case 1:
+			// display ipad, tapu icon, buttons
+			LeanTween.value (ipad, 0f, 1f, 1f)
+				.setOnUpdate ((float alpha) => ipad.GetComponent<CanvasGroup> ().alpha = alpha)
+				.setOnComplete (() => {
+					LeanTween.value (icon, 0f, 1f, 1f)
+						.setOnUpdate ((float alpha) => icon.GetComponent<CanvasGroup> ().alpha = alpha)
+						.setOnComplete (() => {
+							bubbleText.GetComponent<Text> ().text = "Scan Any Vehicle Card";
+							LeanTween.value (bubbleText, 0f, 1f, 1f)
+								.setOnUpdate ((float alpha) => bubbleText.GetComponent<CanvasGroup> ().alpha = alpha)
+								.setOnComplete (() => {
+									LeanTween.value (nextButton, 0f, 1f, 1f)
+										.setOnUpdate ((float alpha) => nextButton.GetComponent<CanvasGroup> ().alpha = alpha)
+										.setOnComplete (() => {
+											nextButton.GetComponent<CanvasGroup> ().interactable = true;
+											nextButton.GetComponent<CanvasGroup> ().blocksRaycasts = true;
+											LeanTween.value (skipButton, 0f, 1f, 1f)
+												.setOnUpdate ((float alpha) => skipButton.GetComponent<CanvasGroup> ().alpha = alpha)
+												.setOnComplete (() => {
+													skipButton.GetComponent<CanvasGroup> ().interactable = true;
+													skipButton.GetComponent<CanvasGroup> ().blocksRaycasts = true;
+												});
+										});
+								});
+						});
+				});
+			Debug.Log (step);
+			break;
+
+		case 2:
+			Debug.Log (step);
+			break;
+
+		case 3:
+			Debug.Log (step);
+			break;
+		}
+	}
+
 	#endregion private functions
 
 }
