@@ -77,7 +77,12 @@ public class UITutorialPanel : MonoBehaviour {
 			}
 		} else {
 //			PlayerPrefs.SetInt (GameConstant.hasPlayedTutorial, 2);
-			PlayerDataController.Instance.UpdatePlayerTutorialState (0, true);
+			if (SceneController.Instance.GetCurrentSceneID () == SceneController.SceneID.CARGAME) {
+				PlayerDataController.Instance.UpdatePlayerTutorialState (0, true);
+			} else if (SceneController.Instance.GetCurrentSceneID () == SceneController.SceneID.CARGAME2) {
+				PlayerDataController.Instance.UpdatePlayerTutorialState (1, true);
+			}
+
 			HandleToggleTutorial (false);
 		}
 	}
