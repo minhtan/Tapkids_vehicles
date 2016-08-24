@@ -42,8 +42,8 @@ public class EventManager {
 		SPRITE_RUN_FINISH,
 		IAP_INIT,
 		// CAR GAME TUT
-		NEXT_TUT_BTN,
-		BACK_TUT_BTN,
+		NEXT_STEP_BTN,
+		PREVIOUS_STEP_BTN,
 		SKIP_TUT_BTN
 
 	}

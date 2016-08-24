@@ -107,4 +107,8 @@ public class SceneController : UnitySingletonPersistent<SceneController>
 			yield return null;
 		}
 	}
+
+	public SceneID GetCurrentSceneID () {
+		return _currentScene;
+	}
 }

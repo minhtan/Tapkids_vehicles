@@ -27,7 +27,15 @@ public static class GameConstant  {
 
 	public const string SFX_STATE = "SFX_STATE";
 
-//	public const string 
+	public const string LostLetterStep1 = "Scan Any Vehicle Card";
+	public const string LostLetterStep2 = "See Your Suggest And Press Next";
+	public const string LostLetterStep3 = "Now Scan Big Map And Ride To Collect The Letters";
+
+	public const string RoamingLetterStep1 = "Now Scan Big Map And Ride To Gather The Letters";
+	public const string RoamingLetterStep2 = "Press The Button To Drop The Collected Letters";
+	public const string RoamingLetterStep3 = "Press The Button To Check The Collected Letters";
+
+//	public const string hasPlayedTutorial = "hasPlayedTutorial";
 	public enum unlockStatus{
 		VALID,
 		INVALID

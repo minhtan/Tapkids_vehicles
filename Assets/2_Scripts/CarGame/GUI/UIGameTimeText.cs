@@ -7,7 +7,7 @@ public class UIGameTimeText : MonoBehaviour {
 	private Text mText;
 	private CanvasGroup mCanvasGroup;
 	bool flag = false;
-
+	float startTime;
 	#region MONO
 	void OnEnable () {
 		Messenger.AddListener (EventManager.GUI.COUNTDOWN.ToString (), HandleCountDown);
@@ -23,8 +23,10 @@ public class UIGameTimeText : MonoBehaviour {
 	}
 	void Update (){
 		if (flag) {
-			mText.text = SecondsToHhMmSs((int)Time.time);
-			Debug.Log (SecondsToHhMmSs((int)Time.time));
+			float t = Time.time - startTime;
+			mText.text = SecondsToHhMmSs(t);
+//			mText.text = SecondsToHhMmSs((int)t);
+//			Debug.Log (SecondsToHhMmSs((int)t));
 		}
 	}
 
@@ -33,6 +35,8 @@ public class UIGameTimeText : MonoBehaviour {
 	#region private methods
 	private void HandleCountDown (){
 		flag = true;
+		startTime = Time.time;
+
 		mCanvasGroup.alpha = 1f;
 	}
 
@@ -44,6 +48,10 @@ public class UIGameTimeText : MonoBehaviour {
 		return string.Format("{0:00}:{1:00}", (seconds/60)%60, seconds%60);
 	}
 
+	private string SecondsToHhMmSs(float t)
+	{
+		return ((int) t / 60).ToString() + ":" + (t % 60).ToString("f0");
+	}
 	#endregion private methods
 
 

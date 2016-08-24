@@ -8,7 +8,21 @@ public class CGARCardState : SKState<CarGameController> {
 	{
 		Debug.Log("Wait Letter State >>>");
 
-//		Messenger.Broadcast <string, float> (EventManager.GUI.NOTIFY.ToString(), GameConstant.LetterScanMessage, 3f);
+//		if (PlayerPrefs.HasKey (GameConstant.hasPlayedTutorial)) {
+//			if (PlayerPrefs.GetInt (GameConstant.hasPlayedTutorial) == 1) {
+//				Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_TUTORIAL.ToString (), true);
+//			} else {
+//				Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_TUTORIAL.ToString (), false);
+//			}
+//		} else {
+//			Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_TUTORIAL.ToString (), true);
+//		}
+
+		if (PlayerDataController.Instance.mPlayer.playedTuts[0] == true) {
+			Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_TUTORIAL.ToString (), false);
+		} else {
+			Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_TUTORIAL.ToString (), true);
+		}
 	}
 
 	public override void reason ()

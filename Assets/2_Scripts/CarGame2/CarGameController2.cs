@@ -125,6 +125,8 @@ public class CarGameController2 : MonoBehaviour {
 			} else {
 				// DO NOTHING
 			}
+
+			Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_GAME_PNL.ToString (), true);
 		} else {		// LOST MAP
 			
 			Renderer[] rendererComponents = GetComponentsInChildren<Renderer>(true);
@@ -140,6 +142,7 @@ public class CarGameController2 : MonoBehaviour {
 			} else {
 				// DO NOTHING
 			}
+			Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_GAME_PNL.ToString (), false);
 		}
 	}
 

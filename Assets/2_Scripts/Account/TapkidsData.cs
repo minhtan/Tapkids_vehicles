@@ -12,27 +12,29 @@ public class Player {
 	public int credit;
 	public int vehicleId;
 	public string vehicleName;
-//	public List <int> unlockedVehicles;
+	public bool[] playedTuts;
 	public Dictionary <int, int> unlockedVehicles;
 
 	public Player () {
 	}
 
-	public Player (int _id, int _currentCredit, int _currentVehicleId, string _currentVehicleName, Dictionary <int, int> _unlockedVehicles) {
+	public Player (int _id, int _currentCredit, int _currentVehicleId, string _currentVehicleName, Dictionary <int, int> _unlockedVehicles, bool[] _playedTuts) {
 		this.id = _id;
 		this.credit = _currentCredit;
 		this.vehicleId = _currentVehicleId;
 		this.vehicleName = _currentVehicleName;
 		this.unlockedVehicles = _unlockedVehicles;
+		this.playedTuts = _playedTuts;
 	}
 
-	public Player (int _id, string _name, int _currentCredit, int _currentVehicleId, string _currentVehicleName, Dictionary <int, int> _unlockedVehicles) {
+	public Player (int _id, string _name, int _currentCredit, int _currentVehicleId, string _currentVehicleName, Dictionary <int, int> _unlockedVehicles, bool[] _playedTuts) {
 		this.id = _id;
 		this.name = _name;
 		this.credit = _currentCredit;
 		this.vehicleId = _currentVehicleId;
 		this.vehicleName = _currentVehicleName;
 		this.unlockedVehicles = _unlockedVehicles;
+		this.playedTuts = _playedTuts;
 	}
 }
 
