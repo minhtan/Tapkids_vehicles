@@ -32,7 +32,7 @@ public class StartupWord : MonoBehaviour
 	{
 		snapShot = GameObject.FindObjectOfType<CaptureAndSave> ();
 		pauseMenu = GameObject.FindObjectOfType<UIPausePanel> ();
-		if(ArController.Instance != null){
+		if (ArController.Instance != null) {
 			ArController.Instance.ToggleAR (true);
 			ArController.Instance.SetCenterMode (false);
 			ArController.Instance.SetArMaxStimTargets (1);
@@ -41,8 +41,9 @@ public class StartupWord : MonoBehaviour
 		Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_MENU_BTN.ToString (), true);
 	}
 
-	void OnDestroy(){
-		if(ArController.Instance != null){
+	void OnDestroy ()
+	{
+		if (ArController.Instance != null) {
 			ArController.Instance.ToggleAR (false);
 			ArController.Instance.ToggleLight (false);
 		}
@@ -55,7 +56,7 @@ public class StartupWord : MonoBehaviour
 		StartupRecognizer.OnGestureReset += OnGestureReset;
 		Messenger.AddListener <bool, string> (EventManager.AR.LETTER_IMAGE_TRACKING.ToString (), OnLetterFound);
 		Messenger.AddListener <bool, string> (EventManager.AR.VEHICLE_IMAGE_TRACKING.ToString (), OnVehicleFound);
-		Messenger.AddListener( EventManager.GameState.RESET.ToString(), OnExitClick );
+		Messenger.AddListener (EventManager.GameState.RESET.ToString (), OnExitClick);
 
 		_recognizer.RegisterInputHandler ();
 	}
@@ -67,7 +68,7 @@ public class StartupWord : MonoBehaviour
 		StartupRecognizer.OnGestureReset -= OnGestureReset;
 		Messenger.RemoveListener <bool, string> (EventManager.AR.LETTER_IMAGE_TRACKING.ToString (), OnLetterFound);
 		Messenger.RemoveListener <bool, string> (EventManager.AR.VEHICLE_IMAGE_TRACKING.ToString (), OnVehicleFound);
-		Messenger.RemoveListener( EventManager.GameState.RESET.ToString(), OnExitClick );
+		Messenger.RemoveListener (EventManager.GameState.RESET.ToString (), OnExitClick);
 
 	}
 
@@ -76,7 +77,7 @@ public class StartupWord : MonoBehaviour
 	{
 		ArController.Instance.ToggleAR (false);
 
-		if(pauseMenu != null){
+		if (pauseMenu != null) {
 			pauseMenu.ToggleResetButton (true);
 		}
 
@@ -88,17 +89,17 @@ public class StartupWord : MonoBehaviour
 
 	public void OnExitClick ()
 	{
-		if(canvasLetter.activeSelf){
+		if (canvasLetter.activeSelf) {
 			ArController.Instance.ToggleAR (true);
 
-			if(pauseMenu != null){
+			if (pauseMenu != null) {
 				pauseMenu.ToggleResetButton (false);
 			}
 
 			_drawer.ResetStroke ();
 			canvasLetter.SetActive (false);
 //		_exitBut.SetActive (false);
-		}else{
+		} else {
 			
 		}
 	}
@@ -185,9 +186,7 @@ public class StartupWord : MonoBehaviour
 
 	private void DrawTutorial ()
 	{
-		GameObject autoDrawStrokes = GameObject.Find ("GestureAutoStroke0");
-
-		string gestureName = _currentLetterBut.Letter.ToString () + "training";
+		string gestureName = _currentLetterBut.Letter + "training";
 		_autoDrawer.AutoDrawGesture (gestureName);
 	}
 
@@ -208,16 +207,19 @@ public class StartupWord : MonoBehaviour
 		StartCoroutine (ShowDialog ());
 	}
 
-	IEnumerator ShowDialog(){
+	IEnumerator ShowDialog ()
+	{
 		yield return null;
-		GUIController.Instance.OpenDialog (LeanLocalization.GetTranslation("PhotoCaptured").Text).AddButton (
-			LeanLocalization.GetTranslation("Ok").Text, 
+		GUIController.Instance.OpenDialog (LeanLocalization.GetTranslation ("PhotoCaptured").Text).AddButton (
+			LeanLocalization.GetTranslation ("Ok").Text, 
 			UIDialogButton.Anchor.CENTER, 0, -25,
-			() => {}
+			() => {
+			}
 		);
 	}
 
-	public void _PlayModelSound(){
+	public void _PlayModelSound ()
+	{
 		AudioClip clip = Resources.Load<AudioClip> ("Sounds/" + targetName);
 		if (clip != null) {
 			AudioManager.Instance.PlayTemp (clip);

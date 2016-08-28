@@ -34,7 +34,7 @@ public class GestureLineDrawing : GestureDrawing
 		sqrMinPixelMove = minPixelMove * minPixelMove;
 	}
 
-	void Start()
+	void Start ()
 	{
 		GameObject vestrosityGO = GameObject.Find ("VectorCanvas");
 		vestrosityGO.AddComponent<DestroyOnLoad> ();
@@ -73,7 +73,7 @@ public class GestureLineDrawing : GestureDrawing
 
 			currentLine.Draw ();
 		}
-	}	
+	}
 
 	protected override void StrokeEnd (Lean.LeanFinger finger)
 	{
@@ -86,6 +86,7 @@ public class GestureLineDrawing : GestureDrawing
 			lineList [i].points2.Clear ();
 			lineList [i].Draw ();
 		}
+
 	}
 
 	/// <summary>
@@ -104,7 +105,7 @@ public class GestureLineDrawing : GestureDrawing
 		currentLine.points2.Add (Input.mousePosition);
 	}
 
-	public void SetDrawing(bool isActive)
+	public void SetDrawing (bool isActive)
 	{
 		canDraw = isActive;
 	}
