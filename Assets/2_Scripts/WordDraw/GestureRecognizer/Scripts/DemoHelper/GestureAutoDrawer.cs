@@ -25,6 +25,7 @@ public class GestureAutoDrawer : MonoBehaviour
 
 	private List<Gesture> _gestureList;
 	private Gesture _currentGesture;
+	private List<GameObject> _autoStrokeGOList;
 
 	public static UnityAction<Gesture> OnDrawGestureDone;
 
@@ -40,13 +41,14 @@ public class GestureAutoDrawer : MonoBehaviour
 		lineList = new List<VectorLine> ();
 
 		_gestureList = new List<Gesture> ();
+		_autoStrokeGOList = new List<GameObject> ();
 		GestureIO.LoadPremadeGestureTemplates ("GestureTraining", _gestureList);
 	}
 
 	private void AddStroke (int index)
 	{
 		VectorLine line = new VectorLine ("GestureAutoStroke" + index, new List<Vector2> (), lineMaterial, lineWidth, LineType.Continuous, Joins.Weld);
-
+		
 		// Optimization for updating only the last point of the currentLine, and the rest is not re-computed
 		line.endPointsUpdate = 1;
 
@@ -67,6 +69,8 @@ public class GestureAutoDrawer : MonoBehaviour
 		rectTrans.localRotation = localRot;
 
 		lineList.Add (line);
+
+		_autoStrokeGOList.Add (rectTrans.gameObject);
 	}
 
 	public void AutoDrawGesture (string gestureName)
@@ -92,11 +96,19 @@ public class GestureAutoDrawer : MonoBehaviour
 			lineList [i].points2.Clear ();
 			lineList [i].Draw ();
 		}
+
+		lineList.Clear ();
+
+		foreach (GameObject strokeGO in _autoStrokeGOList) {
+			Destroy (strokeGO);
+		}
+
+		_autoStrokeGOList.Clear ();
 	}
 
 	private IEnumerator DrawPointCor (List<List<Point>> points, float duration)
 	{
-		
+
 		WaitForSeconds wait = new WaitForSeconds (duration);
 		int curIndex = 0;
 		int curStroke = 0;
@@ -114,10 +126,10 @@ public class GestureAutoDrawer : MonoBehaviour
 
 					if (OnDrawGestureDone != null)
 						OnDrawGestureDone (_currentGesture);
-					
+
 					yield break;
 				}
-				
+
 				curIndex = 0;
 				currentLine = lineList [curStroke];
 				stroke = points [curStroke];
