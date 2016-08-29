@@ -12,7 +12,7 @@ public class PlayerDataController : UnitySingletonPersistent<PlayerDataControlle
 
 	private int currentPlayer = 0;
 	#region MONO
-	void Awake () {
+	public override void Awake () {
 		base.Awake ();
 
 		Debug.Log (Application.persistentDataPath);
@@ -103,6 +103,8 @@ public class PlayerDataController : UnitySingletonPersistent<PlayerDataControlle
 				mPlayer.playedTuts[i] = _state;
 			}
 		}
+		TapkidsData.players[currentPlayer].playedTuts = mPlayer.playedTuts;
+		TapkidsData.Save ();
 	}
 	#endregion public functions
 

@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class UITutorialPanel : MonoBehaviour {
+public class UITutorialPanel2 : MonoBehaviour {
 
 	#region public members
 	public GameObject ipad;
@@ -29,23 +29,22 @@ public class UITutorialPanel : MonoBehaviour {
 
 	#region Mono
 	void OnEnable () {
-		Messenger.AddListener <bool> (EventManager.GUI.TOGGLE_TUTORIAL.ToString (), HandleToggleTutorial);
+		Messenger.AddListener (EventManager.GUI.TOGGLE_TUTORIAL.ToString (), TurnOnTutorial);
 		Messenger.AddListener <int> (EventManager.GUI.NEXT_STEP_BTN.ToString (), HandleTutorialButtons);
 		Messenger.AddListener <int> (EventManager.GUI.PREVIOUS_STEP_BTN.ToString (), HandleTutorialButtons);
-		Messenger.AddListener <int> (EventManager.GUI.SKIP_TUT_BTN.ToString (), HandleTutorialButtons);
+		Messenger.AddListener (EventManager.GUI.SKIP_TUT_BTN.ToString (), TurnOffTutorial);
 	}
 
 	void Start () {
-		mCanvasGroup = GetComponent <CanvasGroup> ();
 //		DisplayLostLetterTutorial (currentStep);
-		DisplayRoamingLetterTutorial (currentStep);
+//		DisplayRoamingLetterTutorial (currentStep);
 	}
 
 	void OnDisable () {
-		Messenger.RemoveListener <bool> (EventManager.GUI.TOGGLE_TUTORIAL.ToString (), HandleToggleTutorial);
+		Messenger.RemoveListener (EventManager.GUI.TOGGLE_TUTORIAL.ToString (), TurnOnTutorial);
 		Messenger.RemoveListener <int> (EventManager.GUI.NEXT_STEP_BTN.ToString (), HandleTutorialButtons);
 		Messenger.RemoveListener <int> (EventManager.GUI.PREVIOUS_STEP_BTN.ToString (), HandleTutorialButtons);
-		Messenger.RemoveListener <int> (EventManager.GUI.SKIP_TUT_BTN.ToString (), HandleTutorialButtons);
+		Messenger.RemoveListener (EventManager.GUI.SKIP_TUT_BTN.ToString (), TurnOffTutorial);
 	}
 	#endregion Mono
 
@@ -53,22 +52,26 @@ public class UITutorialPanel : MonoBehaviour {
 	#endregion public functions
 
 	#region private functions
-	private void HandleToggleTutorial (bool _isFound) {
+	private void TurnOnTutorial () {
+		if (mCanvasGroup == null) 
+			mCanvasGroup = GetComponent <CanvasGroup> ();
 		
-		if (mCanvasGroup == null) return;
+		mCanvasGroup.alpha = 1f;
+		mCanvasGroup.blocksRaycasts = true;
+		mCanvasGroup.interactable = true;
 
-		mCanvasGroup.alpha = _isFound ? 1f : 0f;
-		mCanvasGroup.blocksRaycasts = _isFound ? true : false;
-		mCanvasGroup.interactable = _isFound ? true : false;
+		HandleTutorialButtons (0);
 	}
 
 	private void HandleTutorialButtons (int increment) {
-		if (increment == 0) {
-			HandleToggleTutorial (false);
+		
+		currentStep += increment;
+
+		if (currentStep == 0) {
+			TurnOffTutorial ();
 			return;
 		}
 
-		currentStep += increment;
 		if (currentStep <= 3) {
 			if (SceneController.Instance.GetCurrentSceneID () == SceneController.SceneID.CARGAME) {
 				DisplayLostLetterTutorial (currentStep);
@@ -76,15 +79,20 @@ public class UITutorialPanel : MonoBehaviour {
 				DisplayRoamingLetterTutorial (currentStep);
 			}
 		} else {
-//			PlayerPrefs.SetInt (GameConstant.hasPlayedTutorial, 2);
 			if (SceneController.Instance.GetCurrentSceneID () == SceneController.SceneID.CARGAME) {
 				PlayerDataController.Instance.UpdatePlayerTutorialState (0, true);
-			} else if (SceneController.Instance.GetCurrentSceneID () == SceneController.SceneID.CARGAME2) {
-				PlayerDataController.Instance.UpdatePlayerTutorialState (1, true);
-			}
-
-			HandleToggleTutorial (false);
+			} 
+			TurnOffTutorial ();
 		}
+	}
+
+	private void TurnOffTutorial () {
+		LeanTween.cancelAll ();
+		mCanvasGroup.alpha = 0f;
+		mCanvasGroup.blocksRaycasts = false;
+		mCanvasGroup.interactable = false;
+		if (SceneController.Instance.GetCurrentSceneID () == SceneController.SceneID.CARGAME2)
+			Messenger.Broadcast (EventManager.GUI.ACTIVATE_COUNT_DOWN.ToString ()); // skip 
 	}
 
 	private void DisplayLostLetterTutorial (int step) {
@@ -106,7 +114,6 @@ public class UITutorialPanel : MonoBehaviour {
 				LeanTween.value (icon, 0f, 1f, duration)
 					.setOnUpdate ((float alpha) => icon.GetComponent<CanvasGroup> ().alpha = alpha)
 					.setOnComplete (() => {
-
 						bubbleText.GetComponentInChildren<Text> ().text = StringUltil.TextWrap (GameConstant.LostLetterStep1, 10);
 						LeanTween.value (bubbleText, 0f, 1f, duration)
 							.setOnUpdate ((float alpha) => bubbleText.GetComponent<CanvasGroup> ().alpha = alpha)

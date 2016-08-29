@@ -10,13 +10,14 @@ public class UIGameTimeText : MonoBehaviour {
 	float startTime;
 	#region MONO
 	void OnEnable () {
-		Messenger.AddListener (EventManager.GUI.COUNTDOWN.ToString (), HandleCountDown);
+		Messenger.AddListener (EventManager.GUI.FINISH_COUNTDOWN.ToString (), HandleCountDown);
 		Messenger.AddListener <int> (EventManager.GameState.GAMEOVER.ToString (), HandleGameOver);
 	}
-	void OnDislabe () {
-		Messenger.RemoveListener (EventManager.GUI.COUNTDOWN.ToString (), HandleCountDown);
+	void OnDisable () {
+		Messenger.RemoveListener (EventManager.GUI.FINISH_COUNTDOWN.ToString (), HandleCountDown);
 		Messenger.RemoveListener <int> (EventManager.GameState.GAMEOVER.ToString (), HandleGameOver);
 	}
+
 	void Start () {
 		mText = GetComponent <Text> ();
 		mCanvasGroup = GetComponent <CanvasGroup> ();
@@ -34,6 +35,7 @@ public class UIGameTimeText : MonoBehaviour {
 
 	#region private methods
 	private void HandleCountDown (){
+		Debug.Log ("start game time");
 		flag = true;
 		startTime = Time.time;
 

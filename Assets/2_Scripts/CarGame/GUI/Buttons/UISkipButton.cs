@@ -10,7 +10,7 @@ public class UISkipButton : MonoBehaviour {
 		mButton = GetComponent <Button> ();
 		if (mButton != null) {
 			mButton.onClick.AddListener (delegate {
-				Messenger.Broadcast <int> (EventManager.GUI.SKIP_TUT_BTN.ToString (), 0);				
+				Messenger.Broadcast (EventManager.GUI.SKIP_TUT_BTN.ToString ());				
 			});
 		}
 	}

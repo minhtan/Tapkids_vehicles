@@ -7,21 +7,8 @@ public class CGARCardState : SKState<CarGameController> {
 	public override void begin ()
 	{
 		Debug.Log("Wait Letter State >>>");
-
-//		if (PlayerPrefs.HasKey (GameConstant.hasPlayedTutorial)) {
-//			if (PlayerPrefs.GetInt (GameConstant.hasPlayedTutorial) == 1) {
-//				Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_TUTORIAL.ToString (), true);
-//			} else {
-//				Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_TUTORIAL.ToString (), false);
-//			}
-//		} else {
-//			Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_TUTORIAL.ToString (), true);
-//		}
-
-		if (PlayerDataController.Instance.mPlayer.playedTuts[0] == true) {
-			Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_TUTORIAL.ToString (), false);
-		} else {
-			Messenger.Broadcast <bool> (EventManager.GUI.TOGGLE_TUTORIAL.ToString (), true);
+		if (PlayerDataController.Instance.mPlayer.playedTuts[0] == false) {
+			Messenger.Broadcast (EventManager.GUI.TOGGLE_TUTORIAL.ToString ());
 		}
 	}
 

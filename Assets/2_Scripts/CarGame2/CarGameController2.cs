@@ -41,6 +41,8 @@ public class CarGameController2 : MonoBehaviour {
 		Messenger.AddListener (EventManager.GUI.DROPBUTTON.ToString (), HandleDropLetter);
 
 		Messenger.AddListener (EventManager.Vehicle.GATHER_LETTER.ToString (), HandleGatherLetter);
+
+		Messenger.AddListener (EventManager.GUI.FINISH_COUNTDOWN.ToString (), HandleCountDown);
 	}
 
 	void Start () {
@@ -97,6 +99,8 @@ public class CarGameController2 : MonoBehaviour {
 		Messenger.RemoveListener (EventManager.GUI.DROPBUTTON.ToString (), HandleDropLetter);
 
 		Messenger.RemoveListener (EventManager.Vehicle.GATHER_LETTER.ToString (), HandleGatherLetter);
+
+		Messenger.AddListener (EventManager.GUI.FINISH_COUNTDOWN.ToString (), HandleCountDown);
 	}
 
 	void OnDestroy () {
@@ -178,6 +182,10 @@ public class CarGameController2 : MonoBehaviour {
 		} else {
 			AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.INCORRECT_WORD);
 		}
+	}
+
+	void HandleCountDown () {
+		_machine.changeState <CG2ARMapState> ();
 	}
 	#endregion private function
 }

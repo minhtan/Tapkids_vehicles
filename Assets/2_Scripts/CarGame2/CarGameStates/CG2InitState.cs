@@ -5,7 +5,7 @@ using Prime31.StateKit;
 public class CG2InitState : SKState<CarGameController2> {
 
 	#region private members
-	private	float countDownTimer = 3f;
+//	private	float countDownTimer = 3f;
 
 	#endregion private members
 
@@ -13,6 +13,13 @@ public class CG2InitState : SKState<CarGameController2> {
 	public override void begin ()
 	{
 		Debug.Log("Init State >>>");
+
+		if (PlayerDataController.Instance.mPlayer.playedTuts[1] == false) {
+			Messenger.Broadcast (EventManager.GUI.TOGGLE_TUTORIAL.ToString ());
+		} else {
+			Messenger.Broadcast (EventManager.GUI.ACTIVATE_COUNT_DOWN.ToString ());
+		}
+
 		_context.wordGameDatas = DataUltility.ReadDataForWordGame ();
 		_context.wordGameData = _context.RandomData ();
 
@@ -21,19 +28,21 @@ public class CG2InitState : SKState<CarGameController2> {
 
 		// broadcast event load car, letter, obstacle
 		Messenger.Broadcast <string, string> (EventManager.GameState.INIT.ToString (), _context.RandomLetter ().ToString (), _context.wordGameData.letters);
+
+//		
 	}
 
 	public override void reason ()
 	{
-		if (countDownTimer <= 0f) {
-			_machine.changeState <CG2ARMapState> ();
-		}
+//		if (countDownTimer <= 0f) {
+//			_machine.changeState <CG2ARMapState> ();
+//		}
 	}
 	public override void update (float deltaTime)
 	{
-		if (countDownTimer > 0) {
-			countDownTimer -= Time.deltaTime;
-		}
+//		if (countDownTimer > 0) {
+//			countDownTimer -= Time.deltaTime;
+//		}
 	}
 
 	public override void end ()
