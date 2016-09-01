@@ -41,7 +41,10 @@ public class EventManager {
 		MENU_BTN_UP,
 		MENU_BTN_HOLD,
 		SPRITE_RUN_FINISH,
-		IAP_INIT
+		IAP_INIT,
+
+		//
+		LETTER_AUTODRAW_DONE
 	}
 
 	//

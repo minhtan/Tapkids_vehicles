@@ -9,6 +9,7 @@ using PlayMaker;
 using Lean;
 using System.Collections;
 using System;
+using UnityEngine.UI;
 
 namespace Vuforia
 {
@@ -84,10 +85,12 @@ namespace Vuforia
 
 		private void OnTrackingFound(){
 			fsm.Fsm.Event("found");
+			Debug.Log ("Found " + targetName);
 		}
 
 		private void OnTrackingLost(){
 			fsm.Fsm.Event("lost");
+			Debug.Log ("Lost " + targetName);
 		}
 
 		public void Ready(){
@@ -141,6 +144,7 @@ namespace Vuforia
 		}
 
 		void _ShowModel(){
+			GameObject.Find ("DebugText").GetComponent<Text>().text = "Found " + targetName;
 			if (isLetter) {
 				StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (AssetController.bundleName, targetName, (bundle) => {
 					go = GameObject.Instantiate (bundle, transform.position, transform.rotation) as GameObject;
@@ -200,6 +204,7 @@ namespace Vuforia
 		} 
 
 		void _HideModel(){
+			GameObject.Find ("DebugText").GetComponent<Text>().text = "Lost " + targetName;
 			if(go != null){
 				GameObject.DestroyImmediate(go);
 				go = null;

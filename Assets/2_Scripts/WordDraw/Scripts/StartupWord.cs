@@ -10,12 +10,11 @@ public class StartupWord : MonoBehaviour
 {
 
 	public LeanGestureRecognizer _recognizer;
-	public GestureAutoDrawer _autoDrawer;
+//	public GestureAutoDrawer _autoDrawer;
 	public GestureLineDrawing _drawer;
 	public GameObject _letterHolder;
 	public UITutText _tutText;
-	public GameObject _drawLetterBut;
-	public GameObject _exitBut;
+
 	public float _showTemplateDuration = 2f;
 	public float _scaleTemplateFactor = 3f;
 	private UILetterButton _currentLetterBut;
@@ -27,11 +26,14 @@ public class StartupWord : MonoBehaviour
 	public GameObject canvasLetter;
 
 	string targetName;
+	PlayMakerFSM fsm;
+	GameObject sampleLetter;
 
 	void Start ()
 	{
 		snapShot = GameObject.FindObjectOfType<CaptureAndSave> ();
 		pauseMenu = GameObject.FindObjectOfType<UIPausePanel> ();
+		fsm = GetComponent<PlayMakerFSM> ();
 		if (ArController.Instance != null) {
 			ArController.Instance.ToggleAR (true);
 			ArController.Instance.SetCenterMode (false);
@@ -51,25 +53,26 @@ public class StartupWord : MonoBehaviour
 
 	void OnEnable ()
 	{
-		GestureAutoDrawer.OnDrawGestureDone += OnDrawGestureDone;
+//		GestureAutoDrawer.OnDrawGestureDone += OnDrawGestureDone;
 		StartupRecognizer.OnGestureDetected += OnGestureDetected;
 		StartupRecognizer.OnGestureReset += OnGestureReset;
 		Messenger.AddListener <bool, string> (EventManager.AR.LETTER_IMAGE_TRACKING.ToString (), OnLetterFound);
 		Messenger.AddListener <bool, string> (EventManager.AR.VEHICLE_IMAGE_TRACKING.ToString (), OnVehicleFound);
 		Messenger.AddListener (EventManager.GameState.RESET.ToString (), OnExitClick);
+		Messenger.AddListener (EventManager.GUI.LETTER_AUTODRAW_DONE.ToString(), HandleLetterAutoDrawDone);
 
 		_recognizer.RegisterInputHandler ();
 	}
 
 	void OnDisable ()
 	{
-		GestureAutoDrawer.OnDrawGestureDone -= OnDrawGestureDone;
+//		GestureAutoDrawer.OnDrawGestureDone -= OnDrawGestureDone;
 		StartupRecognizer.OnGestureDetected -= OnGestureDetected;
 		StartupRecognizer.OnGestureReset -= OnGestureReset;
 		Messenger.RemoveListener <bool, string> (EventManager.AR.LETTER_IMAGE_TRACKING.ToString (), OnLetterFound);
 		Messenger.RemoveListener <bool, string> (EventManager.AR.VEHICLE_IMAGE_TRACKING.ToString (), OnVehicleFound);
 		Messenger.RemoveListener (EventManager.GameState.RESET.ToString (), OnExitClick);
-
+		Messenger.RemoveListener (EventManager.GUI.LETTER_AUTODRAW_DONE.ToString(), HandleLetterAutoDrawDone);
 	}
 
 
@@ -81,9 +84,14 @@ public class StartupWord : MonoBehaviour
 			pauseMenu.ToggleResetButton (true);
 		}
 
-		pnlLetterUI.SetActive (false);
-		_tutText.SetTutText (UITutText.TutText.WELCOME);
+		pnlVehicleUI.SetActive (false);
+		StartCoroutine (CallTut ());
+	}
 
+	IEnumerator CallTut(){
+		yield return null;
+		fsm.Fsm.BroadcastEvent ("G_reset");
+		_tutText.SetTutText (UITutText.TutText.WELCOME);
 		DrawTutorial ();
 	}
 
@@ -96,9 +104,9 @@ public class StartupWord : MonoBehaviour
 				pauseMenu.ToggleResetButton (false);
 			}
 
-			_drawer.ResetStroke ();
+//			_drawer.ResetStroke ();
+			DestroySampleLetter();
 			canvasLetter.SetActive (false);
-//		_exitBut.SetActive (false);
 		} else {
 			
 		}
@@ -115,28 +123,30 @@ public class StartupWord : MonoBehaviour
 		pnlLetterUI.SetActive (found);
 		targetName = letterName;
 
-		if (!found) {
-			_drawLetterBut.SetActive (false);
+		if (found == false) {
 			return;
 		}
 
-		_currentLetterBut = _letterHolder.transform.GetChild (0).GetComponent<UILetterButton> ();
+//		_currentLetterBut = _letterHolder.transform.GetChild (0).GetComponent<UILetterButton> ();
+//
+//		_currentLetterBut.Letter = WordDrawConfig.GetLetterFromName (letterName);
+//
+//		GameObject letterGo = Resources.Load<GameObject> ("Letters/" + letterName.ToUpper ());
+//		GameObject child = _letterHolder.transform.GetChild (0).gameObject;
+//
+//		Image image = child.GetComponent<Image> ();
+//		image.sprite = letterGo.GetComponent<Image> ().sprite;
+//
+//		image.SetNativeSize ();
+//		RectTransform rectTrans = child.GetComponent<RectTransform> ();
+//		Vector3 size = rectTrans.sizeDelta;
+//		size.x = size.x * _scaleTemplateFactor;
+//		size.y = size.y * _scaleTemplateFactor;
+//		rectTrans.sizeDelta = size;
 
+		_currentLetterBut = _letterHolder.transform.GetChild (0).GetComponent<UILetterButton> ();
 		_currentLetterBut.Letter = WordDrawConfig.GetLetterFromName (letterName);
 
-		GameObject letterGo = Resources.Load<GameObject> ("Letters/" + letterName.ToUpper ());
-		GameObject child = _letterHolder.transform.GetChild (0).gameObject;
-
-		Image image = child.GetComponent<Image> ();
-		image.sprite = letterGo.GetComponent<Image> ().sprite;
-
-		image.SetNativeSize ();
-		RectTransform rectTrans = child.GetComponent<RectTransform> ();
-		Vector3 size = rectTrans.sizeDelta;
-		size.x = size.x * _scaleTemplateFactor;
-		size.y = size.y * _scaleTemplateFactor;
-		rectTrans.sizeDelta = size;
-		_drawLetterBut.SetActive (true);
 	}
 
 	private void OnDrawGestureDone (Gesture gesture)
@@ -166,6 +176,11 @@ public class StartupWord : MonoBehaviour
 		}
 	}
 
+	void HandleLetterAutoDrawDone(){
+		_tutText.SetTutText (UITutText.TutText.LET_WRITE);
+		SetActiveInputGesture (true);
+	}
+
 	private void SetActiveInputGesture (bool active)
 	{
 		_drawer.enabled = active;
@@ -186,8 +201,18 @@ public class StartupWord : MonoBehaviour
 
 	private void DrawTutorial ()
 	{
-		string gestureName = _currentLetterBut.Letter + "training";
-		_autoDrawer.AutoDrawGesture (gestureName);
+//		string gestureName = _currentLetterBut.Letter + "training";
+//		_autoDrawer.AutoDrawGesture (gestureName);
+
+		sampleLetter = Instantiate (Resources.Load<GameObject> ("StartUpLetters/" + targetName));
+		sampleLetter.transform.SetParent (_letterHolder.transform, false);
+	}
+
+	void DestroySampleLetter(){
+		if(sampleLetter != null){
+			Destroy (sampleLetter);
+			sampleLetter = null;
+		}
 	}
 
 	private IEnumerator DelayResetStroke ()
@@ -196,9 +221,9 @@ public class StartupWord : MonoBehaviour
 
 		SetActiveInputGesture (true);
 
-		_autoDrawer.ResetStroke ();
+//		_autoDrawer.ResetStroke ();
+		DestroySampleLetter ();
 		_tutText.SetTutText (UITutText.TutText.LET_WRITE);
-//		_exitBut.SetActive (true);
 	}
 
 	public void _CaptureAndSave ()
