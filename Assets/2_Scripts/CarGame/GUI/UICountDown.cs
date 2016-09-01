@@ -10,15 +10,17 @@ public class UICountDown : MonoBehaviour {
 
 	#region MONO
 	void OnEnable () {
-		Messenger.AddListener (EventManager.GUI.NEXTBUTTON.ToString (), HandleNextButton);
+		Messenger.AddListener (EventManager.GUI.NEXTBUTTON.ToString (), ActivateCountDown);
+		Messenger.AddListener (EventManager.GUI.ACTIVATE_COUNT_DOWN.ToString (), ActivateCountDown);
 	}
-	void OnDislabe () {
-		Messenger.RemoveListener (EventManager.GUI.NEXTBUTTON.ToString (), HandleNextButton);
+	void OnDisable () {
+		Messenger.RemoveListener (EventManager.GUI.NEXTBUTTON.ToString (), ActivateCountDown);
+		Messenger.RemoveListener (EventManager.GUI.ACTIVATE_COUNT_DOWN.ToString (), ActivateCountDown);
 	}
+
 	void Start () {
 		mText = GetComponent <Text> ();
 		mCanvasGroup = GetComponent <CanvasGroup> ();
-		countDownTimer = 3f;
 	}
 
 	void Update (){
@@ -29,7 +31,7 @@ public class UICountDown : MonoBehaviour {
 			else {
 				flag = false;
 				mCanvasGroup.alpha = 0f;
-				Messenger.Broadcast (EventManager.GUI.COUNTDOWN.ToString ());
+				Messenger.Broadcast (EventManager.GUI.FINISH_COUNTDOWN.ToString ());
 			}
 		}
 	}
@@ -37,9 +39,17 @@ public class UICountDown : MonoBehaviour {
 	#endregion MONO
 
 	#region private methods
-	private void HandleNextButton (){
+	private void ActivateCountDown (){
+		Debug.Log ("ActivateCountDown");
 		flag = true;
-		mCanvasGroup.alpha = 1f;
+		countDownTimer = 3f;
+		if (mCanvasGroup != null) {
+			mCanvasGroup.alpha = 1f;
+		} else {
+			mCanvasGroup = GetComponent <CanvasGroup> ();
+			mCanvasGroup.alpha = 1f;
+		}
+		
 	}
 	#endregion private methods
 }

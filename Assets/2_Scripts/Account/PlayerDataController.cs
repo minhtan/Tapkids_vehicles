@@ -12,8 +12,10 @@ public class PlayerDataController : UnitySingletonPersistent<PlayerDataControlle
 
 	private int currentPlayer = 0;
 	#region MONO
-	void Awake () {
+	public override void Awake () {
 		base.Awake ();
+
+		Debug.Log (Application.persistentDataPath);
 		if (TapkidsData.Load ()) {
 			mPlayer = TapkidsData.GetPlayerById(currentPlayer);
 		} else {
@@ -23,7 +25,8 @@ public class PlayerDataController : UnitySingletonPersistent<PlayerDataControlle
 			if (firstVehicle != null)
 				newCarList.Add (firstVehicle.GetComponent <ArcadeCarController> ().vehicle.id, 0);
 
-			mPlayer = new Player (0, 2000, 0, "Ambulance", newCarList); 
+			bool[] tutStates = {false, false};
+			mPlayer = new Player (0, 2000, 0, "Ambulance", newCarList, tutStates);
 
 			TapkidsData.AddPlayer (mPlayer);
 			TapkidsData.Save ();
@@ -91,6 +94,16 @@ public class PlayerDataController : UnitySingletonPersistent<PlayerDataControlle
 	public void UpdateVehicleMaterial (Vehicle _vehicle) {
 		mPlayer.unlockedVehicles[_vehicle.id] = _vehicle.matId;
 		TapkidsData.players[currentPlayer].unlockedVehicles = mPlayer.unlockedVehicles;
+		TapkidsData.Save ();
+	}
+
+	public void UpdatePlayerTutorialState (int gameIndex, bool _state) {
+		for (int i = 0; i < mPlayer.playedTuts.Length; i++) {
+			if (i == gameIndex) {
+				mPlayer.playedTuts[i] = _state;
+			}
+		}
+		TapkidsData.players[currentPlayer].playedTuts = mPlayer.playedTuts;
 		TapkidsData.Save ();
 	}
 	#endregion public functions

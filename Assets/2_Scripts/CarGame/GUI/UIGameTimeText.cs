@@ -7,24 +7,27 @@ public class UIGameTimeText : MonoBehaviour {
 	private Text mText;
 	private CanvasGroup mCanvasGroup;
 	bool flag = false;
-
+	float startTime;
 	#region MONO
 	void OnEnable () {
-		Messenger.AddListener (EventManager.GUI.COUNTDOWN.ToString (), HandleCountDown);
+		Messenger.AddListener (EventManager.GUI.FINISH_COUNTDOWN.ToString (), HandleCountDown);
 		Messenger.AddListener <int> (EventManager.GameState.GAMEOVER.ToString (), HandleGameOver);
 	}
-	void OnDislabe () {
-		Messenger.RemoveListener (EventManager.GUI.COUNTDOWN.ToString (), HandleCountDown);
+	void OnDisable () {
+		Messenger.RemoveListener (EventManager.GUI.FINISH_COUNTDOWN.ToString (), HandleCountDown);
 		Messenger.RemoveListener <int> (EventManager.GameState.GAMEOVER.ToString (), HandleGameOver);
 	}
+
 	void Start () {
 		mText = GetComponent <Text> ();
 		mCanvasGroup = GetComponent <CanvasGroup> ();
 	}
 	void Update (){
 		if (flag) {
-			mText.text = SecondsToHhMmSs((int)Time.time);
-			Debug.Log (SecondsToHhMmSs((int)Time.time));
+			float t = Time.time - startTime;
+			mText.text = SecondsToHhMmSs(t);
+//			mText.text = SecondsToHhMmSs((int)t);
+//			Debug.Log (SecondsToHhMmSs((int)t));
 		}
 	}
 
@@ -32,7 +35,10 @@ public class UIGameTimeText : MonoBehaviour {
 
 	#region private methods
 	private void HandleCountDown (){
+		Debug.Log ("start game time");
 		flag = true;
+		startTime = Time.time;
+
 		mCanvasGroup.alpha = 1f;
 	}
 
@@ -44,6 +50,10 @@ public class UIGameTimeText : MonoBehaviour {
 		return string.Format("{0:00}:{1:00}", (seconds/60)%60, seconds%60);
 	}
 
+	private string SecondsToHhMmSs(float t)
+	{
+		return ((int) t / 60).ToString() + ":" + (t % 60).ToString("f0");
+	}
 	#endregion private methods
 
 

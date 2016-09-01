@@ -40,7 +40,7 @@ public class CarGameController : MonoBehaviour {
 
 		Messenger.AddListener (EventManager.GUI.DROPBUTTON.ToString (), HandleDropLetter);
 
-		Messenger.AddListener (EventManager.GUI.COUNTDOWN.ToString (), HandleCountDown);
+		Messenger.AddListener (EventManager.GUI.FINISH_COUNTDOWN.ToString (), HandleCountDown);
 	}
 
 	void Start () {
@@ -78,7 +78,7 @@ public class CarGameController : MonoBehaviour {
 
 		Messenger.RemoveListener (EventManager.GUI.DROPBUTTON.ToString (), HandleDropLetter);
 
-		Messenger.RemoveListener (EventManager.GUI.COUNTDOWN.ToString (), HandleCountDown);
+		Messenger.RemoveListener (EventManager.GUI.FINISH_COUNTDOWN.ToString (), HandleCountDown);
 	}
 
 	void OnDestroy () {

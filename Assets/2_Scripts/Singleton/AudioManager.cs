@@ -272,6 +272,7 @@ public class AudioManager : UnitySingletonPersistent<AudioManager>
 
 	private string GetCurrentLocation ()
 	{
+		if (Lean.LeanLocalization.Instance == null) return null;
 		return Lean.LeanLocalization.Instance.CurrentLanguage;
 	}
 

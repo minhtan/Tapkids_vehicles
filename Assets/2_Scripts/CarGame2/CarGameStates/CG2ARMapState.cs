@@ -11,23 +11,14 @@ public class CG2ARMapState : SKState<CarGameController2> {
 		Debug.Log("Map State >>>");
 
 		Messenger.Broadcast <bool> (EventManager.GameState.START.ToString(), false);
-		//		for (int i = 0; i < _context.mTransform.childCount; i++) 
-		//			_context.mTransform.GetChild (i).gameObject.SetActive (false);
-
-		// reset countdown
-		//		countDownTimer = 3f;
 	}
 
 
 	public override void reason ()
 	{
-		//		if (countDownTimer <= 0f) {
-		//			_machine.changeState <CGStartState> ();
-		//		}
 	}
 	public override void update (float deltaTime)
 	{
-		//		countDownTimer -= Time.deltaTime;
 	}
 
 	public override void end ()

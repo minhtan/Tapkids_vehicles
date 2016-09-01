@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections;
 
@@ -22,6 +23,7 @@ public class UIExitButton : MonoBehaviour {
 
 				// back to menu
 				SceneController.Instance.LoadingSceneAsync (SceneController.SceneID.MENU);
+//				SceneManager.LoadScene ((int)SceneController.SceneID.MENU);
 				Messenger.Broadcast<bool>(EventManager.GameState.PAUSE.ToString(), false);
 				Messenger.Broadcast(EventManager.GameState.EXIT_TO_MENU.ToString());
 				AudioManager.Instance.PlayAudio (AudioKey.UNIQUE_KEY.BUTTON_CLICK);
