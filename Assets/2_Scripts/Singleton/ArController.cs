@@ -67,6 +67,14 @@ public class ArController : UnitySingletonPersistent<ArController> {
 		VuforiaUnity.SetHint (Vuforia.VuforiaUnity.VuforiaHint.HINT_MAX_SIMULTANEOUS_IMAGE_TARGETS, targetNums);
 	}
 
+	public void ToggleTracker(bool state){
+		if (state) {
+			TrackerManager.Instance.GetTracker<ObjectTracker> ().Start ();
+		} else {
+			TrackerManager.Instance.GetTracker<ObjectTracker> ().Stop ();
+		}
+	}
+
 	public void ToggleAR(bool state, bool toggleQR = false, bool toggleVuforia = true){
 		if (toggleVuforia || state) {
 			VuforiaBehaviour.Instance.enabled = state;

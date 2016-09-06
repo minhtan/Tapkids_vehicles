@@ -24,6 +24,7 @@ public class StartupWord : MonoBehaviour
 	public GameObject pnlLetterUI;
 	public GameObject pnlVehicleUI;
 	public GameObject canvasLetter;
+	public GameObject letterTargets;
 
 	string targetName;
 	PlayMakerFSM fsm;
@@ -85,11 +86,15 @@ public class StartupWord : MonoBehaviour
 		}
 
 		pnlVehicleUI.SetActive (false);
-		StartCoroutine (CallTut ());
+		fsm.Fsm.BroadcastEvent ("G_reset");
+		letterTargets.SetActive (false);
+		_tutText.SetTutText (UITutText.TutText.WELCOME);
+		DrawTutorial ();
 	}
 
 	IEnumerator CallTut(){
-		yield return null;
+		yield return new WaitForSeconds(0.1f);
+		pnlVehicleUI.SetActive (false);
 		fsm.Fsm.BroadcastEvent ("G_reset");
 		_tutText.SetTutText (UITutText.TutText.WELCOME);
 		DrawTutorial ();
@@ -107,9 +112,12 @@ public class StartupWord : MonoBehaviour
 //			_drawer.ResetStroke ();
 			DestroySampleLetter();
 			canvasLetter.SetActive (false);
+			letterTargets.SetActive (true);
+
 		} else {
 			
 		}
+		SetActiveInputGesture (false);
 	}
 
 	private void OnVehicleFound (bool state, string vehicleName)
@@ -159,9 +167,15 @@ public class StartupWord : MonoBehaviour
 		Debug.Log (result.GestureClass);
 		if (WordDrawConfig.CompareLetterWithResult (_currentLetterBut, result)) {
 			_tutText.SetTutText (UITutText.TutText.CORRECT);
+			StartCoroutine (ExitAfterDetect());
 		} else {
 			_tutText.SetTutText (UITutText.TutText.TRY_AGAIN);
 		}
+	}
+
+	IEnumerator ExitAfterDetect(){
+		yield return new WaitForSeconds (1.0f);
+		OnExitClick ();
 	}
 
 	private void OnSessionResult (bool isPass)

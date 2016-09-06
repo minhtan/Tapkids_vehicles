@@ -144,7 +144,6 @@ namespace Vuforia
 		}
 
 		void _ShowModel(){
-			GameObject.Find ("DebugText").GetComponent<Text>().text = "Found " + targetName;
 			if (isLetter) {
 				StartCoroutine (AssetController.Instance.InstantiateGameObjectAsync (AssetController.bundleName, targetName, (bundle) => {
 					go = GameObject.Instantiate (bundle, transform.position, transform.rotation) as GameObject;
@@ -204,7 +203,6 @@ namespace Vuforia
 		} 
 
 		void _HideModel(){
-			GameObject.Find ("DebugText").GetComponent<Text>().text = "Lost " + targetName;
 			if(go != null){
 				GameObject.DestroyImmediate(go);
 				go = null;
