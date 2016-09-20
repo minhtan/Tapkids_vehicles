@@ -16,6 +16,7 @@ public class GestureLineDrawing : GestureDrawing
 	private Vector2 previousPosition;
 	private int sqrMinPixelMove;
 	private bool canDraw = false;
+	GameObject vestrosityGO;
 
 	void Awake ()
 	{
@@ -36,7 +37,7 @@ public class GestureLineDrawing : GestureDrawing
 
 	void Start ()
 	{
-		GameObject vestrosityGO = GameObject.Find ("VectorCanvas");
+		vestrosityGO = GameObject.Find ("VectorCanvas");
 		vestrosityGO.AddComponent<DestroyOnLoad> ();
 		Canvas canvas = vestrosityGO.GetComponent<Canvas> ();
 		canvas.sortingOrder = 100;

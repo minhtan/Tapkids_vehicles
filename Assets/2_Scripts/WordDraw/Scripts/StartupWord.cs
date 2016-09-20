@@ -117,6 +117,7 @@ public class StartupWord : MonoBehaviour
 		} else {
 			
 		}
+		_drawer.ResetStroke();
 		SetActiveInputGesture (false);
 	}
 
@@ -170,11 +171,13 @@ public class StartupWord : MonoBehaviour
 			StartCoroutine (ExitAfterDetect());
 		} else {
 			_tutText.SetTutText (UITutText.TutText.TRY_AGAIN);
+			_drawer.ResetStroke();
 		}
 	}
 
 	IEnumerator ExitAfterDetect(){
 		yield return new WaitForSeconds (1.0f);
+
 		OnExitClick ();
 	}
 
@@ -198,7 +201,7 @@ public class StartupWord : MonoBehaviour
 	private void SetActiveInputGesture (bool active)
 	{
 		_drawer.enabled = active;
-		_recognizer.enabled = active;
+//		_recognizer.enabled = active;
 	}
 
 	private void EndLetterSession ()
